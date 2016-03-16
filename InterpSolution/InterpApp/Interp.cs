@@ -18,17 +18,22 @@ namespace Interpolator
         {
             return Value;
         }
+        public InterpDouble(double value = 0.0)
+        {
+            Value = value;
+        }
     }
+    public enum ExtrapolType { etZero, etValue, etMethod };
 
     public class Interp<T>:IInterpElem where T :IInterpElem
     {
         private SortedList<double, T> _data = new SortedList<double, T>() ;
-
+        public ExtrapolType ET { get; set; } = ExtrapolType.etValue;
         double IInterpElem.GetV(params double[] t)
         {
-            if(t.Length > 0)
+            return 0; 
+            if (t.Length > 0)
             {
-                return 0;
                 //Короч запилить
             }
         }
