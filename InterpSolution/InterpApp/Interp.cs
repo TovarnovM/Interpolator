@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
+using System.Xml.Serialization;
+using SerializableGenerics;
 
 namespace Interpolator
 {
@@ -11,26 +13,41 @@ namespace Interpolator
     {
         double GetV(params double[] t);
     }
+    public interface IInterpParams
+    {
+        ExtrapolType ET_left { get; set; }
+        ExtrapolType ET_right { get; set; }
+        InterpolType InterpType { get; set; }
+    }
+
+    [XmlRoot(nameof(InterpDouble))]
     public class InterpDouble : IInterpElem
     {
+        [XmlAttribute]
         public double Value { get; set; }
         public double GetV(params double[] t)
         {
             return Value;
         }
-        public InterpDouble(double value = 0.0)
+        public InterpDouble(double value)
         {
             Value = value;
+        }
+        public InterpDouble()
+        {
+            Value = 0.0;
         }
     }
     //тип экстраполяции  = 0, = крайн значению, = продолжению метода, вызывает ошибку
     public enum ExtrapolType { etZero, etValue, etMethod, etError };
     public enum InterpolType { itStep, itLine };
 
-    public class Interp<T> : IInterpElem where T : IInterpElem
+    [Serializable]
+    public class Interp<T> : IInterpElem, IInterpParams where T : IInterpElem
     {
         //Тут хранятся данные
-        private SortedList<double, T> _data = new SortedList<double, T>();
+        public SerializableSortedList<double, T> _data = new SerializableSortedList<double, T>();
+        [XmlIgnore]
         public SortedList<double, T> Data
         {
             get
@@ -38,10 +55,12 @@ namespace Interpolator
                 return _data;
             }
         }
+
         //Тип экстраполяции
         public ExtrapolType ET_left { get; set; } = ExtrapolType.etValue;
         public ExtrapolType ET_right { get; set; } = ExtrapolType.etValue;
         //номер интервала (левого элемента), в который попала искомая точка
+        [XmlIgnore]
         public int N { get; private set; } = 0;
         public int Count()
         {
@@ -198,7 +217,21 @@ namespace Interpolator
             }
             return InterpMethodCurr(t);    
         }
+        public void CopyParamsFrom(IInterpParams parent)
+        {
+            this.ET_left = parent.ET_left;
+            this.ET_right = parent.ET_right;
+            this.InterpType = parent.InterpType;
+        }
+        public void CopyParamsTo(IInterpParams child)
+        {
+            child.ET_left = this.ET_left;
+            child.ET_right = this.ET_right;
+            child.InterpType = this.InterpType;
+        }
     }
+
+    [XmlRoot(nameof(InterpXY))]
     public class InterpXY: Interp<InterpDouble>
     {
         public int Add(double t, double value)
@@ -209,5 +242,9 @@ namespace Interpolator
     public class InterpXYZ: Interp<InterpXY>
     {
         
+    }
+    public class InterpXYZR: Interp<InterpXYZ>
+    {
+
     }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace Interpolator
 {
@@ -10,39 +12,36 @@ namespace Interpolator
     {
         static void Main(string[] args)
         {
-            var dd = new double[0];
-            double t = 1.5;
-            int N = 2;
-            double[] tstArr = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-            
-            if (tstArr[N] > t)
-                for (int i = N; i >= 0; i--)
-                {
-                    if (tstArr[i] <= t)
-                    {
-                        break;
-                    }
-                    N = i-1;
-                }
-            else
-                for (int i = N; i < tstArr.Length; i++)
-                {
-                    if (tstArr[i] > t)
-                    {
-                        break;
-                    }
-                    N = i;
-                }
+            /*
+            var intD = new InterpDouble(77);
+            XmlSerializer serial = new XmlSerializer(typeof(InterpDouble));
+            StreamWriter sr = new StreamWriter("InterpDouble.xml");
+            serial.Serialize(sr, intD);
+            sr.Close(); 
+            */
 
-            Console.WriteLine($"t = {t}   N = {N}");
+            /*
+            var interpol = new InterpXY();
+            interpol.Add(-1.2, 1);
+            interpol.Add(-4.2, 2);
+            interpol.Add(2, 3);
+            interpol.Add(4, 4);
+            interpol.Add(-10, 5);
+            interpol.Add(11, 6);
+            interpol.Add(7, 7);
 
-            var sl = new SortedList<double, double>( new Dictionary<double,double>
-                { [0] = 0,
-                  [5] = 5,
-                  [3] = 3  }  );
-            sl.Add(2, 2);
-            foreach (var tmp in sl)
-                Console.Write($"{tmp}\t");
+            var lst = interpol.Data;
+
+            XmlSerializer serial = new XmlSerializer(typeof(InterpXY));//SerializableGenerics.SerializableSortedList<double,InterpDouble>));
+            StreamWriter sr = new StreamWriter("InterpXY.xml");
+            serial.Serialize(sr, interpol);
+            sr.Close(); 
+            */
+            XmlSerializer serial = new XmlSerializer(typeof(InterpXY));
+            var sr = new StreamReader("InterpXY.xml");
+            var interpol = (InterpXY)serial.Deserialize(sr);
+
+
             Console.ReadLine();
         }
     }
