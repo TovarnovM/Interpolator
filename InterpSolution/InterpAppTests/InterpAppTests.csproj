@@ -51,6 +51,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Interp2DTests.cs" />
     <Compile Include="InterpXYTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
