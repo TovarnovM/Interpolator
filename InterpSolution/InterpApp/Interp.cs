@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using SerializableGenerics;
+using System.IO;
 
 namespace Interpolator
 {
@@ -66,6 +67,7 @@ namespace Interpolator
                 return _data;
             }
         }
+        public string Title { get; set; } = "Title";
 
         //Тип экстраполяции
         public ExtrapolType ET_left { get; set; } = ExtrapolType.etValue;
@@ -240,6 +242,37 @@ namespace Interpolator
             child.ET_right = this.ET_right;
             child.InterpType = this.InterpType;
         }
+        public override string ToString()
+        {
+            return Title;
+        }
+        public void SaveToXmlFile(string fileName)
+        {
+            try
+            {
+                XmlSerializer serial = new XmlSerializer(this.GetType());
+                var sw = new StreamWriter(fileName);
+                serial.Serialize(sw, this);
+                sw.Close();
+            }
+            catch (Exception)
+            {      }
+
+        }
+        public Interp<T> LoadFromXmlFile(string fileName)
+        {
+            try
+            {
+                XmlSerializer serial = new XmlSerializer(this.GetType());
+                var sw = new StreamReader(fileName);
+                Interp<T> result = (serial.Deserialize(sw) as Interp<T>);
+                sw.Close();
+                return result;
+            }
+            catch (Exception)
+            { }
+            return null;
+        }
     }
 
     [XmlRoot(nameof(InterpXY))]
@@ -319,7 +352,7 @@ namespace Interpolator
         /// а    (количество строк - 1)    = количеству элементов внутри каждого одномерного интерполятора.
         /// </summary>
         /// <param name="m">матрица c данными</param>
-        public void ImportDataFromMatrix(double[,] m)
+        public void ImportDataFromMatrix(double[,] m, bool copyParams = true)
         {
             if(m.GetLength(0) < 2 || m.GetLength(1) < 2)
                 throw new ArgumentException($"Неправильные параметры, походу разные длины векторов");
@@ -339,7 +372,7 @@ namespace Interpolator
                 for (int j = 0; j < tsInXY.Length; j++)
                     vecs[i][j] = m[j + 1, i + 1];
             }
-            ImportDataFromVectors(tsXY, tsInXY, vecs);
+            ImportDataFromVectors(tsXY, tsInXY, vecs, copyParams);
         }
         /// <summary>
         /// tsXY.Length == vecs.Length == N
@@ -348,7 +381,7 @@ namespace Interpolator
         /// <param name="tsXY">векстор с аргументами t для идентифицикации интерполяторов XY </param>
         /// <param name="tsInXY">векстор с аргументами t для идентифицикации элементов внутри интерполяторов XY</param>
         /// <param name="vecs">массив векторов для идентификации Интерполяторов XY</param>
-        public void ImportDataFromVectors(double[] tsXY, double[] tsInXY, double[][] vecs)
+        public void ImportDataFromVectors(double[] tsXY, double[] tsInXY, double[][] vecs, bool copyParams = true)
         {
             if(tsXY.Length != vecs.Length || tsXY.Length == 0 || tsInXY.Length == 0)
                 throw new ArgumentException($"Неправильные параметры, походу разные длины векторов");
@@ -357,7 +390,13 @@ namespace Interpolator
                     throw new ArgumentException($"Неправильные параметры, походу разные длины векторов");
             _data.Clear();
             for (int i = 0; i < tsXY.Length; i++)
-                AddElement(tsXY[i], new InterpXY(tsInXY, vecs[i]));
+            {
+                InterpXY tmpInterp = new InterpXY(tsInXY, vecs[i]);
+                if (copyParams)
+                    tmpInterp.CopyParamsFrom(this);
+                AddElement(tsXY[i], tmpInterp);
+            }
+                
         }
 
     }
