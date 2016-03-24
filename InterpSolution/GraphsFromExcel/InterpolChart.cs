@@ -47,7 +47,9 @@ namespace GraphsFromExcel
             {
                 tmpSeries.Points.AddXY(item.Key, item.Value.Value);
             }
-            checkedListBox1.Items.Add(interp, true);
+            int w =checkedListBox1.Items.Add(interp, true);
+            if (checkedListBox1.SelectedIndex == -1)
+                checkedListBox1.SelectedIndex = w;
         }
 
         private void btnCollapse_Click(object sender, EventArgs e)
@@ -300,6 +302,11 @@ namespace GraphsFromExcel
                     throw ex;
                 }
             }
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

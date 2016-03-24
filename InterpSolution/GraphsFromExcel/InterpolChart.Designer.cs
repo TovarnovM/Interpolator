@@ -70,6 +70,7 @@
             this.txtBx_Titile = new System.Windows.Forms.TextBox();
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.btnTestAdd = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -121,6 +122,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.button7);
             this.splitContainer1.Panel2.Controls.Add(this.label4);
             this.splitContainer1.Panel2.Controls.Add(this.textBox2);
             this.splitContainer1.Panel2.Controls.Add(this.groupBox4);
@@ -533,13 +535,25 @@
             // btnTestAdd
             // 
             this.btnTestAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTestAdd.Location = new System.Drawing.Point(206, 314);
+            this.btnTestAdd.Location = new System.Drawing.Point(205, 296);
             this.btnTestAdd.Name = "btnTestAdd";
             this.btnTestAdd.Size = new System.Drawing.Size(85, 24);
             this.btnTestAdd.TabIndex = 0;
             this.btnTestAdd.Text = "btnTestAdd";
             this.btnTestAdd.UseVisualStyleBackColor = true;
+            this.btnTestAdd.Visible = false;
             this.btnTestAdd.Click += new System.EventHandler(this.btnTestAdd_Click);
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(206, 275);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(75, 23);
+            this.button7.TabIndex = 15;
+            this.button7.Text = "button7";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Visible = false;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // InterpolChart
             // 
@@ -614,5 +628,6 @@
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.Button button7;
     }
 }
