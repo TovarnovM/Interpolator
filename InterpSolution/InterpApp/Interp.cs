@@ -259,13 +259,41 @@ namespace Interpolator
             {      }
 
         }
-        public Interp<T> LoadFromXmlFile(string fileName)
+        //public Interp<T> LoadFromXmlFile(string fileName)
+        //{
+        //    try
+        //    {
+        //        XmlSerializer serial = new XmlSerializer(this.GetType());
+        //        var sw = new StreamReader(fileName);
+        //        Interp<T> result = (serial.Deserialize(sw) as Interp<T>);
+        //        sw.Close();
+        //        return result;
+        //    }
+        //    catch (Exception)
+        //    { }
+        //    return null;
+        //}
+        protected static T2 LoadFromXmlString<T2>(string fileStr) where T2 : Interp<T>
         {
             try
             {
-                XmlSerializer serial = new XmlSerializer(this.GetType());
+                XmlSerializer serial = new XmlSerializer(typeof(T2));
+                var sw = new StringReader(fileStr);
+                T2 result = (T2)serial.Deserialize(sw) ;
+                sw.Close();
+                return result;
+            }
+            catch (Exception)
+            { }
+            return null;
+        }
+        protected static T2 LoadFromXmlFile<T2>(string fileName) where T2 : Interp<T>
+        {
+            try
+            {
+                XmlSerializer serial = new XmlSerializer(typeof(T2));
                 var sw = new StreamReader(fileName);
-                Interp<T> result = (serial.Deserialize(sw) as Interp<T>);
+                T2 result =(T2)serial.Deserialize(sw);
                 sw.Close();
                 return result;
             }
@@ -328,6 +356,8 @@ namespace Interpolator
             CopyParamsFrom(this);
             CopyDataFrom(this);
         }
+        public static InterpXY LoadFromXmlFile(string fileName)  => InterpXY.LoadFromXmlFile<InterpXY>(fileName);
+        public static InterpXY LoadFromXmlString(string fileStr) => InterpXY.LoadFromXmlString<InterpXY>(fileStr); 
     }
     [XmlRoot(nameof(Interp2D))]
     public class Interp2D: Interp<InterpXY>
@@ -398,7 +428,8 @@ namespace Interpolator
             }
                 
         }
-
+        public static Interp2D LoadFromXmlFile(string fileName)  => Interp2D.LoadFromXmlFile<Interp2D>(fileName);
+        public static Interp2D LoadFromXmlString(string fileStr) => Interp2D.LoadFromXmlString<Interp2D>(fileStr);
     }
     [XmlRoot(nameof(Interp3D))]
     public class Interp3D: Interp<Interp2D>
@@ -413,5 +444,23 @@ namespace Interpolator
             }
             return result;
         }
+        public static Interp3D LoadFromXmlFile(string fileName) => Interp3D.LoadFromXmlFile<Interp3D>(fileName);
+        public static Interp3D LoadFromXmlString(string fileStr) => Interp3D.LoadFromXmlString<Interp3D>(fileStr);
+    }
+    [XmlRoot(nameof(Interp4D))]
+    public class Interp4D : Interp<Interp3D>
+    {
+        public Interp4D CopyMe()
+        {
+            var result = new Interp4D();
+            result.CopyParamsFrom(this);
+            foreach (var item in _data)
+            {
+                result.AddElement(item.Key, item.Value.CopyMe());
+            }
+            return result;
+        }
+        public static Interp4D LoadFromXmlFile(string fileName) => Interp4D.LoadFromXmlFile<Interp4D>(fileName);
+        public static Interp4D LoadFromXmlString(string fileStr) => Interp4D.LoadFromXmlString<Interp4D>(fileStr);
     }
 }

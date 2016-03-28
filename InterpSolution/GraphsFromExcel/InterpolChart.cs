@@ -232,8 +232,8 @@ namespace GraphsFromExcel
             {
                 try
                 {
-                    var tmpInterpXY = new InterpXY();
-                    tmpInterpXY = (InterpXY)tmpInterpXY.LoadFromXmlFile(_od.FileName);
+                    var tmpInterpXY = InterpXY.LoadFromXmlFile(_od.FileName);
+                   // tmpInterpXY = (InterpXY)tmpInterpXY.LoadFromXmlFile();
                     AddInterp(tmpInterpXY);
                 }
                 catch (Exception ex)
@@ -249,8 +249,7 @@ namespace GraphsFromExcel
             {
                 try
                 {
-                    var tmpInterp2D = new Interp2D();
-                    tmpInterp2D = (Interp2D)tmpInterp2D.LoadFromXmlFile(_od.FileName);
+                    var tmpInterp2D = Interp2D.LoadFromXmlFile(_od.FileName);
                     foreach (var item in tmpInterp2D.Data)
                     {
                         item.Value.Title = item.Key.ToString();
@@ -306,7 +305,64 @@ namespace GraphsFromExcel
 
         private void button7_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var od = new OpenFileDialog()
+                {
+                    Filter = "CSV Files|*.csv",
+                    Multiselect = true
+                };
+                if (od.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (var fileName in od.FileNames)
+                    {
+                        var lines = File.ReadAllLines(fileName).Select(a => a.Split(';'));
+                        var matr = new double[lines.Count(), lines.First().Count()];
+                        int i = 0;
+                        foreach (var items in lines)
+                        {
+                            int j = 0;
+                            foreach (var item in items)
+                            {
+                                //MessageBox.Show($"i={i}, j={j++}, val={Convert.ToDouble(item.Replace('.',',').Trim())}");
+                                matr[i, j++] = Convert.ToDouble(item.Replace('.', ',').Trim());
+                            }
+                            i++;
+                        }
+                        var interp2D = new Interp2D();
+                        interp2D.ImportDataFromMatrix(matr);
+                        foreach (var item in interp2D.Data)
+                        {
+                            item.Value.Title = item.Key.ToString();
+                        }
+                        interp2D.SaveToXmlFile(Path.ChangeExtension(fileName,".xml"));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            var interp4D = new Interp4D();
+
+            var dir = @"C:\Users\MISHA\Desktop\4_30";
+            interp4D.Title = "4_30";
+            Dictionary<double, string> makeFile = new Dictionary<double, string>()
+            {
+                [0] = dir + "\\" + interp4D.Title + "_а_3D.xml",
+                [5] = dir + "\\" + interp4D.Title + "_б_3D.xml",
+                [100] = dir + "\\" + interp4D.Title + "_в_3D.xml"
+            };
+            foreach (var item in makeFile)
+            {
+                interp4D.AddElement(item.Key, Interp3D.LoadFromXmlFile(item.Value));
+            }
+            string str = dir + "\\" + interp4D.Title + "_4D.xml";
+            interp4D.SaveToXmlFile(str);
         }
     }
 }

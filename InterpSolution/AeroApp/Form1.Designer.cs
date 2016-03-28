@@ -1,4 +1,4 @@
-﻿namespace GraphsFromExcel
+﻿namespace AeroApp
 {
     partial class Form1
     {
@@ -28,36 +28,34 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.interpolChart1 = new GraphsFromExcel.InterpolChart();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // interpolChart1
+            // button1
             // 
-            this.interpolChart1.AutoSize = true;
-            this.interpolChart1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.interpolChart1.BackColor = System.Drawing.SystemColors.ActiveBorder;
-            this.interpolChart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.interpolChart1.Location = new System.Drawing.Point(0, 0);
-            this.interpolChart1.Name = "interpolChart1";
-            this.interpolChart1.Size = new System.Drawing.Size(797, 541);
-            this.interpolChart1.TabIndex = 2;
+            this.button1.Location = new System.Drawing.Point(145, 94);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(287, 94);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(797, 541);
-            this.Controls.Add(this.interpolChart1);
+            this.ClientSize = new System.Drawing.Size(636, 402);
+            this.Controls.Add(this.button1);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private InterpolChart interpolChart1;
+        private System.Windows.Forms.Button button1;
     }
 }
 

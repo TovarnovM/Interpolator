@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Interp2D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpXY>
+      <double>0</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.009" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.00788" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.0073" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.00695" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.0067" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.0065" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00635" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.0062" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.0061" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.006" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.00535" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00505" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00485" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.0047" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.00457" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00445" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.00435" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.0043" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.00422" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0038" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00365" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.0035" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.0034" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.1</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.00855" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.0075" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.0069" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.0066" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.00635" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.00615" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00595" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.0058" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.0057" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.0056" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.005" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00465" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00448" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.00433" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.0042" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.0041" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.00402" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.00398" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.0039" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0035" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00332" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.0032" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.0031" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,1</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.2</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.008" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.00695" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.00642" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.00606" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.00585" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.00565" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.0055" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.00535" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.00525" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.00515" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.00455" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.0043" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.0041" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.00395" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.00385" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00375" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.00368" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.0036" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.00355" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.00325" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00305" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.00295" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.00285" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,2</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.3</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.0075" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.00645" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.0059" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.00555" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.0053" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.0051" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00495" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.00485" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.00475" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.00465" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.0041" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00383" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00365" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.00355" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.00345" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00335" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.0033" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.00325" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.0032" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0029" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00274" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.00265" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.00255" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,3</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.4</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.0069" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.00585" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.00535" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.005" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.00478" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.0046" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00445" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.00435" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.00425" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.00415" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.00365" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.0034" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00325" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.0031" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.003" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00295" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.0029" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.00285" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.0028" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0025" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.0024" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.0023" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.00225" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,4</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.5</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.00635" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.0053" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.0048" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.0045" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.00425" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.0041" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00395" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.0038" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.00375" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.00365" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.00315" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00295" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.0028" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.00265" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.0026" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.0025" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.00248" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.00245" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.0024" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0022" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.0021" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.002" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.00195" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,5</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>0.6</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.0057" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.0047" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.00425" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.0039" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.0037" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.0035" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.0034" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.0033" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.0032" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.0031" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.0027" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00245" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00235" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.00225" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.0022" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00215" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.0021" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.00205" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.002" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.00185" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00174" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.00168" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="0.00162" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>0,6</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+    <DoubleInterpXY>
+      <double>1</double>
+      <InterpXY>
+        <_data>
+          <DoubleInterpDouble>
+            <double>1000000</double>
+            <InterpDouble Value="0.00275" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>2000000</double>
+            <InterpDouble Value="0.002" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>3000000</double>
+            <InterpDouble Value="0.0016" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>4000000</double>
+            <InterpDouble Value="0.0014" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>5000000</double>
+            <InterpDouble Value="0.00125" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>6000000</double>
+            <InterpDouble Value="0.00115" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>7000000</double>
+            <InterpDouble Value="0.00105" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>8000000</double>
+            <InterpDouble Value="0.001" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>9000000</double>
+            <InterpDouble Value="0.00095" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>10000000</double>
+            <InterpDouble Value="0.0009" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>20000000</double>
+            <InterpDouble Value="0.00065" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>30000000</double>
+            <InterpDouble Value="0.00052" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>40000000</double>
+            <InterpDouble Value="0.00049" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>50000000</double>
+            <InterpDouble Value="0.0004" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>60000000</double>
+            <InterpDouble Value="0.00038" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>70000000</double>
+            <InterpDouble Value="0.00035" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>80000000</double>
+            <InterpDouble Value="0.00032" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>90000000</double>
+            <InterpDouble Value="0.0003" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>100000000</double>
+            <InterpDouble Value="0.00028" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>200000000</double>
+            <InterpDouble Value="0.0002" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>300000000</double>
+            <InterpDouble Value="0.00015" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>400000000</double>
+            <InterpDouble Value="0.0001" />
+          </DoubleInterpDouble>
+          <DoubleInterpDouble>
+            <double>500000000</double>
+            <InterpDouble Value="8E-05" />
+          </DoubleInterpDouble>
+        </_data>
+        <Title>1</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </InterpXY>
+    </DoubleInterpXY>
+  </_data>
+  <Title>Title</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</Interp2D>

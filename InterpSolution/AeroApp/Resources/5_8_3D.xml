@@ -1,0 +1,1573 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Interp3D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterp2D>
+      <double>0</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>1</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.23" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.23" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.228" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.221" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.211" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.193" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.18" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.163" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.143" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.14" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.16" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.239" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.274" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.346" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.395" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.43" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.441" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.448" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.448" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.449" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>1</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>3</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.245" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.245" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.244" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.238" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.23" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.22" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.212" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.196" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.204" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.235" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.27" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.305" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.332" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.38" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.412" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.44" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.448" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.451" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.453" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.454" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>3</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>5</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.252" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.254" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.252" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.241" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.237" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.233" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.234" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.275" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.31" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.355" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.395" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.425" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.447" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.451" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.454" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.457" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.458" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>5</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>100</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.259" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.262" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.264" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.266" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.264" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.261" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.258" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.252" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.26" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.276" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.305" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.355" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.378" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.41" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.435" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.453" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.459" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.464" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.468" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.47" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>100</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+    <DoubleInterp2D>
+      <double>1</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>1</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.22" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.218" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.215" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.208" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.186" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.177" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.17" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.165" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.17" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.184" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.215" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.29" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.346" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.39" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.418" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.435" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.455" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.458" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>1</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>3</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.254" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.256" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.256" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.255" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.252" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.252" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.26" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.272" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.295" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.32" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.34" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.36" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.392" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.415" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.433" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.446" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.455" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.458" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>3</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>5</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.275" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.272" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.274" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.276" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.285" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.298" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.306" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.315" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.327" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.34" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.359" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.372" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.39" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.402" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.425" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.435" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.445" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.449" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.456" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.459" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.461" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>5</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>100</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.282" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.284" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.288" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.295" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.305" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.322" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.333" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.345" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.36" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.375" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.39" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.4" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.411" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.42" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.435" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.446" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.452" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.458" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.462" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>100</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+    <DoubleInterp2D>
+      <double>2</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>1</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.215" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.22" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.218" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.214" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.209" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.195" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.196" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.202" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.213" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.242" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.275" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.306" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.388" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.42" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.465" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.466" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.469" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>1</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>3</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.28" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.28" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.282" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.284" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.29" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.3" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.306" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.314" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.33" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.348" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.37" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.39" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.41" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.425" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.454" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.47" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.482" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.484" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.484" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.484" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.484" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>3</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>5</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.31" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.315" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.318" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.327" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.34" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.355" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.365" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.378" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.39" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.405" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.42" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.437" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.477" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.487" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.488" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.488" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.488" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.488" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>5</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>100</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.326" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.333" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.342" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.355" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.367" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.387" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.399" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.41" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.422" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.44" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.47" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.48" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.489" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.491" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.491" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.492" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.493" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.492" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.491" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>100</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+    <DoubleInterp2D>
+      <double>3</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>1</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.207" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.209" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.207" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.19" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.192" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.197" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.2" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.21" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.225" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.25" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.29" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.325" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.357" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.41" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.475" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.49" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.5" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.504" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.505" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>1</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>3</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.3" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.3" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.3" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.305" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.312" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.327" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.348" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.363" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.38" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.397" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.415" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.43" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.446" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.47" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.5" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.507" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.51" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.51" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.51" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>3</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>5</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.349" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.35" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.357" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.368" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.38" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.397" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.408" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.418" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.433" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.445" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.46" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.473" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.49" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.505" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.514" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.52" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.519" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.517" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.516" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.515" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>5</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>100</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-4</double>
+                  <InterpDouble Value="0.368" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.5</double>
+                  <InterpDouble Value="0.375" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3</double>
+                  <InterpDouble Value="0.382" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5</double>
+                  <InterpDouble Value="0.396" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2</double>
+                  <InterpDouble Value="0.41" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5</double>
+                  <InterpDouble Value="0.43" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.25</double>
+                  <InterpDouble Value="0.44" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1</double>
+                  <InterpDouble Value="0.45" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.75</double>
+                  <InterpDouble Value="0.462" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5</double>
+                  <InterpDouble Value="0.472" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.25</double>
+                  <InterpDouble Value="0.485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0</double>
+                  <InterpDouble Value="0.492" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.25</double>
+                  <InterpDouble Value="0.5" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5</double>
+                  <InterpDouble Value="0.507" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1</double>
+                  <InterpDouble Value="0.517" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5</double>
+                  <InterpDouble Value="0.525" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2</double>
+                  <InterpDouble Value="0.528" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5</double>
+                  <InterpDouble Value="0.527" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3</double>
+                  <InterpDouble Value="0.525" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5</double>
+                  <InterpDouble Value="0.524" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4</double>
+                  <InterpDouble Value="0.523" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>100</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+  </_data>
+  <Title>5_8</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</Interp3D>

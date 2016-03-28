@@ -1,0 +1,1850 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Interp3D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterp2D>
+      <double>1</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>0</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4535</double>
+                  <InterpDouble Value="0.6998" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.3301</double>
+                  <InterpDouble Value="0.6953" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.0742</double>
+                  <InterpDouble Value="0.6874" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.8415</double>
+                  <InterpDouble Value="0.6815" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.6204</double>
+                  <InterpDouble Value="0.6765" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.3901</double>
+                  <InterpDouble Value="0.6719" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.1853</double>
+                  <InterpDouble Value="0.6675" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.9293</double>
+                  <InterpDouble Value="0.6635" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5524</double>
+                  <InterpDouble Value="0.6581" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2801</double>
+                  <InterpDouble Value="0.6532" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.8333</double>
+                  <InterpDouble Value="0.6479" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.6309</double>
+                  <InterpDouble Value="0.6484" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.2749</double>
+                  <InterpDouble Value="0.6461" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0276</double>
+                  <InterpDouble Value="0.6449" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.3348</double>
+                  <InterpDouble Value="0.6431" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.635</double>
+                  <InterpDouble Value="0.6413" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8072</double>
+                  <InterpDouble Value="0.639" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.998</double>
+                  <InterpDouble Value="0.6313" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.233</double>
+                  <InterpDouble Value="0.6257" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.482</double>
+                  <InterpDouble Value="0.618" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.6704</double>
+                  <InterpDouble Value="0.6096" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.8822</double>
+                  <InterpDouble Value="0.5982" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.0381</double>
+                  <InterpDouble Value="0.5901" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.0707</double>
+                  <InterpDouble Value="0.599" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.215</double>
+                  <InterpDouble Value="0.6219" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.3918</double>
+                  <InterpDouble Value="0.6485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.4686</double>
+                  <InterpDouble Value="0.6603" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.5035</double>
+                  <InterpDouble Value="0.672" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.6478</double>
+                  <InterpDouble Value="0.6807" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.7757</double>
+                  <InterpDouble Value="0.6953" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.9014</double>
+                  <InterpDouble Value="0.7105" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.034</double>
+                  <InterpDouble Value="0.7242" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.169</double>
+                  <InterpDouble Value="0.7369" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.3109</double>
+                  <InterpDouble Value="0.749" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.4529</double>
+                  <InterpDouble Value="0.7606" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5971</double>
+                  <InterpDouble Value="0.7715" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.7461</double>
+                  <InterpDouble Value="0.7815" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.8973</double>
+                  <InterpDouble Value="0.7905" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.0509</double>
+                  <InterpDouble Value="0.799" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.2068</double>
+                  <InterpDouble Value="0.8075" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.3604</double>
+                  <InterpDouble Value="0.8162" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.514</double>
+                  <InterpDouble Value="0.8253" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.6699</double>
+                  <InterpDouble Value="0.8335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.8304</double>
+                  <InterpDouble Value="0.8401" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.991</double>
+                  <InterpDouble Value="0.8464" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.1492</double>
+                  <InterpDouble Value="0.8531" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.3098</double>
+                  <InterpDouble Value="0.8594" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.4703</double>
+                  <InterpDouble Value="0.8651" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.6309</double>
+                  <InterpDouble Value="0.8705" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.7914</double>
+                  <InterpDouble Value="0.8744" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.952</double>
+                  <InterpDouble Value="0.877" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.1126</double>
+                  <InterpDouble Value="0.8799" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.2755</double>
+                  <InterpDouble Value="0.8844" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.4407</double>
+                  <InterpDouble Value="0.8883" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.6082</double>
+                  <InterpDouble Value="0.8903" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.7757</double>
+                  <InterpDouble Value="0.8927" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.9363</double>
+                  <InterpDouble Value="0.8972" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.0899</double>
+                  <InterpDouble Value="0.9032" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.2411</double>
+                  <InterpDouble Value="0.9061" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.3947</double>
+                  <InterpDouble Value="0.9035" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.5529</double>
+                  <InterpDouble Value="0.9006" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.7205</double>
+                  <InterpDouble Value="0.9008" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.8903</double>
+                  <InterpDouble Value="0.9016" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.0579</double>
+                  <InterpDouble Value="0.9015" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.2254</double>
+                  <InterpDouble Value="0.9011" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.393</double>
+                  <InterpDouble Value="0.901" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5605</double>
+                  <InterpDouble Value="0.9024" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>0</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>2</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4581</double>
+                  <InterpDouble Value="0.822" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.2952</double>
+                  <InterpDouble Value="0.816" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.1393</double>
+                  <InterpDouble Value="0.8085" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.9788</double>
+                  <InterpDouble Value="0.8023" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.8159</double>
+                  <InterpDouble Value="0.7978" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.653</double>
+                  <InterpDouble Value="0.7931" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.4924</double>
+                  <InterpDouble Value="0.7872" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.3342</double>
+                  <InterpDouble Value="0.7812" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.1713</double>
+                  <InterpDouble Value="0.7765" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.0061</double>
+                  <InterpDouble Value="0.7724" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.8409</double>
+                  <InterpDouble Value="0.7686" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.678</double>
+                  <InterpDouble Value="0.7648" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5128</double>
+                  <InterpDouble Value="0.761" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.3499</double>
+                  <InterpDouble Value="0.7566" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.187</double>
+                  <InterpDouble Value="0.7528" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.0195</double>
+                  <InterpDouble Value="0.7496" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.8543</double>
+                  <InterpDouble Value="0.7467" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.6891</double>
+                  <InterpDouble Value="0.7441" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5239</double>
+                  <InterpDouble Value="0.7428" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.3563</double>
+                  <InterpDouble Value="0.7424" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.1888</double>
+                  <InterpDouble Value="0.7419" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.0212</double>
+                  <InterpDouble Value="0.7421" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.1463</double>
+                  <InterpDouble Value="0.7432" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.3138</double>
+                  <InterpDouble Value="0.7456" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.4791</double>
+                  <InterpDouble Value="0.7498" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.6396</double>
+                  <InterpDouble Value="0.7558" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8002</double>
+                  <InterpDouble Value="0.7624" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>2</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>4</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.144</double>
+                  <InterpDouble Value="0.9982" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.9764</double>
+                  <InterpDouble Value="0.9956" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.8159</double>
+                  <InterpDouble Value="0.9906" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.653</double>
+                  <InterpDouble Value="0.9862" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.4878</double>
+                  <InterpDouble Value="0.983" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.3226</double>
+                  <InterpDouble Value="0.9801" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.1574</double>
+                  <InterpDouble Value="0.9766" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.9921</double>
+                  <InterpDouble Value="0.9722" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.8316</double>
+                  <InterpDouble Value="0.9669" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.6687</double>
+                  <InterpDouble Value="0.9615" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5058</double>
+                  <InterpDouble Value="0.9565" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.3429</double>
+                  <InterpDouble Value="0.9509" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.187</double>
+                  <InterpDouble Value="0.9443" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.0334</double>
+                  <InterpDouble Value="0.9368" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.8775</double>
+                  <InterpDouble Value="0.9293" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.7216</double>
+                  <InterpDouble Value="0.9218" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5634</double>
+                  <InterpDouble Value="0.9149" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.4029</double>
+                  <InterpDouble Value="0.9093" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.24</double>
+                  <InterpDouble Value="0.9055" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.0748</double>
+                  <InterpDouble Value="0.9026" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0905</double>
+                  <InterpDouble Value="0.9016" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.2557</double>
+                  <InterpDouble Value="0.9033" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.4232</double>
+                  <InterpDouble Value="0.9069" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5861</double>
+                  <InterpDouble Value="0.9132" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.735</double>
+                  <InterpDouble Value="0.9222" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8793</double>
+                  <InterpDouble Value="0.9307" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>4</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+    <DoubleInterp2D>
+      <double>2</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>0</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4628</double>
+                  <InterpDouble Value="0.6329" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.1882</double>
+                  <InterpDouble Value="0.6326" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.9043</double>
+                  <InterpDouble Value="0.6326" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.7414</double>
+                  <InterpDouble Value="0.634" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.4761</double>
+                  <InterpDouble Value="0.6356" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.1899</double>
+                  <InterpDouble Value="0.6356" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.8898</double>
+                  <InterpDouble Value="0.6359" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.6175</double>
+                  <InterpDouble Value="0.6369" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.457</double>
+                  <InterpDouble Value="0.6373" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2499</double>
+                  <InterpDouble Value="0.6382" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.0474</double>
+                  <InterpDouble Value="0.6387" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.8496</double>
+                  <InterpDouble Value="0.6384" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.6565</double>
+                  <InterpDouble Value="0.6383" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.361</double>
+                  <InterpDouble Value="0.6389" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.1608</double>
+                  <InterpDouble Value="0.6394" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0416</double>
+                  <InterpDouble Value="0.6388" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.2254</double>
+                  <InterpDouble Value="0.6381" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.4604</double>
+                  <InterpDouble Value="0.6383" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.6606</double>
+                  <InterpDouble Value="0.6355" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8351</double>
+                  <InterpDouble Value="0.6302" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.0492</double>
+                  <InterpDouble Value="0.6184" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.24</double>
+                  <InterpDouble Value="0.6104" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.3749</double>
+                  <InterpDouble Value="0.6035" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5052</double>
+                  <InterpDouble Value="0.5929" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.6704</double>
+                  <InterpDouble Value="0.5805" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.8031</double>
+                  <InterpDouble Value="0.5696" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.938</double>
+                  <InterpDouble Value="0.5544" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.0614</double>
+                  <InterpDouble Value="0.538" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.2243</double>
+                  <InterpDouble Value="0.5455" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.4407</double>
+                  <InterpDouble Value="0.5528" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.6966</double>
+                  <InterpDouble Value="0.5611" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.9433</double>
+                  <InterpDouble Value="0.5675" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.0876</double>
+                  <InterpDouble Value="0.5729" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.3063</double>
+                  <InterpDouble Value="0.5762" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.4971</double>
+                  <InterpDouble Value="0.5789" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.7856</double>
+                  <InterpDouble Value="0.5848" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.9532</double>
+                  <InterpDouble Value="0.5871" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.1928</double>
+                  <InterpDouble Value="0.5917" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.4348</double>
+                  <InterpDouble Value="0.5938" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.6978</double>
+                  <InterpDouble Value="0.599" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.8746</double>
+                  <InterpDouble Value="0.6007" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.0748</double>
+                  <InterpDouble Value="0.6025" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.2423</double>
+                  <InterpDouble Value="0.6045" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.4401</double>
+                  <InterpDouble Value="0.606" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.6635</double>
+                  <InterpDouble Value="0.6069" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.8682</double>
+                  <InterpDouble Value="0.6096" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.087</double>
+                  <InterpDouble Value="0.6098" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.3313</double>
+                  <InterpDouble Value="0.6101" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.5477</double>
+                  <InterpDouble Value="0.61" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.7199</double>
+                  <InterpDouble Value="0.6099" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.9293</double>
+                  <InterpDouble Value="0.6105" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.0829</double>
+                  <InterpDouble Value="0.6097" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.3016</double>
+                  <InterpDouble Value="0.6094" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.5762</double>
+                  <InterpDouble Value="0.6088" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.8182</double>
+                  <InterpDouble Value="0.6075" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.03</double>
+                  <InterpDouble Value="0.6056" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.1975</double>
+                  <InterpDouble Value="0.6064" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.365</double>
+                  <InterpDouble Value="0.6072" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5303</double>
+                  <InterpDouble Value="0.6046" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>0</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>0.66</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>0.9747</double>
+                  <InterpDouble Value="0.6481" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.1376</double>
+                  <InterpDouble Value="0.6514" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.3982</double>
+                  <InterpDouble Value="0.6544" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5634</double>
+                  <InterpDouble Value="0.658" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.7891</double>
+                  <InterpDouble Value="0.6629" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.9962</double>
+                  <InterpDouble Value="0.6677" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.1661</double>
+                  <InterpDouble Value="0.6759" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.3406</double>
+                  <InterpDouble Value="0.6871" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.4802</double>
+                  <InterpDouble Value="0.6965" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.6361</double>
+                  <InterpDouble Value="0.7105" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.7664</double>
+                  <InterpDouble Value="0.7235" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.9014</double>
+                  <InterpDouble Value="0.7246" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.1736</double>
+                  <InterpDouble Value="0.7265" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.3854</double>
+                  <InterpDouble Value="0.7286" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.6483</double>
+                  <InterpDouble Value="0.7285" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.9997</double>
+                  <InterpDouble Value="0.7311" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.3162</double>
+                  <InterpDouble Value="0.7309" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.5768</double>
+                  <InterpDouble Value="0.7287" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.8234</double>
+                  <InterpDouble Value="0.7244" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.0212</double>
+                  <InterpDouble Value="0.7209" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.2307</double>
+                  <InterpDouble Value="0.7163" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.4796</double>
+                  <InterpDouble Value="0.7113" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.6798</double>
+                  <InterpDouble Value="0.7066" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.8915</double>
+                  <InterpDouble Value="0.7029" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.087</double>
+                  <InterpDouble Value="0.7007" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.2708</double>
+                  <InterpDouble Value="0.7003" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.4407</double>
+                  <InterpDouble Value="0.6965" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.7478</double>
+                  <InterpDouble Value="0.6928" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.9154</double>
+                  <InterpDouble Value="0.6927" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.1364</double>
+                  <InterpDouble Value="0.6902" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.3226</double>
+                  <InterpDouble Value="0.6901" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.5762</double>
+                  <InterpDouble Value="0.687" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.7391</double>
+                  <InterpDouble Value="0.6872" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.9322</double>
+                  <InterpDouble Value="0.6865" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.1277</double>
+                  <InterpDouble Value="0.6861" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.3394</double>
+                  <InterpDouble Value="0.6861" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5582</double>
+                  <InterpDouble Value="0.6872" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>0,66</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>2</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4674</double>
+                  <InterpDouble Value="0.7213" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.372</double>
+                  <InterpDouble Value="0.7208" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.2999</double>
+                  <InterpDouble Value="0.7215" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.2068</double>
+                  <InterpDouble Value="0.7237" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.0393</double>
+                  <InterpDouble Value="0.7221" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.8741</double>
+                  <InterpDouble Value="0.7235" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.7065</double>
+                  <InterpDouble Value="0.7249" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.539</double>
+                  <InterpDouble Value="0.7254" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.3714</double>
+                  <InterpDouble Value="0.725" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.2039</double>
+                  <InterpDouble Value="0.7243" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.0364</double>
+                  <InterpDouble Value="0.7238" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.8688</double>
+                  <InterpDouble Value="0.7237" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.7013</double>
+                  <InterpDouble Value="0.7236" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5361</double>
+                  <InterpDouble Value="0.7238" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.3685</double>
+                  <InterpDouble Value="0.7234" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2429</double>
+                  <InterpDouble Value="0.7195" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2033</double>
+                  <InterpDouble Value="0.7193" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.0753</double>
+                  <InterpDouble Value="0.7173" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.966</double>
+                  <InterpDouble Value="0.7159" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.817</double>
+                  <InterpDouble Value="0.7154" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.6518</double>
+                  <InterpDouble Value="0.711" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.4866</double>
+                  <InterpDouble Value="0.7084" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.3796</double>
+                  <InterpDouble Value="0.7098" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.3191</double>
+                  <InterpDouble Value="0.7102" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.212</double>
+                  <InterpDouble Value="0.7085" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.0445</double>
+                  <InterpDouble Value="0.7083" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0602</double>
+                  <InterpDouble Value="0.7088" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.123</double>
+                  <InterpDouble Value="0.711" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.2277</double>
+                  <InterpDouble Value="0.7102" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.393</double>
+                  <InterpDouble Value="0.7138" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.4418</double>
+                  <InterpDouble Value="0.7135" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.607</double>
+                  <InterpDouble Value="0.7174" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.7723</double>
+                  <InterpDouble Value="0.7219" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.9328</double>
+                  <InterpDouble Value="0.7285" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.0887</double>
+                  <InterpDouble Value="0.7367" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.2446</double>
+                  <InterpDouble Value="0.7454" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.3959</double>
+                  <InterpDouble Value="0.7551" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.4889</double>
+                  <InterpDouble Value="0.7626" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5378</double>
+                  <InterpDouble Value="0.7666" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.6332</double>
+                  <InterpDouble Value="0.7741" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.7659</double>
+                  <InterpDouble Value="0.7878" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.9055</double>
+                  <InterpDouble Value="0.8005" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.0428</double>
+                  <InterpDouble Value="0.8133" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.1754</double>
+                  <InterpDouble Value="0.8266" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.2661</double>
+                  <InterpDouble Value="0.8353" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.301</double>
+                  <InterpDouble Value="0.8415" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.3871</double>
+                  <InterpDouble Value="0.8505" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.4988</double>
+                  <InterpDouble Value="0.8663" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.6268</double>
+                  <InterpDouble Value="0.8827" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.7734</double>
+                  <InterpDouble Value="0.8961" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.927</double>
+                  <InterpDouble Value="0.9011" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.9503</double>
+                  <InterpDouble Value="0.9076" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.1015</double>
+                  <InterpDouble Value="0.917" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.2435</double>
+                  <InterpDouble Value="0.9236" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.3482</double>
+                  <InterpDouble Value="0.9292" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.4715</double>
+                  <InterpDouble Value="0.9386" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.6251</double>
+                  <InterpDouble Value="0.9464" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.7833</double>
+                  <InterpDouble Value="0.9549" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.9462</double>
+                  <InterpDouble Value="0.96" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.0602</double>
+                  <InterpDouble Value="0.9632" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.1067</double>
+                  <InterpDouble Value="0.9587" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.2627</double>
+                  <InterpDouble Value="0.9521" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.4139</double>
+                  <InterpDouble Value="0.9431" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.5652</double>
+                  <InterpDouble Value="0.9337" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.728</double>
+                  <InterpDouble Value="0.9259" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.8886</double>
+                  <InterpDouble Value="0.9187" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.9212</double>
+                  <InterpDouble Value="0.9145" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.0096</double>
+                  <InterpDouble Value="0.9078" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.0817</double>
+                  <InterpDouble Value="0.9079" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.1236</double>
+                  <InterpDouble Value="0.9077" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.2725</double>
+                  <InterpDouble Value="0.8977" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.3982</double>
+                  <InterpDouble Value="0.8951" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.4354</double>
+                  <InterpDouble Value="0.8927" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.5564</double>
+                  <InterpDouble Value="0.8876" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.8659</double>
+                  <InterpDouble Value="0.8766" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.0684</double>
+                  <InterpDouble Value="0.8716" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.2243</double>
+                  <InterpDouble Value="0.8638" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.3871</double>
+                  <InterpDouble Value="0.8582" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.5477</double>
+                  <InterpDouble Value="0.8522" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.6385</double>
+                  <InterpDouble Value="0.8505" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.7129</double>
+                  <InterpDouble Value="0.8481" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.8037</double>
+                  <InterpDouble Value="0.847" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.9666</double>
+                  <InterpDouble Value="0.8419" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.1294</double>
+                  <InterpDouble Value="0.8372" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.2946</double>
+                  <InterpDouble Value="0.8334" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.4575</double>
+                  <InterpDouble Value="0.8299" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.6227</double>
+                  <InterpDouble Value="0.8261" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.788</double>
+                  <InterpDouble Value="0.822" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.9485</double>
+                  <InterpDouble Value="0.8164" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.1091</double>
+                  <InterpDouble Value="0.811" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.2766</double>
+                  <InterpDouble Value="0.8103" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.3813</double>
+                  <InterpDouble Value="0.8083" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.4395</double>
+                  <InterpDouble Value="0.8059" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5396</double>
+                  <InterpDouble Value="0.8026" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>2</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+    <DoubleInterp2D>
+      <double>100</double>
+      <Interp2D>
+        <_data>
+          <DoubleInterpXY>
+            <double>0</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4767</double>
+                  <InterpDouble Value="0.5193" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.3278</double>
+                  <InterpDouble Value="0.5293" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.1859</double>
+                  <InterpDouble Value="0.539" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.0369</double>
+                  <InterpDouble Value="0.548" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.8531</double>
+                  <InterpDouble Value="0.5569" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.7205</double>
+                  <InterpDouble Value="0.5628" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.5669</double>
+                  <InterpDouble Value="0.571" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.3854</double>
+                  <InterpDouble Value="0.578" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.2155</double>
+                  <InterpDouble Value="0.5855" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.0457</double>
+                  <InterpDouble Value="0.5912" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.8781</double>
+                  <InterpDouble Value="0.5976" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.664</double>
+                  <InterpDouble Value="0.604" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.4895</double>
+                  <InterpDouble Value="0.6081" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2848</double>
+                  <InterpDouble Value="0.6136" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.1405</double>
+                  <InterpDouble Value="0.6178" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.9171</double>
+                  <InterpDouble Value="0.6229" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.7845</double>
+                  <InterpDouble Value="0.6261" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.5913</double>
+                  <InterpDouble Value="0.631" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.361</double>
+                  <InterpDouble Value="0.6352" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.1562</double>
+                  <InterpDouble Value="0.6373" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0416</double>
+                  <InterpDouble Value="0.6388" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.3045</double>
+                  <InterpDouble Value="0.6317" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.4465</double>
+                  <InterpDouble Value="0.626" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.614</double>
+                  <InterpDouble Value="0.6189" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8118</double>
+                  <InterpDouble Value="0.6047" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.9933</double>
+                  <InterpDouble Value="0.5904" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.1446</double>
+                  <InterpDouble Value="0.5771" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.354</double>
+                  <InterpDouble Value="0.5546" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.5076</double>
+                  <InterpDouble Value="0.5342" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.6099</double>
+                  <InterpDouble Value="0.5181" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.717</double>
+                  <InterpDouble Value="0.5004" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.8682</double>
+                  <InterpDouble Value="0.4748" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.9683</double>
+                  <InterpDouble Value="0.4544" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.1335</double>
+                  <InterpDouble Value="0.4423" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.3383</double>
+                  <InterpDouble Value="0.4293" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.4965</double>
+                  <InterpDouble Value="0.4178" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.7827</double>
+                  <InterpDouble Value="0.4013" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.0038</double>
+                  <InterpDouble Value="0.3902" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.155</double>
+                  <InterpDouble Value="0.3833" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.3482</double>
+                  <InterpDouble Value="0.3734" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.5297</double>
+                  <InterpDouble Value="0.3665" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.767</double>
+                  <InterpDouble Value="0.3573" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.0369</double>
+                  <InterpDouble Value="0.349" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.2301</double>
+                  <InterpDouble Value="0.3416" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.4395</double>
+                  <InterpDouble Value="0.336" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.6931</double>
+                  <InterpDouble Value="0.3286" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.9351</double>
+                  <InterpDouble Value="0.3236" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.1795</double>
+                  <InterpDouble Value="0.3184" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.4168</double>
+                  <InterpDouble Value="0.3125" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.6518</double>
+                  <InterpDouble Value="0.3073" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.9404</double>
+                  <InterpDouble Value="0.3027" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.194</double>
+                  <InterpDouble Value="0.2987" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.4709</double>
+                  <InterpDouble Value="0.2944" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.7408</double>
+                  <InterpDouble Value="0.2907" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.9921</double>
+                  <InterpDouble Value="0.287" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.2225</double>
+                  <InterpDouble Value="0.2805" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.3784</double>
+                  <InterpDouble Value="0.2838" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.5529</double>
+                  <InterpDouble Value="0.2815" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.7205</double>
+                  <InterpDouble Value="0.2793" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.881</double>
+                  <InterpDouble Value="0.2746" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.0393</double>
+                  <InterpDouble Value="0.2775" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.1998</double>
+                  <InterpDouble Value="0.2752" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.3627</double>
+                  <InterpDouble Value="0.2705" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5279</double>
+                  <InterpDouble Value="0.2676" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>0</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+          <DoubleInterpXY>
+            <double>2</double>
+            <InterpXY>
+              <_data>
+                <DoubleInterpDouble>
+                  <double>-3.4767</double>
+                  <InterpDouble Value="0.5669" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-3.2464</double>
+                  <InterpDouble Value="0.5748" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.9834</double>
+                  <InterpDouble Value="0.5865" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.7763</double>
+                  <InterpDouble Value="0.5935" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.4994</double>
+                  <InterpDouble Value="0.6024" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.29</double>
+                  <InterpDouble Value="0.6072" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-2.0224</double>
+                  <InterpDouble Value="0.6143" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.82</double>
+                  <InterpDouble Value="0.6182" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.5477</double>
+                  <InterpDouble Value="0.6222" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-1.2499</double>
+                  <InterpDouble Value="0.6278" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.8845</double>
+                  <InterpDouble Value="0.6303" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.6076</double>
+                  <InterpDouble Value="0.6356" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>-0.1911</double>
+                  <InterpDouble Value="0.6419" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.0439</double>
+                  <InterpDouble Value="0.6428" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.2813</double>
+                  <InterpDouble Value="0.6424" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.5489</double>
+                  <InterpDouble Value="0.6424" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>0.8444</double>
+                  <InterpDouble Value="0.6431" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.1841</double>
+                  <InterpDouble Value="0.6431" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.4494</double>
+                  <InterpDouble Value="0.6428" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.6844</double>
+                  <InterpDouble Value="0.644" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>1.8426</double>
+                  <InterpDouble Value="0.6439" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.0823</double>
+                  <InterpDouble Value="0.6436" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.3406</double>
+                  <InterpDouble Value="0.6442" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.6245</double>
+                  <InterpDouble Value="0.6439" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>2.7874</double>
+                  <InterpDouble Value="0.6441" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.0177</double>
+                  <InterpDouble Value="0.644" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.2039</double>
+                  <InterpDouble Value="0.6436" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.425</double>
+                  <InterpDouble Value="0.6439" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.653</double>
+                  <InterpDouble Value="0.6435" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>3.8415</double>
+                  <InterpDouble Value="0.6444" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.0439</double>
+                  <InterpDouble Value="0.6434" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.1207</double>
+                  <InterpDouble Value="0.6342" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.3115</double>
+                  <InterpDouble Value="0.6124" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.6675</double>
+                  <InterpDouble Value="0.5799" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>4.8607</double>
+                  <InterpDouble Value="0.5663" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.0515</double>
+                  <InterpDouble Value="0.554" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.2353</double>
+                  <InterpDouble Value="0.5419" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.3679</double>
+                  <InterpDouble Value="0.5335" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.5471</double>
+                  <InterpDouble Value="0.5229" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.6937</double>
+                  <InterpDouble Value="0.5148" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>5.8706</double>
+                  <InterpDouble Value="0.508" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.0637</double>
+                  <InterpDouble Value="0.5011" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.2475</double>
+                  <InterpDouble Value="0.4915" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.4523</double>
+                  <InterpDouble Value="0.485" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.6129</double>
+                  <InterpDouble Value="0.4794" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>6.8409</double>
+                  <InterpDouble Value="0.4726" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.0969</double>
+                  <InterpDouble Value="0.4639" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.2039</double>
+                  <InterpDouble Value="0.4589" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.3714</double>
+                  <InterpDouble Value="0.459" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.5436</double>
+                  <InterpDouble Value="0.4537" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.7088</double>
+                  <InterpDouble Value="0.4487" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>7.8741</double>
+                  <InterpDouble Value="0.4455" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.0393</double>
+                  <InterpDouble Value="0.4426" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.2045</double>
+                  <InterpDouble Value="0.4394" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.3697</double>
+                  <InterpDouble Value="0.4363" />
+                </DoubleInterpDouble>
+                <DoubleInterpDouble>
+                  <double>8.5326</double>
+                  <InterpDouble Value="0.4318" />
+                </DoubleInterpDouble>
+              </_data>
+              <Title>2</Title>
+              <ET_left>etValue</ET_left>
+              <ET_right>etValue</ET_right>
+              <InterpType>itLine</InterpType>
+            </InterpXY>
+          </DoubleInterpXY>
+        </_data>
+        <Title>Title</Title>
+        <ET_left>etValue</ET_left>
+        <ET_right>etValue</ET_right>
+        <InterpType>itLine</InterpType>
+      </Interp2D>
+    </DoubleInterp2D>
+  </_data>
+  <Title>3_16</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</Interp3D>
