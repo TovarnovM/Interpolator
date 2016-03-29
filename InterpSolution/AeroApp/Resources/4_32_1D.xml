@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="0" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.25</double>
+      <InterpDouble Value="0.07" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.5</double>
+      <InterpDouble Value="0.2" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.75</double>
+      <InterpDouble Value="0.38" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1</double>
+      <InterpDouble Value="0.54" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.25</double>
+      <InterpDouble Value="0.67" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.5</double>
+      <InterpDouble Value="0.77" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.75</double>
+      <InterpDouble Value="0.85" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>2</double>
+      <InterpDouble Value="0.91" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>2.25</double>
+      <InterpDouble Value="0.96" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>2.5</double>
+      <InterpDouble Value="0.99" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>0</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

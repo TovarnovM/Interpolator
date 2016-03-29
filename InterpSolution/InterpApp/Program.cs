@@ -47,6 +47,7 @@ namespace Interpolator
             for (int i = 1; i < 5; i++)
             {
                 var interpol = new InterpXY();
+                
                 interpol.Add(-1.2*i, 1);
                 interpol.Add(-4.2, 2 * i);
                 interpol.Add(2 * i, 3);

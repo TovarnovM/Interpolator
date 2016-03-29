@@ -104,6 +104,8 @@ namespace Interpolator
                 }
             }
         }
+        public double MinT() => _data.Keys.Min();
+        public double MaxT() => _data.Keys.Max();
         public Interp()
         {
             InterpType = InterpolType.itLine;
@@ -273,7 +275,7 @@ namespace Interpolator
         //    { }
         //    return null;
         //}
-        protected static T2 LoadFromXmlString<T2>(string fileStr) where T2 : Interp<T>
+        public static T2 LoadFromXmlString<T2>(string fileStr) where T2 : Interp<T>
         {
             try
             {
@@ -287,7 +289,7 @@ namespace Interpolator
             { }
             return null;
         }
-        protected static T2 LoadFromXmlFile<T2>(string fileName) where T2 : Interp<T>
+        public static T2 LoadFromXmlFile<T2>(string fileName) where T2 : Interp<T>
         {
             try
             {

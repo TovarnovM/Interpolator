@@ -143,10 +143,7 @@
     <None Include="Resources\4_30_4D.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\4_32.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\4_40_0-конус_1-ожив.xml" />
+    <None Include="Resources\4_40.xml" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\5_7.xml" />
@@ -171,6 +168,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4_32_1D.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

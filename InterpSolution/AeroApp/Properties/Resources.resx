@@ -163,11 +163,11 @@
   <data name="_4_30_4D" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\4_30_4D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="_4_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\4_32.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  <data name="_4_32_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4_32_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="_4_40_0_конус_1_ожив" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\4_40_0-конус_1-ожив.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  <data name="_4_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\4_40.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
   <data name="_5_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5_11.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>

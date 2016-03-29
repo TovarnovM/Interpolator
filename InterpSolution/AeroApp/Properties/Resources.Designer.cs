@@ -408,24 +408,25 @@ namespace AeroApp.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-        ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///&lt;InterpXY xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;_data&gt;
-        ///    &lt;DoubleInterpXY&gt;
+        ///    &lt;DoubleInterpDouble&gt;
         ///      &lt;double&gt;0&lt;/double&gt;
-        ///      &lt;InterpXY&gt;
-        ///        &lt;_data&gt;
-        ///          &lt;DoubleInterpDouble&gt;
-        ///            &lt;double&gt;0&lt;/double&gt;
-        ///            &lt;InterpDouble Value=&quot;0&quot; /&gt;
-        ///          &lt;/DoubleInterpDouble&gt;
-        ///          &lt;DoubleInterpDouble&gt;
-        ///            &lt;double&gt;0.25&lt;/double&gt;
-        ///            &lt;InterpDouble Value=&quot;0.07&quot; /&gt;
-        ///          &lt;/DoubleIn [остаток строки не уместился]&quot;;.
+        ///      &lt;InterpDouble Value=&quot;0&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0.25&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.07&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0.5&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.2&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///  [остаток строки не уместился]&quot;;.
         /// </summary>
-        internal static string _4_32 {
+        internal static string _4_32_1D {
             get {
-                return ResourceManager.GetString("_4_32", resourceCulture);
+                return ResourceManager.GetString("_4_32_1D", resourceCulture);
             }
         }
         
@@ -446,9 +447,9 @@ namespace AeroApp.Properties {
         ///            &lt;InterpDouble Value=&quot;-0.2&quot; /&gt;
         ///          &lt;/Do [остаток строки не уместился]&quot;;.
         /// </summary>
-        internal static string _4_40_0_конус_1_ожив {
+        internal static string _4_40 {
             get {
-                return ResourceManager.GetString("_4_40_0_конус_1_ожив", resourceCulture);
+                return ResourceManager.GetString("_4_40", resourceCulture);
             }
         }
         
