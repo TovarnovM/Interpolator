@@ -364,5 +364,29 @@ namespace GraphsFromExcel
             string str = dir + "\\" + interp4D.Title + "_4D.xml";
             interp4D.SaveToXmlFile(str);
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (checkedListBox1.SelectedIndex == -1)
+            {
+                MessageBox.Show("Не выделено ни одного интерполятора(");
+                return;
+            }
+            if (_sd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+
+                    lstInterp[checkedListBox1.SelectedIndex].SaveToXmlFile(_sd.FileName);
+                    //var tmpInterpXY = new InterpXY();
+                    //tmpInterpXY = (InterpXY)tmpInterpXY.LoadFromXmlFile(sd.FileName);
+                    //AddInterp(tmpInterpXY);
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+            }
+        }
     }
 }

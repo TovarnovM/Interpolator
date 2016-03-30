@@ -27,11 +27,11 @@ namespace AeroApp
 
             foreach (var item in rrord)
             {
-                MessageBox.Show($"{item.Key} = {item.Value.GetType()}, кол-во параметров = {rr.HowManyParams(item.Key)}");
+                MessageBox.Show($@"{item.Key} = {item.Value.GetType()}, кол-во параметров = {rr.HowManyParams(item.Key)} , params = {rr.GetParams(item.Key)}");
 
             }
             //MessageBox.Show($"{ rr.GetV("3_212", 1, 4.5)}");
-           
+            
 
         }
     }

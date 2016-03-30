@@ -38,18 +38,17 @@
             this.interpolChart1.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.interpolChart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.interpolChart1.Location = new System.Drawing.Point(0, 0);
-            this.interpolChart1.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
+            this.interpolChart1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.interpolChart1.Name = "interpolChart1";
-            this.interpolChart1.Size = new System.Drawing.Size(1218, 832);
+            this.interpolChart1.Size = new System.Drawing.Size(802, 553);
             this.interpolChart1.TabIndex = 2;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1218, 832);
+            this.ClientSize = new System.Drawing.Size(802, 553);
             this.Controls.Add(this.interpolChart1);
-            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.Name = "Form1";
             this.Text = "Form1";
             this.ResumeLayout(false);

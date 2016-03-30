@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Interp3D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <_data>
     <DoubleInterp2D>
@@ -1847,4 +1847,9 @@
   <ET_left>etValue</ET_left>
   <ET_right>etValue</ET_right>
   <InterpType>itLine</InterpType>
+  <paramList>
+    <string>1 - лямбда_к*КОРЕНЬ(М^2-1)</string>
+    <string>2 - лямбда_к*tg(hi_0,5)</string>
+    <string>3 - etta_k</string>
+  </paramList>
 </Interp3D>

@@ -10,13 +10,16 @@ using System.Globalization;
 using System.Collections;
 using System.Diagnostics;
 using System.Xml.Serialization;
+using System.Xml;
 
 namespace RocketAero
 {
     public class AeroGraphs
     {
         private Dictionary<string, IInterpElem> _graphs = new Dictionary<string, IInterpElem>();
-        public Dictionary<string, IInterpElem> Graphs { get { return _graphs; } }
+        public  Dictionary<string, IInterpElem> Graphs { get { return _graphs; } }
+        private Dictionary<string, List<string>> _params = new Dictionary<string, List<string>>();
+        public  Dictionary<string, List<string>> Params { get { return _params; } }
         public AeroGraphs()
         {
             var resourses = Resources.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentUICulture, true, true);
@@ -35,7 +38,25 @@ namespace RocketAero
                 else
                     _graphs.Add(CutMyString(key), 
                                 Interp2D.LoadFromXmlString(item.Value.ToString()));
+
+                XmlDocument doc = new XmlDocument();
+                doc.LoadXml(item.Value.ToString());
+                var tmpList = new List<string>();
+                foreach (XmlNode elem in doc.DocumentElement.SelectNodes("paramList/string"))
+                {
+                    string par = elem?.InnerText;
+                    if(par != null)
+                        tmpList.Add(par);
+                }
+                if (tmpList.Count == 0)
+                    tmpList.Add("I dont know");
+                _params.Add(CutMyString(key), tmpList);
             }                
+        }
+        public string GetParams(string graphNum)
+        {
+            return HasGraph(graphNum) ? _params[CutMyString(graphNum)].Aggregate((a, b) => a + " " + b)
+                                      : "Нет такого графика";
         }
         public string CutMyString(string cutThis)
         {
