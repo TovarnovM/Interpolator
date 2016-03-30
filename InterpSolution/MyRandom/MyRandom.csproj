@@ -54,7 +54,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="RandPCG">
-      <HintPath>..\..\..\..\Visual Studio 2013\Projects\RandPCG\Debug\RandPCG.dll</HintPath>
+      <HintPath>.\RandPCG.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

@@ -31,7 +31,7 @@ namespace AeroApp
 
             }
             //MessageBox.Show($"{ rr.GetV("3_212", 1, 4.5)}");
-            
+            double ss = rr.GetV("3_5", 1, 4.5,2);
 
         }
     }
