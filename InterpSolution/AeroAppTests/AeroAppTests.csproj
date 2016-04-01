@@ -53,6 +53,8 @@
   <ItemGroup>
     <Compile Include="AeroGraphsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RocketBodyTests.cs" />
+    <Compile Include="RocketWingTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AeroApp\AeroApp.csproj">

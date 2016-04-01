@@ -23,18 +23,18 @@ namespace Interpolator.Tests
             sInterp5elem = new InterpXY();
 
             sInterp1elem.Add(3, 3);
-            Assert.AreEqual(1, sInterp1elem.Count());
+            Assert.AreEqual(1, sInterp1elem.Count);
 
             sInterp2elem.Add(1, 1);
             sInterp2elem.Add(4, 4);
-            Assert.AreEqual(2, sInterp2elem.Count());
+            Assert.AreEqual(2, sInterp2elem.Count);
 
             sInterp5elem.Add(-1, -2);
             sInterp5elem.Add(0, 0);
             sInterp5elem.Add(1, -1);
             sInterp5elem.Add(5, 1);
             sInterp5elem.Add(10, 7);
-            Assert.AreEqual(5, sInterp5elem.Count());
+            Assert.AreEqual(5, sInterp5elem.Count);
         }
         [TestMethod()]
         public void InerpolMethodLineTest()
@@ -81,9 +81,9 @@ namespace Interpolator.Tests
             tmpInterp.Add(2, 1);
             tmpInterp.Add(3, 1);
             tmpInterp.RemoveElement(0);
-            Assert.AreEqual(2, tmpInterp.Count());
-            Assert.AreEqual(2, tmpInterp.Count());
-            Assert.AreEqual(2, tmpInterp.Count());
+            Assert.AreEqual(2, tmpInterp.Count);
+            Assert.AreEqual(2, tmpInterp.Count);
+            Assert.AreEqual(2, tmpInterp.Count);
         }
         [TestMethod()]
         public void SetNTest()

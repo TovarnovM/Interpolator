@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Xml.Serialization;
 using SerializableGenerics;
 using System.IO;
+using System.Windows;
 
 namespace Interpolator
 {
@@ -33,7 +32,7 @@ namespace Interpolator
         /// <returns></returns>
         public double GetV(params double[] t)
         {
-            return Value;
+            return Value;            
         }
 
         public InterpDouble CopyMe()
@@ -75,10 +74,14 @@ namespace Interpolator
         //номер интервала (левого элемента), в который попала искомая точка
         [XmlIgnore]
         public int N { get; private set; } = 0;
-        public int Count()
-        {
-            return _data.Count;
+        public int Count {
+            get
+            {
+                return _data.Count;
+            }
         }
+
+
 
         //делегат функции по реализации метода интерполяции
         public delegate double InterpolMethod(params double[] t);
@@ -206,7 +209,7 @@ namespace Interpolator
         /// </summary>
         /// <param name="t"></param>
         /// <returns></returns>
-        public double GetV(params double[] t)
+        public virtual double GetV(params double[] t)
         {
             if (_data.Count == 0 || t.Length == 0)
                 return 0;
@@ -361,6 +364,7 @@ namespace Interpolator
         public static InterpXY LoadFromXmlFile(string fileName)  => InterpXY.LoadFromXmlFile<InterpXY>(fileName);
         public static InterpXY LoadFromXmlString(string fileStr) => InterpXY.LoadFromXmlString<InterpXY>(fileStr); 
     }
+
     [XmlRoot(nameof(Interp2D))]
     public class Interp2D: Interp<InterpXY>
     {
@@ -433,6 +437,7 @@ namespace Interpolator
         public static Interp2D LoadFromXmlFile(string fileName)  => Interp2D.LoadFromXmlFile<Interp2D>(fileName);
         public static Interp2D LoadFromXmlString(string fileStr) => Interp2D.LoadFromXmlString<Interp2D>(fileStr);
     }
+
     [XmlRoot(nameof(Interp3D))]
     public class Interp3D: Interp<Interp2D>
     {
@@ -449,6 +454,7 @@ namespace Interpolator
         public static Interp3D LoadFromXmlFile(string fileName) => Interp3D.LoadFromXmlFile<Interp3D>(fileName);
         public static Interp3D LoadFromXmlString(string fileStr) => Interp3D.LoadFromXmlString<Interp3D>(fileStr);
     }
+
     [XmlRoot(nameof(Interp4D))]
     public class Interp4D : Interp<Interp3D>
     {
@@ -465,4 +471,223 @@ namespace Interpolator
         public static Interp4D LoadFromXmlFile(string fileName) => Interp4D.LoadFromXmlFile<Interp4D>(fileName);
         public static Interp4D LoadFromXmlString(string fileStr) => Interp4D.LoadFromXmlString<Interp4D>(fileStr);
     }
+
+    //Далее идет интерполяторы для графиков "линий уровня"
+    /// <summary>
+    /// Класс полилинии в двумерном пространстве, состоящей из линейных отрезков. Координаты типа Vector
+    /// </summary>
+    [XmlRoot(nameof(LevelLine))]
+    public class LevelLine : InterpDouble
+    {
+        public List<Vector> pointsList = new List<Vector>();
+        public LevelLine(double Value = 0.0): base(Value)
+        {
+
+        }
+        public int Count { get { return pointsList.Count; } }
+        public void AddPoint(double x, double y)
+        {
+            pointsList.Add(new Vector(x, y));
+        }
+        public void AddPoints(double[] x, double[] y)
+        {
+            int n = Math.Min(x.Length, y.Length);
+            for (int i = 0; i < n; i++)
+            {
+                AddPoint(x[i], y[i]);
+            }
+        }
+        public void AddPoints(double[][] xy )
+        {
+            foreach (double[] item in xy)
+            {
+                if (item.Length > 1)
+                    AddPoint(item[0], item[1]);
+            }
+        }
+        public void AddPoint(Vector point)
+        {
+            pointsList.Add(point);
+        }
+        public Vector NearestToPoint(Vector point)
+        {
+            if(pointsList.Count == 0)
+                return new Vector(0, 0);
+            Vector result = new Vector(double.MaxValue, double.MaxValue);
+            for (int i = 0; i < pointsList.Count-1; i++)
+            {
+                Vector tmpResult = MinimumDistanceVector(pointsList[i], pointsList[i + 1], point);
+                if ((tmpResult - point).LengthSquared < (result - point).LengthSquared)
+                    result = tmpResult;
+            }
+            return result;
+        }
+        public static Vector MinimumDistanceVector(Vector v, Vector w, Vector p)
+        {
+            // Return minimum distance vector between line segment vw and point p
+            // i.e. |w-v|^2 -  avoid a sqrt
+            double l2 = (w - v).LengthSquared;  
+            // v == w case
+            if (l2 == 0.0)
+                return w - p;   
+            // Consider the line extending the segment, parameterized as v + t (w - v).
+            // We find projection of point p onto the line. 
+            // It falls where t = [(p-v) . (w-v)] / |w-v|^2
+            // We clamp t from [0,1] to handle points outside the segment vw.
+            double t = Math.Max(0, Math.Min(1, (p - v)*(w - v) / l2));
+            return v + t * (w - v);  // Projection falls on the segment
+        }
+        public bool IsCrossMe(Vector b0, Vector b1)
+        {
+            for (int i = 0; i < pointsList.Count-1; i++)
+            {
+                if (LinesIntersect(pointsList[i], pointsList[i + 1], b0, b1))
+                    return true;
+            }
+            return false;
+        }
+        public static bool BoundingBoxesIntersect(Vector a0, Vector a1, Vector b0, Vector b1)
+        {
+            return     Math.Min(a0.X, a1.X) <= Math.Max(b0.X, b1.X)
+                    && Math.Max(a0.X, a1.X) >= Math.Min(b0.X, b1.X)
+                    && Math.Min(a0.Y, a1.Y) <= Math.Max(b0.Y, b1.Y)
+                    && Math.Max(a0.Y, a1.Y) >= Math.Min(b0.Y, b1.Y);
+        }
+        public static bool IsPointOnLine(Vector a0, Vector a1, Vector p)
+        {
+            // Move the image, so that a.first is on (0|0)
+            return Math.Abs(CrossProduct(a1 - a0, p - a0)) < EPSILON;
+        }
+        public static bool IsPointRightOfLine(Vector a0, Vector a1, Vector p)
+        {
+            // Move the image, so that a.first is on (0|0)
+            return CrossProduct(a1 - a0, p - a0) < 0;
+        }
+        public static bool LineSegmentTouchesOrCrossesLine(Vector a0, Vector a1, Vector b0, Vector b1)
+        {
+            return      IsPointOnLine(a0, a1, b0)
+                        || IsPointOnLine(a0, a1, b1)
+                        || ( IsPointRightOfLine(a0, a1, b0)^
+                             IsPointRightOfLine(a0, a1, b1)   )  ;
+        }
+        public static bool LinesIntersect(Vector a0, Vector a1, Vector b0, Vector b1)
+        {
+
+            return BoundingBoxesIntersect(a0, a1, b0, b1)
+                    && LineSegmentTouchesOrCrossesLine(a0, a1, b0, b1)
+                    && LineSegmentTouchesOrCrossesLine(b0, b1, a0, a1);
+        }
+        public static double CrossProduct(Vector a, Vector b)
+        {
+            return a.X * b.Y - b.X * a.Y;
+        }
+        public static double EPSILON = 0.000001;
+    }
+    /// <summary>
+    /// График, составленный из линий уровня
+    /// </summary>
+    [XmlRoot(nameof(PotentGraff2P))]
+    public class PotentGraff2P : Interp<LevelLine>
+    {
+        /// <summary>
+        /// Воооот тут  t[0] = x
+        ///             t[1] = y
+        /// return интерполированный параметр Value от соседних LevelLine'ов
+        /// </summary>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        public override double GetV(params double[] t)
+        {
+            if (_data.Count == 0 || t.Length < 2)
+                return 0.0;
+            if (_data.Count == 1)
+                return _data.Values[0].Value;
+
+            var p = new Vector(t[0], t[1]);
+            Vector[] nPoints = new Vector[_data.Count];
+            double[] nL = new double[_data.Count];
+            int ni = 0;
+            for (int i = 0; i < _data.Count; i++)
+            {
+                //ближайшая точка на i-ой кривой от точки p 
+                nPoints[i] = _data.Values[i].NearestToPoint(p);
+                //рассотяние от точки p до i-ой кривой
+                nL[i] = (nPoints[i]- p).Length;
+                //запоминаем номер ближайшей кривой в ni
+                if (nL[i] < nL[ni])
+                    ni = i;
+            }
+            int nj = -1;
+            for (int i = 0; i < _data.Count; i++)
+            {
+                //Нет смысла сравнивать один и тот же вектор
+                if (i == ni)
+                    continue;
+                //если вектор кратчайшего расстоняия НЕ пересекает самую ближнюю линию, значит точка лежит между линиями
+                if(!_data.Values[ni].IsCrossMe(p,nPoints[i]))
+                {
+                    //если дебют, то запоминаем
+                    if (nj < 0)
+                    {
+                        nj = i;
+                        continue;
+                    }
+                    //если он самый короткий из "тупых"), то запоминаем
+                    if (nL[i] < nL[nj])
+                        nj = i;    
+                }
+            }
+            //Интерполировать нечего, мы за пределами. Берем ближайшее значение
+            if (nj == -1) 
+                return _data.Values[ni].Value;
+            //линейно интерполируем между соседними линиями
+            if (nL[nj] != 0)
+                return _data.Values[ni].Value + nL[ni] * (_data.Values[nj].Value - _data.Values[ni].Value) / (nL[nj] + nL[ni]);
+            else
+                return _data.Values[nj].Value;
+        }
+        /// <summary>
+        /// Проверяет пересечения линий уровня
+        /// true - всё хоршо, данные хорошие
+        /// false - данные плохие
+        /// </summary>
+        /// <returns></returns>
+        public bool ValidData()
+        {
+            for (int i = 0; i < _data.Count-1; i++)
+            {
+                for (int j = 0 ; j < _data.Values[i].Count-1; j++)
+                {
+                    for (int k = i+1; k < _data.Count; k++)
+                    {
+                        for (int j1 = 0; j1 < _data.Values[k].Count - 1; j1++)
+                        {                       
+                            if (LevelLine.LinesIntersect(_data.Values[i].pointsList[j] , _data.Values[i].pointsList[j + 1],
+                                                         _data.Values[k].pointsList[j1], _data.Values[k].pointsList[j1 + 1]))
+                                return false;
+                        }
+                    }
+
+                }
+            }
+            return true;
+        }
+    }
+    /// <summary>
+    /// Семейство графиков, каждый из которых представляет собой семейство графиков линий уровня
+    /// </summary>
+    [XmlRoot(nameof(PotentGraff3P))]
+    public class PotentGraff3P: Interp<PotentGraff2P>
+    {
+
+    }
+    /// <summary>
+    /// Семейство графиков, каждый из которых представляет собой PotentGraff3D
+    /// </summary>
+    [XmlRoot(nameof(PotentGraff4P))]
+    public class PotentGraff4P : Interp<PotentGraff4P>
+    {
+
+    }
+
 }
