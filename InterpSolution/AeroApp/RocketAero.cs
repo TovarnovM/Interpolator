@@ -146,7 +146,7 @@ namespace RocketAero
         private static string grNum = "3_3";
         public new double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
         {
-            return (this as RocketNos_ConePlusCyl).GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl);
+            return ag.GetV(grNum, AeroGraphs.M2min1(mach) / Lmb_nos, Lmb_cyl / Lmb_nos);
         }
     }
 
@@ -231,17 +231,20 @@ namespace RocketAero
 
         public double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
         {
+
             return    Main.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl) * (1 - Rshtrih * Rshtrih) + 
                     Little.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl)* Rshtrih * Rshtrih;
         }
     }
 
+
+
     /// <summary>
-    /// Фюзеляж ракеты обобщенный
+    /// геометрия Фюзеляжа ракеты обобщенныая
     /// </summary>
-    public class RocketBody : IRocket_Cy1a
+    public class RocketBody_Geom
     {
-        public AeroGraphs AeroGr { get; set; } = null;
+        
         public double L { get; set; } = 1;
         public double L_nos { get; set; } = 0.2;
         public double L_korm { get; set; } = 0.0;
@@ -255,6 +258,28 @@ namespace RocketAero
             {
                 return L_nos / D;
             }
+        }
+        public double Lmb_nos_shtrih
+        {
+            get
+            {
+                if (Nose is RocketNos_Compose)
+                {
+                    double r = (Nose as RocketNos_Compose).Rshtrih * D;
+                    if ((Nose as RocketNos_Compose).Little is RocketNos_SpherePlusCyl)
+                    {
+                        //double tetta_shtrih = ((Nose as RocketNos_Compose).Little as RocketNos_SpherePlusCyl).Type < 0.001 ?
+                        //                        Math.Atan((0.5*D-r)/(L_nos)) :
+
+                        //                        Math.PI*0.5 -
+                        //                        Math.Asin(r / (Math.Sqrt((L_nos - r) * (L_nos - r) + 0.25 * D * D))) -
+                        //                        Math.Atan(2 * (L_nos - r) * (L_nos - r) / D);
+                        double tetta_shtrih = Math.Atan((0.5 * D - r) / (L_nos));
+                        return  0.5 / Math.Tan(tetta_shtrih);
+                    }
+                }
+                return Lmb_nos;
+            }                              
         }
         public double Lmb_cyl
         {
@@ -272,6 +297,15 @@ namespace RocketAero
         }
 
         public IRocketBody_nos Nose { get; set; } = new RocketNos_ConePlusCyl();
+        public RocketBody_Geom()
+        {
+            
+        }
+    }
+
+    public class RocketBody: RocketBody_Geom, IRocket_Cy1a
+    {
+        public AeroGraphs AeroGr { get; set; } = null;
         public virtual double GetCy1a(double mach)
         {
             if (AeroGr == null)
@@ -282,24 +316,18 @@ namespace RocketAero
                 if (D1 > D)
                     cy1a_korm = 0.8 * (D1 * D1 / (D * D) - 1) * 2 * AeroGraphs.PIdiv180 * Math.Cos(2 * Math.Atan(0.5 * (D1 - D) / L_korm));
                 else
-                    cy1a_korm = -0.2 * ( 1 - D1 * D1 / (D * D)) * 2 * AeroGraphs.PIdiv180;
+                    cy1a_korm = -0.2 * (1 - D1 * D1 / (D * D)) * 2 * AeroGraphs.PIdiv180;
             }
-            return Nose.GetCy1a_nos(AeroGr, mach, Lmb_nos, Lmb_cyl) + cy1a_korm;
+            return Nose.GetCy1a_nos(AeroGr, mach, Lmb_nos_shtrih, Lmb_cyl) + cy1a_korm;
         }
-
         public RocketBody(AeroGraphs ag)
         {
             AeroGr = ag;
         }
-        public RocketBody()
-        {
-            
-        }
     }
 
-    public class RocketWing : IRocket_Cy1a
+    public class RocketWing_Geom
     {
-        public AeroGraphs AeroGr { get; set; } = null;
         public double B0 { get; set; } = 0.2;
         public double B1 { get; set; } = 0.05;
         public double L { get; set; } = 0.4;
@@ -402,19 +430,22 @@ namespace RocketAero
         public double GetTgHiM(double m) => tgHi0 - 4 * m * (Etta - 1) / (Lmb * (1 + Etta));        
         public double GetX(double z) => z * tgHi0;
         
-
+        public RocketWing_Geom()
+        {   }
+    }
+    public class RocketWing : RocketWing_Geom, IRocket_Cy1a
+    {
+        public AeroGraphs AeroGr { get; set; } = null;
+        public RocketWing(AeroGraphs ag)
+        {
+            AeroGr = ag;
+        }
         public double GetCy1a(double mach)
         {
             if (AeroGr == null)
                 return 0.0;
             return AeroGr.GetV("3_5", Lmb_k * AeroGraphs.M2min1(mach), Lmb_k * Math.Pow(C_shtr, 1.0 / 3.0), Lmb_k * GetTgHiM(0.5));
         }
-        public RocketWing(AeroGraphs ag)
-        {
-            AeroGr = ag;
-        }
-        public RocketWing()
-        {   }
     }
 
     class RocketAero1

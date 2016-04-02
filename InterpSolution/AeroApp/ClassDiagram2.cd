@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="RocketAero.AeroGraphs" Collapsed="true">
-    <Position X="3" Y="0.5" Width="1.5" />
+    <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAABAAAAAAAAAgAAAAAAAAAAAEAAgARBABAAAEAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="RocketAero.RocketNos_ConePlusCyl" Collapsed="true">
-    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Position X="0.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAIABAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
@@ -23,45 +23,67 @@
     </TypeIdentifier>
   </Class>
   <Class Name="RocketAero.RocketNos_SpherePlusCyl" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="4.75" Y="1.5" Width="2.5" />
+    <Position X="2" Y="1.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAQAAAAAAIABAAAAAAAAAQAAAAAAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="RocketAero.RocketNos_Compose" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="3" Y="1.5" Width="1.5" />
+    <Position X="2" Y="3.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAACAAAAAAAABAAAAAAAAAAAABAgAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
-  <Class Name="RocketAero.RocketBody" BaseTypeListCollapsed="true">
-    <Position X="7.5" Y="0.5" Width="3.25" />
-    <TypeIdentifier>
-      <HashCode>AIAAAAgAAgAAQABAAAAAAAAAAAAAAAAIAGQABA0AAAA=</HashCode>
-      <FileName>RocketAero.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="1.346" Collapsed="true" />
+    <Lollipop Position="0.148" />
   </Class>
   <Class Name="RocketAero.RocketAero1" Collapsed="true">
-    <Position X="4.75" Y="0.5" Width="1.5" />
+    <Position X="2.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Interface Name="RocketAero.IRocket_Cy1a" Collapsed="true">
-    <Position X="3" Y="2.75" Width="1.5" />
+  <Class Name="RocketAero.RocketWing" Collapsed="true">
+    <Position X="5.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RocketAero.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RocketAero.RocketBody_Geom" Collapsed="true">
+    <Position X="4" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAAAAAAAAAAABAAAAAIAAAAAAAAAAIAGQABA0AAAA=</HashCode>
+      <FileName>RocketAero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="RocketAero.RocketBody" Collapsed="true">
+    <Position X="4" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>RocketAero.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="RocketAero.RocketWing_Geom" Collapsed="true">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQUCAICAAAgABgoIAAcgAAEAEAAAQCEAQEAABAWAAAA=</HashCode>
+      <FileName>RocketAero.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="RocketAero.IRocket_Cy1a">
+    <Position X="4.75" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="RocketAero.IRocketBody_nos" Collapsed="true">
-    <Position X="4.75" Y="2.75" Width="1.5" />
+  <Interface Name="RocketAero.IRocketBody_nos">
+    <Position X="1.5" Y="4.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>RocketAero.cs</FileName>

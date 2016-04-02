@@ -50,8 +50,6 @@ namespace RocketAero.Tests
                 C_shtr = 0.01
                 
             };
-
         }
-
     }
 }

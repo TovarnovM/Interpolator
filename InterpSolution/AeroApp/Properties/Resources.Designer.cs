@@ -521,5 +521,28 @@ namespace AeroApp.Properties {
                 return ResourceManager.GetString("_5_8_3D", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;InterpXY xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0.01&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.00798&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0.02&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.01596&quot; /&gt;
+        ///    &lt;/DoubleInterpDo [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string gauss_1D {
+            get {
+                return ResourceManager.GetString("gauss_1D", resourceCulture);
+            }
+        }
     }
 }

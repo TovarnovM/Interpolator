@@ -157,7 +157,18 @@ namespace Interpolator
                 if (_data.Count < 1)
                     return 0;
                 if (N < 0)
+                {
+                    if (_data.Keys[0] > t)
+                        return -1;
                     N = 0;
+                }
+                if(N == _data.Count-1 && _data.Keys[N] <= t)
+                {
+                    return N;
+                }
+                if (_data.Count > 1 && _data.Keys[N] <= t && _data.Keys[N + 1] > t)
+                    return N;
+                   
                 if (_data.Keys[N] > t)
                     for (int i = N; i >= 0; i--)
                     {
