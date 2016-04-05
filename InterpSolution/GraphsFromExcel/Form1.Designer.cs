@@ -42,6 +42,7 @@
             this.interpolChart1.Name = "interpolChart1";
             this.interpolChart1.Size = new System.Drawing.Size(802, 553);
             this.interpolChart1.TabIndex = 2;
+            this.interpolChart1.Load += new System.EventHandler(this.interpolChart1_Load);
             // 
             // Form1
             // 

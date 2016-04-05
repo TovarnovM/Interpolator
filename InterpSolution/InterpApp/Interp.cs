@@ -490,8 +490,41 @@ namespace Interpolator
     [XmlRoot(nameof(LevelLine))]
     public class LevelLine : InterpDouble
     {
+        public static LevelLine LoadFromXmlFile(string fileName)
+        {
+            try
+            {
+                XmlSerializer serial = new XmlSerializer(typeof(LevelLine));
+                var sw = new StreamReader(fileName);
+                LevelLine result = (LevelLine)serial.Deserialize(sw);
+                sw.Close();
+                return result;
+            }
+            catch (Exception)
+            { }
+            return null;
+        }
+        public static LevelLine LoadFromXmlString(string fileStr)
+        {
+            try
+            {
+                XmlSerializer serial = new XmlSerializer(typeof(LevelLine));
+                var sw = new StringReader(fileStr);
+                LevelLine result = (LevelLine)serial.Deserialize(sw);
+                sw.Close();
+                return result;
+            }
+            catch (Exception)
+            { }
+            return null;
+        }
         public List<Vector> pointsList = new List<Vector>();
         public LevelLine(double Value = 0.0): base(Value)
+        {
+
+        }
+
+        public LevelLine() : base()
         {
 
         }
@@ -557,6 +590,7 @@ namespace Interpolator
             }
             return false;
         }
+        
         public static bool BoundingBoxesIntersect(Vector a0, Vector a1, Vector b0, Vector b1)
         {
             return     Math.Min(a0.X, a1.X) <= Math.Max(b0.X, b1.X)
@@ -683,6 +717,8 @@ namespace Interpolator
             }
             return true;
         }
+        public static PotentGraff2P LoadFromXmlFile(string fileName) => PotentGraff2P.LoadFromXmlFile<PotentGraff2P>(fileName);
+        public static PotentGraff2P LoadFromXmlString(string fileStr) => PotentGraff2P.LoadFromXmlString<PotentGraff2P>(fileStr);
     }
     /// <summary>
     /// Семейство графиков, каждый из которых представляет собой семейство графиков линий уровня
@@ -690,15 +726,17 @@ namespace Interpolator
     [XmlRoot(nameof(PotentGraff3P))]
     public class PotentGraff3P: Interp<PotentGraff2P>
     {
-
+        public static PotentGraff3P LoadFromXmlFile(string fileName) => PotentGraff3P.LoadFromXmlFile<PotentGraff3P>(fileName);
+        public static PotentGraff3P LoadFromXmlString(string fileStr) => PotentGraff3P.LoadFromXmlString<PotentGraff3P>(fileStr);
     }
     /// <summary>
     /// Семейство графиков, каждый из которых представляет собой PotentGraff3D
     /// </summary>
     [XmlRoot(nameof(PotentGraff4P))]
-    public class PotentGraff4P : Interp<PotentGraff4P>
+    public class PotentGraff4P : Interp<PotentGraff3P>
     {
-
+        public static PotentGraff4P LoadFromXmlFile(string fileName) => PotentGraff4P.LoadFromXmlFile<PotentGraff4P>(fileName);
+        public static PotentGraff4P LoadFromXmlString(string fileStr) => PotentGraff4P.LoadFromXmlString<PotentGraff4P>(fileStr);
     }
 
 }

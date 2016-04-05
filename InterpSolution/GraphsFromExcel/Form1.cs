@@ -28,5 +28,10 @@ namespace GraphsFromExcel
         {
 
         }
+
+        private void interpolChart1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

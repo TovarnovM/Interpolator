@@ -85,6 +85,29 @@ namespace AeroApp.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;PotentGraff4P xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoublePotentGraff3P&gt;
+        ///      &lt;double&gt;0&lt;/double&gt;
+        ///      &lt;PotentGraff3P&gt;
+        ///        &lt;_data&gt;
+        ///          &lt;DoublePotentGraff2P&gt;
+        ///            &lt;double&gt;0&lt;/double&gt;
+        ///            &lt;PotentGraff2P&gt;
+        ///              &lt;_data&gt;
+        ///                &lt;DoubleLevelLine&gt;
+        ///                  &lt;double&gt;0&lt;/double&gt;
+        ///                  &lt;LevelLine Value=&quot;0&quot;&gt;
+        ///                    &lt; [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _3_17_4P {
+            get {
+                return ResourceManager.GetString("_3_17_4P", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;_data&gt;
         ///    &lt;DoubleInterpXY&gt;

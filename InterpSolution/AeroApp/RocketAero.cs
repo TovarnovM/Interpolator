@@ -35,6 +35,9 @@ namespace RocketAero
                 else if (key.EndsWith("1D"))
                     _graphs.Add(CutMyString(key), 
                                 InterpXY.LoadFromXmlString(item.Value.ToString()));
+                else if (key.EndsWith("4P"))
+                    _graphs.Add(CutMyString(key),
+                                PotentGraff4P.LoadFromXmlString(item.Value.ToString()));
                 else
                     _graphs.Add(CutMyString(key), 
                                 Interp2D.LoadFromXmlString(item.Value.ToString()));
@@ -60,7 +63,8 @@ namespace RocketAero
             if (cutThis.EndsWith("_4D")||
                 cutThis.EndsWith("_3D") ||
                 cutThis.EndsWith("_2D") ||
-                cutThis.EndsWith("_1D")   )
+                cutThis.EndsWith("_1D") ||
+                cutThis.EndsWith("_4P")   )
                 cutThis = cutThis.Remove(cutThis.Length - 3);
             return cutThis;
         }
@@ -76,6 +80,8 @@ namespace RocketAero
                 return 4;
             if (_graphs[CutMyString(graphNum)] is InterpXY)
                 return 1;
+            if (_graphs[CutMyString(graphNum)] is PotentGraff4P)
+                return 4;
             return 0;
         }
         public bool HasGraph(string graphNum)

@@ -109,6 +109,8 @@ namespace GraphsFromExcel
 
         private void txtBx_Titile_TextChanged(object sender, EventArgs e)
         {
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
             lstInterp[checkedListBox1.SelectedIndex].Title = txtBx_Titile.Text;
             checkedListBox1.Refresh();
             chart1.Series[checkedListBox1.SelectedIndex].Name = txtBx_Titile.Text;
@@ -116,17 +118,23 @@ namespace GraphsFromExcel
 
         private void domainUpDown1_Click(object sender, EventArgs e)
         {
-             chart1.Series[checkedListBox1.SelectedIndex].BorderWidth = domainUpDown1.SelectedIndex+1;
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
+            chart1.Series[checkedListBox1.SelectedIndex].BorderWidth = domainUpDown1.SelectedIndex+1;
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
             chart1.Series[checkedListBox1.SelectedIndex].IsValueShownAsLabel = checkBox1.Checked;
         }
 
         private void radioBtnInterpStep_CheckedChanged(object sender, EventArgs e)
         {
-            if(radioBtnLeftZero.Checked)
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
+            if (radioBtnLeftZero.Checked)
             {
                 lstInterp[checkedListBox1.SelectedIndex].ET_left = ExtrapolType.etZero;
             }
@@ -158,7 +166,9 @@ namespace GraphsFromExcel
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if(checkedListBox1.Items.Count > 0 && checkedListBox1.SelectedIndex >=0)
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
+            if (checkedListBox1.Items.Count > 0 && checkedListBox1.SelectedIndex >=0)
             {
                 lstInterp.RemoveAt(checkedListBox1.SelectedIndex);
                 chart1.Series.RemoveAt(checkedListBox1.SelectedIndex);
@@ -170,7 +180,9 @@ namespace GraphsFromExcel
 
         private void button4_Click(object sender, EventArgs e)
         {
-            if(checkedListBox1.SelectedIndices.Count == 0)
+            if (checkedListBox1.SelectedIndex < 0)
+                return;
+            if (checkedListBox1.SelectedIndices.Count == 0)
             {
                 MessageBox.Show("Не выделено ни одного интерполятора(");
                 return;
@@ -347,45 +359,120 @@ namespace GraphsFromExcel
 
         private void button8_Click(object sender, EventArgs e)
         {
-            var interp4D = new Interp4D();
+            var interpLL4P = new PotentGraff4P();
 
-            var dir = @"C:\Users\MISHA\Desktop\4_30";
-            interp4D.Title = "4_30";
+            var dir = @"C:\Users\MISHA\Desktop\3_17";
+            interpLL4P.Title = "_3_17";
             Dictionary<double, string> makeFile = new Dictionary<double, string>()
             {
-                [0] = dir + "\\" + interp4D.Title + "_а_3D.xml",
-                [5] = dir + "\\" + interp4D.Title + "_б_3D.xml",
-                [100] = dir + "\\" + interp4D.Title + "_в_3D.xml"
+                [0.0] = dir + "\\" + interpLL4P.Title + "_3D_эта0.xml",
+                [1.0] = dir + "\\" + interpLL4P.Title + "_3D_эта1.xml",
+                [0.5] = dir + "\\" + interpLL4P.Title + "_3D_эта05.xml"
             };
             foreach (var item in makeFile)
             {
-                interp4D.AddElement(item.Key, Interp3D.LoadFromXmlFile(item.Value));
+                interpLL4P.AddElement(item.Key, PotentGraff3P.LoadFromXmlFile(item.Value));
             }
-            string str = dir + "\\" + interp4D.Title + "_4D.xml";
-            interp4D.SaveToXmlFile(str);
+            string str = dir + "\\" + interpLL4P.Title + "_4P.xml";
+            interpLL4P.SaveToXmlFile(str);
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
-            if (checkedListBox1.SelectedIndex == -1)
+            try
             {
-                MessageBox.Show("Не выделено ни одного интерполятора(");
-                return;
-            }
-            if (_sd.ShowDialog() == DialogResult.OK)
-            {
-                try
+                var tmpInterp4P= PotentGraff4P.LoadFromXmlFile(@"G:\OneDrive\графики\3_17\_3_17_4P.xml");
+                foreach (var item3D in tmpInterp4P.Data.Values)
                 {
+                    foreach (var item2D in item3D.Data.Values)
+                    {
+                        foreach (var item in item2D.Data.Values)
+                        {
+                            for (int i = 0; i < item.pointsList.Count; i++)
+                            {
 
-                    lstInterp[checkedListBox1.SelectedIndex].SaveToXmlFile(_sd.FileName);
-                    //var tmpInterpXY = new InterpXY();
-                    //tmpInterpXY = (InterpXY)tmpInterpXY.LoadFromXmlFile(sd.FileName);
-                    //AddInterp(tmpInterpXY);
+                                if (item.pointsList[i].Y < 0.015)
+                                {
+                                    var vec = new System.Windows.Vector(item.pointsList[i].X, -0.01);
+                                    item.pointsList.RemoveAt(i);
+                                    item.pointsList.Insert(i, vec);
+                                }
+                            }
+                           
+                        }
+                        if (!item2D.ValidData())
+                            MessageBox.Show("Плохая дата(");
+                    }
                 }
-                catch (Exception ex)
+                tmpInterp4P.SaveToXmlFile(@"G:\OneDrive\графики\3_17\_3_17_4P_redact.xml");
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var od = new OpenFileDialog()
                 {
-                    throw ex;
+                    Filter = "CSV Files|*.csv",
+                    Multiselect = true
+                };
+                if (od.ShowDialog() == DialogResult.OK)
+                {
+                    int k = 0;
+                    var oneGraff = new PotentGraff2P();
+                    chart1.Series.Clear();
+                    foreach (var fileName in od.FileNames)
+                    {
+                        var lines = File.ReadAllLines(fileName).
+                                    Select(a => a.Split(new []{ ';' }, StringSplitOptions.RemoveEmptyEntries) ).
+                                    Where(a => a.Count() > 0);
+                        var ddd = lines.ToArray();
+                        var matr = new double[lines.Count(), lines.First().Count()];
+                        int i = 0;
+                        
+                        foreach (var items in lines)
+                        {
+                            int j = 0;
+                            foreach (var item in items)
+                            {
+                                //MessageBox.Show($"i={i}, j={j++}, val={Convert.ToDouble(item.Replace('.',',').Trim())}");
+                                matr[i, j++] = Convert.ToDouble(item.Replace('.', ',').Trim());
+                            }
+                            i++;
+                        }
+                        var ss = fileName.ElementAt(fileName.Length - 6).ToString();
+                        var ss2 = fileName.ElementAt(fileName.Length - 5).ToString();
+                        double value = Convert.ToDouble(ss) +
+                                       Convert.ToDouble(ss2) / 10.0;
+
+                        var interpLevLine = new LevelLine(value);
+                        var s = $"№ {k}, value = {value}";
+                        chart1.Series.Add(s);
+                        chart1.Series[s].ChartType = Charting.SeriesChartType.Line;
+                        for (int j = 1; j < matr.GetLength(0); j++)
+                        {
+                            interpLevLine.AddPoint(matr[j, 0], matr[j, 1]);
+                            chart1.Series[s].Points.AddXY(matr[j, 0], matr[j, 1]);
+                        }
+                        oneGraff.AddElement(k++, interpLevLine);
+                    }
+                    if(!oneGraff.ValidData())
+                    {
+                        MessageBox.Show("Плохие данные");
+                    }
+                    oneGraff.SaveToXmlFile(Path.ChangeExtension(od.FileNames[0], ".xml"));
                 }
+            }
+            catch (Exception)
+            {
+               
             }
         }
     }
