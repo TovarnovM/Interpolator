@@ -131,6 +131,14 @@ namespace RocketAero
     public interface IRocketBody_nos
     {
         double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl);
+        /// <summary>
+        /// Площадь носовой части
+        /// </summary>
+        /// <param name="d"></param>
+        /// <param name="l"></param>
+        /// <returns></returns>
+        double GetF_nos(double d, double l);
+        double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos);
     }
 
     /// <summary>
@@ -138,21 +146,39 @@ namespace RocketAero
     /// </summary>
     public class RocketNos_ConePlusCyl : IRocketBody_nos
     {
-        private static string grNum = "3_2";
+        public double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos)
+        {
+            return ag.GetV("4_11", mach, lmb_nos);
+        }
+
         public double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
         {
-            return ag.GetV(grNum, AeroGraphs.M2min1(mach) / Lmb_nos, Lmb_cyl / Lmb_nos);
+            return ag.GetV("3_2", AeroGraphs.M2min1(mach) / Lmb_nos, Lmb_cyl / Lmb_nos);
+        }
+
+        public double GetF_nos(double d, double l)
+        {
+            return Math.PI * 0.5 * d * Math.Sqrt(0.25 * d * d + l * l);
         }
     }
     /// <summary>
     /// оживало+цилиндр
     /// </summary>
-    public class RocketNos_OzjPlusCyl : RocketNos_ConePlusCyl
+    public class RocketNos_OzjPlusCyl : IRocketBody_nos
     {
-        private static string grNum = "3_3";
-        public new double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
+        public double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos)
         {
-            return ag.GetV(grNum, AeroGraphs.M2min1(mach) / Lmb_nos, Lmb_cyl / Lmb_nos);
+            return ag.GetV("4_12", mach, lmb_nos);
+        }
+
+        public  double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
+        {
+            return ag.GetV("3_3", AeroGraphs.M2min1(mach) / Lmb_nos, Lmb_cyl / Lmb_nos);
+        }
+
+        public double GetF_nos(double d, double l)
+        {
+            return Math.PI * 0.5 * d * Math.Sqrt(0.25 * d * d + l * l);
         }
     }
 
@@ -176,6 +202,18 @@ namespace RocketAero
         {
             return ag.GetV(grNum, AeroGraphs.M2min1(mach) / Lmb_cyl, _type);
         }
+
+        public double GetF_nos(double d, double l)
+        {
+            return Math.PI * d * d * (0.25 + 0.25 * _type);
+        }
+
+        public double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos)
+        {
+            var lmb_forgr = 0.5 * _type;
+            return ag.GetV("4_13", mach, lmb_forgr);
+        }
+
         public RocketNos_SpherePlusCyl() { }
         /// <summary>
         /// 1 - сфера
@@ -241,9 +279,30 @@ namespace RocketAero
             return    Main.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl) * (1 - Rshtrih * Rshtrih) + 
                     Little.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl)* Rshtrih * Rshtrih;
         }
+
+        public double GetF_nos(double d, double l)
+        {
+            double l_shtr = l / (1 - Rshtrih);
+            if (Main is RocketNos_OzjPlusCyl)
+                l_shtr = 0.5 * d / ((1 - Rshtrih) / (l / d - 0.5 * Rshtrih));
+            double type= 0.0;
+            if (Little is RocketNos_SpherePlusCyl)
+                type = (Little as RocketNos_SpherePlusCyl).Type;    
+
+            return Main.GetF_nos(d, l_shtr) 
+                - Main.GetF_nos(d * Rshtrih, l_shtr - l - Rshtrih * d * 0.5* type) 
+                + Little.GetF_nos(d * Rshtrih, Rshtrih * d * 0.5* type);
+        }
+
+        public double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos)
+        {
+            //double lmb_shtr = lmb_nos ;
+            //if(Main is RocketNos_ConePlusCyl)
+            //    lm
+            //double cx_shtr = Main.GetCx_nos();
+            return 0;
+        }
     }
-
-
 
     /// <summary>
     /// геометрия Фюзеляжа ракеты обобщенныая
@@ -301,7 +360,24 @@ namespace RocketAero
                 return L_korm / D;
             }
         }
-
+        /// <summary>
+        /// Площадь миделя
+        /// </summary>
+        public double S_mid {
+            get {
+                return Math.PI * D * D * 0.25;
+            }
+        }
+        /// <summary>
+        /// Площадь корпуса без дна)
+        /// </summary>
+        public double S_fuse
+        {
+            get
+            {
+                return Nose.GetF_nos(D,L_nos)+Math.PI*D*L_cyl+Math.PI*0.5*(D+D1) * Math.Sqrt(0.25 * D* D+ L_korm* L_korm);
+            }
+        }
         public IRocketBody_nos Nose { get; set; } = new RocketNos_ConePlusCyl();
         public RocketBody_Geom()
         {
@@ -330,6 +406,27 @@ namespace RocketAero
         {
             AeroGr = ag;
         }
+        /// <summary>
+        /// Cx трения 
+        /// </summary>
+        /// <param name="mach">мах</param>
+        /// <param name="x_t">относитальная точка  перехода лам погр.слоя в турбул</param>
+        /// <param name="v">кинематическая вязкость среды</param>
+        /// <param name="a_m">местная скорость звука</param>
+        /// <returns></returns>
+        public double Cx_tr(double mach, double x_t, double v, double a_m)
+        {
+            var vel = mach * a_m;
+            var re = vel * L / v;
+            var _2CfM0 = AeroGr.GetV("4_2", re, x_t);
+            var etta = AeroGr.GetV("4_3", mach, x_t);
+            return 0.5 * _2CfM0 * etta * S_fuse / S_mid;
+        }
+        public  double Cx_tr_def(double mach)
+        {
+            return Cx_tr(mach, 0, 1.51E-5, 340.3);
+        }
+
     }
 
     public class RocketWing_Geom
