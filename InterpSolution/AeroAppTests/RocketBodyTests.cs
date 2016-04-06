@@ -46,11 +46,11 @@ namespace RocketAero.Tests
             double mach = 2;
             Assert.AreEqual(0.046, RB.AeroGr.GetV("3_2", 0.34, 1.4), 0.002);
             Assert.AreEqual(0.043, RB.AeroGr.GetV("3_4", 0.24, 1), 0.002);
-            Assert.AreEqual(0.046, RB.Nose.GetCy1a_nos(AG, mach, 5, 7),0.001);
-            Assert.AreEqual(0.077, RB.GetCy1a(mach), 0.001);
+            Assert.AreEqual(0.044, RB.Nose.GetCy1a_nos(AG, mach, 5, 7),0.001);
+            Assert.AreEqual(0.074, RB.GetCy1a(mach), 0.01);
 
             RB.D1 = 0.1;
-            Assert.AreEqual(0.041, RB.GetCy1a(mach), 0.002);
+            Assert.AreEqual(0.0385, RB.GetCy1a(mach), 0.002);
 
             RB.L = 1;
             RB.Nose = new RocketNos_OzjPlusCyl();

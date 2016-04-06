@@ -120,7 +120,7 @@ namespace RocketAero
     /// <summary>
     /// Интерфейс для определения Cy1a
     /// </summary>
-    public interface IRocket_Cy1a
+    public interface IRocket_Coeff
     {
         double GetCy1a(double mach);   
     }    
@@ -130,7 +130,7 @@ namespace RocketAero
     /// </summary>
     public interface IRocketBody_nos
     {
-        double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl);
+        double GetCy1a_nos(AeroGraphs ag, double mach, double lmb_nos, double lmb_cyl);
         /// <summary>
         /// Площадь носовой части
         /// </summary>
@@ -198,9 +198,9 @@ namespace RocketAero
                 _type = value < 0.0 ? 0.0 : value > 1.0 ? 1.0 : value;
             }
         }
-        public double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
+        public double GetCy1a_nos(AeroGraphs ag, double mach, double lmb_nos, double lmb_cyl)
         {
-            return ag.GetV(grNum, AeroGraphs.M2min1(mach) / Lmb_cyl, _type);
+            return ag.GetV(grNum, AeroGraphs.M2min1(mach) / lmb_cyl, _type);
         }
 
         public double GetF_nos(double d, double l)
@@ -234,7 +234,7 @@ namespace RocketAero
         public IRocketBody_nos Main { get; set; }
         public IRocketBody_nos Little{ get; set; }
         public double Rshtrih{ get; set; } //2r/D
-
+        
         public RocketNos_Compose(IRocketBody_nos main, IRocketBody_nos little, double r)
         {
             Main = main;
@@ -273,11 +273,28 @@ namespace RocketAero
             Rshtrih = r;
         }
 
-        public double GetCy1a_nos(AeroGraphs ag, double mach, double Lmb_nos, double Lmb_cyl)
+        public double GetCy1a_nos(AeroGraphs ag, double mach, double lmb_nos, double lmb_cyl)
         {
+            double lmb_shtr = lmb_nos;
+            double type = 0;
+            double cosTetta = Math.Cos(Math.Atan(0.5 / lmb_shtr));
+            double main_expr = Rshtrih * Rshtrih;
+            if (Little is RocketNos_SpherePlusCyl)
+            {
+                type = (Little as RocketNos_SpherePlusCyl).Type;
+            }
 
-            return    Main.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl) * (1 - Rshtrih * Rshtrih) + 
-                    Little.GetCy1a_nos(ag, mach, Lmb_nos, Lmb_cyl)* Rshtrih * Rshtrih;
+            if (Main is RocketNos_ConePlusCyl)
+            {
+                lmb_shtr = lmb_nos / (1 - Rshtrih);
+            }
+
+            if (Main is RocketNos_OzjPlusCyl)
+            {
+                lmb_shtr = (lmb_nos - Rshtrih * 0.5 * type) / Math.Sqrt(1 - Rshtrih);
+            }
+            return  Main.GetCy1a_nos(ag, mach, lmb_shtr, lmb_cyl) * (1 - Rshtrih * Rshtrih) + 
+                    Little.GetCy1a_nos(ag, mach, lmb_nos, lmb_cyl)* Rshtrih * Rshtrih;
         }
 
         public double GetF_nos(double d, double l)
@@ -296,11 +313,31 @@ namespace RocketAero
 
         public double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos)
         {
-            //double lmb_shtr = lmb_nos ;
-            //if(Main is RocketNos_ConePlusCyl)
-            //    lm
-            //double cx_shtr = Main.GetCx_nos();
-            return 0;
+            double lmb_shtr = lmb_nos;
+            double type = 0;
+            double cosTetta = Math.Cos(Math.Atan(0.5 / lmb_shtr));
+            double main_expr = Rshtrih * Rshtrih;
+            if (Little is RocketNos_SpherePlusCyl)
+            {
+                type = (Little as RocketNos_SpherePlusCyl).Type;
+            }
+                
+            if (Main is RocketNos_ConePlusCyl)
+            {
+                lmb_shtr = lmb_nos / (1 - Rshtrih);
+                cosTetta = Math.Cos(Math.Atan(0.5 / lmb_shtr));
+                main_expr = Rshtrih * Rshtrih * (type * (cosTetta - 1) + 1);
+            }
+                
+            if (Main is RocketNos_OzjPlusCyl)
+            {
+                lmb_shtr = (lmb_nos - Rshtrih*0.5*type)/ Math.Sqrt(1 - Rshtrih);
+                cosTetta = Math.Cos(Math.Atan(Math.Sqrt(1 - Rshtrih) / lmb_shtr));
+                double cosTettaExpr = type * (cosTetta - 1) + 1;
+                double r_strSqr = Rshtrih * Rshtrih;
+                main_expr = r_strSqr * cosTettaExpr * (3.1 - 1.4 * cosTettaExpr * Rshtrih + 0.7 * cosTettaExpr * cosTettaExpr * r_strSqr);
+            }
+            return Main.GetCx_nos(ag, mach, lmb_shtr) * (1 - main_expr) + Little.GetCx_nos(ag, mach, lmb_nos) * Rshtrih * Rshtrih;
         }
     }
 
@@ -385,7 +422,7 @@ namespace RocketAero
         }
     }
 
-    public class RocketBody: RocketBody_Geom, IRocket_Cy1a
+    public class RocketBody: RocketBody_Geom, IRocket_Coeff
     {
         public AeroGraphs AeroGr { get; set; } = null;
         public virtual double GetCy1a(double mach)
@@ -422,9 +459,38 @@ namespace RocketAero
             var etta = AeroGr.GetV("4_3", mach, x_t);
             return 0.5 * _2CfM0 * etta * S_fuse / S_mid;
         }
-        public  double Cx_tr_def(double mach)
+        public double Cx_tr(double mach)
         {
             return Cx_tr(mach, 0, 1.51E-5, 340.3);
+        }
+        public double Cx_nose(double mach)
+        {
+            return Nose.GetCx_nos(AeroGr, mach, Lmb_nos);
+        }
+        public double Cx_korm(double mach)
+        {
+            if (D1 == D || L_korm == 0) return 0;
+            double etta = D1 / D ;
+            return AeroGr.GetV("4_24", mach, Lmb_korm, etta);
+            //double S_dno_shtr = D1 * D1 / (D * D);
+            //double expr = D1 < D ?
+            //              Math.Sqrt(1 - S_dno_shtr) :
+            //              Math.Sqrt(S_dno_shtr * (S_dno_shtr - 1));
+            //double sinBetta = Math.Sin(Math.Atan(Math.Abs((D1 - D) * 0.5) / L_korm));
+            //double sinBettaSqr = sinBetta* sinBetta;
+            //return expr * (2.09 * sinBettaSqr + 0.19 * sinBettaSqr / Math.Sqrt(AeroGraphs.M2min1(mach)));
+        }
+        public double Cx_dno(double mach)
+        {
+            return 0;
+        }
+        public double Cx0f(double mach)
+        {
+            return Cx_tr(mach) + Cx_nose(mach) + Cx_korm(mach) + Cx_dno(mach);
+        }
+        public double Cx0f(double mach, double x_t, double v, double a_m)
+        {
+            return Cx_tr(mach, x_t, v, a_m) + Cx_nose(mach) + Cx_korm(mach) + Cx_dno(mach);
         }
 
     }
@@ -532,11 +598,11 @@ namespace RocketAero
         public double GetB(double z) => B0 + (B1 - B0) * z * 2 / L;        
         public double GetTgHiM(double m) => tgHi0 - 4 * m * (Etta - 1) / (Lmb * (1 + Etta));        
         public double GetX(double z) => z * tgHi0;
+
+        public IWingProfile Profile { get; set; } = new WingProf_romb();
         
-        public RocketWing_Geom()
-        {   }
     }
-    public class RocketWing : RocketWing_Geom, IRocket_Cy1a
+    public class RocketWing : RocketWing_Geom, IRocket_Coeff
     {
         public AeroGraphs AeroGr { get; set; } = null;
         public RocketWing(AeroGraphs ag)
@@ -549,8 +615,124 @@ namespace RocketAero
                 return 0.0;
             return AeroGr.GetV("3_5", Lmb_k * AeroGraphs.M2min1(mach), Lmb_k * Math.Pow(C_shtr, 1.0 / 3.0), Lmb_k * GetTgHiM(0.5));
         }
-    }
 
+    }
+    public interface IWingProfile
+    {
+        double K { get; }
+    }
+    /// <summary>
+    /// Таблица 4.2 ромб
+    /// </summary>
+    public class WingProf_romb : IWingProfile
+    {
+        public double K
+        {
+            get
+            {
+                return 1.0;
+            }
+        }
+    }
+    /// <summary>
+    /// Таблица 4.2 четырехугольник
+    /// </summary>
+    public class WingProf_4 : IWingProfile
+    {
+        public double K
+        {
+            get
+            {
+                return 0.25/(Xc_shtr*(1- Xc_shtr));
+            }
+        }
+        private double _xc_str;
+        public double Xc_shtr
+        {
+            get
+            {
+                return _xc_str;
+            }
+            set
+            {
+                _xc_str = value < 0 ? 0 :
+                          value > 1 ? 1 :
+                          value;
+            }
+        }
+        /// <summary>
+        /// Таблица 4.2 четырехугольник
+        /// x_c_shtr = b / x_c
+        /// </summary>
+        /// <param name="x_c_shtr">b / x_c</param>
+        public WingProf_4(double x_c_shtr)
+        {
+            Xc_shtr = x_c_shtr;
+        }
+    }
+    /// <summary>
+    /// Таблица 4.2 шестиугольный
+    /// </summary>
+    public class WingProf_6 : WingProf_4
+    {
+        public new double K
+        {
+            get
+            {
+                return 1.0 / (1 - Xc_shtr);
+            }
+        }
+        /// <summary>
+        /// x_c_shtr = a/b
+        /// </summary>
+        /// <param name="x_c_shtr"></param>
+        public WingProf_6(double x_c_shtr) : base(x_c_shtr) { }
+    }
+    /// <summary>
+    /// Таблица 4.2 синусоидальный
+    /// </summary>
+    public class WingProf_sin : IWingProfile
+    {
+        /// <summary>
+        /// PI^2 / 8
+        /// </summary>
+        public double K
+        {
+            get
+            {
+                return 1.23370055; //PI^2 / 8
+            }
+        }
+    }
+    /// <summary>
+    /// Таблица 4.2 окружности или параболы
+    /// </summary>
+    public class WingProf_okr : IWingProfile
+    {
+        /// <summary>
+        /// 4 / 3
+        /// </summary>
+        public double K
+        {
+            get
+            {
+                return 4.0 / 3.0;
+            }
+        }
+    }
+    /// <summary>
+    /// Таблица 4.2 клиновидный
+    /// </summary>
+    public class WingProf_klin : IWingProfile
+    {
+        public double K
+        {
+            get
+            {
+                return 0.25;
+            }
+        }
+    }
     class RocketAero1
     {
 
