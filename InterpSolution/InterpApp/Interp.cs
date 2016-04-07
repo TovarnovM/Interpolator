@@ -51,7 +51,7 @@ namespace Interpolator
     }
     //тип экстраполяции  = 0, = крайн значению, = продолжению метода, вызывает ошибку
     public enum ExtrapolType { etZero, etValue, etMethod, etError };
-    public enum InterpolType { itStep, itLine };
+    public enum InterpolType { itStep, itLine, itSpecial4_3_17 };
 
     [Serializable]
     public class Interp<T> : IInterpElem, IInterpParams where T : IInterpElem
@@ -100,6 +100,12 @@ namespace Interpolator
                 {
                     case InterpolType.itStep:
                         InterpMethodCurr = new InterpolMethod(this.InerpMethodStep);
+                        break;
+                    case InterpolType.itSpecial4_3_17:
+                        if (this is PotentGraff3P)
+                            InterpMethodCurr = new InterpolMethod(this.InerpMethodSpecial4_3_17);
+                        else
+                            InterpType = InterpolType.itLine;
                         break;
                     default:
                         InterpMethodCurr = new InterpolMethod(this.InerpMethodLine);
@@ -207,6 +213,31 @@ namespace Interpolator
             y1 = GetVSub(t);
             N = N + 1;
             y2 = GetVSub(t);
+            return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
+        }
+
+        public double InerpMethodSpecial4_3_17(params double[] t)
+        {
+            double t1, t2, y1, y2;
+            t1 = _data.Keys[N];
+            t2 = _data.Keys[N + 1];
+            y1 = GetVSub(t);
+            N = N + 1;
+            y2 = GetVSub(t);
+            if(y2==0 && y1 != 0)
+            {
+                double _2z_l = t[0];
+                double _2y_l = t[1];
+                double D_2 = t[2];
+                double koeff = (_2z_l - D_2) / (1 - D_2);
+                N = N - 1;
+                _2z_l = t1 + koeff * (1 - t1);
+                y1 = GetVSub(t1 + koeff * (1 - t1), _2y_l, D_2);
+                N = N + 1;
+                _2z_l = t2 + koeff * (1 - t2);
+                y2 = GetVSub(t2 + koeff * (1 - t2), _2y_l, D_2);
+            }
+
             return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
         }
 
@@ -738,5 +769,4 @@ namespace Interpolator
         public static PotentGraff4P LoadFromXmlFile(string fileName) => PotentGraff4P.LoadFromXmlFile<PotentGraff4P>(fileName);
         public static PotentGraff4P LoadFromXmlString(string fileStr) => PotentGraff4P.LoadFromXmlString<PotentGraff4P>(fileStr);
     }
-
 }

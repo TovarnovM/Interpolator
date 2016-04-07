@@ -20,7 +20,9 @@ namespace AeroApp
         private AeroGraphs rr = new AeroGraphs();
         private void button1_Click(object sender, EventArgs e)
         {
-            
+            //MessageBox.Show($"{ rr.GetV("3_212", 1, 4.5)}");
+            double ss = rr.GetV("3_17", 0.55, 0.0, 0.45, 0.5);
+
             var rrord = from r in rr.Graphs
                         orderby r.Key
                         select r;
@@ -30,8 +32,7 @@ namespace AeroApp
                 MessageBox.Show($@"{item.Key} = {item.Value.GetType()}, кол-во параметров = {rr.HowManyParams(item.Key)}"); //, params = {rr.GetParams(item.Key)}");
 
             }
-            //MessageBox.Show($"{ rr.GetV("3_212", 1, 4.5)}");
-            double ss = rr.GetV("3_5", 1, 4.5,2);
+
 
         }
     }

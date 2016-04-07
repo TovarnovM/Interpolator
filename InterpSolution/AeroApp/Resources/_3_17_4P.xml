@@ -3801,7 +3801,7 @@
         <Title>_3_17</Title>
         <ET_left>etValue</ET_left>
         <ET_right>etValue</ET_right>
-        <InterpType>itLine</InterpType>
+        <InterpType>itSpecial4_3_17</InterpType>
       </PotentGraff3P>
     </DoublePotentGraff3P>
     <DoublePotentGraff3P>
@@ -7478,7 +7478,7 @@
         <Title>_3_17</Title>
         <ET_left>etValue</ET_left>
         <ET_right>etValue</ET_right>
-        <InterpType>itLine</InterpType>
+        <InterpType>itSpecial4_3_17</InterpType>
       </PotentGraff3P>
     </DoublePotentGraff3P>
     <DoublePotentGraff3P>
@@ -11419,7 +11419,7 @@
         <Title>_3_17</Title>
         <ET_left>etValue</ET_left>
         <ET_right>etValue</ET_right>
-        <InterpType>itLine</InterpType>
+        <InterpType>itSpecial4_3_17</InterpType>
       </PotentGraff3P>
     </DoublePotentGraff3P>
   </_data>
