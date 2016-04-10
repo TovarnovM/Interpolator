@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="0.8" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.4</double>
+      <InterpDouble Value="0.9" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>3</double>
+      <InterpDouble Value="1" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>Title</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

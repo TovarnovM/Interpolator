@@ -121,9 +121,6 @@
   <data name="gauss_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gauss.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="_3_16_3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\3_16_3D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
   <data name="_3_2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3_2.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -183,5 +180,14 @@
   </data>
   <data name="_3_17_4P" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\_3_17_4P.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="_3_13_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_13_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="k_shel_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\k_shel_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="_3_16_3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_16_3D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
 </root>

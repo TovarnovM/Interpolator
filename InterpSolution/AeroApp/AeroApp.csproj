@@ -131,9 +131,6 @@
     <None Include="Resources\3_5_3D.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\3_16_3D.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\3_21.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +195,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\_3_17_4P.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_13_1D.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\k_shel_1D.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_16_3D.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

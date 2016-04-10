@@ -381,30 +381,18 @@ namespace GraphsFromExcel
         {
             try
             {
-                var tmpInterp4P= PotentGraff4P.LoadFromXmlFile(@"G:\OneDrive\графики\3_17\_3_17_4P.xml");
-                foreach (var item3D in tmpInterp4P.Data.Values)
+                var tmpInterp= Interp3D.LoadFromXmlFile(@"G:\OneDrive\графики\3_16_3D.xml");
+                foreach (var item2D in tmpInterp.Data.Values)
                 {
-                    foreach (var item2D in item3D.Data.Values)
+                    foreach (var itemXY in item2D.Data.Values)
                     {
-                        foreach (var item in item2D.Data.Values)
+                        foreach (var item in itemXY.Data.Values)
                         {
-                            for (int i = 0; i < item.pointsList.Count; i++)
-                            {
-
-                                if (item.pointsList[i].Y < 0.015)
-                                {
-                                    var vec = new System.Windows.Vector(item.pointsList[i].X, -0.01);
-                                    item.pointsList.RemoveAt(i);
-                                    item.pointsList.Insert(i, vec);
-                                }
-                            }
-                           
+                            item.Value = 0.4 + (1 - 0.4) * item.Value;
                         }
-                        if (!item2D.ValidData())
-                            MessageBox.Show("Плохая дата(");
                     }
                 }
-                tmpInterp4P.SaveToXmlFile(@"G:\OneDrive\графики\3_17\_3_17_4P_redact.xml");
+                tmpInterp.SaveToXmlFile(@"G:\OneDrive\графики\3_16_3D_redact.xml");
 
             }
             catch (Exception ex)

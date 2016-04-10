@@ -62,6 +62,30 @@ namespace AeroApp.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;InterpXY xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;1&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;1&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;1.4&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;1&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;1.8&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.97&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///     [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _3_13_1D {
+            get {
+                return ResourceManager.GetString("_3_13_1D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Interp3D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;_data&gt;
         ///    &lt;DoubleInterp2D&gt;
@@ -74,8 +98,8 @@ namespace AeroApp.Properties {
         ///              &lt;_data&gt;
         ///                &lt;DoubleInterpDouble&gt;
         ///                  &lt;double&gt;-3.4535&lt;/double&gt;
-        ///                  &lt;InterpDouble Value=&quot;0.6998&quot; /&gt;
-        ///                &lt;/DoubleInt [остаток строки не уместился]&quot;;.
+        ///                  &lt;InterpDouble Value=&quot;0.81987999999999994&quot; /&gt;
+        ///               [остаток строки не уместился]&quot;;.
         /// </summary>
         internal static string _3_16_3D {
             get {
@@ -565,6 +589,30 @@ namespace AeroApp.Properties {
         internal static string gauss_1D {
             get {
                 return ResourceManager.GetString("gauss_1D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;InterpXY xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;0&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.8&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;1.4&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;0.9&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///    &lt;DoubleInterpDouble&gt;
+        ///      &lt;double&gt;3&lt;/double&gt;
+        ///      &lt;InterpDouble Value=&quot;1&quot; /&gt;
+        ///    &lt;/DoubleInterpDouble&gt;
+        ///  &lt;/_ [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string k_shel_1D {
+            get {
+                return ResourceManager.GetString("k_shel_1D", resourceCulture);
             }
         }
     }
