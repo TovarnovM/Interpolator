@@ -615,17 +615,62 @@ namespace RocketAero
                 return 0.0;
             return AeroGr.GetV("3_5", Lmb_k * AeroGraphs.M2min1(mach), Lmb_k * Math.Pow(C_shtr, 1.0 / 3.0), Lmb_k * GetTgHiM(0.5));
         }
+        public double Cx_tr(double mach, double x_t, double v, double a_m)
+        {
+            var vel = mach * a_m;
+            var re = vel * L / v;
+            var _2CfM0 = AeroGr.GetV("4_2", re, x_t);
+            var etta = AeroGr.GetV("4_3", mach, x_t);
+
+            var _2Cf = _2CfM0 * etta;
+
+            var etta_c = AeroGr.GetV("4_28", C_shtr, x_t);
+            return _2Cf * etta_c;
+        }
+        public double Cx_tr(double mach)
+        {
+            return Cx_tr(mach, 0, 1.51E-5, 340.3);
+        }
+        public double Cx_v(double mach)
+        {
+            double lmM21 = Lmb_k * AeroGraphs.M2min1(mach);
+            double lmbC3 = Lmb_k * Math.Pow(C_shtr, 1.0 / 3.0);
+            double lmbTgHi = Lmb_k * GetTgHiM(Profile.B_c_shtr);
+            double cx_romb = AeroGr.GetV("4_30", lmM21, lmbC3, lmbTgHi, Etta_k);
+            double fi = AeroGr.GetV("4_32", AeroGraphs.M2min1(mach) - GetTgHiM(Profile.B_c_shtr));
+            return cx_romb * (1 + fi * (Profile.K - 1));
+        }
+        public double Cx01(double mach)
+        {
+            return Cx_tr(mach) + Cx_v(mach);
+        }
+        public double Cx01(double mach, double x_t, double v, double a_m)
+        {
+            return Cx_tr(mach, x_t, v, a_m) + Cx_v(mach);
+        }
 
     }
     public interface IWingProfile
     {
         double K { get; }
+        /// <summary>
+        /// B_c_shtr - относитальная длина расположения линии макс толщин
+        /// </summary>
+        double B_c_shtr { get; }
     }
     /// <summary>
     /// Таблица 4.2 ромб
     /// </summary>
     public class WingProf_romb : IWingProfile
     {
+        public double B_c_shtr
+        {
+            get
+            {
+                return 0.5;
+            }
+        }
+
         public double K
         {
             get
@@ -660,6 +705,13 @@ namespace RocketAero
                           value;
             }
         }
+        public double B_c_shtr
+        {
+            get
+            {
+                return _xc_str;
+            }
+        }
         /// <summary>
         /// Таблица 4.2 четырехугольник
         /// x_c_shtr = b / x_c
@@ -675,6 +727,13 @@ namespace RocketAero
     /// </summary>
     public class WingProf_6 : WingProf_4
     {
+        public new double B_c_shtr
+        {
+            get
+            {
+                return 0.5 - 0.5 * Xc_shtr;
+            }
+        }
         public new double K
         {
             get
@@ -693,6 +752,13 @@ namespace RocketAero
     /// </summary>
     public class WingProf_sin : IWingProfile
     {
+        public double B_c_shtr
+        {
+            get
+            {
+                return 0.5;
+            }
+        }
         /// <summary>
         /// PI^2 / 8
         /// </summary>
@@ -709,6 +775,14 @@ namespace RocketAero
     /// </summary>
     public class WingProf_okr : IWingProfile
     {
+        public double B_c_shtr
+        {
+            get
+            {
+                return 0.5;
+            }
+        }
+
         /// <summary>
         /// 4 / 3
         /// </summary>
@@ -725,6 +799,14 @@ namespace RocketAero
     /// </summary>
     public class WingProf_klin : IWingProfile
     {
+        public double B_c_shtr
+        {
+            get
+            {
+                return 1.0;
+            }
+        }
+
         public double K
         {
             get
