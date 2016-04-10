@@ -954,28 +954,28 @@ namespace RocketAero
         {
             get
             {
-                return Get_kaa(W_I, M_I, Aero_v, Aero_a);
+                return Get_kd0(W_I, M_I, Aero_v, Aero_a);
             }
         }
         public double kd0_II
         {
             get
             {
-                return Get_kaa(W_II, M_II, Aero_v, Aero_a);
+                return Get_kd0(W_II, M_II, Aero_v, Aero_a);
             }
         }
         public double Kd0_I
         {
             get
             {
-                return Get_Kaa(W_I, M_I, Aero_v, Aero_a);
+                return Get_Kd0(W_I, M_I, Aero_v, Aero_a);
             }
         }
         public double Kd0_II
         {
             get
             {
-                return Get_Kaa(W_II, M_II, Aero_v, Aero_a);
+                return Get_Kd0(W_II, M_II, Aero_v, Aero_a);
             }
         }
 
