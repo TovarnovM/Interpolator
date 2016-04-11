@@ -205,6 +205,15 @@
   <ItemGroup>
     <None Include="Resources\3_16_3D.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_35_M1_1D.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_35_M2.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3_32_1D.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

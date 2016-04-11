@@ -190,4 +190,13 @@
   <data name="_3_16_3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\3_16_3D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="_3_32_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_32_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="_3_35_M1_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_35_M1_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="_3_35_M2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\3_35_M2.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
 </root>

@@ -381,18 +381,17 @@ namespace GraphsFromExcel
         {
             try
             {
-                var tmpInterp= Interp3D.LoadFromXmlFile(@"G:\OneDrive\графики\3_16_3D.xml");
-                foreach (var item2D in tmpInterp.Data.Values)
+                var tmpInterp= Interp2D.LoadFromXmlFile(@"G:\OneDrive\графики\3_35_M2_old.xml");
+                foreach (var itemXY in tmpInterp.Data.Values)
                 {
-                    foreach (var itemXY in item2D.Data.Values)
-                    {
+
+                
                         foreach (var item in itemXY.Data.Values)
                         {
-                            item.Value = 0.4 + (1 - 0.4) * item.Value;
+                            item.Value = 0.4 + item.Value*2.4/2.828;
                         }
-                    }
                 }
-                tmpInterp.SaveToXmlFile(@"G:\OneDrive\графики\3_16_3D_redact.xml");
+                tmpInterp.SaveToXmlFile(@"G:\OneDrive\графики\3_35_M2.xml");
 
             }
             catch (Exception ex)

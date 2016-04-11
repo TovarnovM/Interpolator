@@ -40,7 +40,7 @@ namespace AeroApp
         private void button2_Click(object sender, EventArgs e)
         {
             InterpXY interp = new InterpXY();
-            interp.Add(0, 0.8);
+            interp.Add(0, 2.5);
             interp.Add(1.4, 0.9);
             interp.Add(3, 1.0);
             var sd = new SaveFileDialog();

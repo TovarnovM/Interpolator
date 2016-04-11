@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="2.5301272984441296" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0025</double>
+      <InterpDouble Value="2.7932107496463932" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.005</double>
+      <InterpDouble Value="2.962942008486563" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0075</double>
+      <InterpDouble Value="3.0478076379066477" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.01</double>
+      <InterpDouble Value="3.0987270155586986" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0125</double>
+      <InterpDouble Value="3.1309759547383309" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.015</double>
+      <InterpDouble Value="3.1343705799151342" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0175</double>
+      <InterpDouble Value="3.11994342291372" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.02</double>
+      <InterpDouble Value="3.0817538896746819" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0225</double>
+      <InterpDouble Value="3.0223479490806224" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.025</double>
+      <InterpDouble Value="2.9493635077793496" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0275</double>
+      <InterpDouble Value="2.8644978783592645" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.03</double>
+      <InterpDouble Value="2.7694483734087694" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0325</double>
+      <InterpDouble Value="2.654879773691655" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.035</double>
+      <InterpDouble Value="2.5244413012729843" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0375</double>
+      <InterpDouble Value="2.3732107496463932" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.04</double>
+      <InterpDouble Value="2.1916831683168319" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0425</double>
+      <InterpDouble Value="1.9651768033946251" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.045</double>
+      <InterpDouble Value="1.7211032531824611" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0475</double>
+      <InterpDouble Value="1.4316265912305517" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.05</double>
+      <InterpDouble Value="1.0718811881188119" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.0525</double>
+      <InterpDouble Value="0.79182461103253188" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>0</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

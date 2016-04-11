@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="0.464876633" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.1</double>
+      <InterpDouble Value="0.477358491" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.2</double>
+      <InterpDouble Value="0.512191582" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.3</double>
+      <InterpDouble Value="0.595065312" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.4</double>
+      <InterpDouble Value="0.798548621" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.5</double>
+      <InterpDouble Value="1.175181422" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.6</double>
+      <InterpDouble Value="1.325689405" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.7</double>
+      <InterpDouble Value="1.383889695" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.8</double>
+      <InterpDouble Value="1.405515239" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.9</double>
+      <InterpDouble Value="1.396081277" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1</double>
+      <InterpDouble Value="1.377213353" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.1</double>
+      <InterpDouble Value="1.366328012" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.2</double>
+      <InterpDouble Value="1.348911466" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.4</double>
+      <InterpDouble Value="1.318432511" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.6</double>
+      <InterpDouble Value="1.301886792" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1.8</double>
+      <InterpDouble Value="1.285341074" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>0</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>
