@@ -578,7 +578,7 @@
     </DoubleInterpXY>
   </_data>
   <Title>Title</Title>
-  <ET_left>etValue</ET_left>
+  <ET_left>etMethod_Line</ET_left>
   <ET_right>etValue</ET_right>
   <InterpType>itLine</InterpType>
 </Interp2D>

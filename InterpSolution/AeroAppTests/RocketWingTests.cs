@@ -34,7 +34,7 @@ namespace RocketAero.Tests
         public void WingGraffTest()
         {
             Assert.AreEqual(0.215, Math.Pow(RW.C_shtr, 1.0/3), 0.002);
-            Assert.AreEqual(0.022,RW.GetCy1a(1.1),0.001);
+            Assert.AreEqual(0.022* RW.Lmb_k, RW.GetCy1a(1.1),0.001);
         }
         [TestMethod(), TestInitialize()]
         public void RocketWingTest()

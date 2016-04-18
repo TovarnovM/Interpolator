@@ -572,6 +572,52 @@ namespace AeroApp.Properties {
         ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;_data&gt;
         ///    &lt;DoubleInterpXY&gt;
+        ///      &lt;double&gt;0&lt;/double&gt;
+        ///      &lt;InterpXY&gt;
+        ///        &lt;_data&gt;
+        ///          &lt;DoubleInterpDouble&gt;
+        ///            &lt;double&gt;-3.5&lt;/double&gt;
+        ///            &lt;InterpDouble Value=&quot;0.65&quot; /&gt;
+        ///          &lt;/DoubleInterpDouble&gt;
+        ///          &lt;DoubleInterpDouble&gt;
+        ///            &lt;double&gt;-1&lt;/double&gt;
+        ///            &lt;InterpDouble Value=&quot;0.25&quot; /&gt;
+        ///          &lt;/Doub [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _4_42 {
+            get {
+                return ResourceManager.GetString("_4_42", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterpXY&gt;
+        ///      &lt;double&gt;2&lt;/double&gt;
+        ///      &lt;InterpXY&gt;
+        ///        &lt;_data&gt;
+        ///          &lt;DoubleInterpDouble&gt;
+        ///            &lt;double&gt;-0.5&lt;/double&gt;
+        ///            &lt;InterpDouble Value=&quot;0.91&quot; /&gt;
+        ///          &lt;/DoubleInterpDouble&gt;
+        ///          &lt;DoubleInterpDouble&gt;
+        ///            &lt;double&gt;-0.4&lt;/double&gt;
+        ///            &lt;InterpDouble Value=&quot;0.91&quot; /&gt;
+        ///          &lt;/Do [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _4_43 {
+            get {
+                return ResourceManager.GetString("_4_43", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterpXY&gt;
         ///      &lt;double&gt;77&lt;/double&gt;
         ///      &lt;InterpXY&gt;
         ///        &lt;_data&gt;

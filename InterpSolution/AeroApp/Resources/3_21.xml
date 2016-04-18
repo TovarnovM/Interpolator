@@ -2,7 +2,7 @@
 <Interp2D xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <_data>
     <DoubleInterpXY>
-      <double>1</double>
+      <double>0</double>
       <InterpXY>
         <_data>
           <DoubleInterpDouble>

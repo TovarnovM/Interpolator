@@ -50,7 +50,7 @@ namespace Interpolator
         }
     }
     //тип экстраполяции  = 0, = крайн значению, = продолжению метода, вызывает ошибку
-    public enum ExtrapolType { etZero, etValue, etMethod, etError };
+    public enum ExtrapolType { etZero, etValue, etMethod_Line, etError };
     public enum InterpolType { itStep, itLine, itSpecial4_3_17 };
 
     [Serializable]
@@ -99,7 +99,7 @@ namespace Interpolator
                 switch (value)
                 {
                     case InterpolType.itStep:
-                        InterpMethodCurr = new InterpolMethod(this.InerpMethodStep);
+                        InterpMethodCurr = new InterpolMethod(this.InterpMethodStep);
                         break;
                     case InterpolType.itSpecial4_3_17:
                         if (this is PotentGraff3P)
@@ -108,7 +108,7 @@ namespace Interpolator
                             InterpType = InterpolType.itLine;
                         break;
                     default:
-                        InterpMethodCurr = new InterpolMethod(this.InerpMethodLine);
+                        InterpMethodCurr = new InterpolMethod(this.InterpMethodLine);
                         break;
                 }
             }
@@ -138,7 +138,7 @@ namespace Interpolator
         public int AddElement(double t, T element)
         {
             if (_data.ContainsKey(t))
-                return AddElement(t*1.000001, element);
+                throw new Exception("Добавляешь дубликат по t");
             _data.Add(t, element);
             return _data.IndexOfValue(element);
         }
@@ -201,11 +201,11 @@ namespace Interpolator
             }
         }
         //Метод интерполяции "ступенька" возр. знач. = ближ левому точке
-        public double InerpMethodStep(params double[] t)
+        public double InterpMethodStep(params double[] t)
         {
             return GetVSub(t);   
         }
-        public double InerpMethodLine(params double[] t)
+        public double InterpMethodLine(params double[] t)
         {
             double t1, t2, y1, y2;
             t1 = _data.Keys[N];
@@ -271,6 +271,14 @@ namespace Interpolator
                         return 0;
                     case ExtrapolType.etValue:
                         return GetVSub(t);
+                    case ExtrapolType.etMethod_Line:
+                        {
+                            N -= N == _data.Count - 1 ?
+                                1 :
+                                0;
+                            return InterpMethodLine(t);
+                        }
+                        
                     default:
                         return GetVSub(t);
                 } 
@@ -353,8 +361,10 @@ namespace Interpolator
     [XmlRoot(nameof(InterpXY))]
     public class InterpXY : Interp<InterpDouble>
     {
-        public int Add(double t, double value)
+        public int Add(double t, double value, bool allowDublicates = false)
         {
+            if (!allowDublicates && _data.ContainsKey(t))
+                return 0;
             return AddElement(t, new InterpDouble(value));
         }
         public void CopyDataFrom(InterpXY parent, bool delPrevData = false)
