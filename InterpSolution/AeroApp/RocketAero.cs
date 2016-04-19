@@ -1132,7 +1132,7 @@ namespace RocketAero
         {
             get
             {
-                return Body.GetCy1a(M);
+                return Body.Cy1(M,Alpha);
             }
         }
         public double Cy_f
