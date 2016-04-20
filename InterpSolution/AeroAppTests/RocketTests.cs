@@ -127,18 +127,18 @@ namespace RocketAero.Tests
         [TestMethod()]
         public void CxiTest()
         {
-            var xi = new double[,]
-                { { 0.162,   0.16,    0.251 ,  0.398  , 0.482 ,  0.476 },
-                {0.092,   0.091,   0.142,   0.227 ,  0.275 ,  0.271},
-                {0.041 ,  0.04 ,   0.064 ,  0.101 ,  0.123 ,  0.122},
-                {0.01 ,   0.01 ,   0.016,   0.025 ,  0.031 ,  0.031},
-                {0 , 0  , 0 ,  0   ,0  , 0},
-                {0.01 ,   0.01  ,  0.016  , 0.025 ,  0.031  , 0.031},
-                {0.041 ,  0.04  ,  0.064 ,  0.101 ,  0.123  , 0.122},
-                {0.092 ,  0.091  , 0.142 ,  0.227 ,  0.275  , 0.271},
-                {0.162 ,  0.16  ,  0.251 ,  0.398 ,  0.482  , 0.476},
-                {0.252  , 0.249 ,  0.388  , 0.613,   0.742  , 0.733 } };
-
+            //var xi = new double[,]
+            //    { { 0.162,   0.16,    0.251 ,  0.398  , 0.482 ,  0.476 },
+            //    {0.092,   0.091,   0.142,   0.227 ,  0.275 ,  0.271},
+            //    {0.041 ,  0.04 ,   0.064 ,  0.101 ,  0.123 ,  0.122},
+            //    {0.01 ,   0.01 ,   0.016,   0.025 ,  0.031 ,  0.031},
+            //    {0 , 0  , 0 ,  0   ,0  , 0},
+            //    {0.01 ,   0.01  ,  0.016  , 0.025 ,  0.031  , 0.031},
+            //    {0.041 ,  0.04  ,  0.064 ,  0.101 ,  0.123  , 0.122},
+            //    {0.092 ,  0.091  , 0.142 ,  0.227 ,  0.275  , 0.271},
+            //    {0.162 ,  0.16  ,  0.251 ,  0.398 ,  0.482  , 0.476},
+            //    {0.252  , 0.249 ,  0.388  , 0.613,   0.742  , 0.733 } };
+            var xi = new double[10, 6];
 
             var alph = new double[] { -20, -15, -10, -5, 0, 5, 10, 15, 20, 25 };
             var m = new double[] { 0.3, 0.8, 1.0, 1.2, 2.0, 2.9 };
@@ -148,10 +148,11 @@ namespace RocketAero.Tests
                 for (int j = 0; j < 6; j++)
                 {
                     _r.M = m[j];
-                    Assert.AreEqual(xi[i, j], _r.Cxi_f, xi[i, j]*0.1);
+                    xi[i, j] = _r.Cxi_II;
+                    //Assert.AreEqual(xi[i, j], _r.Cxi_f, xi[i, j]*0.1);
                 }
             }
-
+            var ee = 1;
 
 
         }
@@ -229,54 +230,6 @@ namespace RocketAero.Tests
         }
 
         [TestMethod()]
-        public void Get_kd0_starTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_Kd0_starTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_hi_pc_shtrTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_hi_pcTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_hi_pcTest1()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_hi_MTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_hi_nosTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void Get_F_LhvTest()
-        {
-
-        }
-
-        [TestMethod()]
         public void Get_KaaTest()
         {
             _r.M = 0.3;
@@ -303,13 +256,33 @@ namespace RocketAero.Tests
         [TestMethod()]
         public void Get_kd0Test()
         {
+            _r.M = 0.3;
+            Assert.AreEqual(0.99, _r.kd0_I, 0.01);
+            Assert.AreEqual(0.96, _r.kd0_II, 0.01);
 
+            _r.M = 1.2;
+            Assert.AreEqual(0.98, _r.kd0_I, 0.01);
+            Assert.AreEqual(0.96, _r.kd0_II, 0.01);
+
+            _r.M = 2.9;
+            Assert.AreEqual(0.85, _r.kd0_I, 0.01);
+            Assert.AreEqual(0.826, _r.kd0_II, 0.01);
         }
 
         [TestMethod()]
         public void Get_Kd0Test()
         {
+            _r.M = 0.3;
+            Assert.AreEqual(1.33, _r.Kd0_I, 0.01);
+            Assert.AreEqual(1.43, _r.Kd0_II, 0.01);
 
+            _r.M = 1.2;
+            Assert.AreEqual(1.33, _r.Kd0_I, 0.01);
+            Assert.AreEqual(1.38, _r.Kd0_II, 0.01);
+
+            _r.M = 2.9;
+            Assert.AreEqual(1.15, _r.Kd0_I, 0.01);
+            Assert.AreEqual(0.94, _r.Kd0_II, 0.01);
         }
 
         [TestMethod()]
@@ -339,20 +312,37 @@ namespace RocketAero.Tests
         [TestMethod()]
         public void Get_eps_sr_alphaTest()
         {
-
+            _r.M = 0.3;
+            Assert.AreEqual(0.575, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 0.8;
+            Assert.AreEqual(0.62, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 1;
+            Assert.AreEqual(0.72, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 1.2;
+            Assert.AreEqual(0.73, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 2.0;
+            Assert.AreEqual(0.63, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 2.9;
+            Assert.AreEqual(0.499, _r.Get_eps_sr_alpha(), 0.01);
         }
 
         [TestMethod()]
         public void Get_eps_sr_deltaTest()
         {
-
+            _r.M = 0.3;
+            Assert.AreEqual(0.35, _r.Get_eps_sr_delta(), 0.01);
+            _r.M = 0.8;
+            Assert.AreEqual(0.4, _r.Get_eps_sr_delta(), 0.01);
+            _r.M = 1;
+            Assert.AreEqual(0.46, _r.Get_eps_sr_delta(), 0.01);
+            _r.M = 1.2;
+            Assert.AreEqual(0.48, _r.Get_eps_sr_delta(), 0.01);
+            _r.M = 2.0;
+            Assert.AreEqual(0.44, _r.Get_eps_sr_delta(), 0.01);
+            _r.M = 2.9;
+            Assert.AreEqual(0.36, _r.Get_eps_sr_delta(), 0.01);
         }
 
-        [TestMethod()]
-        public void Get_nTest()
-        {
-
-        }
 
 
     }

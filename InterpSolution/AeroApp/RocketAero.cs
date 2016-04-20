@@ -487,11 +487,10 @@ namespace RocketAero
         {
             return Cx_tr(mach, x_t, v, a_m) + Cx_nose(mach) + Cx_korm(mach) + Cx_dno(mach);
         }
-        public double Cx_i(double mach, double alpha)
+        public double Cx_i(double mach, double alpha, double sMinus = 0.0)
         {
             var sinAlpha = Math.Sin(alpha * AeroGraphs.PIdiv180);
             var cosAlpha = Math.Cos(alpha * AeroGraphs.PIdiv180);
-            var cy1a = GetCy1a(mach);
             var m21_lmb = AeroGraphs.M2min1(mach) / Lmb_nos;
             var type = Nose is RocketNos_ConePlusCyl ? 0.0
                      : Nose is RocketNos_OzjPlusCyl ? 1.0
@@ -500,17 +499,19 @@ namespace RocketAero
                      : Nose is RocketNos_Compose && (Nose as RocketNos_Compose).Main is RocketNos_OzjPlusCyl ? 1.0//1 - (Nose as RocketNos_Compose).Rshtrih
                      : 0.5;
             var ksi = AeroGr.GetV("4_40", m21_lmb, type);
-            return Cy1(mach, alpha) * sinAlpha + 2.0 * ksi * sinAlpha * sinAlpha * cosAlpha;
+            return Cy1(mach, alpha,sMinus) * sinAlpha + 2.0 * ksi * sinAlpha * sinAlpha * cosAlpha;
         }
-        public double Cy1(double mach, double alpha)
+        public double Cy1(double mach, double alpha, double sMinus = 0.0)
         {
             var cy1fa = GetCy1a(mach);
             var hi_a = 1.0 - 0.45 * (1.0 - Math.Exp(-0.06 * mach * mach)) * (1.0 - Math.Exp(-0.12 * Math.Abs(alpha)));
-            var s_bok = S_bok;
+            var s_bok = S_bok - sMinus;
             var sinAlpha = Math.Sin(alpha * AeroGraphs.PIdiv180);
             var cosAlpha = Math.Cos(alpha * AeroGraphs.PIdiv180);
             var cx_cyl = AeroGr.GetV("3_32", mach * Math.Abs(sinAlpha));
-            return AeroGraphs._180divPI * cy1fa * hi_a * sinAlpha * cosAlpha + s_bok * cx_cyl * sinAlpha * sinAlpha * Math.Sign(alpha) / S_mid;
+            var expr1 = AeroGraphs._180divPI * cy1fa * hi_a * sinAlpha * cosAlpha;
+            var expr2 = s_bok * cx_cyl * sinAlpha * sinAlpha * Math.Sign(alpha) / S_mid;
+            return expr1 + expr2;
         }
     }
 
@@ -883,7 +884,7 @@ namespace RocketAero
         /// <summary>
         /// рис 3.23
         /// </summary>
-        public double Hi_rulei { get; set; } = 90.0;
+        public double Hi_rulei { get; set; } = 0.0;
         public WingOrient(RocketWing wing)
         {
             Wing = wing;
@@ -994,13 +995,13 @@ namespace RocketAero
         public double Cxi
         {
             get
-            {
-                var cx0i = Body.Cx_i(M, Alpha);
+            {                
+                var cxi_f = Cxi_f;
                 var cxi_I = Cxi_I;
                 var cxi_II = Cxi_II;
                 var sI_sm = W_I.Wing.S_k / Body.S_mid;
                 var sII_sm = W_II.Wing.S_k / Body.S_mid;
-                return cx0i + cxi_I * kt_I * sI_sm + cxi_II * kt_II * sII_sm;
+                return cxi_f + cxi_I * kt_I * sI_sm + cxi_II * kt_II * sII_sm;
             }
         }
         public double Cx
@@ -1153,7 +1154,8 @@ namespace RocketAero
         {
             get
             {
-                return Body.Cx_i(M, Alpha);
+                var sMinus = W_I.Wing.Ba_k * W_I.Wing.D + W_II.Wing.Ba_k * W_II.Wing.D;
+                return Body.Cx_i(M, Alpha, sMinus);
             }
         }
 
@@ -1217,7 +1219,7 @@ namespace RocketAero
                 var cn = W_I.Wing.Cn(M_I, alphaEff);
                 var ksi = W_I.Wing.TgHi0 < 0.01
                             ? 0.0
-                            : AeroGr.GetV("4_43", AeroGraphs.M2min1(M_I) / W_I.Wing.TgHi0, alphaEff);
+                            : AeroGr.GetV("4_43", AeroGraphs.M2min1(M_I) / W_I.Wing.TgHi0, Math.Abs(alphaEff));
                 var lmbd_k = W_I.Wing.Lmb_k;
                 var x = lmbd_k * AeroGraphs.M2min1(M_I);
                 var y = lmbd_k * W_I.Wing.TgHi0;
@@ -1381,7 +1383,7 @@ namespace RocketAero
             double d_shtr = wing.Wing.D / wing.Wing.L;
             double l_1 = wing.X + wing.Wing.Xb + 0.5 * wing.Wing.Bb;
             //ф. 3.17
-            double delta_star_shtr = 0.093 * l_1 * (1 + 0.4 * mach + 0.147 * mach * mach - 0.006 * mach * mach * mach) / (Math.Pow(mach * l_1 / (v * a_m), 0.2) * Body.D);
+            double delta_star_shtr = 0.093 * l_1 * (1 + 0.4 * mach + 0.147 * mach * mach - 0.006 * mach * mach * mach) / (Math.Pow(mach * a_m* l_1 / (v ), 0.2) * wing.Wing.D);
 
             var ex1 = (1.0 - d_shtr * (1 + delta_star_shtr))/(1.0-d_shtr);
             var ex2 = 1.0 - ((wing.Wing.Etta_k - 1) * d_shtr * (1 + delta_star_shtr)) / (wing.Wing.Etta_k + 1 - 2 * d_shtr);
@@ -1473,8 +1475,8 @@ namespace RocketAero
         }
         public double Get_Kd0(WingOrient wing, double mach, double v, double a_m)
         {
-            double Kd0star = Get_Kaa_star(wing);
-            double kd0star = Get_kaa_star(wing);
+            double Kd0star = Get_Kd0_star(wing);
+            double kd0star = Get_kd0_star(wing);
             double hipc = Get_hi_pc_shtr(wing, mach, v, a_m);
             double him = Get_hi_M(mach);
             double FLhv = Get_F_Lhv(wing, mach);
@@ -1536,24 +1538,8 @@ namespace RocketAero
         }
         public double Get_eps_sr_delta()
         {
-            var z_v_shtr = W_I.Wing.Z_v_shtr(M_I);
-            var d_I = W_I.Wing.D;
-            var l_I = W_I.Wing.L;
-            var z_v = 0.5 * (d_I + z_v_shtr * (l_I - d_I));
 
-            var x_v = W_I.Wing.GetX(z_v) + W_I.Wing.GetB(z_v) - W_I.Wing.Xb - W_I.Wing.Bb * W_I.X_povor_otn;
-            var x_II = W_II.Wing.Xa_k + W_II.Wing.Ba_k * 0.5 -
-                W_I.Wing.Xb + W_I.Wing.Bb * W_I.X_povor_otn + x_v * Math.Cos(W_I.Delta * AeroGraphs.PIdiv180);
-            var y_II = 0.0;
-            var y_v = x_II * SinAlpha - x_v * Math.Sin(W_I.Delta * AeroGraphs.PIdiv180) + y_II;
-
-            var _1_div_etta = 1 / W_II.Wing.Etta_k;
-            var _2zv_div_lII = 2.0 * z_v / W_II.Wing.L;
-            var _2yv_div_lII = 2.0 * y_v / W_II.Wing.L;
-            var d_II_shtr = W_II.Wing.D / W_II.Wing.L;
-            var i = AeroGr.GetV("3_17", _2zv_div_lII, _2yv_div_lII, d_II_shtr, _1_div_etta);
-            var ksi = 1.0;
-            return AeroGraphs._180divPI * i * W_II.Wing.L_k * W_I.Wing.GetCy1a(M_I) * kd0_I*Get_n(W_I,M_I) * ksi / (2 * Math.PI * z_v_shtr * W_II.Wing.L_k * W_I.Wing.Lmb_k * Kaa_II);
+            return Get_eps_sr_alpha() * kd0_I * Get_n(W_I, M_I) / kaa_I;
         }
 
         public double Get_n(WingOrient wing, double mach)
