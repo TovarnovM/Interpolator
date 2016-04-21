@@ -123,7 +123,6 @@ namespace RocketAero.Tests
             Assert.AreEqual(0.019, _r.Cy1a_II, 0.001);
         }
 
-
         [TestMethod()]
         public void CxiTest()
         {

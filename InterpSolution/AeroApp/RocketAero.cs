@@ -139,6 +139,7 @@ namespace RocketAero
         /// <returns></returns>
         double GetF_nos(double d, double l);
         double GetCx_nos(AeroGraphs ag, double mach, double lmb_nos);
+        double GetW_nos(double d, double l);
     }
 
     /// <summary>
@@ -160,6 +161,11 @@ namespace RocketAero
         {
             return Math.PI * 0.5 * d * Math.Sqrt(0.25 * d * d + l * l);
         }
+
+        public double GetW_nos(double d, double l)
+        {
+            return 0.25 * Math.PI * d * d * l / 3.0;
+        }
     }
     /// <summary>
     /// оживало+цилиндр
@@ -179,6 +185,11 @@ namespace RocketAero
         public double GetF_nos(double d, double l)
         {
             return Math.PI * 0.5 * d * Math.Sqrt(0.25 * d * d + l * l);
+        }
+
+        public double GetW_nos(double d, double l)
+        {
+            return 0.533 * 0.25 * Math.PI * d * d * l;
         }
     }
 
@@ -214,6 +225,12 @@ namespace RocketAero
             return ag.GetV("4_13", mach, lmb_forgr);
         }
 
+        public double GetW_nos(double d, double l)
+        {
+            var r = 0.5 * d;
+            return (2.0 * Math.PI * r * r * r / 3.0) * Type; ;
+        }
+
         public RocketNos_SpherePlusCyl() { }
         /// <summary>
         /// 1 - сфера
@@ -234,6 +251,26 @@ namespace RocketAero
         public IRocketBody_nos Main { get; set; }
         public IRocketBody_nos Little{ get; set; }
         public double Rshtrih{ get; set; } //2r/D
+        public double getLmbdShtr(double lmb_nos)
+        {
+            double lmb_shtr = lmb_nos;
+            double type = 0;
+            if (Little is RocketNos_SpherePlusCyl)
+            {
+                type = (Little as RocketNos_SpherePlusCyl).Type;
+            }
+
+            if (Main is RocketNos_ConePlusCyl)
+            {
+                lmb_shtr = lmb_nos / (1 - Rshtrih);
+            }
+
+            if (Main is RocketNos_OzjPlusCyl)
+            {
+                lmb_shtr = (lmb_nos - Rshtrih * 0.5 * type) / Math.Sqrt(1 - Rshtrih);
+            }
+            return lmb_shtr;
+        }
         
         public RocketNos_Compose(IRocketBody_nos main, IRocketBody_nos little, double r)
         {
@@ -277,24 +314,7 @@ namespace RocketAero
 
         public double GetCy1a_nos(AeroGraphs ag, double mach, double lmb_nos, double lmb_cyl)
         {
-            double lmb_shtr = lmb_nos;
-            double type = 0;
-            double cosTetta = Math.Cos(Math.Atan(0.5 / lmb_shtr));
-            double main_expr = Rshtrih * Rshtrih;
-            if (Little is RocketNos_SpherePlusCyl)
-            {
-                type = (Little as RocketNos_SpherePlusCyl).Type;
-            }
-
-            if (Main is RocketNos_ConePlusCyl)
-            {
-                lmb_shtr = lmb_nos / (1 - Rshtrih);
-            }
-
-            if (Main is RocketNos_OzjPlusCyl)
-            {
-                lmb_shtr = (lmb_nos - Rshtrih * 0.5 * type) / Math.Sqrt(1 - Rshtrih);
-            }
+            double lmb_shtr = getLmbdShtr(lmb_nos);
             return  Main.GetCy1a_nos(ag, mach, lmb_shtr, lmb_cyl) * (1 - Rshtrih * Rshtrih) + 
                     Little.GetCy1a_nos(ag, mach, lmb_nos, lmb_cyl)* Rshtrih * Rshtrih;
         }
@@ -340,6 +360,16 @@ namespace RocketAero
                 main_expr = r_strSqr * cosTettaExpr * cosTettaExpr*(3.1 - 1.4 * cosTettaExpr * Rshtrih - 0.7 * cosTettaExpr * cosTettaExpr * r_strSqr);
             }
             return Main.GetCx_nos(ag, mach, lmb_shtr) * (1 - main_expr) + Little.GetCx_nos(ag, mach, lmb_nos) * Rshtrih * Rshtrih;
+        }
+
+        public double GetW_nos(double d, double l)
+        {
+            var lmbShtr = getLmbdShtr(l / d);
+            var l_dop = (Little is RocketNos_SpherePlusCyl) ? (Little as RocketNos_SpherePlusCyl).Type * d * 0.5 * Rshtrih : 0.0;
+
+            return Little.GetW_nos(d * Rshtrih, l)
+                    + Main.GetW_nos(d, d * lmbShtr)
+                    - Main.GetW_nos(d * Rshtrih, d * lmbShtr - l + l_dop);
         }
     }
 
@@ -406,6 +436,13 @@ namespace RocketAero
         public RocketBody_Geom()
         {
             
+        }
+        public double W_nos
+        {
+            get
+            {
+                return Nose.GetW_nos(D, L_nos);
+            }
         }
     }
     public class RocketBody: RocketBody_Geom, IRocket_Coeff
@@ -1341,6 +1378,16 @@ namespace RocketAero
                 var expr2 = cn * (Kaa - kaa) * SinAlpha * Math.Cos(AeroGraphs.PIdiv180 * W_II.Delta) / kaa;
                 var expr3 = cn * ksi * c_f_shtr * Math.Cos(AeroGraphs.PIdiv180 * (Alpha + W_II.Delta));
                 return expr1 + expr2 + expr3;
+            }
+        }
+
+        public double Xf_a_f
+        {
+            get
+            {
+                var x_delt = AeroGr.GetV("5_7", AeroGraphs.M2min1(M), Body.L_cyl / Body.Lmb_nos);
+                x_delt *= Body.L_nos;
+                return Body.Lmb_nos - Body.W_nos / Body.S_mid +x_delt;
             }
         }
         
