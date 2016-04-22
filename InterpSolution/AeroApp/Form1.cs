@@ -21,6 +21,9 @@ namespace AeroApp
         private AeroGraphs rr = new AeroGraphs();
         private void button1_Click(object sender, EventArgs e)
         {
+            bool i = radioButton1.Checked;
+
+
             //MessageBox.Show($"{ rr.GetV("3_212", 1, 4.5)}");
             double ss = rr.GetV("3_17", 0.55, 0.0, 0.45, 0.5);
 
@@ -39,13 +42,21 @@ namespace AeroApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            InterpXY interp = new InterpXY();
-            interp.Add(0, 2.5);
-            interp.Add(1.4, 0.9);
-            interp.Add(3, 1.0);
-            var sd = new SaveFileDialog();
-            if (sd.ShowDialog() == DialogResult.OK)
-                interp.SaveToXmlFile(sd.FileName);
+            Bitmap bm = new Bitmap(10,10);
+            
+            pictureBox1.Image.
+
+
+
+
+
+            //InterpXY interp = new InterpXY();
+            //interp.Add(0, 2.5);
+            //interp.Add(1.4, 0.9);
+            //interp.Add(3, 1.0);
+            //var sd = new SaveFileDialog();
+            //if (sd.ShowDialog() == DialogResult.OK)
+            //    interp.SaveToXmlFile(sd.FileName);
         }
     }
 }
