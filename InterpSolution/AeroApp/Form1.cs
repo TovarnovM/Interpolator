@@ -42,13 +42,7 @@ namespace AeroApp
 
         private void button2_Click(object sender, EventArgs e)
         {
-            Bitmap bm = new Bitmap(10,10);
             
-            pictureBox1.Image.
-
-
-
-
 
             //InterpXY interp = new InterpXY();
             //interp.Add(0, 2.5);

@@ -16,14 +16,14 @@ namespace RocketAero.Tests
         [TestMethod()]
         public void WingGeometryTest()
         {
-            Assert.AreEqual(26.3, RW.Bb, 0.02);
-            Assert.AreEqual(25.2, RW.Ba, 0.02);
-            Assert.AreEqual(19.06, RW.Ba_k, 0.02);
+            Assert.AreEqual(26.3, RW.B_b, 0.02);
+            Assert.AreEqual(25.2, RW.B_a, 0.02);
+            Assert.AreEqual(19.06, RW.B_ak, 0.02);
             Assert.AreEqual(Math.Tan(18*Math.PI/180), RW.GetTgHiM(0.5), 0.02);
-            Assert.AreEqual(22.27, RW.Za, 0.02);
-            Assert.AreEqual(34.93, RW.Za_k, 0.02);
-            Assert.AreEqual(11.33, RW.Xb, 0.02);
-            Assert.AreEqual(19.79, RW.Xa_k, 0.04);
+            Assert.AreEqual(22.27, RW.Z_a, 0.02);
+            Assert.AreEqual(34.93, RW.Z_ak, 0.02);
+            Assert.AreEqual(11.33, RW.X_b, 0.02);
+            Assert.AreEqual(19.79, RW.X_ak, 0.04);
             Assert.AreEqual(2 * 629.812233, RW.S_k, 2);
             Assert.AreEqual(2 * 1252.83194, RW.S, 2);
             Assert.AreEqual(4, RW.Etta, 0.02);

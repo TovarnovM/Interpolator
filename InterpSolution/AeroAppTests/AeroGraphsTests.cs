@@ -33,17 +33,6 @@ namespace RocketAero.Tests
             Assert.AreEqual("4_5_5", sample.CutMyString("4_5_5"));
         }
 
-        [TestMethod()]
-        public void HowManyParamsTest()
-        {
-
-        }
-
-        [TestMethod()]
-        public void HasGraphTest()
-        {
-
-        }
 
         [TestMethod()]
         public void GetVTest_3_17()

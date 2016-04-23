@@ -56,6 +56,8 @@ namespace Interpolator
     [Serializable]
     public class Interp<T> : IInterpElem, IInterpParams where T : IInterpElem
     {
+        [XmlIgnore]
+        protected bool _isSynch = false;
         //Тут хранятся данные
         public SerializableSortedList<double, T> _data = new SerializableSortedList<double, T>();
         [XmlIgnore]
@@ -73,7 +75,7 @@ namespace Interpolator
         public ExtrapolType ET_right { get; set; } = ExtrapolType.etValue;
         //номер интервала (левого элемента), в который попала искомая точка
         [XmlIgnore]
-        public int N { get; private set; } = 0;
+        public int N { get; protected set; } = 0;
         public int Count {
             get
             {
@@ -85,8 +87,8 @@ namespace Interpolator
 
         //делегат функции по реализации метода интерполяции
         public delegate double InterpolMethod(params double[] t);
-        private InterpolMethod InterpMethodCurr { get; set; }
-        private InterpolType _interpType;
+        protected InterpolMethod InterpMethodCurr { get; set; }
+        protected InterpolType _interpType;
         public InterpolType InterpType
         {
             get
@@ -121,7 +123,7 @@ namespace Interpolator
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private double GetVSub(params double[] t)
+        protected double GetVSub(params double[] t)
         {
             if (t.Length == 1)
                 return _data.Values[N].GetV();
@@ -137,6 +139,7 @@ namespace Interpolator
         }
         public int AddElement(double t, T element)
         {
+            _isSynch = false;
             if (_data.ContainsKey(t))
                 throw new Exception("Добавляешь дубликат по t");
             _data.Add(t, element);
@@ -144,6 +147,7 @@ namespace Interpolator
         }
         public void RemoveElement(int elemIndex)
         {
+            _isSynch = false;
             if (elemIndex < _data.Count && elemIndex >= 0)
             {
                 _data.RemoveAt(elemIndex);
@@ -156,7 +160,7 @@ namespace Interpolator
         }
         //функция нахождения интервала, в который попадает запрашиваемая точка + Инициализирует N
         //-1 - находится левее 0 точки, = length - нахиодтся справа последней
-        public int SetN(double t)
+        public virtual int SetN(double t)
         {
             try
             {
@@ -168,32 +172,90 @@ namespace Interpolator
                         return -1;
                     N = 0;
                 }
-                if(N == _data.Count-1 && _data.Keys[N] <= t)
+                int min, max;
+                int lengthM1 = _data.Count -1;
+                if (_data.Keys[N] <= t)
                 {
-                    return N;
+                    //проверка "на прошлый вызванный интервал"
+                    if (N == lengthM1 || _data.Keys[N + 1] > t)
+                        return N;
+                    ++N;
+                    //проверка на соседний правый интервал
+                    if (N == lengthM1 || _data.Keys[N + 1] > t)
+                        return N;
+                    //проверка на экстраполяцию справа
+                    if(_data.Keys.Last() <= t)
+                    {
+                        N = lengthM1;
+                        return lengthM1;
+                    }
+                    min = N;
+                    max = lengthM1;
                 }
-                if (_data.Count > 1 && _data.Keys[N] <= t && _data.Keys[N + 1] > t)
-                    return N;
-                   
-                if (_data.Keys[N] > t)
-                    for (int i = N; i >= 0; i--)
-                    {
-                        if (_data.Keys[i] <= t)
-                        {
-                            break;
-                        }
-                        N = i - 1;
-                    }
                 else
-                    for (int i = N; i < _data.Count; i++)
+                {
+                    //проверка на ближайший левый интервал, относительно прошлого вызванного интервала
+                    if (N == 0 || _data.Keys[N - 1] <= t)
+                        return --N;
+                    //проверка на экстраполяцию слева
+                    if (_data.Keys[0] > t)
                     {
-                        if (_data.Keys[i] > t)
-                        {
-                            break;
-                        }
-                        N = i;
+                        N = -1 ;
+                        return N;
                     }
+                    min = 0;
+                    max = N;
+                }
+                //Бинарный поиск
+                while(min != max)
+                {
+                    N = (min + max) / 2;
+                    if (_data.Keys[N] <= t)
+                    {
+                        if (_data.Keys[N + 1] > t)
+                            return N;
+                        min = N;
+                    }
+                    else
+                        max = N;
+                }
+                N = min;
                 return N;
+                //OLD linear search
+                //if (_data.Count < 1)
+                //    return 0;
+                //if (N < 0)
+                //{
+                //    if (_data.Keys[0] > t)
+                //        return -1;
+                //    N = 0;
+                //}
+                //if(N == _data.Count-1 && _data.Keys[N] <= t)
+                //{
+                //    return N;
+                //}
+                //if (_data.Count > 1 && _data.Keys[N] <= t && _data.Keys[N + 1] > t)
+                //    return N;
+
+                //if (_data.Keys[N] > t)
+                //    for (int i = N; i >= 0; i--)
+                //    {
+                //        if (_data.Keys[i] <= t)
+                //        {
+                //            break;
+                //        }
+                //        N = i - 1;
+                //    }
+                //else
+                //    for (int i = N; i < _data.Count; i++)
+                //    {
+                //        if (_data.Keys[i] > t)
+                //        {
+                //            break;
+                //        }
+                //        N = i;
+                //    }
+                //return N;
             }
             catch (Exception)
             {
@@ -201,11 +263,11 @@ namespace Interpolator
             }
         }
         //Метод интерполяции "ступенька" возр. знач. = ближ левому точке
-        public double InterpMethodStep(params double[] t)
+        public virtual double InterpMethodStep(params double[] t)
         {
             return GetVSub(t);   
         }
-        public double InterpMethodLine(params double[] t)
+        public virtual double InterpMethodLine(params double[] t)
         {
             double t1, t2, y1, y2;
             t1 = _data.Keys[N];
@@ -361,6 +423,171 @@ namespace Interpolator
     [XmlRoot(nameof(InterpXY))]
     public class InterpXY : Interp<InterpDouble>
     {
+        private double[] _x;
+        private double[] _y;
+        private double[] _k;
+        private double[] _b;
+        private int _length;
+        public void SynchArrays()
+        {
+            _length = _data.Count;
+            _x = new double[_length];
+            _y = new double[_length];
+            _k = new double[_length];
+            _b = new double[_length];
+            int indx = 0;
+            foreach (var item in _data)
+            {
+                _x[indx] = item.Key;
+                _y[indx] = item.Value.Value;
+                ++indx;
+            }
+            for (int i = 0; i < _length-1; i++)
+            {                
+                _k[i] = (_y[i + 1] - _y[i]) / (_x[i + 1] - _x[i]);
+                _b[i] = _y[i] - _k[i] * _x[i];
+            }
+            _isSynch = true;
+        }
+        public double InterpMethodXYLine(double t)
+        {
+            return _k[N] * t + _b[N];
+        }
+        public override int SetN(double t)
+        {
+            try { 
+                if (!_isSynch)
+                    SynchArrays();
+                if (_length < 1)
+                    return 0;
+                if (N < 0)
+                {
+                    if (_x[0] > t)
+                        return -1;
+                    N = 0;
+                }
+                int min, max;
+                int lengthM1 = _length - 1;
+                if (_x[N] <= t)
+                {
+                    if (N == lengthM1 || _x[N + 1] > t)
+                        return N;
+                    ++N;
+                    if (N == lengthM1 || _x[N + 1] > t)
+                        return N;
+                    if (_x.Last() <= t)
+                    {
+                        N = lengthM1;
+                        return lengthM1;
+                    }
+                    min = N;
+                    max = lengthM1;
+                }
+                else
+                {
+                    if (N == 0 || _x[N - 1] <= t)
+                        return --N;
+                    if (_x[0] > t)
+                    {
+                        N = -1;
+                        return N;
+                    }
+                    min = 0;
+                    max = N;
+                }
+                while (min != max)
+                {
+                    N = (min + max) / 2;
+                    if (_x[N] <= t)
+                    {
+                        if (_x[N + 1] > t)
+                            return N;
+                        min = N;
+                    }
+                    else
+                        max = N;
+                }
+                N = min;
+                return N;
+                //if (_length < 1)
+                //    return 0;
+                //if (N < 0)
+                //{
+                //    if (_x[0] > t)
+                //        return -1;
+                //    N = 0;
+                //}
+                //if (N == _length - 1 && _x[N] <= t)
+                //{
+                //    return N;
+                //}
+                //if (_length > 1 && _x[N] <= t && _x[N + 1] > t)
+                //    return N;
+
+                //if (_x[N] > t)
+                //    for (int i = N; i >= 0; i--)
+                //    {
+                //        if (_x[i] <= t)
+                //        {
+                //            break;
+                //        }
+                //        N = i - 1;
+                //    }
+                //else
+                //    for (int i = N; i < _length; i++)
+                //    {
+                //        if (_x[i] > t)
+                //        {
+                //            break;
+                //        }
+                //        N = i;
+                //    }
+                //return N;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
+        public override double GetV(params double[] t)
+        {
+            var tt = t[0];
+            SetN(tt);
+
+            //Экстраполяция (пока только 2 типа)
+            if (N < 0 || N == _length - 1 || _length == 1)
+            {
+                ExtrapolType ET_temp = N < 0 ? ET_left : ET_right;
+                N = N < 0 ? 0 : N;
+                switch (ET_temp)
+                {
+                    case ExtrapolType.etZero:
+                        if (N == _length - 1 && (tt == _x[0] || tt == _x[_length-1]))
+                        {
+                            return _y[N];
+                        }
+                        return 0;
+                    case ExtrapolType.etValue:
+                        return _y[N];
+                    case ExtrapolType.etMethod_Line:
+                        {
+                            N -= N == _length - 1 ?
+                                1 :
+                                0;
+                            return InterpMethodXYLine(tt);
+                        }
+
+                    default:
+                        return _y[N];
+                }
+            }
+            if(InterpType == InterpolType.itLine)
+                return InterpMethodXYLine(tt);
+            if (InterpType == InterpolType.itStep)
+                return _y[N];
+            return InterpMethodXYLine(tt);
+        }
+
         public int Add(double t, double value, bool allowDublicates = false)
         {
             if (!allowDublicates && _data.ContainsKey(t))
@@ -402,7 +629,7 @@ namespace Interpolator
         }
         public InterpXY() : base()
         {
-
+            
         }
         public InterpXY(double[] ts, double[] vals):this()
         {

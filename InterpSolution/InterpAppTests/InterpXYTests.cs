@@ -107,6 +107,16 @@ namespace Interpolator.Tests
             Assert.AreEqual(0, sInterp5elem.SetN(-1));
             Assert.AreEqual(0, sInterp5elem.SetN(-0.5));
             Assert.AreEqual(1, sInterp5elem.SetN(0));
+
+            var ts = new double[] { -2.0, -1.0, -0.5, 0.0, 1.0, 2.0, 3.0, 4.0, 7.0, 10.0, 11.0 };
+            var expected = new int[] { -1, 0, 0, 1, 2, 2, 2, 2, 3, 4, 4 };
+            var rnd = new Random();
+            int k = 0;
+            for (int i = 0; i < 50; i++)
+            {
+                k = rnd.Next(0, ts.Length - 1);
+                Assert.AreEqual(expected[k], sInterp5elem.SetN(ts[k]));
+            }
         }
         [TestMethod()]
         public void ExtrapolForListWithOneElemTest()
