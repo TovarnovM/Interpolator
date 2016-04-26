@@ -153,7 +153,7 @@ namespace RocketAero.Tests
             }
             var ee = 1;
 
-
+            _r.Alpha = 0;
         }
 
         [TestMethod()]
@@ -323,6 +323,22 @@ namespace RocketAero.Tests
             Assert.AreEqual(0.63, _r.Get_eps_sr_alpha(), 0.01);
             _r.M = 2.9;
             Assert.AreEqual(0.499, _r.Get_eps_sr_alpha(), 0.01);
+
+            _r.Alpha = 20;
+            _r.M = 0.3;
+            Assert.AreEqual(0.24, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 0.8;
+            Assert.AreEqual(0.27, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 1;
+            Assert.AreEqual(0.31, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 1.2;
+            Assert.AreEqual(0.316, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 2.0;
+            Assert.AreEqual(0.279, _r.Get_eps_sr_alpha(), 0.01);
+            _r.M = 2.9;
+            Assert.AreEqual(0.23, _r.Get_eps_sr_alpha(), 0.01);
+
+            _r.Alpha = 0;
         }
 
         [TestMethod()]
@@ -342,7 +358,120 @@ namespace RocketAero.Tests
             Assert.AreEqual(0.36, _r.Get_eps_sr_delta(), 0.01);
         }
 
+        [TestMethod()]
+        public void GetX_df()
+        {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(0.934, _r.X_df, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(0.936, _r.X_df, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(0, _r.X_df, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(0, _r.X_df, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(0, _r.X_df, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(0, _r.X_df, 0.001);
+        }
+
+        [TestMethod()]
+        public void GetX_d_I()
+        {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(2.285, _r.X_d_I, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.282, _r.X_d_I, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.3213, _r.X_d_I, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.397, _r.X_d_I, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.488, _r.X_d_I, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.539, _r.X_d_I, 0.001);
+
+            _r.Alpha = 20;
+            _r.M = 0.3;
+            Assert.AreEqual(2.36, _r.X_d_I, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.353, _r.X_d_I, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.369, _r.X_d_I, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.426, _r.X_d_I, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.496, _r.X_d_I, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.547, _r.X_d_I, 0.001);
+
+            _r.Alpha = -20;
+            _r.M = 0.3;
+            Assert.AreEqual(2.36, _r.X_d_I, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.353, _r.X_d_I, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.369, _r.X_d_I, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.426, _r.X_d_I, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.496, _r.X_d_I, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.547, _r.X_d_I, 0.001);
+
+            _r.Alpha = 0;
+        }
+
+        [TestMethod()]
+        public void GetX_d_II()
+        {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(3.923, _r.X_d_II, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(3.927, _r.X_d_II, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(3.94, _r.X_d_II, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(3.968, _r.X_d_II, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(3.956, _r.X_d_II, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(3.96, _r.X_d_II, 0.001);
+
+            _r.Alpha = 20;
+            _r.M = 0.3;
+            Assert.AreEqual(3.935, _r.X_d_II, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(3.935, _r.X_d_II, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(3.9428, _r.X_d_II, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(3.97, _r.X_d_II, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(3.957, _r.X_d_II, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(3.9613, _r.X_d_II, 0.001);
+
+            _r.Alpha = -20;
+            _r.M = 0.3;
+            Assert.AreEqual(3.935, _r.X_d_II, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(3.935, _r.X_d_II, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(3.9428, _r.X_d_II, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(3.97, _r.X_d_II, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(3.957, _r.X_d_II, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(3.9613, _r.X_d_II, 0.001);
+
+            _r.Alpha = 0;
+        }
 
 
-    }
+     }
 }

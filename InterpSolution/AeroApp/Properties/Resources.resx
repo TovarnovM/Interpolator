@@ -169,9 +169,6 @@
   <data name="_4_40" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\4_40.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
-  <data name="_5_11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\5_11.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
-  </data>
   <data name="_5_7" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5_7.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
@@ -204,5 +201,8 @@
   </data>
   <data name="_4_43" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\4_43.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="_5_11_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\5_11_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
 </root>
