@@ -363,17 +363,128 @@ namespace RocketAero.Tests
         {
             _r.Alpha = 0;
             _r.M = 0.3;
-            Assert.AreEqual(0.934, _r.X_df, 0.001);
+            Assert.AreEqual(-0.0075, _r.X_d_f, 0.001);
             _r.M = 0.8;
-            Assert.AreEqual(0.936, _r.X_df, 0.001);
+            Assert.AreEqual(-0.002, _r.X_d_f, 0.001);
             _r.M = 1;
-            Assert.AreEqual(0, _r.X_df, 0.001);
+            Assert.AreEqual(0.0204, _r.X_d_f, 0.001);
             _r.M = 1.2;
-            Assert.AreEqual(0, _r.X_df, 0.001);
+            Assert.AreEqual(0.0903, _r.X_d_f, 0.001);
             _r.M = 2.0;
-            Assert.AreEqual(0, _r.X_df, 0.001);
+            Assert.AreEqual(0.227, _r.X_d_f, 0.001);
             _r.M = 2.9;
-            Assert.AreEqual(0, _r.X_df, 0.001);
+            Assert.AreEqual(0.2666, _r.X_d_f, 0.001);
+
+            _r.Alpha = 5;
+            _r.M = 0.3;
+            Assert.AreEqual(0.372, _r.X_d_f, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(0.377, _r.X_d_f, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(0.383, _r.X_d_f, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(0.405, _r.X_d_f, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(0.504, _r.X_d_f, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(0.577, _r.X_d_f, 0.001);
+
+            _r.Alpha = 30;
+            _r.M = 0.3;
+            Assert.AreEqual(1.160, _r.X_d_f, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(1.338, _r.X_d_f, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(1.446, _r.X_d_f, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(1.4586, _r.X_d_f, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(1.4766, _r.X_d_f, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(1.5028, _r.X_d_f, 0.001);
+
+
+            _r.Alpha = -30;
+            _r.M = 0.3;
+            Assert.AreEqual(1.160, _r.X_d_f, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(1.338, _r.X_d_f, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(1.446, _r.X_d_f, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(1.4586, _r.X_d_f, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(1.4766, _r.X_d_f, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(1.5028, _r.X_d_f, 0.001);
+
+            _r.Alpha = 0;
+        }
+
+        [TestMethod()]
+        public void GetX_Fa()
+        {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(2.244, _r.X_Fa, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.241, _r.X_Fa, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.246, _r.X_Fa, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.271, _r.X_Fa, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.255, _r.X_Fa, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.216, _r.X_Fa, 0.001);
+        }
+
+        [TestMethod()]
+        public void GetX_d()
+        {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(2.244, _r.X_d, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.241, _r.X_d, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.246, _r.X_d, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.271, _r.X_d, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.255, _r.X_d, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.216, _r.X_d, 0.001);
+
+            _r.Alpha = 20;
+            _r.M = 0.3;
+            Assert.AreEqual(2.382, _r.X_d, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.372, _r.X_d, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.372, _r.X_d, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.381, _r.X_d, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.28, _r.X_d, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.242, _r.X_d, 0.001);
+
+            _r.Alpha = -20;
+            _r.M = 0.3;
+            Assert.AreEqual(2.382, _r.X_d, 0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(2.372, _r.X_d, 0.001);
+            _r.M = 1;
+            Assert.AreEqual(2.372, _r.X_d, 0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(2.381, _r.X_d, 0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(2.28, _r.X_d, 0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(2.242, _r.X_d, 0.001);
+
+            _r.Alpha = 0;
         }
 
         [TestMethod()]
