@@ -638,6 +638,52 @@ namespace AeroApp.Properties {
         
         /// <summary>
         ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Interp3D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterp2D&gt;
+        ///      &lt;double&gt;0&lt;/double&gt;
+        ///      &lt;Interp2D&gt;
+        ///        &lt;_data&gt;
+        ///          &lt;DoubleInterpXY&gt;
+        ///            &lt;double&gt;0&lt;/double&gt;
+        ///            &lt;InterpXY&gt;
+        ///              &lt;_data&gt;
+        ///                &lt;DoubleInterpDouble&gt;
+        ///                  &lt;double&gt;1.18&lt;/double&gt;
+        ///                  &lt;InterpDouble Value=&quot;-7.21&quot; /&gt;
+        ///                &lt;/DoubleInterpD [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _5_15_3D {
+            get {
+                return ResourceManager.GetString("_5_15_3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Interp3D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
+        ///  &lt;_data&gt;
+        ///    &lt;DoubleInterp2D&gt;
+        ///      &lt;double&gt;1&lt;/double&gt;
+        ///      &lt;Interp2D&gt;
+        ///        &lt;_data&gt;
+        ///          &lt;DoubleInterpXY&gt;
+        ///            &lt;double&gt;0&lt;/double&gt;
+        ///            &lt;InterpXY&gt;
+        ///              &lt;_data&gt;
+        ///                &lt;DoubleInterpDouble&gt;
+        ///                  &lt;double&gt;0&lt;/double&gt;
+        ///                  &lt;InterpDouble Value=&quot;0&quot; /&gt;
+        ///                &lt;/DoubleInterpDouble&gt;        /// [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string _5_16_3D {
+            get {
+                return ResourceManager.GetString("_5_16_3D", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
         ///&lt;Interp2D xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot; xmlns:xsd=&quot;http://www.w3.org/2001/XMLSchema&quot;&gt;
         ///  &lt;_data&gt;
         ///    &lt;DoubleInterpXY&gt;

@@ -310,7 +310,7 @@ namespace GraphsFromExcel
                 }
                 catch(Exception ex)
                 {
-                    throw ex;
+                    
                 }
             }
         }
@@ -359,22 +359,23 @@ namespace GraphsFromExcel
 
         private void button8_Click(object sender, EventArgs e)
         {
-            var interpLL4P = new PotentGraff4P();
+            var interp3 = new Interp3D();
 
-            var dir = @"C:\Users\MISHA\Desktop\3_17";
-            interpLL4P.Title = "_3_17";
+            var dir = @"C:\Users\Миша\OneDrive\графики\5_16";
+            interp3.Title = "5_16";
             Dictionary<double, string> makeFile = new Dictionary<double, string>()
             {
-                [0.0] = dir + "\\" + interpLL4P.Title + "_3D_эта0.xml",
-                [1.0] = dir + "\\" + interpLL4P.Title + "_3D_эта1.xml",
-                [0.5] = dir + "\\" + interpLL4P.Title + "_3D_эта05.xml"
+                [100.0] = dir + "\\" + interp3.Title + ".xml"
             };
             foreach (var item in makeFile)
             {
-                interpLL4P.AddElement(item.Key, PotentGraff3P.LoadFromXmlFile(item.Value));
+                interp3.AddElement(item.Key, Interp2D.LoadFromXmlFile(item.Value));
             }
-            string str = dir + "\\" + interpLL4P.Title + "_4P.xml";
-            interpLL4P.SaveToXmlFile(str);
+            var et1 = new Interp2D();
+            et1.AddElement(0.0, new InterpXY(new double[] { 0.0 }, new double[] { 0.0 }));
+            interp3.AddElement(1.0, et1);
+            string str = dir + "\\" + interp3.Title + "_3D.xml";
+            interp3.SaveToXmlFile(str);
         }
 
         private void button9_Click(object sender, EventArgs e)
