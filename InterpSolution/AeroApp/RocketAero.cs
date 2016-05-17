@@ -984,6 +984,16 @@ namespace RocketAero {
         }
         public double X_ct { get; set; } = 0.5;
 
+        public double Mz_omz {
+            get {
+                var bakI = W_I.Wing.B_ak / Body.L;
+                var bakII = W_II.Wing.B_ak / Body.L;
+                return Mz_omz_f 
+                     + Mz_omz_I * S_I_shtr*bakI*bakI*Math.Sqrt(kt_I)  
+                     + Mz_omz_II * S_II_shtr * bakII * bakII * Math.Sqrt(kt_II);
+            }
+        }
+
         public double M_I {
             get {
                 return M * Math.Sqrt(kt_I);
@@ -1777,7 +1787,7 @@ namespace RocketAero {
                           W_I.Wing.Lmb_k;
             double etta = mode == 2 ?
                           W_II.Wing.Etta_k :
-                          W_II.Wing.Etta_k;
+                          W_I.Wing.Etta_k;
             double x_ak = mode == 2 ?
                           W_II.Wing.X_ak + W_II.X:
                           W_I.Wing.X_ak + W_I.X;
@@ -1800,7 +1810,7 @@ namespace RocketAero {
             double delta_mz = 0.0;
             if(mode == 2) {
                 //5.82
-                var expr11 = (x_ct - (W_II.Wing.X_ak + W_II.X + 0.5 * W_II.Wing.B_ak)) / W_II.Wing.B_ak;
+                var expr11 = (x_ct - (W_I.Wing.X_ak + W_I.X + 0.5 * W_I.Wing.B_ak)) / W_II.Wing.B_ak;
                 var expr12 = (x_ct - X_Fa_II) / W_II.Wing.B_ak;
                 delta_mz = -AeroGraphs._180divPI * Cy1a_II * Kaa_II * Eps_sr_a * expr11 * expr12;
             }

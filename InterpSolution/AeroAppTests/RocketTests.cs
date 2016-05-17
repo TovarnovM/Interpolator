@@ -20,6 +20,7 @@ namespace RocketAero.Tests
             Rocket r = new Rocket();
             var ag = new AeroGraphs();
             r.AeroGr = ag;
+            r.X_ct = 2.5;
 
             r.Body = new RocketBody(ag)
             {
@@ -582,7 +583,91 @@ namespace RocketAero.Tests
 
             _r.Alpha = 0;
         }
+        [TestMethod()]
+        public void GetMz_omz_f() {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.M = 1;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(-0.463,_r.Mz_omz_f,0.001);
+            _r.Alpha = 0;
+        }
 
+        [TestMethod()]
+        public void GetMz_omz_I() {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(-0.702,_r.Mz_omz_I,0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(-0.764,_r.Mz_omz_I,0.001);
+            _r.M = 1;
+            Assert.AreEqual(-0.881,_r.Mz_omz_I,0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(-0.864,_r.Mz_omz_I,0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(-0.533,_r.Mz_omz_I,0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(-0.306,_r.Mz_omz_I,0.001);
+            _r.Alpha = 0;
 
-     }
+        }
+
+        [TestMethod()]
+        public void GetMz_omz() {
+            _r.Alpha = 0;
+            _r.M = 0.3;
+            Assert.AreEqual(-1.167,_r.Mz_omz,0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(-1.166,_r.Mz_omz,0.001);
+            _r.M = 1;
+            Assert.AreEqual(-1.077,_r.Mz_omz,0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(-0.991,_r.Mz_omz,0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(-0.807,_r.Mz_omz,0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(-0.701,_r.Mz_omz,0.001);
+            _r.Alpha = 0;
+
+            _r.Alpha = 20;
+            _r.M = 0.3;
+            Assert.AreEqual(-1.653,_r.Mz_omz,0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(-1.762,_r.Mz_omz,0.001);
+            _r.M = 1;
+            Assert.AreEqual(-1.854,_r.Mz_omz,0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(-1.681,_r.Mz_omz,0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(-1.088,_r.Mz_omz,0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(-0.812,_r.Mz_omz,0.001);
+            _r.Alpha = 0;
+
+            _r.Alpha = -20;
+            _r.M = 0.3;
+            Assert.AreEqual(-1.653,_r.Mz_omz,0.001);
+            _r.M = 0.8;
+            Assert.AreEqual(-1.762,_r.Mz_omz,0.001);
+            _r.M = 1;
+            Assert.AreEqual(-1.854,_r.Mz_omz,0.001);
+            _r.M = 1.2;
+            Assert.AreEqual(-1.681,_r.Mz_omz,0.001);
+            _r.M = 2.0;
+            Assert.AreEqual(-1.088,_r.Mz_omz,0.001);
+            _r.M = 2.9;
+            Assert.AreEqual(-0.812,_r.Mz_omz,0.001);
+            _r.Alpha = 0;
+
+        }
+
+    }
 }
