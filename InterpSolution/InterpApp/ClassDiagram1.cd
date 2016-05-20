@@ -1,2 +1,111 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram /> 
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Interpolator.InterpDouble" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABAgAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Interpolator.Interp&lt;T&gt;" Collapsed="true">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Delegate Name="Interpolator.Interp&lt;T&gt;.InterpolMethod" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Interp.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Delegate>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>gAoBAAAABIEBAUAMAAgACUQEAAACIBQAEBgAABBAEAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Interpolator.InterpXY" Collapsed="true">
+    <Position X="10" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAIAQAAIAIQAAQAAAAAAIAAAAAAAIAACBRgAAAAAAgA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.Interp2D" Collapsed="true">
+    <Position X="12.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAgAAAAIAAAAAgAAAAAAAE=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.Interp3D" Collapsed="true">
+    <Position X="1" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.Interp4D" Collapsed="true">
+    <Position X="5.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAAAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.LevelLine" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACEAAAAwhAAAAACAAAQAAAAAKQAAAAgCEEAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.PotentGraff2P" Collapsed="true">
+    <Position X="14.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAhgAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.PotentGraff3P" Collapsed="true">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpolator.PotentGraff4P" Collapsed="true">
+    <Position X="7.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Interpolator.IInterpElem" Collapsed="true">
+    <Position X="17" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Interpolator.IInterpParams" Collapsed="true">
+    <Position X="18.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAEAAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Interpolator.ExtrapolType" Collapsed="true">
+    <Position X="17" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAIAAAGAAAAAACAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Interpolator.InterpolType" Collapsed="true">
+    <Position X="18.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAEAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Interp.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
