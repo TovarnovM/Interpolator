@@ -666,8 +666,11 @@ namespace RocketAero.Tests
             _r.M = 2.9;
             Assert.AreEqual(-0.812,_r.Mz_omz,0.001);
             _r.Alpha = 0;
-
         }
+
+        //да здравствует поворот крыльев
+        //ToDo сделать тесты для поворотв крыльев
+
 
     }
 }
