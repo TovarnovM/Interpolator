@@ -91,7 +91,7 @@ namespace Oslo.Tests
         [TestMethod]
         public void SolverCoreTestSparseMatrixNd()
         {
-            const int N = 50;
+            const int N = 15;
             SparseMatrix a = new SparseMatrix(N, N);
             // Make matrix diagonal
             for (int i = 0; i < N; i++)
