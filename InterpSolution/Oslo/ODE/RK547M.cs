@@ -54,6 +54,10 @@ namespace Microsoft.Research.Oslo
             Vector x = x0;
             int n = x0.Length;
             double dt = opts.InitialStep;
+            if(dt == 0.0) {
+                dt = 0.1;
+                opts.InitialStep = dt;
+            }
 
             //Output initial point
             yield return new SolPoint(t0, x0.Clone());

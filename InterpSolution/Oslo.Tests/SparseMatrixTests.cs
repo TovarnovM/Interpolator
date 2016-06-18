@@ -112,7 +112,7 @@ namespace Oslo.NET.Tests
         [TestMethod]
         public void SolveGETest()
         {
-            const int N = 50;
+            const int N = 20;
             SparseMatrix a = new SparseMatrix(N, N);
             for (int i = 0; i < N; i++)
                 a[i, i] = 1;

@@ -1,19 +1,13 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.Research.Oslo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Research.Oslo;
+using System;
 using System.Diagnostics;
 
-namespace Oslo.Tests
-{
+namespace Oslo.Tests {
     [TestClass]
-    public class GaussianEliminationTest
-    {
+    public class GaussianEliminationTest {
         [TestMethod]
-        public void SolverCoreTest3d()
-        {
+        public void SolverCoreTest3d() {
             var a = new double[][] {
                 new double[] { 2,1,-1 },
                 new double[] { -3,-1,2 },
@@ -21,13 +15,13 @@ namespace Oslo.Tests
             };
             var b = new Vector(8, -11, -3);
             var x = Gauss.SolveCore(a, b);
-            var answer = new Vector(2,3,-1);
+            var answer = new Vector(2, 3, -1);
             Assert.IsTrue(Vector.GetLInfinityNorm(x, answer) < 1e-10);
+
         }
 
         [TestMethod]
-        public void SolverCoreTest2d()
-        {
+        public void SolverCoreTest2d() {
             var a = new double[][] {
                 new double[] { 2,1 },
                 new double[] { -1,1 }
@@ -39,18 +33,16 @@ namespace Oslo.Tests
         }
 
         [TestMethod]
-        public void SolverCoreTestMatrixNd()
-        {
+        public void SolverCoreTestMatrixNd() {
             const int N = 50;
             Matrix a = new Matrix(N, N);
             // Make matrix diagonal
             for (int i = 0; i < N; i++)
-                a[i,i] = 1;
+                a[i, i] = 1;
             // Apply random rotations around each pair of axes. This will keep det(A) ~ 1
             Random rand = new Random();
-            for(int i = 0; i < N; i++)
-                for (int j = i + 1; j < N; j++)
-                {
+            for (int i = 0; i < N; i++)
+                for (int j = i + 1; j < N; j++) {
                     double angle = rand.NextDouble() * 2 * Math.PI;
                     Matrix r = new Matrix(N, N);
                     for (int k = 0; k < N; k++)
@@ -63,7 +55,7 @@ namespace Oslo.Tests
 
             // Generate random vector
             Vector b = Vector.Zeros(N);
-            for(int i =0;i<N;i++)
+            for (int i = 0; i < N; i++)
                 b[i] = rand.NextDouble();
 
             // Solve system
@@ -89,8 +81,7 @@ namespace Oslo.Tests
         }
 
         [TestMethod]
-        public void SolverCoreTestSparseMatrixNd()
-        {
+        public void SolverCoreTestSparseMatrixNd() {
             const int N = 15;
             SparseMatrix a = new SparseMatrix(N, N);
             // Make matrix diagonal
@@ -99,8 +90,7 @@ namespace Oslo.Tests
             // Apply random rotations around each pair of axes. This will keep det(A) ~ 1
             Random rand = new Random();
             for (int i = 0; i < N; i++)
-                for (int j = i + 1; j < N; j++)
-                {
+                for (int j = i + 1; j < N; j++) {
                     double angle = rand.NextDouble() * 2 * Math.PI;
                     SparseMatrix r = new SparseMatrix(N, N);
                     for (int k = 0; k < N; k++)
