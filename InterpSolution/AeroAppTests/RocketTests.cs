@@ -152,7 +152,6 @@ namespace RocketAero.Tests
                     //Assert.AreEqual(xi[i, j], _r.Cxi_f, xi[i, j]*0.1);
                 }
             }
-            var ee = 1;
 
             _r.Alpha = 0;
         }
