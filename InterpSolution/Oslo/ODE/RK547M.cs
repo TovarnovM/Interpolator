@@ -40,10 +40,14 @@ namespace Microsoft.Research.Oslo
         }
 
         //[Obsolete("Fixed step RK45 method is provided only as an example")]        
-        public static IEnumerable<SolPoint> RK45(double t0, Vector x0, Func<double, Vector, Vector> f)
+        public static IEnumerable<SolPoint> RK45(double t0, Vector x0, Func<double, Vector, Vector> f, double initialStep = 0.1d)
         {
-            return RK45(t0, x0, f, Options.Default);
+            var opt = Options.Default;
+            opt.InitialStep = initialStep;
+            return RK45(t0, x0, f, opt);
         }
+
+
 
 
         //<summary>Simple RK implementation with fixed time step. Not intended for practical use</summary>

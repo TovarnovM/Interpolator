@@ -7,9 +7,12 @@ namespace Experiment {
 
     interface IScnObj : INamedChild {
         List<IScnObj> Children { get; }
+        IScnPrm FindParam(string paramName);
         int AddParam(IScnPrm prm);
         void RemoveParam(IScnPrm prm);
-        void Rebuild();
+        void AddChild(IScnObj child);
+        void RemoveChild(IScnObj child);
+        Vector Rebuild(double toTime);
         IEnumerable<IScnPrm> GetDiffPrms();
         void SynchMe(double t);
         void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt, bool getNewName);
@@ -40,13 +43,14 @@ namespace Experiment {
             return result;
         }
 
-        public void Rebuild() {
+        public Vector Rebuild(double toTime = 0.0d) {
             var diffArrSeq = GetDiffPrms();
             foreach (var child in Children) {
                 diffArrSeq = diffArrSeq.Concat(child.GetDiffPrms());
             }
             DiffArr = diffArrSeq.ToArray();
             DiffArrN = DiffArr.Length;
+            return new Vector(diffArrSeq.Select(prm => prm.GetVal(toTime)).ToArray());
         }
 
         public IEnumerable<IScnPrm> GetDiffPrms() {
@@ -66,7 +70,7 @@ namespace Experiment {
 
         public virtual void SynchMe(double t) {
             foreach (var child in Children) {
-                SynchMe(t);
+                child.SynchMe(t);
             }
         }
 
@@ -80,13 +84,32 @@ namespace Experiment {
             prm.MyDiff = dPrmDt;
 
             AddParam(dPrmDt);
-
-
         }
 
         public void RemoveParam(IScnPrm prm) {
             if (Prms.Contains(prm))
                 Prms.Remove(prm);
+        }
+
+        public void RemoveParam(String prmName) {
+            var pX = FindParam(prmName);
+            if(pX != null)
+                RemoveParam(pX);
+        }
+
+
+        public void AddChild(IScnObj child) {
+            Children.Add(child);
+            child.Owner = this;
+        }
+
+        public void RemoveChild(IScnObj child) {
+            Children.Remove(child);
+            child.Owner = null;
+        }
+
+        public IScnPrm FindParam(string paramName) {
+            return Prms.Where(elem => elem.Name == paramName).FirstOrDefault();
         }
     }
 }
