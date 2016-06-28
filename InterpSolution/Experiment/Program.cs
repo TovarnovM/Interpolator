@@ -4,24 +4,24 @@ using System;
 namespace Experiment {
     class Program {
         static void Main(string[] args) {
-            var pos = new Position(1,2,3,1, "pos");
-            var pos_ = new Position(1,0.5,-0.25,0,"dposDt");
+            var pos = new Position(1, 2, 3, 1, "pos");
+            var pos_ = new Position(1, 0.5, -0.25, 0, "dposDt");
             pos.AddChild(pos_);
-            pos.AddDiffVect(pos_,true);
+            pos.AddDiffVect(pos_, true);
 
-            var solve = Ode.RK45(0,pos.Rebuild(),pos.f, 0.001);
+            var solve = Ode.RK45(0, pos.Rebuild(), pos.f, 10);
 
-            foreach(var item in solve.SolveFromToStep(0,10,0.25)) {
+            foreach (var item in solve.SolveFromToStep(0, 1000, 100)) {
                 Console.WriteLine($"t = {item.T},   \tV = {item.X}");
             }
 
-            foreach(var item in pos.Prms) {
+            foreach (var item in pos.Prms) {
                 Console.WriteLine($"{item.Name} = {item.GetVal(0d)}");
             }
 
-          
 
-            //var ww = new ScnPrmConst("ww", null, 1);
+
+            //var ww = new ScnPrm("ww", null, 1);
             //ww.SetVal(33);
             //Console.WriteLine($"ww = {ww.GetVal(1)}");
 

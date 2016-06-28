@@ -58,13 +58,13 @@ namespace Experiment {
         }
 
         public int AddParam(IScnPrm prm) {
-            if (Prms.Contains(prm))
-                throw new IndexOutOfRangeException("Такой параметр уже есть!");
-            if (prm.Owner != null && prm.Owner != this)
-                prm.Owner.RemoveParam(prm);
+            if (!Prms.Contains(prm)) {
+                if (prm.Owner != null && prm.Owner != this)
+                    prm.Owner.RemoveParam(prm);
 
-            Prms.Add(prm);
-            prm.Owner = this;
+                Prms.Add(prm);
+                prm.Owner = this;
+            }
             return Prms.Count;
         }
 
