@@ -1,7 +1,18 @@
 ﻿using Sharp3D.Math.Core;
 
 namespace Experiment {
-    class Position : ScnObjDummy {
+    public interface IPosition {
+        double X { get; set; }
+        double Y { get; set; }
+        double Z { get; set; }
+        double W { get; set; }
+        IScnPrm pX { get; set; }
+        IScnPrm pY { get; set; }
+        IScnPrm pZ { get; set; }
+        void AddDiffVect(IPosition dVdt,bool getNewName);
+    }
+
+    public class Position :  ScnObjDummy, IPosition {
         private Vector4D v;
         public Vector4D V {
             get { return v; }
@@ -11,23 +22,23 @@ namespace Experiment {
         public IScnPrm pY { get; set; }
         public IScnPrm pZ { get; set; }
 
-        protected void AddParamX() {
+        protected void ResetParamX() {
             RemoveParam("X");
             pX = new ScnPrm("X", this, X);
-            pX.GetVal = v.GetX;
-            pX.SetVal = v.SetX;
+            pX.GetVal = t => X;
+            pX.SetVal = val => X = val;
         }
-        protected void AddParamY() {
+        protected void ResetParamY() {
             RemoveParam("Y");
             pY = new ScnPrm("Y", this, Y);
-            pY.GetVal = v.GetY;
-            pY.SetVal = v.SetY;
+            pY.GetVal = t => Y;
+            pY.SetVal = val => Y = val;
         }
-        protected void AddParamZ() {
+        protected void ResetParamZ() {
             RemoveParam("Z");
             pZ = new ScnPrm("Z", this, Z);
-            pZ.GetVal = v.GetZ;
-            pZ.SetVal = v.SetZ;
+            pZ.GetVal = t => Z;
+            pZ.SetVal = val => Z = val;
         }
 
         public double X {
@@ -68,20 +79,23 @@ namespace Experiment {
             Y = y;
             Z = z;
             W = w;
-            AddParamX();
-            AddParamY();
-            AddParamZ();
+            Resetparams();
             Name = name;
         }
         public Position() : this(0d, 0d, 0d, 1d, "Pos") {
 
         }
 
-        public void AddDiffVect(Position dVdt, bool getNewName = false) {
+        public void AddDiffVect(IPosition dVdt, bool getNewName = false) {
             AddDiffPropToParam(pX, dVdt.pX, true, getNewName);
             AddDiffPropToParam(pY, dVdt.pY, true, getNewName);
             AddDiffPropToParam(pZ, dVdt.pZ, true, getNewName);
         }
 
+        public override void Resetparams() {
+            ResetParamX();
+            ResetParamY();
+            ResetParamZ();
+        }
     }
 }

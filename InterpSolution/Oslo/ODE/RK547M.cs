@@ -11,6 +11,7 @@ namespace Microsoft.Research.Oslo
     /// </summary>
     public static partial class Ode
     {
+        private static double defaultInitStep = 0.1;
 
         // <summary>Simple Euler implementation with fixed time step. Not intended for practical use</summary>
         //[Obsolete("Euler method is provided only as an example")]
@@ -26,6 +27,10 @@ namespace Microsoft.Research.Oslo
             Vector x = x0;
             int n = x0.Length;
             double dt = opts.InitialStep;
+            if(dt == 0.0) {
+                dt = defaultInitStep;
+                opts.InitialStep = dt;
+            }
 
             // Output initial point
             yield return new SolPoint(t0, x0.Clone());
@@ -38,6 +43,13 @@ namespace Microsoft.Research.Oslo
                 yield return new SolPoint(t, x);
             }
         }
+        //[Obsolete("Fixed step RK45 method is provided only as an example")]        
+        public static IEnumerable<SolPoint> Euler(double t0,Vector x0,Func<double,Vector,Vector> f,double initialStep = 0.1d) {
+            var opt = Options.Default;
+            opt.InitialStep = initialStep;
+            return Euler(t0,x0,f,opt);
+        }
+
 
         //[Obsolete("Fixed step RK45 method is provided only as an example")]        
         public static IEnumerable<SolPoint> RK45(double t0, Vector x0, Func<double, Vector, Vector> f, double initialStep = 0.1d)
@@ -59,7 +71,7 @@ namespace Microsoft.Research.Oslo
             int n = x0.Length;
             double dt = opts.InitialStep;
             if(dt == 0.0) {
-                dt = 0.1;
+                dt = defaultInitStep;
                 opts.InitialStep = dt;
             }
 

@@ -69,6 +69,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Integrator.cs" />
+    <Compile Include="Mass.cs" />
+    <Compile Include="Orient3D.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +82,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\InterpApp\InterpApp.csproj">
+      <Project>{5c93bceb-59bc-4510-823e-8860581b1332}</Project>
+      <Name>InterpApp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
       <Project>{441ff4c9-0f85-4470-a274-41408b420f86}</Project>
       <Name>Sharp3D.Math</Name>

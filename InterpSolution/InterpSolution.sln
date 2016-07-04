@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oslo", "Oslo\Oslo.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oslo.Tests", "Oslo.Tests\Oslo.Tests.csproj", "{BD2534FD-A6D8-42D5-AAE7-B90B96369BCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExperimentTests", "ExperimentTests\ExperimentTests.csproj", "{A310D79C-7F6F-47C3-AF26-A31468E4F755}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -122,6 +124,14 @@ Global
 		{BD2534FD-A6D8-42D5-AAE7-B90B96369BCE}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BD2534FD-A6D8-42D5-AAE7-B90B96369BCE}.Release|x86.ActiveCfg = Release|Any CPU
 		{BD2534FD-A6D8-42D5-AAE7-B90B96369BCE}.Release|x86.Build.0 = Release|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Debug|x86.Build.0 = Debug|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Release|x86.ActiveCfg = Release|Any CPU
+		{A310D79C-7F6F-47C3-AF26-A31468E4F755}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

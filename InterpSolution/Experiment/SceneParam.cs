@@ -1,15 +1,16 @@
 ﻿using System;
+using Interpolator;
 
 
 namespace Experiment {
 
-    public delegate void FillDtFunc(double t, ref double[] y, out double[] dy);
+    public delegate double SetValFunct(params double[] t);
 
     /// <summary>
     /// Параметр системы
     /// </summary>
     /// <typeparam name="T">Тип параметра</typeparam>
-    interface IScnPrm : INamedChild {
+    public interface IScnPrm : INamedChild {
         /// <summary>
         /// Получить значение параметра, синхонизированного по времени t
         /// </summary>
@@ -20,30 +21,50 @@ namespace Experiment {
         /// Значение параметра (последнего синхронизированного)
         /// </summary>
         IScnPrm MyDiff { get; set; }
+        void SealInterp(InterpXY interp);
+        bool IsDiff { get; }
+        bool IsNeedSynch { get; set; }
     }
 
-    interface INamedChild {
+    public interface INamedChild {
         string Name { get; set; }
+        string FullName { get; }
         /// <summary>
         /// Хозяин параметра
         /// </summary>
         IScnObj Owner { get; set; }
     }
 
-    class ScnPrm : IScnPrm {
+    public class ScnPrm : IScnPrm {
         private double _value;
-        public IScnPrm MyDiff { get; set; } = null;
-        public double GetValMethod(double t) {
-            return _value;
+        private IScnPrm myDiff; 
+        public IScnPrm MyDiff {
+            get { return myDiff; }
+            set {
+                myDiff = value;
+                IsDiff = myDiff != null;
+            }
         }
-        public Func<double, double> GetVal { get; set; }
-        public bool IsDiff { get; private set; } = false;
+
         public string Name { get; set; }
         public IScnObj Owner { get; set; }
+
+        public Action<double> SetVal { get; set; }
+        public Func<double, double> GetVal { get; set; }
+
         public void SetValMethod(double val) {
             _value = val;
         }
-        public Action<double> SetVal { get; set; }
+        public double GetValMethod(double t) {
+            return _value;
+        }
+
+        public void SealInterp(InterpXY interp) {
+            MyDiff = null;
+            IsNeedSynch = true;
+            Action<double> old = new Action<double>(SetVal);
+            SetVal = t => old(interp.GetV(t));
+        }
 
         public ScnPrm(string name, IScnObj owner, double val = 0.0) {
             Name = name;
@@ -57,6 +78,14 @@ namespace Experiment {
 
         }
 
+        public bool IsDiff { get; private set; } = false;
 
+        public bool IsNeedSynch { get; set; } = false;
+
+        public string FullName {
+            get {
+                return Owner != null ? Owner.FullName + '.' + Name : Name;
+            }
+        }
     }
 }

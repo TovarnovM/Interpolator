@@ -5,7 +5,10 @@ using System.Linq;
 
 namespace Experiment {
 
-    interface IScnObj : INamedChild {
+    public interface IScnObj : INamedChild {
+        List<string> AllParamsNames { get; }
+        IEnumerable<IScnPrm> GetAllParams();
+        Vector GetAllParamsValues(double t,Vector y);
         List<IScnObj> Children { get; }
         IScnPrm FindParam(string paramName);
         int AddParam(IScnPrm prm);
@@ -16,9 +19,10 @@ namespace Experiment {
         IEnumerable<IScnPrm> GetDiffPrms();
         void SynchMe(double t);
         void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt, bool getNewName);
+        void Resetparams();
     }
 
-    class ScnObjDummy : IScnObj {
+    public abstract class ScnObjDummy : IScnObj {
         public IScnPrm[] DiffArr { get; private set; }
         public int DiffArrN { get; private set; } = -1;
         public List<IScnPrm> Prms { get; set; } = new List<IScnPrm>();
@@ -27,16 +31,28 @@ namespace Experiment {
 
         public string Name { get; set; }
 
-        public Vector f(double t, Vector y) {
+        public string FullName {
+            get {
+                return Owner != null ? Owner.FullName + '.' + Name : Name;
+            }
+        }
+
+        public List<string> AllParamsNames { get; set; } = new List<string>();
+
+        public void SynchMeTo(double t,ref Vector y) {
             if (DiffArrN != y.Length)
                 throw new InvalidOperationException("разные длины векторов in out");
-            var result = Vector.Zeros(y.Length);
+     
             for (int i = 0; i < DiffArrN; i++) {
                 DiffArr[i].SetVal(y[i]);
             }
 
             SynchMe(t);
+        }
 
+        public Vector f(double t, Vector y) {
+            SynchMeTo(t,ref y);
+            var result = Vector.Zeros(y.Length);
             for (int i = 0; i < DiffArrN; i++) {
                 result[i] = DiffArr[i].MyDiff.GetVal(t);
             }
@@ -44,6 +60,11 @@ namespace Experiment {
         }
 
         public Vector Rebuild(double toTime = 0.0d) {
+            AllParamsNames.Clear();
+            foreach(var prm in GetAllParams()) {
+                AllParamsNames.Add(prm.FullName);
+            }
+
             var diffArrSeq = GetDiffPrms();
             foreach (var child in Children) {
                 diffArrSeq = diffArrSeq.Concat(child.GetDiffPrms());
@@ -69,7 +90,13 @@ namespace Experiment {
         }
 
         public virtual void SynchMe(double t) {
-            foreach (var child in Children) {
+
+            for(int i = 0; i < Prms.Count; i++) {
+                if(Prms[i].IsNeedSynch)
+                    Prms[i].SetVal(t);
+            }
+
+            foreach(var child in Children) {
                 child.SynchMe(t);
             }
         }
@@ -82,8 +109,8 @@ namespace Experiment {
             if (getNewName)
                 dPrmDt.Name = prm.Name + "'";
             prm.MyDiff = dPrmDt;
-
-            AddParam(dPrmDt);
+            if(dPrmDt.Owner == null)
+                AddParam(dPrmDt);
         }
 
         public void RemoveParam(IScnPrm prm) {
@@ -111,5 +138,30 @@ namespace Experiment {
         public IScnPrm FindParam(string paramName) {
             return Prms.Where(elem => elem.Name == paramName).FirstOrDefault();
         }
+
+        public Vector GetAllParamsValues(SolPoint sp) {
+            return GetAllParamsValues(sp.T,sp.X);
+        }
+
+
+        public Vector GetAllParamsValues(double t,Vector y) {
+            SynchMeTo(t,ref y);
+            var res = Vector.Zeros(AllParamsNames.Count());
+            int i = 0;
+            foreach(var prm in GetAllParams()) {
+                res[i++] = prm.GetVal(t);
+            }
+            return res;
+        }
+
+        public IEnumerable<IScnPrm> GetAllParams() {
+            var res = Prms.Select(prm => prm);
+            foreach(var child in Children) {
+                res = res.Concat(child.GetAllParams());
+            }
+            return res;
+        }
+
+        public abstract void Resetparams();
     }
 }

@@ -1,22 +1,37 @@
-﻿using Microsoft.Research.Oslo;
+﻿using Interpolator;
+using Microsoft.Research.Oslo;
 using System;
 
 namespace Experiment {
     class Program {
         static void Main(string[] args) {
-            var pos = new Position(1, 2, 3, 1, "pos");
-            var pos_ = new Position(1, 0.5, -0.25, 0, "dposDt");
+            var pos = new Position(0, 0, 0, 1, "pos");
+            var pos_ = new Position(0, 0, 0, 1, "dposDt");
+
+
             pos.AddChild(pos_);
-            pos.AddDiffVect(pos_, true);
+            pos.AddDiffVect(pos_);
 
-            var solve = Ode.RK45(0, pos.Rebuild(), pos.f, 10);
+            var interpX = new InterpXY();
+            interpX.Add(0,0);
+            interpX.Add(2,1);
+            interpX.Add(6,-1);
+            interpX.Add(8,0);
+            pos_.pX.SealInterp(interpX);
 
-            foreach (var item in solve.SolveFromToStep(0, 1000, 100)) {
+
+
+            var solve = Ode.RK45(0,pos.Rebuild(),pos.f);
+
+            SolPoint sp = new SolPoint();
+            foreach(var item in solve.SolveFromToStep(0,2,0.1)) {
                 Console.WriteLine($"t = {item.T},   \tV = {item.X}");
+                sp = item;
             }
 
-            foreach (var item in pos.Prms) {
-                Console.WriteLine($"{item.Name} = {item.GetVal(0d)}");
+            var res = pos.GetAllParamsValues(sp);
+            for(int i = 0; i < res.Length; i++) {
+                Console.WriteLine($"{pos.AllParamsNames[i]} = \t{res[i]}");
             }
 
 
