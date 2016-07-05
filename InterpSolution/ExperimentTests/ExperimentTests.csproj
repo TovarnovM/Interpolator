@@ -51,6 +51,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="ForceTests.cs" />
+    <Compile Include="Orient3DTests.cs" />
     <Compile Include="PositionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +60,10 @@
     <ProjectReference Include="..\Experiment\Experiment.csproj">
       <Project>{A2A6D10D-18D1-46AF-A3D7-F4CA320D0E42}</Project>
       <Name>Experiment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
+      <Project>{441FF4C9-0F85-4470-A274-41408B420F86}</Project>
+      <Name>Sharp3D.Math</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

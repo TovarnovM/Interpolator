@@ -10850,6 +10850,13 @@
             <param name="q">A <see cref="T:Sharp3D.Math.Core.QuaternionD"/> instance.</param>
             <returns>A new <see cref="T:Sharp3D.Math.Core.Matrix4D"/> instance.</returns>
         </member>
+        <member name="M:Sharp3D.Math.Core.QuaternionD.QuaternionToMatrix3D(Sharp3D.Math.Core.QuaternionD)">
+            <summary>
+            Converts a given <see cref="T:Sharp3D.Math.Core.QuaternionD"/> to a matrix.
+            </summary>
+            <param name="q">A <see cref="T:Sharp3D.Math.Core.QuaternionD"/> instance.</param>
+            <returns>A new <see cref="T:Sharp3D.Math.Core.Matrix3D"/> instance.</returns>
+        </member>
         <member name="M:Sharp3D.Math.Core.QuaternionD.FromAxisAngle(Sharp3D.Math.Core.Vector3D,System.Double)">
             <summary>
             Turn an axis and an angle to a quaternion.
@@ -16062,6 +16069,15 @@
             </summary>
         </member>
         <member name="M:Sharp3D.Math.Core.Vector4D.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Sharp3D.Math.Core.Vector4D"/> class with the specified coordinates.
+            </summary>
+            <param name="x">The vector's X coordinate.</param>
+            <param name="y">The vector's Y coordinate.</param>
+            <param name="z">The vector's Z coordinate.</param>
+            <param name="w">The vector's W coordinate.</param>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector4D.#ctor(System.Double,System.Double,System.Double)">
             <summary>
             Initializes a new instance of the <see cref="T:Sharp3D.Math.Core.Vector4D"/> class with the specified coordinates.
             </summary>

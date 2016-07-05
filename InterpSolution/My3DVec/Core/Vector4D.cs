@@ -58,6 +58,16 @@ namespace Sharp3D.Math.Core {
         /// <summary>
         /// Initializes a new instance of the <see cref="Vector4D"/> class with the specified coordinates.
         /// </summary>
+        /// <param name="x">The vector's X coordinate.</param>
+        /// <param name="y">The vector's Y coordinate.</param>
+        /// <param name="z">The vector's Z coordinate.</param>
+        /// <param name="w">The vector's W coordinate.</param>
+        public Vector4D(double x,double y,double z):this(x,y,z,0d) {
+
+        }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Vector4D"/> class with the specified coordinates.
+        /// </summary>
         /// <param name="coordinates">An array containing the coordinate parameters.</param>
         public Vector4D(double[] coordinates) {
             Debug.Assert(coordinates != null);

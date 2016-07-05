@@ -1,5 +1,7 @@
-﻿namespace Experiment {
-    public interface IMass {
+﻿using System;
+
+namespace Experiment {
+    public interface IMass:IScnObj {
         double Value { get; set; }
         IScnPrm pValue { get; set; }
     }
@@ -9,6 +11,9 @@
         public IScnPrm pValue { get; set; }
 
         public static string DefName = "Mass";
+        public Mass():this(1) {
+        }
+
         public Mass(double value) {
             Name = DefName;
             Value = value;

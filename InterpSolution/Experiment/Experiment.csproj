@@ -68,7 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Force.cs" />
     <Compile Include="Integrator.cs" />
+    <Compile Include="Law.cs" />
     <Compile Include="Mass.cs" />
     <Compile Include="Orient3D.cs" />
     <Compile Include="Position.cs" />

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Experiment {
 
@@ -17,27 +18,26 @@ namespace Experiment {
         void RemoveChild(IScnObj child);
         Vector Rebuild(double toTime);
         IEnumerable<IScnPrm> GetDiffPrms();
-        void SynchMe(double t);
         void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt, bool getNewName);
         void Resetparams();
+        void SynchMe(double t);
+        Action<double> SynchMeBefore { get; set; }
+        Action<double> SynchMeAfter { get; set; }
+
+        List<ILaw> Laws { get; }
+        void AddLaw(ILaw newLaw);
+        bool ApplyLaws();
     }
 
-    public abstract class ScnObjDummy : IScnObj {
+    public class ScnObjDummy : NamedChild, IScnObj {
         public IScnPrm[] DiffArr { get; private set; }
         public int DiffArrN { get; private set; } = -1;
         public List<IScnPrm> Prms { get; set; } = new List<IScnPrm>();
         public List<IScnObj> Children { get; set; } = new List<IScnObj>();
-        public IScnObj Owner { get; set; }
-
-        public string Name { get; set; }
-
-        public string FullName {
-            get {
-                return Owner != null ? Owner.FullName + '.' + Name : Name;
-            }
-        }
-
         public List<string> AllParamsNames { get; set; } = new List<string>();
+        public List<ILaw> Laws { get; } = new List<ILaw>();
+        public Action<double> SynchMeBefore { get; set; } = null;
+        public Action<double> SynchMeAfter { get; set; }= null;
 
         public void SynchMeTo(double t,ref Vector y) {
             if (DiffArrN != y.Length)
@@ -60,6 +60,9 @@ namespace Experiment {
         }
 
         public Vector Rebuild(double toTime = 0.0d) {
+            if(!ApplyLaws())
+                throw new Exception("Структура неправильная. Невозможно реализовать все Laws");
+
             AllParamsNames.Clear();
             foreach(var prm in GetAllParams()) {
                 AllParamsNames.Add(prm.FullName);
@@ -74,8 +77,38 @@ namespace Experiment {
             return new Vector(diffArrSeq.Select(prm => prm.GetVal(toTime)).ToArray());
         }
 
+        public bool ApplyLaws() {
+            foreach(var law in Laws) {
+                if(!law.ApplyMe())
+                    return false;
+            }
+
+            foreach(var child in Children) {
+                if(!child.ApplyLaws())
+                    return false;
+            }
+
+            return true;
+        }
+
         public IEnumerable<IScnPrm> GetDiffPrms() {
             return Prms.Where(a => a.MyDiff != null);
+        }
+
+        public void SynchMe(double t) {
+
+            for(int i = 0; i < Prms.Count; i++) {
+                if(Prms[i].IsNeedSynch)
+                    Prms[i].SetVal(t);
+            }
+
+            SynchMeBefore?.Invoke(t);
+
+            foreach(var child in Children) {
+                child.SynchMe(t);
+            }
+
+            SynchMeAfter?.Invoke(t);
         }
 
         public int AddParam(IScnPrm prm) {
@@ -88,19 +121,6 @@ namespace Experiment {
             }
             return Prms.Count;
         }
-
-        public virtual void SynchMe(double t) {
-
-            for(int i = 0; i < Prms.Count; i++) {
-                if(Prms[i].IsNeedSynch)
-                    Prms[i].SetVal(t);
-            }
-
-            foreach(var child in Children) {
-                child.SynchMe(t);
-            }
-        }
-
         public void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt = true, bool getNewName = true) {
             if (!Prms.Contains(prm))
                 AddParam(prm);
@@ -112,38 +132,42 @@ namespace Experiment {
             if(dPrmDt.Owner == null)
                 AddParam(dPrmDt);
         }
-
         public void RemoveParam(IScnPrm prm) {
             if (Prms.Contains(prm))
                 Prms.Remove(prm);
         }
-
         public void RemoveParam(String prmName) {
             var pX = FindParam(prmName);
             if(pX != null)
                 RemoveParam(pX);
         }
-
-
-        public void AddChild(IScnObj child) {
-            Children.Add(child);
-            child.Owner = this;
-        }
-
-        public void RemoveChild(IScnObj child) {
-            Children.Remove(child);
-            child.Owner = null;
-        }
-
         public IScnPrm FindParam(string paramName) {
             return Prms.Where(elem => elem.Name == paramName).FirstOrDefault();
+        }
+
+        public void AddChild(IScnObj newChild) {
+            IScnObj hasWThisName = null;
+            int ind = 0;
+            do {
+                hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
+                newChild.Name =
+                    hasWThisName != null ?
+                    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
+                    newChild.Name;
+
+            } while(hasWThisName != null);
+            
+            Children.Add(newChild);
+            newChild.Owner = this;
+        }
+        public void RemoveChild(IScnObj child) {
+            if (Children.Remove(child))
+                child.Owner = null;
         }
 
         public Vector GetAllParamsValues(SolPoint sp) {
             return GetAllParamsValues(sp.T,sp.X);
         }
-
-
         public Vector GetAllParamsValues(double t,Vector y) {
             SynchMeTo(t,ref y);
             var res = Vector.Zeros(AllParamsNames.Count());
@@ -153,7 +177,6 @@ namespace Experiment {
             }
             return res;
         }
-
         public IEnumerable<IScnPrm> GetAllParams() {
             var res = Prms.Select(prm => prm);
             foreach(var child in Children) {
@@ -162,6 +185,17 @@ namespace Experiment {
             return res;
         }
 
-        public abstract void Resetparams();
+        public virtual void Resetparams() { }
+
+        public void AddLaw(ILaw newLaw) {
+            var alredyHas = Laws.FirstOrDefault(lw => lw.Name == newLaw.Name);
+
+            if(alredyHas != null)
+                throw new KeyNotFoundException("Такой закон уже тут есть!");
+
+            Laws.Add(newLaw);
+            newLaw.Owner = this;
+
+        }
     }
 }

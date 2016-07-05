@@ -4,8 +4,6 @@ using Interpolator;
 
 namespace Experiment {
 
-    public delegate double SetValFunct(params double[] t);
-
     /// <summary>
     /// Параметр системы
     /// </summary>
@@ -35,7 +33,17 @@ namespace Experiment {
         IScnObj Owner { get; set; }
     }
 
-    public class ScnPrm : IScnPrm {
+    public class NamedChild : INamedChild {
+        public string Name { get; set; }
+        public IScnObj Owner { get; set; }
+        public string FullName {
+            get {
+                return Owner != null ? Owner.FullName + '.' + Name : Name;
+            }
+        }
+    }
+
+    public class ScnPrm : NamedChild, IScnPrm {
         private double _value;
         private IScnPrm myDiff; 
         public IScnPrm MyDiff {
@@ -45,9 +53,6 @@ namespace Experiment {
                 IsDiff = myDiff != null;
             }
         }
-
-        public string Name { get; set; }
-        public IScnObj Owner { get; set; }
 
         public Action<double> SetVal { get; set; }
         public Func<double, double> GetVal { get; set; }
@@ -82,10 +87,6 @@ namespace Experiment {
 
         public bool IsNeedSynch { get; set; } = false;
 
-        public string FullName {
-            get {
-                return Owner != null ? Owner.FullName + '.' + Name : Name;
-            }
-        }
+
     }
 }
