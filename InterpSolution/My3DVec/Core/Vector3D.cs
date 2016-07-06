@@ -151,12 +151,25 @@ namespace Sharp3D.Math.Core
 			get { return _z; }
 			set { _z = value;}
 		}
+		/// <summary>
+		/// Gets 4D vect with w=0 (Direction Vector)
+		/// </summary>
+		public Vector4D Dir {
+			get {
+				return new Vector4D(_x, _y, _z, 0d); 
+			}
+		}
+
         /// <summary>
-        /// Gets 4D vect with w=0 (Direction Vector)
+        /// 
         /// </summary>
-        public Vector4D Dir {
+        public Vector2D Vec2D {
             get {
-                return new Vector4D(_x, _y, _z, 0d); 
+                return new Vector2D(_x,_y);
+            }
+            set {
+                _x = value.X;
+                _y = value.Y;
             }
         }
 

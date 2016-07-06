@@ -12,7 +12,7 @@ namespace Experiment.Tests {
     public class ForceTests {
         [TestMethod()]
         public void GetMomentTest() {
-            var f = new Force(new Vector3D(0,1,0));
+            var f = new Force3D(new Vector3D(0,1,0));
             f.FPoint = new Position3D(new Vector3D(1,0,0));
 
             var answ = f.GetMoment();

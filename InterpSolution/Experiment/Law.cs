@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 namespace Experiment {
     public interface ILaw:INamedChild {
         bool ApplyMe();
-        bool IsFit();
         bool Applyed { get; }
     }
 
@@ -23,34 +22,48 @@ namespace Experiment {
         public string Name { get; set; }
         public IScnObj Owner { get; set; } = null;
 
-        public abstract bool ApplyMe();
+        public bool ApplyMe() {
+            if(Applyed)
+                return true;
 
-        public abstract bool IsFit();
+            if(!IsFitAndFull())
+                return false;
+
+            Applyed = ApplyMeAction();
+            return Applyed;
+        }
+        public bool IsFitAndFull() {
+            if(Applyed)
+                return true;
+
+            if(Owner == null)
+                return false;
+
+            return IsFitAndFullAction();
+        }
+
+        public abstract bool IsFitAndFullAction();
+
+        public abstract bool ApplyMeAction();
     }
 
-    public class NewtonLaw4MatPoint : LawBase {
+    public class NewtonLaw4MatPoint3D : LawBase {
         public IPosition3D pos { get; private set; } = null;
-        public IMass mass { get; private set; } = null;
+        public IMassPoint mass { get; private set; } = null;
         public List<IForce3D> extForceList { get; set; }
         public List<IForce3D> innerForceList { get; set; }
 
-        public NewtonLaw4MatPoint(IEnumerable<IForce3D> externForces) {
-            Name = nameof(NewtonLaw4MatPoint);
+        public NewtonLaw4MatPoint3D(IEnumerable<IForce3D> externForces) {
+            Name = nameof(NewtonLaw4MatPoint3D);
             extForceList = new List<IForce3D>();
             innerForceList = new List<IForce3D>();
             if(externForces?.Count() > 0) {
                 extForceList.AddRange(externForces);
             }
         }
-        public NewtonLaw4MatPoint() : this(null) { }
+        public NewtonLaw4MatPoint3D() : this(null) { }
 
-        public override bool ApplyMe() {
-            if(Applyed)
-                return true;
-
-            if(!IsFit())
-                return false;
-
+        public override bool ApplyMeAction() {
             var velocity = new Position3D("Vel");
             var aceleration = new Position3D("Aclr");
             pos.Owner.AddChild(velocity);
@@ -60,33 +73,24 @@ namespace Experiment {
             velocity.AddDiffVect(aceleration,false);
 
             pos.Owner.SynchMeAfter +=
-                t => {
-                    var fSum = Vector3D.Zero;
-                    foreach(var force in innerForceList) {
-                        fSum += force.VGlob;
-                    }
-                    foreach(var force in extForceList) {
-                        fSum += force.V;
-                    }
-                    if(mass.Value < Double.Epsilon)
-                        throw new Exception("масса слишком мала");
-                    aceleration.V = fSum / mass.Value;
-                };
-
-
-
+            t => {
+                var fSum = Vector3D.Zero;
+                foreach(var force in innerForceList) {
+                    fSum += force.VGlob;
+                }
+                foreach(var force in extForceList) {
+                    fSum += force.Vec3D;
+                }
+                if(mass.Value < Double.Epsilon)
+                    throw new Exception("масса слишком мала");
+                aceleration.Vec3D = fSum / mass.Value;
+            };
             return true;
         }
 
-        public override bool IsFit() {
-            if(Applyed)
-                return true;
-
-            if(Owner == null)
-                return false;
-
+        public override bool IsFitAndFullAction() {
             pos = (IPosition3D)Owner.Children.FirstOrDefault(ch => ch is IPosition3D);
-            mass = (IMass)Owner.Children.FirstOrDefault(ch => ch is IMass);
+            mass = (IMassPoint)Owner.Children.FirstOrDefault(ch => ch is IMassPoint);
 
             innerForceList.Clear();
             var innerF = Owner.Children.

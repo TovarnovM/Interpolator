@@ -496,7 +496,7 @@ namespace Microsoft.Research.Oslo
                 for (int i = 0; i < v.Length; i++)
                 {
                     if (i > 0) sb.Append(", ");
-                    sb.Append(v[i]);
+                    sb.Append(v[i].ToString("G6"));
                 }
             sb.Append("]");
             return sb.ToString();

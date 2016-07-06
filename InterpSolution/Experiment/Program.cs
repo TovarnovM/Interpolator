@@ -2,20 +2,22 @@
 using Microsoft.Research.Oslo;
 using Sharp3D.Math.Core;
 using System;
+using System.Diagnostics;
 
 namespace Experiment {
     class Program {
         static void Main(string[] args) {
 
+            var sdd = new Position3D(3,77,0);
             var dm = new ScnObjDummy() { Name = "Rocket" };
-            dm.AddChild(new Position3D(new Vector3D(3,4,10)));
-            dm.AddChild(new Mass(10));
-            dm.AddChild(new Force(new Vector3D(0,-1,0.5)));
-            dm.AddLaw(new NewtonLaw4MatPoint());
+            dm.AddChild(new Position3D(new Vector3D(3,77,0)));
+            dm.AddChild(new MassPoint(10));
+            dm.AddChild(new Force3D(new Vector3D(0,-8,4)));
+            dm.AddLaw(new NewtonLaw4MatPoint3D());
 
             var x0 = dm.Rebuild();
 
-            var solve = Ode.RK45(0,x0,dm.f);
+            var solve = Ode.RK45(0,dm.Rebuild(),dm.f);
 
             var res = dm.GetAllParamsValues(0,x0);
             for(int i = 0; i < res.Length; i++) {
@@ -23,7 +25,7 @@ namespace Experiment {
             }
 
             SolPoint sp = new SolPoint();
-            foreach(var item in solve.SolveFromToStep(0,20,1)) {
+            foreach(var item in solve.SolveFromToStep(0,100,1)) {
                 Console.WriteLine($"t = {item.T},   \tV = {item.X}");
                 sp = item;
             }
@@ -33,13 +35,11 @@ namespace Experiment {
                 Console.WriteLine($"{dm.AllParamsNames[i]} = \t{res[i]}");
             }
             //==========================
-            //var o = new Orient3D();
+            //var sw = new Stopwatch();
 
             //var pos = new Position3D(0,0,0,"pos");
-            //var pos_ = new Position3D(0,0,0,"dposDt");
 
-
-
+            //var pos_ = new Position3D(12,17,-22,"dposDt");
             //pos.AddChild(pos_);
             //pos.AddDiffVect(pos_);
 
@@ -52,14 +52,16 @@ namespace Experiment {
 
 
 
-            //var solve = Ode.RK45(0,pos.Rebuild(),pos.f);
+            //var solve = Ode.RK45(0,pos.Rebuild(),pos.f,0.01);
 
             //SolPoint sp = new SolPoint();
-            //foreach(var item in solve.SolveFromToStep(0,2,0.1)) {
+            //sw.Start();
+            //foreach(var item in solve.SolveFromToStep(0,10000,1000)) {
             //    Console.WriteLine($"t = {item.T},   \tV = {item.X}");
             //    sp = item;
             //}
-
+            //sw.Stop();
+            //Console.WriteLine($"{sw.ElapsedMilliseconds}");    
             //var res = pos.GetAllParamsValues(sp);
             //for(int i = 0; i < res.Length; i++) {
             //    Console.WriteLine($"{pos.AllParamsNames[i]} = \t{res[i]}");

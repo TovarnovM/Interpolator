@@ -19,7 +19,8 @@ namespace Experiment {
         Vector Rebuild(double toTime);
         IEnumerable<IScnPrm> GetDiffPrms();
         void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt, bool getNewName);
-        void Resetparams();
+        int ResetAllParams();
+        void ResetParam(string nameOfProp);
         void SynchMe(double t);
         Action<double> SynchMeBefore { get; set; }
         Action<double> SynchMeAfter { get; set; }
@@ -133,8 +134,13 @@ namespace Experiment {
                 AddParam(dPrmDt);
         }
         public void RemoveParam(IScnPrm prm) {
-            if (Prms.Contains(prm))
+            if(Prms.Contains(prm)) {
                 Prms.Remove(prm);
+                prm.GetVal = null;
+                prm.SetVal = null;
+                prm.MyDiff = null;
+            }
+
         }
         public void RemoveParam(String prmName) {
             var pX = FindParam(prmName);
@@ -185,8 +191,6 @@ namespace Experiment {
             return res;
         }
 
-        public virtual void Resetparams() { }
-
         public void AddLaw(ILaw newLaw) {
             var alredyHas = Laws.FirstOrDefault(lw => lw.Name == newLaw.Name);
 
@@ -196,6 +200,40 @@ namespace Experiment {
             Laws.Add(newLaw);
             newLaw.Owner = this;
 
+        }
+
+        public void ResetParam(string nameOfProp) {
+            RemoveParam(nameOfProp);
+            var currVal = (double)this.GetType().GetProperty(nameOfProp).GetGetMethod().Invoke(this,null);
+
+            var scnParam = new ScnPrm(nameOfProp,this,currVal);
+            this.GetType().GetProperty("p" + nameOfProp).GetSetMethod().Invoke(this,new object[] { scnParam });
+
+            var GetDeleg = (Func<double>)this.GetType().GetProperty(nameOfProp).GetGetMethod().CreateDelegate(typeof(Func<double>),this);
+            var SetDeleg = (Action<double>)this.GetType().GetProperty(nameOfProp).GetSetMethod().CreateDelegate(typeof(Action<double>),this);
+
+            scnParam.GetVal = t => GetDeleg();
+            scnParam.SetVal = SetDeleg;
+        }
+
+        public int ResetAllParams() {
+            var propsNames = 
+                from prInf  in this.GetType().GetProperties()
+                join prInfP in this.GetType().GetProperties()
+                on "p" +prInf.Name equals  prInfP.Name
+                select prInf.Name;
+            int i = 0;
+            foreach(var propname in propsNames) {
+                ResetParam(propname);
+                ++i;
+            }
+            return i;
+
+
+        }
+
+        public ScnObjDummy() {
+            ResetAllParams();
         }
     }
 }
