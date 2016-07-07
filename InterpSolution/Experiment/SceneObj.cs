@@ -209,7 +209,7 @@ namespace Experiment {
             var scnParam = new ScnPrm(nameOfProp,this,currVal);
             this.GetType().GetProperty("p" + nameOfProp).GetSetMethod().Invoke(this,new object[] { scnParam });
 
-            var GetDeleg = (Func<double>)this.GetType().GetProperty(nameOfProp).GetGetMethod().CreateDelegate(typeof(Func<double>),this);
+            var GetDeleg =   (Func<double>)this.GetType().GetProperty(nameOfProp).GetGetMethod().CreateDelegate(typeof(Func<double>),this);
             var SetDeleg = (Action<double>)this.GetType().GetProperty(nameOfProp).GetSetMethod().CreateDelegate(typeof(Action<double>),this);
 
             scnParam.GetVal = t => GetDeleg();

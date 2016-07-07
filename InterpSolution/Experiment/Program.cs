@@ -8,7 +8,6 @@ namespace Experiment {
     class Program {
         static void Main(string[] args) {
 
-            var sdd = new Position3D(3,77,0);
             var dm = new ScnObjDummy() { Name = "Rocket" };
             dm.AddChild(new Position3D(new Vector3D(3,77,0)));
             dm.AddChild(new MassPoint(10));
