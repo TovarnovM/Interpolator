@@ -502,6 +502,19 @@ namespace Microsoft.Research.Oslo
             return sb.ToString();
         }
 
+        public string ToString(string mode = "G6") {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("[");
+            if(v != null)
+                for(int i = 0; i < v.Length; i++) {
+                    if(i > 0)
+                        sb.Append(", ");
+                    sb.Append(v[i].ToString(mode));
+                }
+            sb.Append("]");
+            return sb.ToString();
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is Vector)

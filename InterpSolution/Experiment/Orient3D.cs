@@ -1,106 +1,71 @@
 ﻿using System;
 using Sharp3D.Math.Core;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Experiment {
 
-    public interface IOrient2D: IScnObj {
-        Vector2D Loc2Glob(Vector2D loc);
-        Vector2D Glob2Loc(Vector2D wrld);
-        Matrix2D M { get; }
-        Matrix2D M_1 { get; }
-        double AngleX { get; set; }
-        IScnPrm pAngleX { get; set; }
-    }
 
     public interface IOrient3D:IScnObj {
-        Vector3D Loc2Glob(Vector3D loc);
-        Vector3D Glob2Loc(Vector3D wrld);
-
+        /// <summary>
+        /// матрица Перехода из Локальнойй СК в глобальную СК 
+        /// </summary>
+        Matrix4D M { get; }
         /// <summary>
         /// матрица перехода из Глобальной СК в локальную СК
         /// </summary>
-        Matrix3D M { get; }
+        Matrix4D M_1 { get; }
         /// <summary>
-        /// матрица перехода из Локальнойй СК в глобальнуюСК
+        /// матрица вращения из Локальнойй СК в глобальнуюСК 
         /// </summary>
-        Matrix3D M_1 { get; }
+        Matrix3D MRot { get; }
+        /// <summary>
+        /// матрица вращения из Глобальной СК в локальную СК
+        /// </summary>
+        Matrix3D MRot_1 { get; }
+        /// <summary>
+        /// матрица перехода из Локальнойй СК в МИРОВУЮ СК
+        /// </summary>
+        Matrix4D WorldTransform { get; }
+        /// <summary>
+        /// матрица перехода из МИРОВОЙ СК в локальную СК
+        /// </summary>
+        Matrix4D WorldTransform_1 { get; }
+        /// <summary>
+        /// матрица вращения из Локальнойй СК в МИРОВУЮ СК
+        /// </summary>
+        Matrix3D WorldTransformRot { get; }
+        /// <summary>
+        /// матрица вращения из МИРОВОЙ СК в локальную СК
+        /// </summary>
+        Matrix3D WorldTransformRot_1 { get; }
+
+        List<IOrient3D> TransformChain { get; }
         QuaternionD Q { get; set; }
 
-        double W { get; set; }
-        double X { get; set; }
-        double Y { get; set; }
-        double Z { get; set; }
+        double Qw { get; set; }
+        double Qx { get; set; }
+        double Qy { get; set; }
+        double Qz { get; set; }
         
-        IScnPrm pW { get; set; }
-        IScnPrm pX { get; set; }
-        IScnPrm pY { get; set; }
-        IScnPrm pZ { get; set; }
+        IScnPrm pQw { get; set; }
+        IScnPrm pQx { get; set; }
+        IScnPrm pQy { get; set; }
+        IScnPrm pQz { get; set; }
     }
 
-    public class Orient2D : ScnObjDummy, IOrient2D {
-        private Matrix2D m = Matrix2D.Identity;
-        private Matrix2D m_1 = Matrix2D.Identity;
-        private double angleX = 0d;
+ 
 
-        public Vector2D Loc2Glob(Vector2D loc) {
-            return m * loc;
-        }
-
-        public Vector2D Glob2Loc(Vector2D wrld) {
-            return m_1 * wrld;
-        }
-
-        public Matrix2D M { get { return m; } }
-        public Matrix2D M_1 { get { return m_1; } }
-        /// <summary>
-        /// от -PI до PI в итоге)
-        /// </summary>
-        public double AngleX {
-            get { return angleX; }
-            set {
-                angleX = value % MathFunctions.PI;
-                SynchAngleAndM();
-            }
-        }
-
-        public IScnPrm pAngleX { get; set; }
-
-        private void SynchAngleAndM() {
-            var sin = System.Math.Sin(angleX);
-            var cos = System.Math.Cos(angleX);
-            m.M11 = cos;   m.M12 = -sin;
-            m.M21 = sin;   m.M22 = cos;
-
-            m.M11 = cos;   m.M12 = sin;
-            m.M21 = -sin;   m.M22 = cos;
-        }
-
-        protected void MySynchMeBefore(double t) {
-            SynchAngleAndM();
-        }
-
-        public Orient2D() {
-            SynchMeBefore = new System.Action<double>(MySynchMeBefore);
-            //ResetAllParams();
-        }
-
-    }
-
-    public class Orient3D : ScnObjDummy, IOrient3D {
-        private Matrix3D m = Matrix3D.Identity;
-        private Matrix3D m_1 = Matrix3D.Identity;
+    public class Orient3D : Position3D, IOrient3D {
+        public List<IOrient3D> TransformChain { get; private set; } = new List<IOrient3D>();
+        private Matrix4D m = Matrix4D.Identity;
+        private Matrix4D m_1 = Matrix4D.Identity;
+        private Matrix4D worldTransform = Matrix4D.Identity;
+        private Matrix4D worldTransform_1 = Matrix4D.Identity;
         private QuaternionD q = QuaternionD.Identity;
 
-        public Vector3D Loc2Glob(Vector3D loc) {
-            return m*loc;
-        }
-
-        public Vector3D Glob2Loc(Vector3D wrld) {
-            return m_1 * wrld;
-        }
-
-        public Matrix3D M { get { return m; } }
-        public Matrix3D M_1 { get { return m_1; } }
+        public Matrix3D MRot { get { return m.Rot; } }
+        public Matrix3D MRot_1 { get { return m_1.Rot; } }
         public QuaternionD Q {
             get { return q; }
             set {
@@ -108,7 +73,7 @@ namespace Experiment {
                 SynchQandM();
             }
         }
-        public double W {
+        public double Qw {
             get {
                 return q.W;
             }
@@ -116,7 +81,7 @@ namespace Experiment {
                 q.W = value;
             }
         }
-        public double X {
+        public double Qx {
             get {
                 return q.X;
             }
@@ -124,7 +89,7 @@ namespace Experiment {
                 q.X = value;
             }
         }
-        public double Y {
+        public double Qy {
             get {
                 return q.Y;
             }
@@ -132,7 +97,7 @@ namespace Experiment {
                 q.Y = value;
             }
         }
-        public double Z {
+        public double Qz {
             get {
                 return q.Z;
             }
@@ -140,16 +105,66 @@ namespace Experiment {
                 q.Z = value;
             }
         }
-        public IScnPrm pW { get; set; }
-        public IScnPrm pX { get; set; }
-        public IScnPrm pY { get; set; }
-        public IScnPrm pZ { get; set; }
+        public IScnPrm pQw { get; set; }
+        public IScnPrm pQx { get; set; }
+        public IScnPrm pQy { get; set; }
+        public IScnPrm pQz { get; set; }
 
-        private void SynchQandM() {
+        public Matrix3D WorldTransformRot {
+            get {
+                return worldTransform.Rot;
+            }
+        }
+
+        public Matrix3D WorldTransformRot_1 {
+            get {
+                return worldTransform_1.Rot;
+            }
+        }
+
+        public Matrix4D M {
+            get {
+                return m;
+            }
+        }
+
+        public Matrix4D M_1 {
+            get {
+                return m_1;
+            }
+        }
+
+        public Matrix4D WorldTransform {
+            get {
+                return worldTransform;
+            }
+        }
+
+        public Matrix4D WorldTransform_1 {
+            get {
+                return worldTransform_1;
+            }
+        }
+
+        public void SynchQandM() {
             q.Normalize();
-            m = QuaternionD.QuaternionToMatrix3D(q);
-            m_1 = m;
-            m_1.Transpose();
+            m = QuaternionD.QuaternionToMatrix(q);
+            m.Col4 = Vec3D;
+            m_1 = Matrix4D.Inverse(m);
+
+            if(TransformChain.Count == 0) {
+                worldTransform = m;
+                worldTransform_1 = m_1;
+                return;
+            }
+
+
+            worldTransform = M;
+
+            foreach(var orient in TransformChain) {
+                worldTransform = orient.M * worldTransform;
+            }
+            worldTransform_1 = Matrix4D.Inverse(worldTransform);
         }
 
         protected void MySynchMeBefore(double t) {
@@ -157,9 +172,77 @@ namespace Experiment {
         }
 
         public Orient3D() {
-            SynchMeBefore = new System.Action<double>(MySynchMeBefore);
-            //ResetAllParams();
+            SynchMeBefore += MySynchMeBefore;
+            RebuildStructureAction += RebuildTransformChain;
+        }
+
+        public void RebuildTransformChain() {
+            TransformChain.Clear();
+            var daddy = Owner;
+            while(daddy != null) {
+                if(daddy is IOrient3D) {
+                    TransformChain.Add(daddy as IOrient3D);
+                    continue;
+                }
+                var orient = (IOrient3D)daddy.Children.FirstOrDefault(ch => ch is IOrient3D);
+                if(orient != null)
+                    TransformChain.Add(orient);
+
+            }
         }
 
     }
+
+    //public class Orient2D : ScnObjDummy, IOrient2D {
+    //    private Matrix2D m = Matrix2D.Identity;
+    //    private Matrix2D m_1 = Matrix2D.Identity;
+    //    private double angleX = 0d;
+
+    //    public Vector2D Loc2Glob(Vector2D loc) {
+    //        return m * loc;
+    //    }
+
+    //    public Vector2D Glob2Loc(Vector2D wrld) {
+    //        return m_1 * wrld;
+    //    }
+
+    //    public Matrix2D M { get { return m; } }
+    //    public Matrix2D M_1 { get { return m_1; } }
+    //    /// <summary>
+    //    /// от -PI до PI в итоге)
+    //    /// </summary>
+    //    public double AngleX {
+    //        get { return angleX; }
+    //        set {
+    //            angleX = value % MathFunctions.PI;
+    //            SynchAngleAndM();
+    //        }
+    //    }
+
+    //    public IScnPrm pAngleX { get; set; }
+
+    //    private void SynchAngleAndM() {
+    //        var sin = System.Math.Sin(angleX);
+    //        var cos = System.Math.Cos(angleX);
+    //        m.M11 = cos;
+    //        m.M12 = -sin;
+    //        m.M21 = sin;
+    //        m.M22 = cos;
+
+    //        m.M11 = cos;
+    //        m.M12 = sin;
+    //        m.M21 = -sin;
+    //        m.M22 = cos;
+    //    }
+
+    //    protected void MySynchMeBefore(double t) {
+    //        SynchAngleAndM();
+    //    }
+
+    //    public Orient2D() {
+    //        SynchMeBefore = new System.Action<double>(MySynchMeBefore);
+    //        //ResetAllParams();
+    //    }
+
+    //}
 }

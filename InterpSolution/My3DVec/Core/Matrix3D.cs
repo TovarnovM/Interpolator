@@ -576,6 +576,28 @@ namespace Sharp3D.Math.Core
                 _m11 * _m22 * _m33 + _m12 * _m23 * _m31 + _m13 * _m21 * _m32 -
                 _m13 * _m22 * _m31 - _m11 * _m23 * _m32 - _m12 * _m21 * _m33;
         }
+
+        public Matrix3D Inverse {
+
+            get {
+                double determinant = Determinant();
+                if(determinant == 0d)
+                    return Matrix3D.Identity;
+                double invdet = 1 / determinant;
+
+                var result = new Matrix3D();
+                result.M11 = (_m22 * _m33 - _m32 * _m23) * invdet;
+                result.M12 = (_m13 * _m32 - _m12 * _m33) * invdet;
+                result.M13 = (_m12 * _m23 - _m13 * _m22) * invdet;
+                result.M21 = (_m23 * _m31 - _m21 * _m33) * invdet;
+                result.M22 = (_m11 * _m33 - _m13 * _m31) * invdet;
+                result.M23 = (_m21 * _m13 - _m11 * _m23) * invdet;
+                result.M31 = (_m21 * _m32 - _m31 * _m22) * invdet;
+                result.M32 = (_m31 * _m12 - _m11 * _m32) * invdet;
+                result.M33 = (_m11 * _m22 - _m21 * _m12) * invdet;
+                return result;
+            }
+        }
         /*
         /// <summary>
         /// Calculates the adjoint of the matrix.

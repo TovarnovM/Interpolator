@@ -72,7 +72,7 @@
     <Compile Include="Integrator.cs" />
     <Compile Include="Law.cs" />
     <Compile Include="Mass.cs" />
-    <Compile Include="NewtonLaw4MatPoint.cs" />
+    <Compile Include="MatPoint.cs" />
     <Compile Include="Orient3D.cs" />
     <Compile Include="Position.cs" />
     <Compile Include="Program.cs" />

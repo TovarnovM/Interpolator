@@ -30,52 +30,48 @@ namespace Experiment {
             Value = value;
             //ResetAllParams();
         }
-
-
-        public class Mass3D : MassPoint, IMass3D {
-            private Matrix3D tensor = Matrix3D.Identity;
-
-            public Matrix3D Tensor { get; set; }
-            public double Ix {
-                get {
-                    return tensor.M11;
-                }
-                set {
-                    tensor.M11 = value;
-                }
-            }
-            public double Iy {
-                get {
-                    return tensor.M22;
-                }
-                set {
-                    tensor.M22 = value;
-                }
-            }
-            public double Iz {
-                get {
-                    return tensor.M33;
-                }
-                set {
-                    tensor.M33 = value;
-                }
-            }
-            public IScnPrm pIx { get; set; }
-            public IScnPrm pIy { get; set; }
-            public IScnPrm pIz { get; set; }
-
-
-
-            //protected void ResetParamIx() {
-            //    RemoveParam("Ix");
-            //    pX = new ScnPrm("Ix",this,X);
-            //    pX.GetVal = t => X;
-            //    pX.SetVal = val => X = val;
-            //}
-        }
-
-
     }
 
 
+    public class Mass3D : MassPoint, IMass3D {
+        private Matrix3D tensor = Matrix3D.Identity;
+
+        public Matrix3D Tensor { get; set; }
+        public double Ix {
+            get {
+                return tensor.M11;
+            }
+            set {
+                tensor.M11 = value;
+            }
+        }
+        public double Iy {
+            get {
+                return tensor.M22;
+            }
+            set {
+                tensor.M22 = value;
+            }
+        }
+        public double Iz {
+            get {
+                return tensor.M33;
+            }
+            set {
+                tensor.M33 = value;
+            }
+        }
+        public IScnPrm pIx { get; set; }
+        public IScnPrm pIy { get; set; }
+        public IScnPrm pIz { get; set; }
+
+
+
+        //protected void ResetParamIx() {
+        //    RemoveParam("Ix");
+        //    pX = new ScnPrm("Ix",this,X);
+        //    pX.GetVal = t => X;
+        //    pX.SetVal = val => X = val;
+        //}
+    }
 }

@@ -22,8 +22,10 @@ namespace Experiment {
         int ResetAllParams();
         void ResetParam(string nameOfProp);
         void SynchMe(double t);
+        void RebuildStruct();
         Action<double> SynchMeBefore { get; set; }
         Action<double> SynchMeAfter { get; set; }
+        Action RebuildStructureAction { get; set; }
 
         List<ILaw> Laws { get; }
         void AddLaw(ILaw newLaw);
@@ -38,7 +40,8 @@ namespace Experiment {
         public List<string> AllParamsNames { get; set; } = new List<string>();
         public List<ILaw> Laws { get; } = new List<ILaw>();
         public Action<double> SynchMeBefore { get; set; } = null;
-        public Action<double> SynchMeAfter { get; set; }= null;
+        public Action<double> SynchMeAfter { get; set; } = null;
+        public Action RebuildStructureAction { get; set; } = null;
 
         public void SynchMeTo(double t,ref Vector y) {
             if (DiffArrN != y.Length)
@@ -61,6 +64,7 @@ namespace Experiment {
         }
 
         public Vector Rebuild(double toTime = 0.0d) {
+            RebuildStruct();
             if(!ApplyLaws())
                 throw new Exception("Структура неправильная. Невозможно реализовать все Laws");
 
@@ -122,7 +126,7 @@ namespace Experiment {
             }
             return Prms.Count;
         }
-        public void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt = true, bool getNewName = true) {
+        public void AddDiffPropToParam(IScnPrm prm, IScnPrm dPrmDt, bool removeOldDt = true, bool getNewName = false) {
             if (!Prms.Contains(prm))
                 AddParam(prm);
             if (removeOldDt && prm.MyDiff != null && Prms.Contains(prm.MyDiff))
@@ -230,6 +234,13 @@ namespace Experiment {
             return i;
 
 
+        }
+
+        public void RebuildStruct() {
+            RebuildStructureAction?.Invoke();
+            foreach(var child in Children) {
+                child.RebuildStruct();
+            }
         }
 
         public ScnObjDummy() {
