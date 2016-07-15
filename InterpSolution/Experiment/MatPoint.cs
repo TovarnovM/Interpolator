@@ -17,12 +17,12 @@ namespace Experiment {
     /// <summary>
     /// X, y, z, - желательно, чтобы были в WORLD СК
     /// </summary>
-    public class MaterialPoint : Orient3D, IMaterialPoint {
+    public class MaterialPointNewton : Orient3D, IMaterialPoint {
         public IPosition3D Vel { get; set; }
         public IPosition3D Acc { get; set; }
         public IMassPoint Mass { get; set; }
         public List<IForceCenter> Forces { get; set; }
-        public MaterialPoint() {
+        public MaterialPointNewton() {
             Vel = new Position3D("Vel");
             Acc = new Position3D("Acc");
             Mass = Mass == null ? new MassPoint(): Mass;
@@ -46,7 +46,7 @@ namespace Experiment {
         public virtual void AddForce(IForceCenter force,bool createNewSK = false) {
             AddChild(force as IScnObj);
             Forces.Add(force);
-            force.SK = createNewSK ? this : force.SK;
+            force.SK = createNewSK || force.SK == null ? this : force.SK;
         }
     }
 
@@ -62,13 +62,13 @@ namespace Experiment {
         void AddMoment(IForceCenter moment,bool createNewSK);
     }
 
-    public class MaterialObject : MaterialPoint, IMaterialObject {
+    public class MaterialObjectNewtow : MaterialPointNewton, IMaterialObject {
         public new IMass3D Mass { get; set; } = new Mass3D();
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
         public List<IForceCenter> Moments { get; set; }= new List<IForceCenter>();
         public List<IForce> ForcesWithFPoints { get; set; } = new List<IForce>();
-        public MaterialObject():base() {
+        public MaterialObjectNewtow():base() {
             AddChild(Omega);
             AddChild(Eps);
 

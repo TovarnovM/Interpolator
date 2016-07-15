@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Experiment.ForceCenter" Collapsed="true">
+    <Position X="0.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAABAAAAAAAAAAiAAAAAAAAAAAAAAAABgEAAAAAA=</HashCode>
+      <FileName>Force.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Force" Collapsed="true">
+    <Position X="0.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgECAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Force.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.LawBase" BaseTypeListCollapsed="true">
+    <Position X="12.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAIAAAAAAAAABCBAQAAAAA=</HashCode>
+      <FileName>Law.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.576" Collapsed="true" />
+  </Class>
+  <Class Name="Experiment.MassPoint" Collapsed="true">
+    <Position X="5.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Mass.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Mass3D" Collapsed="true">
+    <Position X="5.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAIAAAAAAAAQAAAAAIAAAACAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Mass.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.MaterialPointNewton" Collapsed="true">
+    <Position X="3" Y="9.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAgAAAAACIAEE=</HashCode>
+      <FileName>MatPoint.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Orient3D" Collapsed="true">
+    <Position X="3" Y="8.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAQgRAEAQAABEAAIAQAACAAEAAmAACIqgAgA=</HashCode>
+      <FileName>Orient3D.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Position1D" Collapsed="true">
+    <Position X="3" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAEAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Position2D" Collapsed="true">
+    <Position X="3" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAgAAAAAAAAAACAAAAAAAAAIAA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Position3D" Collapsed="true">
+    <Position X="3" Y="7" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAQAAAAAQAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.Program" Collapsed="true">
+    <Position X="17.25" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Experiment.ScnObjDummy" Collapsed="true">
+    <Position X="3" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAASCAIAIhAAmEABABAEAIAAAQIABAAWEGAAAABAAQA=</HashCode>
+      <FileName>SceneObj.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.NamedChild" Collapsed="true">
+    <Position X="4" Y="1.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SceneParam.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Experiment.ScnPrm" Collapsed="true">
+    <Position X="7.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAAAAAAAAAQCAAAAAAAIAAAACgIAAABAAAABAAAAAA=</HashCode>
+      <FileName>SceneParam.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="Experiment.IForceCenter" Collapsed="true">
+    <Position X="0.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAABAAAAAAAAAAiAAAAAAAAAAAAAAAABgEAAAAAA=</HashCode>
+      <FileName>Force.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IForce" Collapsed="true">
+    <Position X="0.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgECAAAAAAABAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Force.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.ILaw" Collapsed="true">
+    <Position X="14.75" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAAAAA=</HashCode>
+      <FileName>Law.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IMassPoint" Collapsed="true">
+    <Position X="5.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Mass.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IMass3D" Collapsed="true">
+    <Position X="5.75" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIAAIAAAAAAAAQAAAAAAAAAACAAAAAAAAAAAAIAAAAA=</HashCode>
+      <FileName>Mass.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IMaterialPoint" Collapsed="true">
+    <Position X="8" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAACIAEE=</HashCode>
+      <FileName>MatPoint.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IMaterialObject" Collapsed="true">
+    <Position X="8" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABAEAACCAAQ=</HashCode>
+      <FileName>MatPoint.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IOrient3D" Collapsed="true">
+    <Position X="8" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAACAAAQARAEAAAABEAAAAAAACAAAAAEAAAIqgAgA=</HashCode>
+      <FileName>Orient3D.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IPosition1D" Collapsed="true">
+    <Position X="10.25" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAEAAAAAAAAAAAAAAAAAAAAAAAAQAA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IPosition2D" Collapsed="true">
+    <Position X="10.25" Y="11.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAgAAAAAAAAAACAAAAAAAAAIAA=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IPosition3D" Collapsed="true">
+    <Position X="10.25" Y="13" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAQAAAAAQAAAAAAAAAAAAAAAAE=</HashCode>
+      <FileName>Position.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IScnObj" Collapsed="true">
+    <Position X="8" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAASCAIAIhAAmEABABAEAIAAAQIAAAAEAGAAAABAAQA=</HashCode>
+      <FileName>SceneObj.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.IScnPrm" Collapsed="true">
+    <Position X="12.5" Y="8.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAACAAAAAAAAAAAACgIAAAAAAAABAAAAAA=</HashCode>
+      <FileName>SceneParam.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="Experiment.INamedChild" Collapsed="true">
+    <Position X="10.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAACAAAAAAIAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>SceneParam.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

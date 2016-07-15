@@ -1,20 +1,13 @@
-﻿namespace Experiment {
+﻿using System;
+
+namespace Experiment {
     public interface ILaw : INamedChild {
         bool ApplyMe();
         bool Applyed { get; }
     }
 
-    public abstract class LawBase : ILaw {
+    public abstract class LawBase : NamedChild, ILaw {
         public bool Applyed { get; protected set; } = false;
-
-        public string FullName {
-            get {
-                return Owner != null ? Owner.FullName + '.' + Name : Name;
-            }
-        }
-        public string Name { get; set; }
-        public IScnObj Owner { get; set; } = null;
-
         public bool ApplyMe() {
             if (Applyed)
                 return true;
@@ -38,5 +31,15 @@
         public abstract bool IsFitAndFullAction();
 
         public abstract bool ApplyMeAction();
+    }
+
+    public class NewtonLaw : LawBase {
+        public override bool ApplyMeAction() {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsFitAndFullAction() {
+            throw new NotImplementedException();
+        }
     }
 }
