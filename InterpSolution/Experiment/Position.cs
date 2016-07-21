@@ -2,6 +2,12 @@
 using System;
 
 namespace Experiment {
+    public interface IModulus {
+        void NormilizeDirection();
+        double Modulus { get; set; }
+        IScnPrm pModulus { get; set; }
+    }
+
     public interface IPosition1D : IScnObj {
         double X { get; set; }
         IScnPrm pX { get; set; }
@@ -26,15 +32,29 @@ namespace Experiment {
         public IScnPrm pX { get; set; }
         public double X { get; set; }
 
-        public Position1D(double x,string name) {
+        public Position1D(object x,string name) {
             Name = name;
-            X = x;
-            //ResetAllParams();
+            SetParam("x",x);
         }
         public Position1D(string name = "Pos1D") : this(0d,name) { }
 
         public void AddDiffVect(IPosition1D dXdt,bool getNewName = false) {
             AddDiffPropToParam(pX,dXdt.pX,true,getNewName);
+        }
+    }
+
+    public class Position1DModulus : Position1D, IModulus {
+        public double Modulus { get; set; }
+        public IScnPrm pModulus { get; set; }
+        public Position1DModulus(object modulus,object x,string name):base(x,name) {
+            SetParam("modulus",modulus);
+        }
+        public Position1DModulus(string name = "Pos1DMod"):this(0d,0d,name) {
+
+        }
+
+        public virtual void NormilizeDirection() {
+            X = X < 0d ? -1d : 1d;
         }
     }
 
@@ -57,8 +77,8 @@ namespace Experiment {
         //    pY.SetVal = val => Y = val;
         //}
 
-        public Position2D(double x,double y,string name):base(x,name) {
-            Y = y;
+        public Position2D(object x,object y,string name):base(x,name) {
+            SetParam("y",y);
             //ResetAllParams();
         }
         public Position2D(Vector2D posVec,string name = "Pos2D") : this(posVec.X,posVec.Y,name) { }
@@ -69,6 +89,23 @@ namespace Experiment {
             AddDiffPropToParam(pY,dVdt.pY,true,getNewName);
         }
 
+    }
+
+    public class Position2DModulus: Position2D, IModulus {
+        public double Modulus { get; set; }
+        public IScnPrm pModulus { get; set; }
+        public Position2DModulus(object modulus,object x,object y,string name):base(x,y,name) {
+            SetParam("modulus",modulus);
+        }
+        public Position2DModulus(string name = "Pos2DMod"):this(0d,0d,0d,name) {
+
+        }
+
+        public virtual void NormilizeDirection() {
+            var dir = Vec2D;
+            dir.Normalize();
+            Vec2D = dir;
+        }
     }
 
     public class Position3D : Position2D, IPosition3D {
@@ -85,8 +122,8 @@ namespace Experiment {
 
         public double Z { get; set; }
 
-        public Position3D(double x, double y, double z, string name = "Pos"):base(x,y,name) {
-            Z = z;
+        public Position3D(object x,object y,object z, string name = "Pos"):base(x,y,name) {
+            SetParam("z",z);
             //ResetAllParams();
         }
         public Position3D(Vector3D posVec, string name = "Pos") : this(posVec.X,posVec.Y,posVec.Z,name) { }
@@ -96,6 +133,23 @@ namespace Experiment {
             AddDiffPropToParam(pX, dVdt.pX, true, getNewName);
             AddDiffPropToParam(pY, dVdt.pY, true, getNewName);
             AddDiffPropToParam(pZ, dVdt.pZ, true, getNewName);
+        }
+    }
+
+    public class Position3DModulus : Position3D, IModulus {
+        public double Modulus { get; set; }
+        public IScnPrm pModulus { get; set; }
+        public Position3DModulus(object modulus,object x,object y,object z,string name) : base(x,y,z,name) {
+            SetParam("modulus",modulus);
+        }
+        public Position3DModulus(string name = "Pos3DMod") : this(0d,0d,0d,0d,name) {
+
+        }
+
+        public virtual void NormilizeDirection() {
+            var dir = Vec3D;
+            dir.Normalize();
+            Vec3D = dir;
         }
     }
 }
