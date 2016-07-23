@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Interpolator;
 
 namespace RocketAero.Tests
 {
@@ -17,6 +18,38 @@ namespace RocketAero.Tests
         {
             sample = new AeroGraphs();
         }
+
+        [TestMethod()]
+        public void GetClone() {
+            AeroGraphs clone = (AeroGraphs)sample.Clone();
+
+            Assert.AreEqual(0.019, clone.GetV("3_5_3D", 0, 1.6, 1.5), 0.05);
+            Assert.AreEqual(0.029, clone.GetV("3_5_3D", 0, 1.1, 0.4), 0.05);
+            Assert.AreEqual(0.014, clone.GetV("3_5_3D", 0, 1.7, 4), 0.05);
+            Assert.AreEqual(0.028, clone.GetV("3_5_3D", 0, 0.3, 1.7), 0.05);
+            Assert.AreEqual(0.021, clone.GetV("3_5_3D", 1, 0.9, 2.2), 0.05);
+            Assert.AreEqual(0.029, clone.GetV("3_5_3D", 1, 0.2, 1.5), 0.05);
+            Assert.AreEqual(0.024, clone.GetV("3_5_3D", 1, 1.5, -1.2), 0.05);
+            Assert.AreEqual(0.021, clone.GetV("3_5_3D", 1, 1.7, 0.6), 0.05);
+            Assert.AreEqual(0.014, clone.GetV("3_5_3D", 2, 1.6, 3.5), 0.05);
+            Assert.AreEqual(0.025, clone.GetV("3_5_3D", 2, 0.7, 0.8), 0.05);
+            Assert.AreEqual(0.022, clone.GetV("3_5_3D", 2, 1.4, -1), 0.05);
+            Assert.AreEqual(0.017, clone.GetV("3_5_3D", 2, 1.6, -2.5), 0.05);
+            Assert.AreEqual(0.018, clone.GetV("3_5_3D", 3, 1, -1.7), 0.05);
+            Assert.AreEqual(0.011, clone.GetV("3_5_3D", 3, 1.7, 5.2), 0.05);
+            Assert.AreEqual(0.017, clone.GetV("3_5_3D", 3, 0.9, 2.4), 0.05);
+            Assert.AreEqual(0.026, clone.GetV("3_5_3D", 3, 0.2, 1), 0.05);
+
+            Assert.AreEqual(0.83, clone.GetV("3_22", 3, 0.3), 0.1);
+
+            Assert.AreEqual("4_5_5", clone.CutMyString("__4_5_5_4D"));
+            Assert.AreEqual("4_5_5", clone.CutMyString("4_5_5_4D"));
+
+            Assert.AreEqual(0.57, clone.GetV("3_17", 2.2, 0.8, 0.6, 0.5), 0.2); //требуемая точность - delta - ?
+            Assert.AreEqual(0.15, clone.GetV("3_17", 0.2, 1.2, 0.2, 1), 0.01);
+            Assert.AreEqual(2.5, clone.GetV("3_17", 1, 0, 0, 1), 0.01);
+        }
+
 
         [TestMethod()]
         public void GetParamsTest()

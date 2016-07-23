@@ -57,27 +57,30 @@ namespace Interpolator
                 interpol.Add(7 * i, 7);
                 interp2D.AddElement((double)i, interpol);
             }
-            XmlSerializer serial = new XmlSerializer(typeof(Interp2D));
-            var sw = new StreamWriter("Interp2D.xml");
-            serial.Serialize(sw, interp2D);
-            sw.Close();
 
-            var sr = new StreamReader("Interp2D.xml");
-            var interp2D_des = (Interp2D)serial.Deserialize(sr);
+            var clone = interp2D.Clone();
 
-            var interp2D_clone = interp2D_des.CopyMe();
+            //XmlSerializer serial = new XmlSerializer(typeof(Interp2D));
+            //var sw = new StreamWriter("Interp2D.xml");
+            //serial.Serialize(sw, interp2D);
+            //sw.Close();
 
-            var ww = new int[7, 4];
-            Console.WriteLine(ww.GetLength(0));
+            //var sr = new StreamReader("Interp2D.xml");
+            //var interp2D_des = (Interp2D)serial.Deserialize(sr);
 
-            var interp2D2 = new Interp2D();
-            interp2D2.ImportDataFromMatrix(new double[4, 5]
-                {   { 0, 0, 20, 30, 40},
+            //var interp2D_clone = interp2D_des.CopyMe();
 
-                    { -1,0, 3, 0, -1},
-                    { 0, -1,-2,-3,-3},
-                    { 2, 1, 2, 3, 1}});
-            var ee = interp2D2.GetV(-1, 10);
+            //var ww = new int[7, 4];
+            //Console.WriteLine(ww.GetLength(0));
+
+            //var interp2D2 = new Interp2D();
+            //interp2D2.ImportDataFromMatrix(new double[4, 5]
+            //    {   { 0, 0, 20, 30, 40},
+
+            //        { -1,0, 3, 0, -1},
+            //        { 0, -1,-2,-3,-3},
+            //        { 2, 1, 2, 3, 1}});
+            //var ee = interp2D2.GetV(-1, 10);
 
             Console.ReadLine();
         }

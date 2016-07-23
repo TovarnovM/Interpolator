@@ -81,6 +81,10 @@
       <Project>{08247CC2-AA89-43BA-A7B1-C1311F7A52CB}</Project>
       <Name>AeroApp</Name>
     </ProjectReference>
+    <ProjectReference Include="..\InterpApp\InterpApp.csproj">
+      <Project>{5c93bceb-59bc-4510-823e-8860581b1332}</Project>
+      <Name>InterpApp</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

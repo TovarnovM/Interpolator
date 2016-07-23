@@ -9,10 +9,21 @@ namespace RocketAero {
     /// <summary>
     /// Там графики из Л-Ч
     /// </summary>
-    public class AeroGraphs {
+    public class AeroGraphs : ICloneable {
         private Dictionary<string, IInterpElem> _graphs = new Dictionary<string, IInterpElem>();
         public Dictionary<string, IInterpElem> Graphs { get { return _graphs; } }
-        public AeroGraphs() {
+        public AeroGraphs(bool loadNew = true) {
+            if (loadNew)
+                LoadMe();
+        }
+        public AeroGraphs(AeroGraphs cloneMe) {
+            foreach (var graph in cloneMe.Graphs) {
+                Graphs.Add(graph.Key, (IInterpElem)graph.Value.Clone());
+            }
+        }
+
+
+        protected void LoadMe() {
             var resourses = Resources.ResourceManager.GetResourceSet(System.Globalization.CultureInfo.CurrentUICulture, true, true);
             foreach (DictionaryEntry item in resourses) {
                 string key = item.Key.ToString();
@@ -31,19 +42,6 @@ namespace RocketAero {
                 else
                     _graphs.Add(CutMyString(key),
                                 Interp2D.LoadFromXmlString(item.Value.ToString()));
-
-                //XmlDocument doc = new XmlDocument();
-                //doc.LoadXml(item.Value.ToString());
-                //var tmpList = new List<string>();
-                //foreach (XmlNode elem in doc.DocumentElement.SelectNodes("paramList/string"))
-                //{
-                //    string par = elem?.InnerText;
-                //    if(par != null)
-                //        tmpList.Add(par);
-                //}
-                //if (tmpList.Count == 0)
-                //    tmpList.Add("I dont know");
-                //_params.Add(CutMyString(key), tmpList);
             }
         }
         public string CutMyString(string cutThis) {
@@ -97,6 +95,10 @@ namespace RocketAero {
         public static double _180divPI = 57.295779513082320876798154814105D;
         public static double M2min1(double mach) {
             return Math.Sqrt(Math.Abs(mach * mach - 1)) * Math.Sign(mach - 1);
+        }
+
+        public object Clone() {
+            return new AeroGraphs(this);
         }
     }
 }
