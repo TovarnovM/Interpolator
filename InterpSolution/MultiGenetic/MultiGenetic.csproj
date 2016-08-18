@@ -71,8 +71,10 @@
     <Compile Include="ChromosomeDE.cs" />
     <Compile Include="CrossoverDE.cs" />
     <Compile Include="MutationDE.cs" />
+    <Compile Include="PopulationDE.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectionDE.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -177,12 +177,31 @@ namespace MultiGenetic {
     //    }
     //}
 
+    public enum FitnessExtremum { fe_min, fe_max };
+
+    public class FitnesInfo {
+        public FitnessExtremum Extremum { get; set; }
+        public double? Min { get; set; }
+        public double? Max { get; set; }
+        public string Name { get; set; }
+        public FitnesInfo(string name, FitnessExtremum extr = FitnessExtremum.fe_max, double? min = null, double? max = null) {
+            Name = name;
+            Extremum = extr;
+            Min = min;
+            Max = max;
+        }
+    }
+
 
     public class ChromosomeDE : ChromosomeBase {
         private IList<IGeneInfo> _gInfo;
         public IList<IGeneInfo> GInfo { get { return _gInfo; } }
 
+        public Dictionary<string, double?> MultiFitnes { get; set; }
+        public Dictionary<string, FitnesInfo> FInfo { get; set; }
+
         public ChromosomeDE(IList<IGeneInfo> geneInfos) : base(geneInfos.Count()) {
+            MultiFitnes = new Dictionary<string, double?>();
             _gInfo = geneInfos;
             CreateGenes();
         }
@@ -195,5 +214,38 @@ namespace MultiGenetic {
             return new Gene(_gInfo[geneIndex].GetRandValue());
             throw new Exception($"Чет не так с типом или индексом гена( {nameof(ChromosomeDE)} - GenerateGene Method");
         }
+
+        public override IChromosome Clone() {
+            var clone = base.Clone() as ChromosomeDE;
+            foreach (var key in MultiFitnes.Keys) {
+                clone.MultiFitnes.Add(key, MultiFitnes[key]);
+            }
+            clone.FInfo = FInfo;
+            return clone;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns>1 - first cooler by pareto, 0 - pareto ==, -1 second cooler</returns>
+        public static int ParetoRel(ChromosomeDE first, ChromosomeDE second) {
+            bool firstCooler = true; ;
+            bool secondCooler = true;
+            foreach (var fiName in first.FInfo.Keys) {
+                var kritBattle = first.FInfo[fiName].Extremum == FitnessExtremum.fe_max ?
+                    first.MultiFitnes[fiName] > second.MultiFitnes[fiName] :
+                    first.MultiFitnes[fiName] < second.MultiFitnes[fiName];
+                firstCooler &= kritBattle;
+                secondCooler &= !kritBattle;
+                if ((!firstCooler) && (!secondCooler))
+                    break;
+            }
+            return firstCooler ? 1 :
+                secondCooler ? -1 :
+                0;
+        }
     }
+
 }
