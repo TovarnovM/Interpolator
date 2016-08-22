@@ -5,11 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using static System.Math;
+using Microsoft.CSharp.RuntimeBinder;
+using GeneticSharp.Domain.Populations;
+using Sharp3D.Math.Core;
 
 namespace MultiGenetic {
     public interface IGeneInfo {
         string Name { get; set; }
         dynamic GetRandValue();
+        bool ValidateValue(dynamic value);
     }
 
     public class DoubleRange : IGeneInfo {
@@ -73,33 +77,12 @@ namespace MultiGenetic {
             return RandomizationProvider.Current.GetDouble(lft, rgt);
         }
 
+        public bool ValidateValue(dynamic value) {
+            if(!(value is double))
+                throw new ArgumentException("Нужно проверять Double, а не ",value.GetType().ToString());
+            return Left <= (double)value && (double)value <= Right;
+        }
     }
-
-    //public struct GeneDouble {
-    //    private double _value;
-    //    public DoubleRange Range { get; private set; }
-    //    public string Name {
-    //        get {
-    //            return Range.Name;
-    //        }
-    //    }
-    //    public double Value {
-    //        get { return _value; }
-    //        set {
-    //            _value =
-    //                value > Range.Max ? Range.Max :
-    //                value < Range.Min ? Range.Min :
-    //                value;
-    //        }
-    //    }
-    //    public GeneDouble(DoubleRange range, double value) {
-    //        Range = range;
-    //        _value =
-    //            value > Range.Max ? Range.Max :
-    //            value < Range.Min ? Range.Min :
-    //            value;
-    //    }
-    //}
 
     public class StringRange : IGeneInfo {
         private List<string> _elements;
@@ -134,6 +117,16 @@ namespace MultiGenetic {
             return _elements.IndexOf(name);
         }
 
+        public bool ValidateValue(dynamic value) {
+            if(!(value is string || value is int))
+                throw new ArgumentException("Нужно проверять String или int, а не ",value.GetType().ToString());
+            if(value is string)
+                return _elements.Any(el => el == (string)value.Trim());
+            if(value is int)
+                return (int)value >= 0 && (int)value < _elements.Count;
+            return false;
+        }
+
         public string this[int index] {
             get {
                 return _elements[index];
@@ -141,54 +134,41 @@ namespace MultiGenetic {
         }
     }
 
-    //public struct GeneEnum {
-    //    private int curElemIndex;
-    //    public StringEnum Elem { get; private set; }
-    //    public string Name {
-    //        get {
-    //            return Elem.Name;
+    public enum CritExtremum { fe_min, fe_max };
 
-    //        }
-    //    }
-    //    public string Value {
-    //        get {
-    //            return Elem[curElemIndex];
-    //        }
-
-    //        set {
-    //            if (Elem.Contains(value)) {
-    //                curElemIndex = Elem.IndexOf(value);
-    //            }
-    //        }
-    //    }
-    //    public int EnumIndex {
-    //        get {
-    //            return curElemIndex;
-    //        }
-
-    //        set {
-    //            if (Elem.IndexValidate(value))
-    //                curElemIndex = value;
-    //        }
-    //    }
-    //    public GeneEnum(StringEnum myEnum, int enumIndex = 0) {
-    //        Elem = myEnum;
-    //        EnumIndex = enumIndex;
-    //    }
-    //}
-
-    public enum FitnessExtremum { fe_min, fe_max };
-
-    public class FitnesInfo {
-        public FitnessExtremum Extremum { get; set; }
+    public class CritInfo {
+        public CritExtremum Extremum { get; set; }
         public double? Min { get; set; }
         public double? Max { get; set; }
         public string Name { get; set; }
-        public FitnesInfo(string name, FitnessExtremum extr = FitnessExtremum.fe_max, double? min = null, double? max = null) {
+        public CritInfo(string name, CritExtremum extr = CritExtremum.fe_max, double? min = null, double? max = null) {
             Name = name;
             Extremum = extr;
             Min = min;
             Max = max;
+        }
+        public bool ValidValue(double? value) {
+            if(value == null)
+                return false;
+            if(Min != null && value < Min)
+                return false;
+            if(Max != null && value > Max)
+                return false;
+            return true;
+        }
+
+    }
+
+    public class Criteria {
+        public CritInfo Info { get; set; }
+        public double? Value { get; set; }
+        public Criteria(CritInfo info, double? value = null) {
+            Info = info;
+            Value = value;
+        }
+        public Criteria(Criteria cloneMe):this(cloneMe.Info, cloneMe.Value) {  }
+        public Criteria Clone() {
+            return new Criteria(this);
         }
     }
 
@@ -197,32 +177,116 @@ namespace MultiGenetic {
         private IList<IGeneInfo> _gInfo;
         public IList<IGeneInfo> GInfo { get { return _gInfo; } }
 
-        public Dictionary<string, double?> MultiFitnes { get; set; }
-        public Dictionary<string, FitnesInfo> FInfo { get; set; }
+        public Dictionary<string, Criteria> Crits { get; set; }
 
-        public ChromosomeDE(IList<IGeneInfo> geneInfos) : base(geneInfos.Count()) {
-            MultiFitnes = new Dictionary<string, double?>();
+        public IEnumerable<CritInfo> CritsInfos() {
+            foreach(var crit in Crits.Values) {
+                yield return crit.Info;
+            }
+        }
+
+        public void AddCrit(ChromosomeDE critsFrom, bool copyValues = false) {
+            foreach(var ci in critsFrom.Crits.Values) {
+                AddCrit(ci.Info, copyValues ? ci.Value : null);
+            }
+        }
+        public void AddCrit(params CritInfo[] crits) {
+            foreach(var crit in crits) {
+                AddCrit(crit);
+            }
+        }
+        public void AddCrit(CritInfo fi, double? value = null) {
+            Crits.Add(fi.Name,new Criteria(fi,value));
+        }
+        public void AddCrit(params Criteria[] criterias) {
+            foreach(var crit in criterias) {
+                AddCrit(crit.Info,crit.Value);
+            }
+        }
+
+        public ChromosomeDE(IList<IGeneInfo> geneInfos, IEnumerable<CritInfo> crits = null) : base(geneInfos.Count()) {
+            Crits = new Dictionary<string,Criteria>();
+            if(crits != null)
+                foreach(var crit in crits) {
+                    AddCrit(crit);
+                }
             _gInfo = geneInfos;
             CreateGenes();
         }
 
+        public dynamic this[dynamic IndexOrString] {
+            get {
+                int index = 0;
+                if(IndexOrString is string) {
+                    var item = _gInfo.FirstOrDefault(gi => gi.Name == (string)IndexOrString);
+                    if(item == null)
+                        throw new ArgumentException("Такого гена нет ",IndexOrString.ToString());
+                    index = _gInfo.IndexOf(item);
+                } else
+                if(IndexOrString is int) {
+                    index = IndexOrString;
+                }
+                if(_gInfo[index] is DoubleRange)
+                    return (double)GetGene(index).Value;
+                if(_gInfo[index] is StringRange)
+                    return (_gInfo[index] as StringRange)[(int)GetGene(index).Value];
+                return null;
+            } set {
+                int index = 0;
+                if(IndexOrString is string && _gInfo.Any(gi => gi.Name == IndexOrString)) {
+                    var item = _gInfo.FirstOrDefault(gi => gi.Name == IndexOrString);
+                    if(item == null)
+                        throw new ArgumentException("Такого гена нет ",IndexOrString.ToString());
+                    index = _gInfo.IndexOf(item);
+                } else
+                if(IndexOrString is int) {
+                    index = IndexOrString;
+                    if(index < 0 || index >= _gInfo.Count)
+                        throw new ArgumentOutOfRangeException();
+                }
+                if(_gInfo[index] is DoubleRange && value is double) {
+                    if(_gInfo[index].ValidateValue(value))
+                        ReplaceGene(index,new Gene((double)value));
+                    else
+                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as DoubleRange).Left} ; {(_gInfo[index] as DoubleRange).Right}]");
+                }
+                    
+                if(_gInfo[index] is StringRange) {
+                    if(!_gInfo[index].ValidateValue(value))
+                        throw new ArgumentException("Такой разновидности гена нет ",value.ToString());
+                    if(value is string)
+                        ReplaceGene(index,new Gene((_gInfo[index] as StringRange).IndexOf((string)value)));
+                    if(value is int)
+                        ReplaceGene(index,new Gene((int)value));
+                }
+                //throw new ArgumentException("Такого гена нет ",IndexOrString.ToString());
+            }
+        }
+
         public override IChromosome CreateNew() {
-            return new ChromosomeDE(_gInfo);
+            return new ChromosomeDE(_gInfo, CritsInfos());
         }
 
         public override Gene GenerateGene(int geneIndex) {
             return new Gene(_gInfo[geneIndex].GetRandValue());
+
             throw new Exception($"Чет не так с типом или индексом гена( {nameof(ChromosomeDE)} - GenerateGene Method");
         }
 
         public override IChromosome Clone() {
             var clone = base.Clone() as ChromosomeDE;
-            foreach (var key in MultiFitnes.Keys) {
-                clone.MultiFitnes.Add(key, MultiFitnes[key]);
+            foreach(var critName in Crits.Keys) {
+                clone.Crits[critName].Value = Crits[critName].Value;
             }
-            clone.FInfo = FInfo;
             return clone;
         }
+
+        public bool ValidCrits() {
+            return Crits.Values.All(cr => cr.Info.ValidValue(cr.Value));
+        }
+
+        #region ParetoStatic Methods
+
 
         /// <summary>
         /// 
@@ -230,22 +294,145 @@ namespace MultiGenetic {
         /// <param name="first"></param>
         /// <param name="second"></param>
         /// <returns>1 - first cooler by pareto, 0 - pareto ==, -1 second cooler</returns>
+        public static int MAX_PAR = 100;
         public static int ParetoRel(ChromosomeDE first, ChromosomeDE second) {
             bool firstCooler = true; ;
             bool secondCooler = true;
-            foreach (var fiName in first.FInfo.Keys) {
-                var kritBattle = first.FInfo[fiName].Extremum == FitnessExtremum.fe_max ?
-                    first.MultiFitnes[fiName] > second.MultiFitnes[fiName] :
-                    first.MultiFitnes[fiName] < second.MultiFitnes[fiName];
+            foreach (var critName in first.Crits.Keys) {
+                if(first.Crits[critName].Value == second.Crits[critName].Value)
+                    continue;
+                var kritBattle = first.Crits[critName].Info.Extremum == CritExtremum.fe_max ?
+                    first.Crits[critName].Value > second.Crits[critName].Value :
+                    first.Crits[critName].Value < second.Crits[critName].Value;
                 firstCooler &= kritBattle;
                 secondCooler &= !kritBattle;
                 if ((!firstCooler) && (!secondCooler))
                     break;
             }
-            return firstCooler ? 1 :
+            return
+                firstCooler && secondCooler ? 0:
+                firstCooler ? 1 :
                 secondCooler ? -1 :
                 0;
+        }        
+        public static void TryGetInPareto(IList<ChromosomeDE> pareto,ChromosomeDE candidate) {
+            for(int i = pareto.Count - 1; i >= 0; i--) {
+                var pr = pareto[i];
+                switch(ChromosomeDE.ParetoRel(pr,candidate)) {
+                    case 1: {
+                        return;
+                    }
+                    case -1: {
+                        pareto.RemoveAt(i);
+                    }
+                    break;
+                    default:
+                    break;
+                }
+            }
+            pareto.Add(candidate);
         }
+        public static IList<ChromosomeDE> Pareto(IEnumerable<IChromosome> all) {
+            var par = new List<ChromosomeDE>();
+            foreach(var chr in all) {
+                TryGetInPareto(par,chr as ChromosomeDE);
+            }
+            return par;
+        }
+        public static void PerformParetoRange(IList<IChromosome> chromosomes) {
+            var allCr = new List<IChromosome>(chromosomes);
+            int i = MAX_PAR;
+            while(allCr.Count > 0) {
+                var par = Pareto(allCr);
+                foreach(var cr in par) {
+                    cr.Fitness = i--;
+                    allCr.Remove(cr);
+                }
+            }
+        }
+        public static MatrixD GeneDifference(IList<ChromosomeDE> crGroup) {
+            var dRange =
+                crGroup.
+                First().
+                GInfo.
+                Where(gInfo => gInfo is DoubleRange).
+                Select(gInfo => {
+                    int gIndex = crGroup.First().GInfo.IndexOf(gInfo);
+                    var max = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
+                    var min = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
+                    return new {
+                        Info = gInfo as DoubleRange,
+                        Delta = max - min,
+                        TooSmall = (max - min) < 1E-10
+                    };
+                });
+
+            var rMatr = new MatrixD(crGroup.Count,crGroup.Count);
+            for(int i = 0; i < crGroup.Count; i++) {
+                var cr = crGroup[i];
+                rMatr[i,i] = 0d;
+                for(int j = i; j < crGroup.Count; j++) {
+                    var crIn = crGroup[j];
+                    var r = 0d;
+                    foreach(var gInfo in cr.GInfo) {
+                        var rr2 = 0d;
+                        if(gInfo is DoubleRange) {
+                            var gRange = dRange.First(rn => rn.Info == gInfo);
+                            if(gRange.TooSmall)
+                                continue;
+                            rr2 = Math.Abs((double)crIn[gInfo.Name] - (double)cr[gInfo.Name]) / gRange.Delta;
+                        } else if(gInfo is StringRange)
+                            rr2 = (int)crIn[gInfo.Name] != (int)cr[gInfo.Name] ? 0d : 1d;
+                        rr2 *= rr2;
+                        r += rr2;
+                    }
+                    r = Math.Sqrt(r / cr.GInfo.Count);
+                    rMatr[i,j] = r;
+                    rMatr[j,i] = r;
+                }
+            }
+            return rMatr;
+        }
+        public static MatrixD CritDifference(IList<ChromosomeDE> crGroup) {
+            var crRange =
+                crGroup.
+                First().
+                Crits.
+                Values.
+                Select(crit => {
+                    var max = (double)crGroup.Max(cr => cr.Crits[crit.Info.Name].Value);
+                    var min = (double)crGroup.Min(cr => cr.Crits[crit.Info.Name].Value);
+                    return new {
+                        Info = crit.Info,
+                        Delta = max - min,
+                        DeltaTooSmall = (max - min) < 1E-10
+                    };
+                });
+
+            var rMatr = new MatrixD(crGroup.Count,crGroup.Count);
+            for(int i = 0; i < crGroup.Count; i++) {
+                var cr = crGroup[i];
+                rMatr[i,i] = 0d;
+                for(int j = i; j < crGroup.Count; j++) {
+                    var crIn = crGroup[j];
+                    var r = 0d;
+                    foreach(var crRn in crRange) {
+                        if(crRn.DeltaTooSmall)
+                            continue;
+                        double rr2 = (double)cr.Crits[crRn.Info.Name].Value - (double)crIn.Crits[crRn.Info.Name].Value;
+                        rr2 /= crRn.Delta;
+                        rr2 *= rr2;
+                        r += rr2;
+                    }
+                    r = Math.Sqrt(r);
+                    rMatr[i,j] = r;
+                    rMatr[j,i] = r;
+                }
+            }
+
+            return rMatr;
+        }
+        #endregion
     }
 
 }
