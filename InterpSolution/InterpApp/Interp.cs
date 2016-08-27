@@ -18,7 +18,7 @@ namespace Interpolator {
         InterpolType InterpType { get; set; }
     }
 
-    [XmlRoot(nameof(InterpDouble))]
+    [Serializable,XmlRoot(nameof(InterpDouble))]
     public class InterpDouble : IInterpElem {
         [XmlAttribute]
         public double Value { get; set; }
@@ -47,13 +47,11 @@ namespace Interpolator {
         }
     }
     //тип экстраполяции  = 0, = крайн значению, = продолжению метода, вызывает ошибку
-    public enum ExtrapolType { etZero, etValue, etMethod_Line, etError };
+    public enum ExtrapolType { etZero, etValue, etMethod_Line, etError,etRepeat };
     public enum InterpolType { itStep, itLine, itSpecial4_3_17 };
 
     [Serializable]
     public class Interp<T> : IInterpElem, IInterpParams where T : IInterpElem {
-        [XmlIgnore]
-        protected bool _isSynch = false;
         //Тут хранятся данные
         public SerializableSortedList<double, T> _data = new SerializableSortedList<double, T>();
         [XmlIgnore]
@@ -123,15 +121,15 @@ namespace Interpolator {
             }
             return 0;
         }
-        public int AddElement(double t, T element) {
-            _isSynch = false;
+        public virtual int AddElement(double t, T element) {
+
             if (_data.ContainsKey(t))
                 throw new Exception("Добавляешь дубликат по t");
             _data.Add(t, element);
             return _data.IndexOfValue(element);
         }
-        public void RemoveElement(int elemIndex) {
-            _isSynch = false;
+        public virtual void RemoveElement(int elemIndex) {
+
             if (elemIndex < _data.Count && elemIndex >= 0) {
                 _data.RemoveAt(elemIndex);
                 N = 0;
@@ -271,6 +269,12 @@ namespace Interpolator {
             return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
         }
 
+        public double this[params double[] t] {
+            get {
+                return GetV(t);
+            }
+        }
+
         /// <summary>
         /// Получить значение в точке с координатами t;
         /// t[0] - координата самого низкого порядка, для интерполяции вложенных одномерных интерполяторов
@@ -303,12 +307,24 @@ namespace Interpolator {
                                 0;
                             return InterpMethodLine(t);
                         }
+                    case ExtrapolType.etRepeat:
+                        //Не забыть изменить в InterpXY
+                        int l = t.Length;
+                        var shiftParams = new double[l];
+                        Array.Copy(t,shiftParams,l);
+                        RepeatShift(ref shiftParams[l - 1]);
+                        return GetV(shiftParams);
 
                     default:
                         return GetVSub(t);
                 }
             }
             return InterpMethodCurr(t);
+        }
+        public void RepeatShift(ref double t) {
+            double first = _data.Keys.First();
+            double interval = _data.Keys.Last() - first;
+            t = t - Math.Floor((t - first) / interval) * interval;
         }
         public void CopyParamsFrom(IInterpParams parent) {
             this.ET_left = parent.ET_left;
@@ -385,11 +401,21 @@ namespace Interpolator {
 
     [XmlRoot(nameof(InterpXY))]
     public class InterpXY : Interp<InterpDouble> {
+        [XmlIgnore]
+        private bool _isSynch = false;
         private double[] _x;
         private double[] _y;
         private double[] _k;
         private double[] _b;
         private int _length;
+        public override int AddElement(double t,InterpDouble element) {
+            _isSynch = false;
+            return base.AddElement(t,element);
+        }
+        public override void RemoveElement(int elemIndex) {
+            _isSynch = false;
+            base.RemoveElement(elemIndex);
+        }
         public void SynchArrays() {
             _length = _data.Count;
             _x = new double[_length];
@@ -520,7 +546,10 @@ namespace Interpolator {
                                 0;
                             return InterpMethodXYLine(tt);
                         }
-
+                    case ExtrapolType.etRepeat:
+                    //Не забыть изменить в Interp<>
+                    RepeatShift(ref tt);
+                    return GetV(tt);
                     default:
                         return _y[N];
                 }

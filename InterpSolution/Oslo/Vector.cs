@@ -192,6 +192,25 @@ namespace Microsoft.Research.Oslo
             set { v[idx] = value; }
         }
 
+        /// <summary>
+        /// Получить/назначть часть вектора, начиная с [fromInd-элекента и до toIndex-элемента] включительно 
+        /// </summary>
+        /// <param name="fromInd">ОТ (начиная с 0) индекс</param>
+        /// <param name="toIndex">ДО ()</param>
+        /// <returns></returns>
+        public Vector this[int fromInd,int toIndex] {
+            get {
+                int length = toIndex - fromInd + 1;
+                var res = Vector.Zeros(length);
+                Array.Copy(this.v,fromInd,res.v,0,length);
+                return res;
+            }
+            set {
+                Array.Copy(value.v,0,this.v,fromInd,toIndex - fromInd + 1);
+            }
+
+        }
+
         /// <summary>Performs conversion of vector to array</summary>
         /// <param name="v">Vector to be converted</param>
         /// <returns>Array with contents of vector</returns>

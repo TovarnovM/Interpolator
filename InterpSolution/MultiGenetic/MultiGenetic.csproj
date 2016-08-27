@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="ChromosomeDE.cs" />
     <Compile Include="CrossoverDE.cs" />
+    <Compile Include="FitnesDE.cs" />
     <Compile Include="MutationDE.cs" />
     <Compile Include="PopulationDE.cs" />
     <Compile Include="Program.cs" />

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Experiment {
+    public delegate bool FlagFunct(params SolPoint[] sp);
 
     public interface IScnObj : INamedChild {
         List<string> AllParamsNames { get; }
@@ -32,6 +33,9 @@ namespace Experiment {
         List<ILaw> Laws { get; }
         void AddLaw(ILaw newLaw);
         bool ApplyLaws();
+        Vector f(double t,Vector y);
+
+        Dictionary<string,FlagFunct> FlagDict { get; }
     }
 
     public class ScnObjDummy : NamedChild, IScnObj {
@@ -44,21 +48,20 @@ namespace Experiment {
         public Action<double> SynchMeBefore { get; set; } = null;
         public Action<double> SynchMeAfter { get; set; } = null;
         public Action RebuildStructureAction { get; set; } = null;
+        public Dictionary<string,FlagFunct> FlagDict { get; set; } = new Dictionary<string,FlagFunct>();
 
         public void SynchMeTo(double t,ref Vector y) {
-            if(DiffArrN != y.Length)
-                throw new InvalidOperationException("разные длины векторов in out");
-
+            //if(DiffArrN != y.Length)
+            //    throw new InvalidOperationException("разные длины векторов in out");
             for(int i = 0; i < DiffArrN; i++) {
                 DiffArr[i].SetVal(y[i]);
             }
-
             SynchMe(t);
         }
 
         public Vector f(double t,Vector y) {
             SynchMeTo(t,ref y);
-            var result = Vector.Zeros(y.Length);
+            var result = Vector.Zeros(DiffArrN);
             for(int i = 0; i < DiffArrN; i++) {
                 result[i] = DiffArr[i].MyDiff.GetVal(t);
             }
@@ -247,6 +250,7 @@ namespace Experiment {
         }
 
         public ScnObjDummy() {
+            FlagDict.Add("TimeLimit",TimeFlag);
             ResetAllParams();
         }
 
@@ -288,6 +292,11 @@ namespace Experiment {
                    value is double ? (double)value :
                    value is decimal ? Decimal.ToDouble((decimal)value) :
                    0d;
+        }
+
+        public double TimeLimit { get; set; } = 300d;
+        public bool TimeFlag(params SolPoint[] sp) {
+            return sp[0].T >= TimeLimit;
         }
     }
 }

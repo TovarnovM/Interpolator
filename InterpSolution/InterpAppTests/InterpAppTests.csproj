@@ -71,6 +71,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Interp2DTests.cs" />
+    <Compile Include="InterpTests.cs" />
     <Compile Include="InterpXYTests.cs" />
     <Compile Include="LevelLineTests.cs" />
     <Compile Include="PotentGraff2DTests.cs" />

@@ -10,7 +10,7 @@ using Sharp3D.Math.Core;
 namespace MultiGenetic {
     public class PopulationDE : Population {
               
-        public PopulationDE(int minSize, int maxSize, IChromosome adamChromosome) : base(minSize, maxSize, adamChromosome) {
+        public PopulationDE(int minSize, int maxSize, ChromosomeDE adamChromosome) : base(minSize, maxSize, adamChromosome) {
         }
 
 

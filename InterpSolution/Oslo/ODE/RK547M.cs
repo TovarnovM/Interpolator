@@ -13,6 +13,7 @@ namespace Microsoft.Research.Oslo
     {
         private static double defaultInitStep = 0.1;
 
+
         // <summary>Simple Euler implementation with fixed time step. Not intended for practical use</summary>
         //[Obsolete("Euler method is provided only as an example")]
         public static IEnumerable<SolPoint> Euler(double t0, Vector x0, Func<double, Vector, Vector> f)
@@ -51,6 +52,45 @@ namespace Microsoft.Research.Oslo
         }
 
 
+
+        public static IEnumerable<SolPoint> MidPoint(double t0,Vector x0,Func<double,Vector,Vector> f) {
+            return MidPoint(t0,x0,f,Options.Default);
+        }
+
+        //[Obsolete("Euler method is provided only as an example")]
+        public static IEnumerable<SolPoint> MidPoint(double t0,Vector x0,Func<double,Vector,Vector> f,Options opts) {
+            double t = t0;
+            Vector x = x0;
+            int n = x0.Length;
+            double dt = opts.InitialStep;
+            if(dt == 0.0) {
+                dt = defaultInitStep;
+                opts.InitialStep = dt;
+            }
+            var dt2 = 0.5 * dt;
+
+            Vector x1 = f(t,x);
+            // Output initial point
+            yield return new SolPoint(t0,x0.Clone());
+
+            while(true) // Can produce any number of solution points
+            {
+                Vector x2 = f(t+dt2,x+ dt2*x1);
+                x = x + dt * x2;
+                t = t + dt; //Go to the next point of our time grid
+                x1 = f(t,x);
+                yield return new SolPoint(t,x);
+            }
+        }
+        //[Obsolete("Fixed step RK45 method is provided only as an example")]        
+        public static IEnumerable<SolPoint> MidPoint(double t0,Vector x0,Func<double,Vector,Vector> f,double initialStep = 0.1d) {
+            var opt = Options.Default;
+            opt.InitialStep = initialStep;
+            return MidPoint(t0,x0,f,opt);
+        }
+
+
+
         //[Obsolete("Fixed step RK45 method is provided only as an example")]        
         public static IEnumerable<SolPoint> RK45(double t0, Vector x0, Func<double, Vector, Vector> f, double initialStep = 0.1d)
         {
@@ -76,11 +116,12 @@ namespace Microsoft.Research.Oslo
             }
 
             //Output initial point
+            Vector x1 = f(t,x);
             yield return new SolPoint(t0, x0.Clone());
-
+            
             while (true) // Can produce any number of solution points
             {
-                Vector x1 = f(t, x);
+                
                 Vector xx = x + x1 * (dt / 2.0);
                 Vector x2 = f(t + dt / 2.0, xx);
                 xx = x + x2 * (dt / 2.0);
@@ -89,6 +130,7 @@ namespace Microsoft.Research.Oslo
                 Vector x4 = f(t + dt, xx);
                 x = x + (dt / 6.0) * (x1 + 2.0 * x2 + 2.0 * x3 + x4);
                 t = t + dt; //Go to the next point of our time grid
+                x1 = f(t,x);
                 yield return new SolPoint(t, x);
             }
         }
