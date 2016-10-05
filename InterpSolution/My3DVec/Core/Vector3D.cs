@@ -154,10 +154,17 @@ namespace Sharp3D.Math.Core
 		/// <summary>
 		/// Gets 4D vect with w=0 (Direction Vector)
 		/// </summary>
-		public Vector4D Dir {
+		public Vector3D Dir {
 			get {
-				return new Vector4D(_x, _y, _z, 0d); 
+				return Norm; 
 			}
+            set {
+                var l = GetLength();
+                var dir = value.Norm;
+                _x = dir.X * l;
+                _x = dir.Y * l;
+                _z = dir.Z * l;
+            }
 		}
 
         /// <summary>
@@ -170,6 +177,15 @@ namespace Sharp3D.Math.Core
             set {
                 _x = value.X;
                 _y = value.Y;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Vector3D Norm {
+            get {
+                return GetUnit();
             }
         }
 
@@ -539,18 +555,93 @@ namespace Sharp3D.Math.Core
 				(System.Math.Abs(v.Z - u.Z) <= tolerance)
 				);
 		}
-		#endregion
 
-		#region Public Methods
-		/// <summary>
-		/// Scale the vector so that its length is 1.
-		/// </summary>
-		public void Normalize()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="t0"></param>
+        /// <param name="v0"></param>
+        /// <param name="t1"></param>
+        /// <param name="v1"></param>
+        /// <returns></returns>
+        public static Vector3D Lerp(double t,double t0,Vector3D v0,double t1,Vector3D v1) {
+            return (v0 * (t1 - t) + v1 * (t - t0)) / (t1 - t0);
+        }
+
+        /// <summary>
+        /// Ѕыстрый метод определени€ ѕ≈–≈—≈„≈Ќ»я 2х параллепипедов (грани параллельны х,у,z) 
+        /// </summary>
+        /// <param name="a0"></param>
+        /// <param name="a1"></param>
+        /// <param name="b0"></param>
+        /// <param name="b1"></param>
+        /// <returns></returns>
+        public static bool BoundingBoxesIntersect(Vector3D a0,Vector3D a1,Vector3D b0,Vector3D b1) {
+            return     System.Math.Min(a0.X,a1.X) <= System.Math.Max(b0.X,b1.X)
+                    && System.Math.Max(a0.X,a1.X) >= System.Math.Min(b0.X,b1.X)
+                    && System.Math.Min(a0.Y,a1.Y) <= System.Math.Max(b0.Y,b1.Y)
+                    && System.Math.Max(a0.Y,a1.Y) >= System.Math.Min(b0.Y,b1.Y)
+                    && System.Math.Min(a0.Z,a1.Z) <= System.Math.Max(b0.Z,b1.Z)
+                    && System.Math.Max(a0.Z,a1.Z) >= System.Math.Min(b0.Z,b1.Z);
+        }
+
+        /// <summary>
+        /// ѕересечет ли точка, движуща€с€ равномерно от точки arr0 до точки arr1, нашу цель(сферу радиуцсом Radius), движущуюс€ равномерно 
+        /// от точки trg0 до точки trg1. Ѕудем считать, что в момент времени t0 - точка находитс€ в arr0, наша цель (сфера) в точке trg0, 
+        /// в момент времени t1 - точка - в arr1, цель - в trg1;
+        /// </summary>
+        /// <param name="arr0"></param>
+        /// <param name="arr1"></param>
+        /// <param name="trg0"></param>
+        /// <param name="trg1"></param>
+        /// <param name="radius"></param>
+        /// <returns>-1 - если не пересечет, [0;1]  - дол€ вектора в момент пересечени€</returns>
+        public static double HitRadius(Vector3D arr0,Vector3D arr1,Vector3D trg0,Vector3D trg1, double radius) {
+            var v0 = arr0 - trg0;
+            if(v0.GetLength() <= radius)
+                return 0d;
+            var v1 = arr1 - trg1;
+            var c1 = v0.GetLengthSquared();
+            var c2 = Vector3D.DotProduct(v0,v1);
+            var c3 = v1.GetLengthSquared();
+            var r2 = radius * radius;
+
+            var a = c1 - 2 * c2 + c3;
+            var b = 2 * c2 - 2 * c1;
+            var c = c1 - r2;
+            if(c > 0 && a + b + c > 0)
+                return -1d;
+            if(System.Math.Abs(a) < MathFunctions.EpsilonD) {
+                var ans = -c / b;
+                return ans >= 0d && ans <= 1d ? ans : -1d;
+            } else {
+                var d = b * b - 4 * a * c;
+                if(d < 0)
+                    return -1d;
+                var x1 = (-b + System.Math.Sqrt(d)) / (2 * a);
+                var xx2 = (-b - System.Math.Sqrt(d)) / (2 * a);
+                var x2 = System.Math.Max(x1,xx2);
+                x1 = System.Math.Min(x1,xx2);
+                return
+                    x1 >= 0d && x1 <= 1d ? x1 :
+                    x2 >= 0d && x2 <= 1d ? x2 :
+                    -1d;
+            }
+
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Scale the vector so that its length is 1.
+        /// </summary>
+        public void Normalize()
 		{
 			double length = GetLength();
 			if (length == 0)
 			{
-				throw new DivideByZeroException("Trying to normalize a vector with length of zero.");
+                return;
 			}
 
 			_x /= length;
@@ -824,16 +915,34 @@ namespace Sharp3D.Math.Core
 		{
 			return Vector3D.Multiply(v,s);
 		}
-		/// <summary>
-		/// Divides a vector by a scalar.
-		/// </summary>
-		/// <param name="v">A <see cref="Vector3D"/> instance.</param>
-		/// <param name="s">A scalar</param>
-		/// <returns>A new <see cref="Vector3D"/> containing the quotient.</returns>
-		/// <remarks>
-		/// result[i] = v[i] / s;
-		/// </remarks>
-		public static Vector3D operator/(Vector3D v, double s)
+        /// <summary>
+        /// DOT prod a vector by a vector.
+        /// </summary>
+        /// <param name="v1">A <see cref="Vector3D"/> instance.</param>
+        /// <param name="v2">A scalar.</param>
+        /// <returns>A new <see cref="Vector3D"/> containing the result.</returns>
+        public static double operator *(Vector3D v1,Vector3D v2) {
+            return Vector3D.DotProduct(v1,v2);
+        }
+        /// <summary>
+        /// CROSS prod a vector by a vector.
+        /// </summary>
+        /// <param name="v1">A <see cref="Vector3D"/> instance.</param>
+        /// <param name="v2">A scalar.</param>
+        /// <returns>A new <see cref="Vector3D"/> containing the result.</returns>
+        public static Vector3D operator &(Vector3D v1,Vector3D v2) {
+            return Vector3D.CrossProduct(v1,v2);
+        }
+        /// <summary>
+        /// Divides a vector by a scalar.
+        /// </summary>
+        /// <param name="v">A <see cref="Vector3D"/> instance.</param>
+        /// <param name="s">A scalar</param>
+        /// <returns>A new <see cref="Vector3D"/> containing the quotient.</returns>
+        /// <remarks>
+        /// result[i] = v[i] / s;
+        /// </remarks>
+        public static Vector3D operator/(Vector3D v, double s)
 		{
 			return Vector3D.Divide(v,s);
 		}

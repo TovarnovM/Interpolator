@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="9.8066" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1</double>
+      <InterpDouble Value="9.8036" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>2</double>
+      <InterpDouble Value="9.8005" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>3</double>
+      <InterpDouble Value="9.7974" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>4</double>
+      <InterpDouble Value="9.7943" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>5</double>
+      <InterpDouble Value="9.7912" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>6</double>
+      <InterpDouble Value="9.7882" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>8</double>
+      <InterpDouble Value="9.782" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>10</double>
+      <InterpDouble Value="9.7759" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>15</double>
+      <InterpDouble Value="9.7605" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>20</double>
+      <InterpDouble Value="9.7452" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>50</double>
+      <InterpDouble Value="9.6542" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>80</double>
+      <InterpDouble Value="9.5644" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>100</double>
+      <InterpDouble Value="9.505" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>120</double>
+      <InterpDouble Value="9.447" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>500</double>
+      <InterpDouble Value="8.45" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1000</double>
+      <InterpDouble Value="7.36" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>10000</double>
+      <InterpDouble Value="1.5" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>50000</double>
+      <InterpDouble Value="0.125" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>400000</double>
+      <InterpDouble Value="0.0025" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>G(H) [m/s^2], H [km] </Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

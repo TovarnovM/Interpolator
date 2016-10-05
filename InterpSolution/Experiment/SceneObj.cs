@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 namespace Experiment {
     public delegate bool FlagFunct(params SolPoint[] sp);
 
-    public interface IScnObj : INamedChild {
+    public interface IScnObj : INamedChild, IDisposable {
         List<string> AllParamsNames { get; }
         IEnumerable<IScnPrm> GetAllParams();
         Vector GetAllParamsValues(double t,Vector y);
@@ -29,6 +29,7 @@ namespace Experiment {
         Action<double> SynchMeAfter { get; set; }
         Action RebuildStructureAction { get; set; }
         void SetParam(string name,object value);
+
 
         List<ILaw> Laws { get; }
         void AddLaw(ILaw newLaw);
@@ -76,6 +77,7 @@ namespace Experiment {
             AllParamsNames.Clear();
             foreach(var prm in GetAllParams()) {
                 AllParamsNames.Add(prm.FullName);
+                prm.NumInVector = -1;
             }
 
             var diffArrSeq = GetDiffPrms();
@@ -84,6 +86,9 @@ namespace Experiment {
             }
             DiffArr = diffArrSeq.ToArray();
             DiffArrN = DiffArr.Length;
+            for(int i = 0; i < DiffArrN; i++) {
+                DiffArr[i].NumInVector = i;
+            }
             return new Vector(diffArrSeq.Select(prm => prm.GetVal(toTime)).ToArray());
         }
 
@@ -215,7 +220,7 @@ namespace Experiment {
         public void ResetParam(string nameOfProp) {
             RemoveParam(nameOfProp);
             var currVal = (double)this.GetType().GetProperty(nameOfProp).GetGetMethod().Invoke(this,null);
-
+            
             var scnParam = new ScnPrm(nameOfProp,this,currVal);
             this.GetType().GetProperty("p" + nameOfProp).GetSetMethod().Invoke(this,new object[] { scnParam });
 
@@ -294,9 +299,28 @@ namespace Experiment {
                    0d;
         }
 
-        public double TimeLimit { get; set; } = 300d;
-        public bool TimeFlag(params SolPoint[] sp) {
+        public static double TimeLimit { get; set; } = 300d;
+        public static bool TimeFlag(params SolPoint[] sp) {
             return sp[0].T >= TimeLimit;
         }
+
+        public virtual void Dispose() {
+            DiffArr = null;
+            Prms.Clear();
+            Prms = null;
+            foreach(var ch in Children) {
+                ch.Dispose();
+            }
+            Children.Clear();
+            Children = null;
+            AllParamsNames.Clear();
+            AllParamsNames = null;
+            Laws.Clear();
+            SynchMeBefore = null;
+            SynchMeAfter = null;
+            RebuildStructureAction = null;
+            FlagDict.Clear();
+            FlagDict = null;
+    }
     }
 }

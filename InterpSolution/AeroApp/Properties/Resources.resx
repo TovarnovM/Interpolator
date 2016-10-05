@@ -211,4 +211,16 @@
   <data name="_5_16_3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\5_16_3D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
   </data>
+  <data name="Atmo_A_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Atmo_A_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="Atmo_Ro_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Atmo_Ro_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="G_1D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\G_1D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
+  <data name="Fisher_3D" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Fisher_3D.xml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;windows-1251</value>
+  </data>
 </root>

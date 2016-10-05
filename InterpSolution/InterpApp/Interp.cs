@@ -9,7 +9,7 @@ using System.Windows;
 using System.Xml.Serialization;
 
 namespace Interpolator {
-    public interface IInterpElem : ICloneable {
+    public interface IInterpElem : ICloneable,IDisposable {
         double GetV(params double[] t);
     }
     public interface IInterpParams {
@@ -37,6 +37,9 @@ namespace Interpolator {
 
         public virtual object Clone() {
             return new InterpDouble(Value);
+        }
+
+        public virtual void Dispose() {            
         }
 
         public InterpDouble(double value) {
@@ -397,6 +400,15 @@ namespace Interpolator {
             CopyParamsTo(myClone);
             return myClone;
         }
+
+        public virtual void Dispose() {
+            foreach(var item in _data) {
+                item.Value.Dispose();
+            }
+            _data.Clear();
+            _data = null;
+
+        }
     }
 
     [XmlRoot(nameof(InterpXY))]
@@ -606,6 +618,19 @@ namespace Interpolator {
         }
         public static InterpXY LoadFromXmlFile(string fileName) => InterpXY.LoadFromXmlFile<InterpXY>(fileName);
         public static InterpXY LoadFromXmlString(string fileStr) => InterpXY.LoadFromXmlString<InterpXY>(fileStr);
+        public override void Dispose() {
+            base.Dispose();
+            _x = null;
+            _y = null;
+            _k = null;
+            _b = null;
+        }
+
+        public IEnumerable<Vector> Points() {
+            foreach(var item in _data) {
+                yield return new Vector(item.Key,item.Value.Value);
+            }
+        }
     }
 
     [XmlRoot(nameof(Interp2D))]
@@ -825,6 +850,12 @@ namespace Interpolator {
             var myClone = new LevelLine(Value);
             myClone.pointsList.AddRange(pointsList);
             return myClone;
+        }
+
+        public override void Dispose() {
+            base.Dispose();
+            pointsList.Clear();
+            pointsList = null;
         }
     }
     /// <summary>

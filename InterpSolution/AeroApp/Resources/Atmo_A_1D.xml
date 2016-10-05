@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="340.29" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>50</double>
+      <InterpDouble Value="340.1" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>100</double>
+      <InterpDouble Value="339.91" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>200</double>
+      <InterpDouble Value="339.53" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>300</double>
+      <InterpDouble Value="339.14" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>400</double>
+      <InterpDouble Value="338.76" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>500</double>
+      <InterpDouble Value="338.38" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>600</double>
+      <InterpDouble Value="337.98" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>700</double>
+      <InterpDouble Value="337.6" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>800</double>
+      <InterpDouble Value="337.21" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>900</double>
+      <InterpDouble Value="336.82" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1000</double>
+      <InterpDouble Value="336.43" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>5000</double>
+      <InterpDouble Value="320.54" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>10000</double>
+      <InterpDouble Value="299.53" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>20000</double>
+      <InterpDouble Value="295.07" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>50000</double>
+      <InterpDouble Value="329.8" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>80000</double>
+      <InterpDouble Value="282.54" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>a(H) [m/s], H [m]</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

@@ -97,5 +97,11 @@ namespace Experiment.Tests {
             Assert.AreEqual(1d,det,0.000001);
             Assert.AreEqual(3d,ident.M11 + ident.M22 + ident.M33,0.000001);
         }
+
+        [TestMethod()]
+        public void Stup() {
+            var z = Vector3D.CrossProduct(Vector3D.XAxis,Vector3D.XAxis);
+            //z.Normalize();
+        }
     }
 }

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<InterpXY xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <_data>
+    <DoubleInterpDouble>
+      <double>0</double>
+      <InterpDouble Value="1.225" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.05</double>
+      <InterpDouble Value="1.219" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.1</double>
+      <InterpDouble Value="1.213" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.2</double>
+      <InterpDouble Value="1.202" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.3</double>
+      <InterpDouble Value="1.19" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>0.5</double>
+      <InterpDouble Value="1.167" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>1</double>
+      <InterpDouble Value="1.112" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>2</double>
+      <InterpDouble Value="1.007" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>3</double>
+      <InterpDouble Value="0.909" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>5</double>
+      <InterpDouble Value="0.736" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>8</double>
+      <InterpDouble Value="0.526" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>10</double>
+      <InterpDouble Value="0.414" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>12</double>
+      <InterpDouble Value="0.312" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>15</double>
+      <InterpDouble Value="0.195" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>20</double>
+      <InterpDouble Value="0.089" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>50</double>
+      <InterpDouble Value="0.001027" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>100</double>
+      <InterpDouble Value="5.55E-07" />
+    </DoubleInterpDouble>
+    <DoubleInterpDouble>
+      <double>120</double>
+      <InterpDouble Value="2E-08" />
+    </DoubleInterpDouble>
+  </_data>
+  <Title>Ro(H) [kg/m^3], H[km]</Title>
+  <ET_left>etValue</ET_left>
+  <ET_right>etValue</ET_right>
+  <InterpType>itLine</InterpType>
+</InterpXY>

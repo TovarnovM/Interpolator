@@ -14914,6 +14914,11 @@
             
             </summary>
         </member>
+        <member name="P:Sharp3D.Math.Core.Vector3D.Norm">
+            <summary>
+            
+            </summary>
+        </member>
         <member name="M:Sharp3D.Math.Core.Vector3D.System#ICloneable#Clone">
             <summary>
             Creates an exact copy of this <see cref="T:Sharp3D.Math.Core.Vector3D"/> object.
@@ -15168,6 +15173,40 @@
             <param name="tolerance">The tolerance value used to test approximate equality.</param>
             <returns><see langword="true"/> if the two vectors are approximately equal; otherwise, <see langword="false"/>.</returns>
         </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.Lerp(System.Double,System.Double,Sharp3D.Math.Core.Vector3D,System.Double,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            
+            </summary>
+            <param name="t"></param>
+            <param name="t0"></param>
+            <param name="v0"></param>
+            <param name="t1"></param>
+            <param name="v1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.BoundingBoxesIntersect(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            Быстрый метод определения ПЕРЕСЕЧЕНИЯ 2х параллепипедов (грани параллельны х,у,z) 
+            </summary>
+            <param name="a0"></param>
+            <param name="a1"></param>
+            <param name="b0"></param>
+            <param name="b1"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.HitRadius(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D,System.Double)">
+            <summary>
+            Пересечет ли точка, движущаяся равномерно от точки arr0 до точки arr1, нашу цель(сферу радиуцсом Radius), движущуюся равномерно 
+            от точки trg0 до точки trg1. Будем считать, что в момент времени t0 - точка находится в arr0, наша цель (сфера) в точке trg0, 
+            в момент времени t1 - точка - в arr1, цель - в trg1;
+            </summary>
+            <param name="arr0"></param>
+            <param name="arr1"></param>
+            <param name="trg0"></param>
+            <param name="trg1"></param>
+            <param name="radius"></param>
+            <returns>-1 - если не пересечет, [0;1]  - доля вектора в момент пересечения</returns>
+        </member>
         <member name="M:Sharp3D.Math.Core.Vector3D.Normalize">
             <summary>
             Scale the vector so that its length is 1.
@@ -15355,6 +15394,22 @@
             </summary>
             <param name="v">A <see cref="T:Sharp3D.Math.Core.Vector3D"/> instance.</param>
             <param name="s">A scalar.</param>
+            <returns>A new <see cref="T:Sharp3D.Math.Core.Vector3D"/> containing the result.</returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.op_Multiply(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            DOT prod a vector by a vector.
+            </summary>
+            <param name="v1">A <see cref="T:Sharp3D.Math.Core.Vector3D"/> instance.</param>
+            <param name="v2">A scalar.</param>
+            <returns>A new <see cref="T:Sharp3D.Math.Core.Vector3D"/> containing the result.</returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.op_BitwiseAnd(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            CROSS prod a vector by a vector.
+            </summary>
+            <param name="v1">A <see cref="T:Sharp3D.Math.Core.Vector3D"/> instance.</param>
+            <param name="v2">A scalar.</param>
             <returns>A new <see cref="T:Sharp3D.Math.Core.Vector3D"/> containing the result.</returns>
         </member>
         <member name="M:Sharp3D.Math.Core.Vector3D.op_Division(Sharp3D.Math.Core.Vector3D,System.Double)">

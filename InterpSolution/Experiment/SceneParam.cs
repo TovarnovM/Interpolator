@@ -22,6 +22,7 @@ namespace Experiment {
         void SealInterp(InterpXY interp);
         bool IsDiff { get; }
         bool IsNeedSynch { get; set; }
+        int NumInVector { get; set; }
     }
 
     public interface INamedChild {
@@ -86,6 +87,8 @@ namespace Experiment {
         public bool IsDiff { get; private set; } = false;
 
         public bool IsNeedSynch { get; set; } = false;
+
+        public int NumInVector { get; set; } = -1;
 
 
     }

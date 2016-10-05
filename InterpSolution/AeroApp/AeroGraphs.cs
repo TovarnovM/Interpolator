@@ -91,6 +91,9 @@ namespace RocketAero {
             }
 
         }
+        public double Fisher(double alpha, int chisl, int znam) {
+            return GetV("Fisher",znam,chisl,alpha);
+        }
         public static double PIdiv180 = 0.01745329251994329576923690768489D;
         public static double _180divPI = 57.295779513082320876798154814105D;
         public static double M2min1(double mach) {
@@ -100,5 +103,19 @@ namespace RocketAero {
         public object Clone() {
             return new AeroGraphs(this);
         }
+
+        public T GetGraphCopy<T>(string graphNum) where T : IInterpElem {
+            try {
+                return (T)_graphs[CutMyString(graphNum)].Clone();
+            }
+            catch(Exception ex) {
+                Debug.WriteLine(ex.Message);
+                return default(T);
+            }
+        }
+        private static readonly Lazy<AeroGraphs> lazy =
+            new Lazy<AeroGraphs>(() => new AeroGraphs());
+
+        public static AeroGraphs Instance { get { return lazy.Value; } }
     }
 }

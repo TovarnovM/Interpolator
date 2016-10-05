@@ -59,9 +59,6 @@
       <HintPath>..\packages\GeneticSharp.1.0.100\lib\net35\NCalc.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RemotingLite">
-      <HintPath>MPAIPbin\RemotingLite.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -71,6 +68,7 @@
     <Compile Include="Law.cs" />
     <Compile Include="Mass.cs" />
     <Compile Include="MatPoint.cs" />
+    <Compile Include="Missile1.cs" />
     <Compile Include="MissileTarget.cs" />
     <Compile Include="Orient3D.cs" />
     <Compile Include="Position.cs" />
@@ -86,6 +84,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AeroApp\AeroApp.csproj">
+      <Project>{08247cc2-aa89-43ba-a7b1-c1311f7a52cb}</Project>
+      <Name>AeroApp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InterpApp\InterpApp.csproj">
       <Project>{5c93bceb-59bc-4510-823e-8860581b1332}</Project>
       <Name>InterpApp</Name>

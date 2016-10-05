@@ -100,7 +100,26 @@ namespace Microsoft.Research.Oslo
         }
 
 
-
+        /// <summary>Implementation of Runge-Kutta algoritm with per-point accurancy control from
+        /// Dormand and Prince article.
+        /// (J.R.Dormand, P.J.Prince, A family of embedded Runge-Kuttae formulae)</summary>
+        /// <param name="t0">Left end of current time span</param>
+        /// <param name="x0">Initial phase vector value</param>
+        /// <param name="f">System right parts vector function</param>
+        /// <example>Let our problem will be: 
+        /// dx/dt=y+1,
+        /// dy/dt=-x+2.
+        /// x(0)=0, y(0)=1.
+        /// To solve it, we just have to write
+        /// <code>
+        /// var sol=Ode.RK547M(0,new Vector(0,1),(t,x)=>new Vector(y+1,-x+2));
+        /// </code>
+        /// and then enumerate solution point from <see cref="System.IEnumerable"/> 'sol'.
+        /// </example>
+        /// <returns>Endless sequence of solution points</returns>
+        public static IEnumerable<SolPoint> RK547M(double t0,Vector x0,Func<double,Vector,Vector> f, double nevermind = 0) {
+            return RK547M(t0,x0,f,Options.Default);
+        }
 
         //<summary>Simple RK implementation with fixed time step. Not intended for practical use</summary>
         //[Obsolete("Fixed step RK45 method is provided only as an example")]

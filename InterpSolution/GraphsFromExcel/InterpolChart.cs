@@ -382,17 +382,26 @@ namespace GraphsFromExcel
         {
             try
             {
-                var tmpInterp= Interp2D.LoadFromXmlFile(@"G:\OneDrive\графики\3_35_M2_old.xml");
-                foreach (var itemXY in tmpInterp.Data.Values)
-                {
+                string fn = @"C:\Users\Миша\OneDrive\графики\Fisher\Fisher_alpha_001.xml";
+                var tmpInterp001= Interp2D.LoadFromXmlFile(fn);
+                fn = @"C:\Users\Миша\OneDrive\графики\Fisher\Fisher_alpha_01.xml";
+                var tmpInterp01 = Interp2D.LoadFromXmlFile(fn);
+                fn = @"C:\Users\Миша\OneDrive\графики\Fisher\Fisher_alpha_005.xml";
+                var tmpInterp005 = Interp2D.LoadFromXmlFile(fn);
+                fn = @"C:\Users\Миша\OneDrive\графики\Fisher\Fisher_alpha_0025.xml";
+                var tmpInterp0025 = Interp2D.LoadFromXmlFile(fn);
 
-                
-                        foreach (var item in itemXY.Data.Values)
-                        {
-                            item.Value = 0.4 + item.Value*2.4/2.828;
-                        }
-                }
-                tmpInterp.SaveToXmlFile(@"G:\OneDrive\графики\3_35_M2.xml");
+                var tmpInterp = new Interp3D();
+                tmpInterp.AddElement(0.1,tmpInterp01);
+                tmpInterp.AddElement(0.05,tmpInterp005);
+                tmpInterp.AddElement(0.025,tmpInterp0025);
+                tmpInterp.AddElement(0.01,tmpInterp001);
+
+
+
+
+
+                tmpInterp.SaveToXmlFile(@"C:\Users\Миша\OneDrive\графики\Fisher\Fisher_3D.xml");
 
             }
             catch (Exception ex)
