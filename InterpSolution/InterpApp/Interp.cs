@@ -343,7 +343,7 @@ namespace Interpolator {
             return Title;
         }
         public void SaveToXmlFile(string fileName) {
-            try {
+            try {                
                 XmlSerializer serial = new XmlSerializer(this.GetType());
                 var sw = new StreamWriter(fileName);
                 serial.Serialize(sw, this);
