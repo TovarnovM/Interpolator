@@ -2,7 +2,7 @@
 using System.Linq;
 using System;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public interface IForceCenter {
         double Value { get; set; }
         IScnPrm pValue { get; set; }

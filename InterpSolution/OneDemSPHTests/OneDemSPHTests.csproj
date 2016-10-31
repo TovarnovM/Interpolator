@@ -3,12 +3,12 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A310D79C-7F6F-47C3-AF26-A31468E4F755}</ProjectGuid>
+    <ProjectGuid>{442FEDCC-B1E4-4130-A2AE-E8780362B9B9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExperimentTests</RootNamespace>
-    <AssemblyName>ExperimentTests</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <RootNamespace>OneDemSPHTests</RootNamespace>
+    <AssemblyName>OneDemSPHTests</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -51,18 +51,13 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="Orient3DTests.cs" />
-    <Compile Include="PositionTests.cs" />
+    <Compile Include="OneDemExampleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
-      <Project>{441FF4C9-0F85-4470-A274-41408B420F86}</Project>
-      <Name>Sharp3D.Math</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SimpleIntegrator\SimpleIntegrator.csproj">
-      <Project>{fccf7d41-c6a6-4991-bfe3-769d77d9b314}</Project>
-      <Name>SimpleIntegrator</Name>
+    <ProjectReference Include="..\OneDemSPH\OneDemSPH.csproj">
+      <Project>{412316A3-C269-4951-97A4-580A16348602}</Project>
+      <Name>OneDemSPH</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

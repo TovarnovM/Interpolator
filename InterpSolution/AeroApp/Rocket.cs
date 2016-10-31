@@ -3,7 +3,7 @@ using System;
 
 namespace RocketAero {
     public class Rocket {
-        private double sss = Double.NaN;
+       // private double sss = Double.NaN;
         public AeroGraphs AeroGr { get; set; } = null;
         public double Aero_v { get; set; } = 1.52E-5;
         public double Aero_a { get; set; } = 340.3;

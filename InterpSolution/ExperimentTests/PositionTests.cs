@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Experiment;
+using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Experiment.Tests {
+namespace MyIntegrator.Tests {
     [TestClass()]
     public class PositionTests {
         [TestMethod()]

@@ -1,7 +1,7 @@
 ﻿using Sharp3D.Math.Core;
 using System;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public interface IModulus {
         void NormilizeDirection();
         double Modulus { get; set; }

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Math;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public class MissileTarget: Position3D {
         public double Radius { get; set; } = 1d;
         public IPosition3D Vel { get; set; }

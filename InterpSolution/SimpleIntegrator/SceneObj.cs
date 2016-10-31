@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public delegate bool FlagFunct(params SolPoint[] sp);
 
     public interface IScnObj : INamedChild, IDisposable {
@@ -268,6 +268,23 @@ namespace MyIntegrator {
             } else if(value is InterpXY) {
                 param.SealInterp((InterpXY)value);
             }
+        }
+
+        public bool SetDiff(string prmName, Func<double,double> dPrmdtF, string dname = "") {
+            return SetDiff(FindParam(prmName),dPrmdtF,dname);
+        }
+        public bool SetDiff(IScnPrm prm,Func<double,double> dPrmdtF,string dname = "") {
+            if(!Prms.Contains(prm))
+                return false;
+            var dprm = new ScnPrm();
+            dprm.GetVal = new Func<double,double>(dPrmdtF);
+
+            bool newname = dname == "";
+            if(!newname)
+                dprm.Name = dname;
+            AddDiffPropToParam(prm,dprm,getNewName: newname);
+            return true;
+
         }
 
         public static bool IsNumber(object value) {

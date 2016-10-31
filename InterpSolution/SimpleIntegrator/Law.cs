@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public interface ILaw : INamedChild {
         bool ApplyMe();
         bool Applyed { get; }

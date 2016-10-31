@@ -2,7 +2,7 @@
 using Interpolator;
 
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
 
     /// <summary>
     /// Параметр системы

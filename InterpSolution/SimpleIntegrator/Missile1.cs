@@ -8,7 +8,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace MyIntegrator {
+//namespace SimpleIntegrator {
 //    public class Missile1:Position3D {
 //        private InterpXY _GInterp;
 //        public double G { get { return _simpleEnv ? 9.81 : _GInterp.GetV(Y / 1000); } }
@@ -139,7 +139,7 @@
 //                Thrust.Add(T0,P1);
 //                Thrust.Add(T0 + Tau1,P2);
 //                Thrust.Add(T0 + Tau1 + Tau2,0d);
-                
+
 
 //            }
 //            catch(Exception) {

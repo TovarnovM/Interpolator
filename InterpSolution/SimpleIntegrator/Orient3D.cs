@@ -3,7 +3,7 @@ using Sharp3D.Math.Core;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
 
 
     public interface IOrient3D:IScnObj {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public interface IMaterialPoint : IOrient3D {
         IPosition3D Vel { get; set; }
         IPosition3D Acc { get; set; }

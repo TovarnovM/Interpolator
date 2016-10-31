@@ -1,7 +1,7 @@
 ﻿using Sharp3D.Math.Core;
 using System;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     public interface IMassPoint:IScnObj {
         double Value { get; set; }
         IScnPrm pValue { get; set; }

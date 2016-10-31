@@ -4,7 +4,7 @@ using Sharp3D.Math.Core;
 using System;
 using System.Diagnostics;
 
-namespace MyIntegrator {
+namespace SimpleIntegrator {
     class Program {
         static void Main(string[] args) {
             var mp = new MaterialObjectNewtow() { Name = "ball" };
