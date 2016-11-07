@@ -12,6 +12,8 @@ namespace SimpleIntegrator {
         IMassPoint Mass { get; set; }
         List<IForceCenter> Forces { get; set; }
         void AddForce(IForceCenter force,bool createNewSK);
+        Vector3D GetImpulse();
+        double GetEnergy();
 
     }
     /// <summary>
@@ -22,7 +24,8 @@ namespace SimpleIntegrator {
         public IPosition3D Acc { get; set; }
         public IMassPoint Mass { get; set; }
         public List<IForceCenter> Forces { get; set; }
-        public MaterialPointNewton() {
+        const string DEFNAME = "MatPoint";
+        public MaterialPointNewton(object x,object y,object z,string name = DEFNAME):base(x,y,z,name) {
             Vel = new Position3D("Vel");
             Acc = new Position3D("Acc");
             Mass = Mass == null ? new MassPoint(): Mass;
@@ -35,6 +38,10 @@ namespace SimpleIntegrator {
             Vel.AddDiffVect(Acc,false);
             SynchMeAfter += NewtonLaw;
         }
+
+        public MaterialPointNewton(Vector3D posVec,string name = DEFNAME) : this(posVec.X,posVec.Y,posVec.Z,name) { }
+        public MaterialPointNewton(string name = DEFNAME) : this(0d,0d,0d,name) { }
+
         public virtual void NewtonLaw(double t) {
             Vector3D fsumm = Vector3D.Zero;
             foreach(var force in Forces) {
@@ -48,6 +55,15 @@ namespace SimpleIntegrator {
             Forces.Add(force);
             force.SK = createNewSK || force.SK == null ? this : force.SK;
         }
+
+        public virtual Vector3D GetImpulse() {
+            return Mass.Value * Vel.Vec3D;
+        }
+
+        public virtual double GetEnergy() {
+            var vel =  Vel.Vec3D.GetLength();
+            return Mass.Value * vel * vel;
+        }
     }
 
     /// <summary>
@@ -60,15 +76,18 @@ namespace SimpleIntegrator {
         IPosition3D Eps { get; set; }
         new IMass3D Mass { get; set; }
         void AddMoment(IForceCenter moment,bool createNewSK);
+        Vector3D GetL();
+        double GetRotEnergy();
     }
 
-    public class MaterialObjectNewtow : MaterialPointNewton, IMaterialObject {
+    public class MaterialObjectNewton : MaterialPointNewton, IMaterialObject {
         public new IMass3D Mass { get; set; } = new Mass3D();
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
         public List<IForceCenter> Moments { get; set; }= new List<IForceCenter>();
         public List<IForce> ForcesWithFPoints { get; set; } = new List<IForce>();
-        public MaterialObjectNewtow():base() {
+        const string DEFNAME = "MatObj";
+        public MaterialObjectNewton(object x,object y,object z,string name = DEFNAME) : base(x,y,z,name) {
             AddChild(Omega);
             AddChild(Eps);
 
@@ -78,6 +97,10 @@ namespace SimpleIntegrator {
             AddDiffPropToParam(pQy,pdQYdt);
             AddDiffPropToParam(pQz,pdQZdt);
         }
+
+        public MaterialObjectNewton(Vector3D posVec,string name = DEFNAME) : this(posVec.X,posVec.Y,posVec.Z,name) { }
+        public MaterialObjectNewton(string name = DEFNAME) : this(0d,0d,0d,name) { }
+
         public override void NewtonLaw(double t) {
             base.NewtonLaw(t);
             var momSum = Vector3D.Zero;
@@ -113,5 +136,18 @@ namespace SimpleIntegrator {
         public double dQXdt { get; set; }
         public double dQYdt { get; set; }
         public double dQZdt { get; set; }
+
+        public override double GetEnergy() {
+            return GetRotEnergy() * base.GetEnergy();
+        }
+
+        public Vector3D GetL() {
+            return Mass.Tensor * Omega.Vec3D;
+        }
+
+        public double GetRotEnergy() {
+            var om = Omega.Vec3D;
+            return 0.5*om * (Mass.Tensor * om);
+        }
     }
 }

@@ -540,6 +540,52 @@ namespace Sharp3D.Math.Core
             double sin = System.Math.Sin(halfAngle);
             return new QuaternionD(System.Math.Cos(halfAngle), axis.X * sin, axis.Y * sin, axis.Z * sin);
         }
+
+        /// <summary>
+        /// Поворот от u к v
+        /// </summary>
+        /// <param name="u"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static QuaternionD FromTwoVectors(Vector3D u, Vector3D v) {
+            var norm_u_norm_v = System.Math.Sqrt(u.GetLengthSquared() * v.GetLengthSquared());
+            var w = u & v;
+            var q = new QuaternionD(norm_u_norm_v + u * v, w.X, w.Y, w.Z);
+            q.Normalize();
+            return q;
+        }
+        //    float norm_u_norm_v = sqrt(sqlength(u) * sqlength(v));
+        //    vec3 w = cross(u,v);
+        //    quat q = quat(norm_u_norm_v + dot(u,v),w.x,w.y,w.z);
+        //return normalize(q);
+        /// <summary>
+        /// Rotate vec by quat
+        /// </summary>
+        /// <param name="quat"></param>
+        /// <param name="vec"></param>
+        /// <returns></returns>
+        public static Vector3D Multiply(QuaternionD quat, Vector3D vec) {
+            double num = quat.X * 2d;
+            double num2 = quat.Y * 2d;
+            double num3 = quat.Z * 2d;
+            double num4 = quat.X * num;
+            double num5 = quat.Y * num2;
+            double num6 = quat.Z * num3;
+            double num7 = quat.X * num2;
+            double num8 = quat.X * num3;
+            double num9 = quat.Y * num3;
+            double num10 = quat.W * num;
+            double num11 = quat.W * num2;
+            double num12 = quat.W * num3;
+
+            return new Vector3D(
+                (1d - (num5 + num6)) * vec.X + (num7 - num12) * vec.Y + (num8 + num11) * vec.Z,
+                (num7 + num12) * vec.X + (1d - (num4 + num6)) * vec.Y + (num9 - num10) * vec.Z,
+                (num8 - num11) * vec.X + (num9 + num10) * vec.Y + (1d - (num4 + num5)) * vec.Z
+                );
+            
+        }
+
         #endregion
 
         #region Public Methods

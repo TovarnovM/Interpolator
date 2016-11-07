@@ -28,15 +28,16 @@ namespace OneDemSPH {
             InitializeComponent();
             vm = new ViewModel();
             DataContext = vm;
+
             pr = new OneDemExample();
             v0 = pr.Rebuild();
-            pr.dt = 0.0001;
-            sol = Ode.Euler(0,v0,pr.f,pr.dt).GetEnumerator();
+            pr.dt = 0.001;
+            sol = Ode.RK45(0,v0,pr.f,pr.dt).GetEnumerator();
             vm.Draw(pr);
         }
 
         private void button_Click(object sender,RoutedEventArgs e) {
-            for(int i = 0; i < 50; i++) {
+            for(int i = 0; i < 10; i++) {
                 sol.MoveNext();
             }
             

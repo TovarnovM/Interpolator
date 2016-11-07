@@ -13,7 +13,7 @@
             <RowDefinition Height="45*"/>
         </Grid.RowDefinitions>
         <oxy:PlotView Model="{Binding Model1}" Grid.Row="0"/>
-        <Button x:Name="button" Content="Click Me" HorizontalAlignment="Left" Height="45" VerticalAlignment="Top" Width="517" Click="button_Click" Grid.Row="1"/>
+        <Button x:Name="button" Content="Click Me" Click="button_Click" Grid.Row="1"/>
 
     </Grid>
 </Window>

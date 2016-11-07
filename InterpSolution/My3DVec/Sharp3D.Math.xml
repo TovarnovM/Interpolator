@@ -10865,6 +10865,22 @@
             <param name="angle">An angle.</param>
             <returns>A new <see cref="T:Sharp3D.Math.Core.QuaternionD"/> instance.</returns>
         </member>
+        <member name="M:Sharp3D.Math.Core.QuaternionD.FromTwoVectors(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            Поворот от u к v
+            </summary>
+            <param name="u"></param>
+            <param name="v"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.QuaternionD.Multiply(Sharp3D.Math.Core.QuaternionD,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            Rotate vec by quat
+            </summary>
+            <param name="quat"></param>
+            <param name="vec"></param>
+            <returns></returns>
+        </member>
         <member name="M:Sharp3D.Math.Core.QuaternionD.GetModulus">
             <summary>
             Gets the modulus of the quaternion.
@@ -15403,6 +15419,14 @@
             <param name="v1">A <see cref="T:Sharp3D.Math.Core.Vector3D"/> instance.</param>
             <param name="v2">A scalar.</param>
             <returns>A new <see cref="T:Sharp3D.Math.Core.Vector3D"/> containing the result.</returns>
+        </member>
+        <member name="M:Sharp3D.Math.Core.Vector3D.op_Multiply(Sharp3D.Math.Core.QuaternionD,Sharp3D.Math.Core.Vector3D)">
+            <summary>
+            Rotate
+            </summary>
+            <param name="quat"></param>
+            <param name="v"></param>
+            <returns></returns>
         </member>
         <member name="M:Sharp3D.Math.Core.Vector3D.op_BitwiseAnd(Sharp3D.Math.Core.Vector3D,Sharp3D.Math.Core.Vector3D)">
             <summary>

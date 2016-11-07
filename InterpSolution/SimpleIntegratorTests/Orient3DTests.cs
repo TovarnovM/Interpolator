@@ -103,5 +103,52 @@ namespace SimpleIntegrator.Tests {
             var z = Vector3D.CrossProduct(Vector3D.XAxis,Vector3D.XAxis);
             //z.Normalize();
         }
+
+        [TestMethod()]
+        public void RotateOXtoVecTest() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                var v = new Vector3D(min + (max - min)*rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOXtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.XAxis).GetLength(),0.0000001);
+            }
+
+        }
+        [TestMethod()]
+        public void RotateOYtoVecTest() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                var v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOYtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.YAxis).GetLength(),0.0000001);
+            }
+
+        }
+        [TestMethod()]
+        public void RotateOZtoVecTest() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                var v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOZtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.ZAxis).GetLength(),0.0000001);
+            }
+
+        }
+
     }
 }

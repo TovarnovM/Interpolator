@@ -641,6 +641,7 @@ namespace Sharp3D.Math.Core
 			double length = GetLength();
 			if (length == 0)
 			{
+                _x = 1d;
                 return;
 			}
 
@@ -924,6 +925,17 @@ namespace Sharp3D.Math.Core
         public static double operator *(Vector3D v1,Vector3D v2) {
             return Vector3D.DotProduct(v1,v2);
         }
+
+        /// <summary>
+        /// Rotate
+        /// </summary>
+        /// <param name="quat"></param>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public static Vector3D operator *(QuaternionD quat,Vector3D v) {
+            return QuaternionD.Multiply(quat, v);
+        }
+
         /// <summary>
         /// CROSS prod a vector by a vector.
         /// </summary>
@@ -959,13 +971,16 @@ namespace Sharp3D.Math.Core
 		{
 			return Vector3D.Divide(s,v);
 		}
-		#endregion
 
-		#region Array Indexing Operator
-		/// <summary>
-		/// Indexer ( [x, y] ).
-		/// </summary>
-		public double this[int index]
+
+
+        #endregion
+
+        #region Array Indexing Operator
+        /// <summary>
+        /// Indexer ( [x, y] ).
+        /// </summary>
+        public double this[int index]
 		{
 			get	
 			{

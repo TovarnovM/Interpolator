@@ -146,6 +146,24 @@ namespace SimpleIntegrator {
             }
         }
 
+        public Vector3D XAxis {
+            get {
+                return WorldTransformRot * Vector3D.XAxis;
+            }
+        }
+
+        public Vector3D YAxis {
+            get {
+                return WorldTransformRot * Vector3D.YAxis;
+            }
+        }
+
+        public Vector3D ZAxis {
+            get {
+                return WorldTransformRot * Vector3D.ZAxis;
+            }
+        }
+
         public void SynchQandM() {
             q.Normalize();
             m = QuaternionD.QuaternionToMatrix(q);
@@ -171,10 +189,16 @@ namespace SimpleIntegrator {
             SynchQandM();
         }
 
-        public Orient3D() {
+        const string DEFNAME = "Orient3D";
+
+        public Orient3D(object x,object y,object z,string name = DEFNAME) :base(x,y,z,name) {
             SynchMeBefore += MySynchMeBefore;
             RebuildStructureAction += RebuildTransformChain;
         }
+
+        public Orient3D(Vector3D posVec,string name = DEFNAME) : this(posVec.X,posVec.Y,posVec.Z,name) { }
+        public Orient3D(string name = DEFNAME) : this(0d,0d,0d,name) { }
+
 
         public void RebuildTransformChain() {
             TransformChain.Clear();
@@ -189,6 +213,21 @@ namespace SimpleIntegrator {
                     TransformChain.Add(orient);
 
             }
+        }
+        public void RotateVecToVec(Vector3D oldVec, Vector3D toVec) {
+            var rot = QuaternionD.FromTwoVectors(oldVec,toVec);
+            q = rot*q;
+            SynchQandM();
+        }
+
+        public void RotateOXtoVec(Vector3D toVec) {
+            RotateVecToVec(WorldTransformRot * Vector3D.XAxis,toVec);
+        }
+        public void RotateOYtoVec(Vector3D toVec) {
+            RotateVecToVec(WorldTransformRot * Vector3D.YAxis,toVec);
+        }
+        public void RotateOZtoVec(Vector3D toVec) {
+            RotateVecToVec(WorldTransformRot * Vector3D.ZAxis,toVec);
         }
 
     }

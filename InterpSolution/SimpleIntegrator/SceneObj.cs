@@ -259,6 +259,10 @@ namespace SimpleIntegrator {
             ResetAllParams();
         }
 
+        public ScnObjDummy(string name):this() {
+            Name = name;
+        }
+
         public void SetParam(string name,object value) {
             var param = this.FindParam(name);
             if(param == null)
@@ -267,6 +271,8 @@ namespace SimpleIntegrator {
                 param.SetVal(ToDouble(value));
             } else if(value is InterpXY) {
                 param.SealInterp((InterpXY)value);
+            } else if(value is Func<double,double>) {
+                param.GetVal = value as Func<double,double>;
             }
         }
 
