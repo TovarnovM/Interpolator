@@ -31,13 +31,13 @@ namespace OneDemSPH {
 
             pr = new OneDemExample();
             v0 = pr.Rebuild();
-            pr.dt = 0.001;
+            pr.dt = 0.005;
             sol = Ode.RK45(0,v0,pr.f,pr.dt).GetEnumerator();
             vm.Draw(pr);
         }
 
         private void button_Click(object sender,RoutedEventArgs e) {
-            for(int i = 0; i < 10; i++) {
+            for(int i = 0; i < 1; i++) {
                 sol.MoveNext();
             }
             

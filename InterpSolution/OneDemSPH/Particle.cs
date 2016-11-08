@@ -142,13 +142,14 @@ namespace OneDemSPH {
         public List<Particle> Wall { get; set; } = new List<Particle>();
         public List<Particle> AllParticles { get; set; } = new List<Particle>();
 
-        const int scaler = 3;
-        const double boardL = 0.5;
+        const int scaler = 4;
+        const double boardL = 0.6;
+        const int perc = 80;
 
         public int Np { get; set; } = 100*scaler;
         public int Np_wall { get; set; } = 15 * scaler;
         public double dt { get; set; } = 0.001;
-        public double h { get; set; } = boardL / 80 * 3;
+        public double h { get; set; } = boardL / ((100-perc)*scaler) * 2;
         public double gamma { get; set; } = 1.4;
         public double alpha { get; set; } = 1d;
         public double betta { get; set; } = 2d;
@@ -156,25 +157,37 @@ namespace OneDemSPH {
 
         public OneDemExample() : base() {
 
-            int n_pm = 80 *scaler;
+            int n_pm = perc * scaler;
             
-            for(int i = 1; i <= Np; i++) {
 
-                bool board = i < n_pm+1;
+            var dx1 = boardL/n_pm;
+            for(int i = 0; i < n_pm; i++) {
                 Particles.Add(new Particle() {
                     Name = i.ToString(),
-                    X = board ? 0.0 + i * boardL / n_pm : boardL + (i - n_pm) * boardL / (Np - n_pm),
-                    Ro = board ? 1 : 0.25,
-                    P = board ? 1 : 0.1795,
-                    E = board ? 2.5 : 1.795,
+                    X = -boardL + i * dx1,
+                    Ro = 1,
+                    P = 1,
+                    E = 2.5,
+                    V = 0
+                });
+            }
+            var dx2 = boardL/(Np - n_pm);
+            for(int i = n_pm; i < Np; i++) {
+                
+                Particles.Add(new Particle() {
+                    Name = i.ToString(),
+                    X = (i-n_pm) * dx2,
+                    Ro = 0.25,
+                    P = 0.1795,
+                    E = 1.795,
                     V = 0
                 });
             }
 
-            for(int i = 1; i > -Np_wall; i--) {
+            for(int i = -1; i > -Np_wall - 1; i--) {
                 Wall.Add(new Particle() {
                     Name = (i).ToString(),
-                    X = 0.0 + (i - 1) * boardL / n_pm,
+                    X = -boardL + (i) * dx1,
                     Ro = 1,
                     P = 1,
                     E = 2.5,
@@ -185,7 +198,7 @@ namespace OneDemSPH {
             for(int i = Np + 1; i <= Np + Np_wall; i++) {
                 Wall.Add(new Particle() {
                     Name = (i).ToString(),
-                    X = boardL + (i - n_pm) * boardL / (Np - n_pm),
+                    X =  (i-n_pm-1) * dx2,
                     Ro = 0.25,
                     P = 0.1795,
                     E = 1.795,
@@ -197,16 +210,7 @@ namespace OneDemSPH {
             var all = Particles.Concat(Wall).OrderBy(p => p.X);
             AllParticles.AddRange(all);
 
-            AllParticles.ForEach(p => p.M = 1.0 / 160.0);
-            foreach(var p in AllParticles.Where(p => p.P > 0.3)) {
-                p.M = 0.5 / Particles.Where(pp => pp.P > 0.3).Count();
-
-            }
-            foreach(var p in AllParticles.Where(p => p.P < 0.3)) {
-                p.M = 0.125 / Particles.Where(pp => pp.P < 0.3).Count();
-
-            }
-
+            AllParticles.ForEach(p => p.M = 0.001875);
 
             for(int i = 0; i < AllParticles.Count; i++) {
                 AllParticles[i].MInd = i;
@@ -233,7 +237,10 @@ namespace OneDemSPH {
             return (gamma - 1) * p.Ro * p.E;
         }
         public bool FarParticles(Particle p1, Particle p2) {
-            return p1.GetRtoPart(p2) > 2 * h;
+            var r = p1.GetRtoPart(p2);
+            if(Double.IsNaN(r))
+                return true;
+            return r > 2 * h;
         }
 
 
