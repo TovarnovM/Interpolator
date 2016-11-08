@@ -59,6 +59,10 @@
       <Project>{412316A3-C269-4951-97A4-580A16348602}</Project>
       <Name>OneDemSPH</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Oslo\Oslo.csproj">
+      <Project>{92589C2D-3833-496F-87E8-788FD511B162}</Project>
+      <Name>Oslo</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

@@ -12,6 +12,7 @@ namespace OneDemSPH {
         private ScatterSeries Ro;
         private ScatterSeries V;
         private ScatterSeries P;
+        private ScatterSeries E;
 
         public ViewModel() {
             Model1 = GetNewModel("params", "X", "p,Ro,V");
@@ -38,16 +39,26 @@ namespace OneDemSPH {
                 MarkerFill = OxyColors.Blue
             };
             Model1.Series.Add(V);
+
+            E = new ScatterSeries() {
+                Title = "E",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = OxyColors.Red
+            };
+            Model1.Series.Add(E);
         }
 
         public void Draw(OneDemExample curr) {
             Ro.Points.Clear();
             V.Points.Clear();
             P.Points.Clear();
+            E.Points.Clear();
             foreach(var p in curr.AllParticles) {
                 Ro.Points.Add(new ScatterPoint(p.X,p.Ro));
                 V.Points.Add(new ScatterPoint(p.X,p.V));
                 P.Points.Add(new ScatterPoint(p.X,p.P));
+                E.Points.Add(new ScatterPoint(p.X,p.E));
             }
             Model1.InvalidatePlot(true);
         }

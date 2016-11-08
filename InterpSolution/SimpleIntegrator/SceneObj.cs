@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace SimpleIntegrator {
     public delegate bool FlagFunct(params SolPoint[] sp);
@@ -27,6 +28,7 @@ namespace SimpleIntegrator {
         void RebuildStruct();
         Action<double> SynchMeBefore { get; set; }
         Action<double> SynchMeAfter { get; set; }
+        Action<double> SynchMeForNext { get; set; }
         Action RebuildStructureAction { get; set; }
         void SetParam(string name,object value);
 
@@ -34,7 +36,9 @@ namespace SimpleIntegrator {
         List<ILaw> Laws { get; }
         void AddLaw(ILaw newLaw);
         bool ApplyLaws();
+
         Vector f(double t,Vector y);
+        Vector f_parallel(double t,Vector y);
 
         Dictionary<string,FlagFunct> FlagDict { get; }
     }
@@ -48,9 +52,12 @@ namespace SimpleIntegrator {
         public List<ILaw> Laws { get; } = new List<ILaw>();
         public Action<double> SynchMeBefore { get; set; } = null;
         public Action<double> SynchMeAfter { get; set; } = null;
+        public Action<double> SynchMeForNext { get; set; } = null;
         public Action RebuildStructureAction { get; set; } = null;
         public Dictionary<string,FlagFunct> FlagDict { get; set; } = new Dictionary<string,FlagFunct>();
 
+
+        private ParallelQuery<IScnPrm> DiffArr_parallel;
         public void SynchMeTo(double t,ref Vector y) {
             //if(DiffArrN != y.Length)
             //    throw new InvalidOperationException("разные длины векторов in out");
@@ -61,11 +68,13 @@ namespace SimpleIntegrator {
         }
 
         public Vector f(double t,Vector y) {
+
             SynchMeTo(t,ref y);
             var result = Vector.Zeros(DiffArrN);
             for(int i = 0; i < DiffArrN; i++) {
                 result[i] = DiffArr[i].MyDiff.GetVal(t);
             }
+            SynchMeForNext?.Invoke(t);
             return result;
         }
 
@@ -89,6 +98,7 @@ namespace SimpleIntegrator {
             for(int i = 0; i < DiffArrN; i++) {
                 DiffArr[i].NumInVector = i;
             }
+            DiffArr_parallel = DiffArr.AsParallel();
             return new Vector(diffArrSeq.Select(prm => prm.GetVal(toTime)).ToArray());
         }
 
@@ -344,6 +354,40 @@ namespace SimpleIntegrator {
             RebuildStructureAction = null;
             FlagDict.Clear();
             FlagDict = null;
-    }
+        }
+        #region Parallel
+        public int ThreadsCount { get; set; } = 7;
+        private Vector _res;
+        private struct StateStruct {
+            public double t;
+            public int fromind;
+            public int toind;
+        }
+        public Vector f_parallel(double t,Vector y) {
+            SynchMeTo(t,ref y);
+            _res = Vector.Zeros(DiffArrN);
+
+            int piece = DiffArrN / ThreadsCount;
+            var tasks = new List<Task>(DiffArrN);
+            for(int i = 0; i < ThreadsCount; i++) {
+                StateStruct s;
+                s.t = t;
+                s.fromind = i * piece;
+                s.toind = (i + 1) * piece - 1;
+                s.toind = s.toind > DiffArrN ? DiffArrN : s.toind;
+                tasks.Add(Task.Factory.StartNew(FillResVector,s));
+            }
+            Task.WhenAll(tasks);
+
+            return _res;
+        }
+
+        private void FillResVector(object state) {
+            var str = state ;
+            for(int i = ((StateStruct)state).fromind; i <= ((StateStruct)state).toind; i++) {
+                _res[i] = DiffArr[i].MyDiff.GetVal(((StateStruct)state).t);
+            }
+        }
+        #endregion
     }
 }

@@ -29,18 +29,18 @@ namespace OneDemSPH {
             vm = new ViewModel();
             DataContext = vm;
 
-            pr = new OneDemExample();
+            pr = new OneDemExample();//(0.001875+0.0075) * 0.5
             v0 = pr.Rebuild();
-            pr.dt = 0.005;
-            sol = Ode.RK45(0,v0,pr.f,pr.dt).GetEnumerator();
+            pr.dt = 0.0001;
+
+            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStep(0.01).GetEnumerator();
             vm.Draw(pr);
         }
 
         private void button_Click(object sender,RoutedEventArgs e) {
-            for(int i = 0; i < 1; i++) {
-                sol.MoveNext();
-            }
-            
+            sol.MoveNext();
+            var x = sol.Current.X;
+            pr.SynchMeTo(sol.Current.T,ref x);
             vm.Draw(pr);
             button.Content = $"{sol.Current.T:0.###} s,  RoMax = {pr.Particles.Max(p=>p.Ro):0.###},  Pmax = {pr.Particles.Max(p => p.P):0.###}";
 
