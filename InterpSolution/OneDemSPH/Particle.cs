@@ -199,7 +199,7 @@ namespace OneDemSPH {
         public List<Particle> Wall { get; set; } = new List<Particle>();
         public List<Particle> AllParticles { get; set; } = new List<Particle>();
 
-        const int scaler = 10;
+        const int scaler = 4;
         const double boardL = 0.6;
         const int perc = 80;
 

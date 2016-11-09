@@ -72,9 +72,19 @@ namespace Interpolator {
         //Тип экстраполяции
         public ExtrapolType ET_left { get; set; } = ExtrapolType.etValue;
         public ExtrapolType ET_right { get; set; } = ExtrapolType.etValue;
+
+        //[ThreadStatic]
+        private int _n = 0;
         //номер интервала (левого элемента), в который попала искомая точка
         [XmlIgnore]
-        public int N { get; protected set; } = 0;
+        public int N {
+            get {
+                return _n;
+            }
+            protected set {
+                _n = value;
+            }
+        }
         public int Count {
             get {
                 return _data.Count;
@@ -118,13 +128,13 @@ namespace Interpolator {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         protected TRes GetVSub(params double[] t) {
             if(t.Length == 1)
-                return _data.Values[N].GetV();
+                return _data.Values[_n].GetV();
             else if(t.Length == 2)
-                return _data.Values[N].GetV(t[0]);
+                return _data.Values[_n].GetV(t[0]);
             else if(t.Length > 2) {
                 var t_next = new double[t.Length - 1];
                 Array.Copy(t,t_next,t.Length - 1);
-                return _data.Values[N].GetV(t_next);
+                return _data.Values[_n].GetV(t_next);
             }
             return default(TRes);
         }
@@ -139,99 +149,99 @@ namespace Interpolator {
 
             if(elemIndex < _data.Count && elemIndex >= 0) {
                 _data.RemoveAt(elemIndex);
-                N = 0;
+                _n = 0;
             }
         }
         public void Clear() {
             _data.Clear();
         }
-        //функция нахождения интервала, в который попадает запрашиваемая точка + Инициализирует N
+        //функция нахождения интервала, в который попадает запрашиваемая точка + Инициализирует _n
         //-1 - находится левее 0 точки, = length - нахиодтся справа последней
         public virtual int SetN(double t) {
             try {
                 if(_data.Count < 1)
                     return 0;
-                if(N < 0) {
+                if(_n < 0) {
                     if(_data.Keys[0] > t)
                         return -1;
-                    N = 0;
+                    _n = 0;
                 }
                 int min, max;
                 int lengthM1 = _data.Count - 1;
-                if(_data.Keys[N] <= t) {
+                if(_data.Keys[_n] <= t) {
                     //проверка "на прошлый вызванный интервал"
-                    if(N == lengthM1 || _data.Keys[N + 1] > t)
-                        return N;
-                    ++N;
+                    if(_n == lengthM1 || _data.Keys[_n + 1] > t)
+                        return _n;
+                    ++_n;
                     //проверка на соседний правый интервал
-                    if(N == lengthM1 || _data.Keys[N + 1] > t)
-                        return N;
+                    if(_n == lengthM1 || _data.Keys[_n + 1] > t)
+                        return _n;
                     //проверка на экстраполяцию справа
                     if(_data.Keys.Last() <= t) {
-                        N = lengthM1;
+                        _n = lengthM1;
                         return lengthM1;
                     }
-                    min = N;
+                    min = _n;
                     max = lengthM1;
                 } else {
                     //проверка на ближайший левый интервал, относительно прошлого вызванного интервала
-                    if(N == 0 || _data.Keys[N - 1] <= t)
-                        return --N;
+                    if(_n == 0 || _data.Keys[_n - 1] <= t)
+                        return --_n;
                     //проверка на экстраполяцию слева
                     if(_data.Keys[0] > t) {
-                        N = -1;
-                        return N;
+                        _n = -1;
+                        return _n;
                     }
                     min = 0;
-                    max = N;
+                    max = _n;
                 }
                 //Бинарный поиск
                 while(min != max) {
-                    N = (min + max) / 2;
-                    if(_data.Keys[N] <= t) {
-                        if(_data.Keys[N + 1] > t)
-                            return N;
-                        min = N;
+                    _n = (min + max) / 2;
+                    if(_data.Keys[_n] <= t) {
+                        if(_data.Keys[_n + 1] > t)
+                            return _n;
+                        min = _n;
                     } else
-                        max = N;
+                        max = _n;
                 }
-                N = min;
-                return N;
+                _n = min;
+                return _n;
                 //OLD linear search
                 //if (_data.Count < 1)
                 //    return 0;
-                //if (N < 0)
+                //if (_n < 0)
                 //{
                 //    if (_data.Keys[0] > t)
                 //        return -1;
-                //    N = 0;
+                //    _n = 0;
                 //}
-                //if(N == _data.Count-1 && _data.Keys[N] <= t)
+                //if(_n == _data.Count-1 && _data.Keys[_n] <= t)
                 //{
-                //    return N;
+                //    return _n;
                 //}
-                //if (_data.Count > 1 && _data.Keys[N] <= t && _data.Keys[N + 1] > t)
-                //    return N;
+                //if (_data.Count > 1 && _data.Keys[_n] <= t && _data.Keys[_n + 1] > t)
+                //    return _n;
 
-                //if (_data.Keys[N] > t)
-                //    for (int i = N; i >= 0; i--)
+                //if (_data.Keys[_n] > t)
+                //    for (int i = _n; i >= 0; i--)
                 //    {
                 //        if (_data.Keys[i] <= t)
                 //        {
                 //            break;
                 //        }
-                //        N = i - 1;
+                //        _n = i - 1;
                 //    }
                 //else
-                //    for (int i = N; i < _data.Count; i++)
+                //    for (int i = _n; i < _data.Count; i++)
                 //    {
                 //        if (_data.Keys[i] > t)
                 //        {
                 //            break;
                 //        }
-                //        N = i;
+                //        _n = i;
                 //    }
-                //return N;
+                //return _n;
             }
             catch(Exception) {
                 return 0;
@@ -266,19 +276,19 @@ namespace Interpolator {
                 return default(TRes);
             SetN(t.Last());
             //Экстраполяция (пока только 2 типа)
-            if(N < 0 || N == _data.Count - 1 || _data.Count == 1) {
-                ExtrapolType ET_temp = N < 0 ? ET_left : ET_right;
-                N = N < 0 ? 0 : N;
+            if(_n < 0 || _n == _data.Count - 1 || _data.Count == 1) {
+                ExtrapolType ET_temp = _n < 0 ? ET_left : ET_right;
+                _n = _n < 0 ? 0 : _n;
                 switch(ET_temp) {
                     case ExtrapolType.etZero:
-                    if(N == _data.Count - 1 && _data.ContainsKey(t[0])) {
+                    if(_n == _data.Count - 1 && _data.ContainsKey(t[0])) {
                         return GetVSub(t);
                     }
                     return default(TRes);
                     case ExtrapolType.etValue:
                     return GetVSub(t);
                     case ExtrapolType.etMethod_Line: {
-                        N -= N == _data.Count - 1 ?
+                        _n -= _n == _data.Count - 1 ?
                             1 :
                             0;
                         return InterpMethodLine(t);

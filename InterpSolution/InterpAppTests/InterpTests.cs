@@ -77,5 +77,7 @@ namespace Interpolator.Tests {
             Assert.AreEqual(2.0,interp[4.5],0.0001);
             Assert.AreEqual(0,interp[-4.0],0.0001);
         }
+
+
     }
 }

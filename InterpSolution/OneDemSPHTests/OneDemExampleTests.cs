@@ -35,17 +35,17 @@ namespace OneDemSPH.Tests {
 
         [TestMethod]
         public void KernelTest2() {
-            double h = 0.075;
+            double h = 10;
             Func<double,Vector,Vector> tstf = (t,v) => {
                 var res = Vector.Zeros(1);
                 res[0] = KernelF.dWdr(t,h)*Math.Sign(t);
                 return res;
             };
 
-            var sol = Ode.RK45(-3 * h,Vector.Zeros(1),tstf,0.00001).SolveFromTo(-2.5*h,2.5*h);
+            var sol = Ode.RK45(-3 * h,Vector.Zeros(1),tstf,h/100000).SolveFromTo(-3*h,3*h);
 
             foreach(var sp in sol) {
-                Assert.AreEqual(KernelF.W(sp.T,h),sp.X[0],0.01);
+                Assert.AreEqual(KernelF.W(sp.T,h),sp.X[0],0.1);
             }
 
 

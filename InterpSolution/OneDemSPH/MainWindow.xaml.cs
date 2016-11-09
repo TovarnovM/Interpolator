@@ -31,7 +31,7 @@ namespace OneDemSPH {
 
             pr = new OneDemExample();//(0.001875+0.0075) * 0.5
             v0 = pr.Rebuild();
-            pr.dt = 0.0001;
+            pr.dt = 0.001;
 
             sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStep(0.01).GetEnumerator();
             vm.Draw(pr);

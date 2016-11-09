@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Interpolator.Tests
 {
@@ -176,6 +177,59 @@ namespace Interpolator.Tests
             Assert.AreEqual(7.0, sInterp5elem.GetV(10));
             if (sInterp5elem.GetV(5) < 1)
                 Assert.Fail();
+        }
+
+        [TestMethod]
+        public void ThreadSafeTest() {
+            sInterp5elem.InterpType = InterpolType.itLine;
+            sInterp1elem.InterpType = InterpolType.itLine;
+            sInterp2elem.InterpType = InterpolType.itLine;
+            int N = 1000;
+            var tsks = new List<Task>(N);
+            for(int i = 0; i < N; i++) {
+                tsks.Add(Task.Factory.StartNew(() => {
+                   
+                    Assert.AreEqual(3.0,sInterp1elem.GetV(3));
+
+                    
+                    Assert.AreEqual(1.0,sInterp2elem.GetV(1));
+                    Assert.AreEqual(1,sInterp2elem.GetV(3));
+                    Assert.AreEqual(4,sInterp2elem.GetV(4));
+
+                
+                    Assert.AreEqual(-2.0,sInterp5elem.GetV(-1));
+                    Assert.AreEqual(-2.0,sInterp5elem.GetV(-0.1));
+                    Assert.AreEqual(1.0,sInterp5elem.GetV(6));
+                    Assert.AreEqual(-1.0,sInterp5elem.GetV(2));
+                    Assert.AreEqual(7.0,sInterp5elem.GetV(10));
+                    //Thread.Sleep(100);
+                    //bool res =
+                    //Math.Abs(3.0 - sInterp1elem.GetV(3)) >= 0.0001 ||
+
+
+                    //Math.Abs(1.0 - sInterp2elem.GetV(1)) >= 0.0001 ||
+                    //Math.Abs(3.0 - sInterp2elem.GetV(3)) >= 0.0001 ||
+                    //Math.Abs(4.0 - sInterp2elem.GetV(4)) >= 0.0001 ||
+
+
+                    //Math.Abs(-2.0 - sInterp5elem.GetV(-1)) >= 0.0001 ||
+                    //Math.Abs(-0.2 - sInterp5elem.GetV(-0.1)) >= 0.0001 ||
+                    //Math.Abs(2.2 - sInterp5elem.GetV(6)) >= 0.0001 ||
+                    //Math.Abs(0.0 - sInterp5elem.GetV(3)) >= 0.0001 ||
+                    //Math.Abs(-0.5 - sInterp5elem.GetV(2)) >= 0.0001 ||
+                    //Math.Abs(7.0 - sInterp5elem.GetV(10)) >= 0.0001;
+
+
+
+
+                    //return res;
+
+                }));
+            }
+
+            var fin = Task.WhenAll(tsks);
+            fin.Wait();
+            //Assert.IsTrue(tsks.Where(t => t.Result).Count() == 0);
         }
     }
 }
