@@ -181,6 +181,9 @@ namespace Interpolator.Tests
 
         [TestMethod]
         public void ThreadSafeTest() {
+            //Fail already(
+
+
             sInterp5elem.InterpType = InterpolType.itLine;
             sInterp1elem.InterpType = InterpolType.itLine;
             sInterp2elem.InterpType = InterpolType.itLine;

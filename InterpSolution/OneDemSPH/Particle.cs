@@ -192,6 +192,38 @@ namespace OneDemSPH {
         }
     }
 
+    public static class KernelF1 {
+        public static double dWdr(double r_shtr,double h) {
+            double r = Math.Abs(r_shtr) / h;
+            if(r > 2.0)
+                return 0.0;
+            double a = 1d / h;
+            double r2 = r * r;
+            double r3 = r2 * r;
+            //double r4 = r3 * r;
+            double result = - 2*v2 * r + 3*v3 * r2 - 4*v4 * r3;
+
+            return result * a;
+        }
+        const double 
+            v1 = 2d / 3d, 
+            v2 = 9d / 8d, 
+            v3 = 19d / 24d, 
+            v4 = 5d / 32d;
+        public static double W(double r_shtr,double h) {
+            double r = Math.Abs(r_shtr) / h;
+            if(r > 2.0)
+                return 0.0;
+            double a = 1d / h;
+            double r2 = r * r;
+            double r3 = r2 * r;
+            double r4 = r3 * r;
+            double result = v1 - v2 * r2 + v3 * r3 - v4 * r4;
+
+            return result * a;
+        }
+    }
+
     public class OneDemExample : ScnObjDummy {
         public Matrix matr_dW, matr_II, matr_ViminVj, matr_SignXiminXj;
 
@@ -199,7 +231,7 @@ namespace OneDemSPH {
         public List<Particle> Wall { get; set; } = new List<Particle>();
         public List<Particle> AllParticles { get; set; } = new List<Particle>();
 
-        const int scaler = 4;
+        const int scaler = 10;
         const double boardL = 0.6;
         const int perc = 80;
 
@@ -295,11 +327,11 @@ namespace OneDemSPH {
             }
 
             SynchMeAfter += SynchMeAfterAct;
-            SynchMeForNext += t => {
-                foreach(var p in Particles) {
-                    p.P = GetP(p);
-                }
-            };
+            //SynchMeForNext += t => {
+            //    foreach(var p in Particles) {
+            //        p.P = GetP(p);
+            //    }
+            //};
 
             particles_par = Particles.AsParallel();
         }
@@ -321,6 +353,9 @@ namespace OneDemSPH {
         public void SynchMeAfterAct(double t) {
             particles_par.ForAll(p => p.Fillneib());
             particles_par.ForAll(p => p.FillRos());
+            foreach(var p in Particles) {
+                p.P = GetP(p);
+            }
             particles_par.ForAll(p => p.FillDs());
             
             //Particles.ForEach(p => p.FillDs());
