@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneDemSPH", "OneDemSPH\OneD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneDemSPHTests", "OneDemSPHTests\OneDemSPHTests.csproj", "{442FEDCC-B1E4-4130-A2AE-E8780362B9B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPHmain", "SPHmain\SPHmain.csproj", "{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -172,6 +174,14 @@ Global
 		{442FEDCC-B1E4-4130-A2AE-E8780362B9B9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{442FEDCC-B1E4-4130-A2AE-E8780362B9B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{442FEDCC-B1E4-4130-A2AE-E8780362B9B9}.Release|x86.Build.0 = Release|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Debug|x86.Build.0 = Debug|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|x86.ActiveCfg = Release|Any CPU
+		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
