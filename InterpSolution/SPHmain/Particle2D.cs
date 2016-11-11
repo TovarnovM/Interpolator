@@ -8,24 +8,67 @@ using System.Threading.Tasks;
 using static System.Math;
 
 namespace SPHmain {
+    public interface IParticle2D : IScnObj {
+        /// <summary>
+        /// Х координата частицы
+        /// </summary>
+        double X { get; }
 
-    public class Particle2D: Position2D {
+        /// <summary>
+        /// Y координата частицы
+        /// </summary>
+        double Y { get; }
+
+        /// <summary>
+        /// Скорость по X
+        /// </summary>
+        double dX { get; }
+
+        /// <summary>
+        /// Скорость по Y
+        /// </summary>
+        double dY { get; }
+
+        /// <summary>
+        /// Соседи частицы
+        /// </summary>
+        List<IParticle2D> Neibs { get; }
+
+        /// <summary>
+        /// Расстояние до частицы
+        /// </summary>
+        /// <param name="particle">до этой частицы</param>
+        /// <returns></returns>
+        double GetDistTo(IParticle2D particle);
+
+        /// <summary>
+        /// Первое действе над частицей при интегрировании
+        /// </summary>
+        void DoStuff1();
+
+        /// <summary>
+        /// Второе действе над частицей при интерировании
+        /// </summary>
+        void DoStuff2();
+    }
+
+    /// <summary>
+    /// Абстрактный класс представляющий частицу для SPH 2D
+    /// </summary>
+    public abstract class Particle2D: Position2D, IParticle2D {
         public Position2D Vel;
-        public double hmax, xmin, ymin;
-        public Particle2D(double hmax,double xmin,double xmax,double ymin,double ymax) {
+        public double hmax;
+        public Particle2D(double hmax) {
             this.hmax = hmax;
-            this.xmin = xmin;
-            this.ymin = ymin;
-
 
             Vel = new Position2D();
             Vel.Name = "Vel";
             AddChild(Vel);
 
             AddDiffVect(Vel);
-            Neibs = new List<Particle2D>(30);
+            Neibs = new List<IParticle2D>(30);
 
-            
+            Name = "Particle";
         }
 
         public double dX {
@@ -48,23 +91,21 @@ namespace SPHmain {
             }
         }
 
-        public List<Particle2D> Neibs;
+        public List<IParticle2D> Neibs { get; private set; }
 
-        public double GetDistTo(Particle2D particle) {
+        public double GetDistTo(IParticle2D particle) {
             double deltX = X - particle.X;
             double deltY = Y - particle.Y;
             return Sqrt(deltX * deltX + deltY * deltY);
         }
 
-        public int XIndex {
-            get {
-                return (int)Floor((X - xmin) / hmax);
-            }
-        }
-        public int YIndex {
-            get {
-                return (int)Floor((Y - ymin) / hmax);
-            }
-        }
+
+        /// <summary>
+        /// Сделать что-то первое (например что-то высчитать)
+        /// </summary>
+        public abstract void DoStuff1();
+
+        public abstract void DoStuff2();
     }
+
 }
