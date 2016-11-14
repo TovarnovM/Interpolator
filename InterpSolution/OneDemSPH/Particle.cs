@@ -35,6 +35,9 @@ namespace OneDemSPH {
         public double dV { get; set; }
         public IScnPrm pdV { get; set; }
 
+        public double dRo { get; set; }
+        public IScnPrm pdRo { get; set; }
+
         public double GetRtoPart(Particle toMe) {
             return Math.Abs(X - toMe.X);
         }
@@ -49,15 +52,16 @@ namespace OneDemSPH {
             AddDiffPropToParam(pX,pV);
             AddDiffPropToParam(pV,pdV);
             AddDiffPropToParam(pE,pdE);
+            //AddDiffPropToParam(pRo,pdRo);
             //double dro= 0, de = 0, dv = 0;
 
             ////SetDiff(pRo,t => {
 
             ////    return dro;
             ////});
-  
 
-            
+
+
             //SynchMeAfter += t => {
 
 
@@ -81,7 +85,7 @@ namespace OneDemSPH {
             //            //    break;
             //            continue;
             //        }
-                        
+
             //        if(i == j)
             //            continue;
 
@@ -95,7 +99,7 @@ namespace OneDemSPH {
             //    }
             //};
 
-            
+
         }
         public bool IsWall = false;
 
@@ -127,6 +131,7 @@ namespace OneDemSPH {
             
             dE = 0;
             dV = 0;
+            //dRo = 0;
             var h = owner2.h;
             foreach(var neib in neib_lst) {
 
@@ -147,7 +152,8 @@ namespace OneDemSPH {
 
 
 
-                //dro += neib.M * matV[i,j] * matSignX[i,j] * matdW[i,j];
+                //dRo += neib.M * Vij * signXij * dw;
+
                 dE += 0.5 * neib.M * Vij * signXij * dw
                                     * (neib.P / (neib.Ro * neib.Ro) + P / (Ro * Ro) + II);
                 dV -= neib.M * signXij * dw
@@ -325,6 +331,9 @@ namespace OneDemSPH {
             foreach(var part in AllParticles) {
                 part.Ro = AllParticles.Sum(p => p.M * KernelF.W(part.X - p.X,h));
             }
+            foreach(var p in Particles) {
+                p.P = GetP(p);
+            }
 
             SynchMeAfter += SynchMeAfterAct;
             //SynchMeForNext += t => {
@@ -351,12 +360,11 @@ namespace OneDemSPH {
 
         
         public void SynchMeAfterAct(double t) {
-            particles_par.ForAll(p => p.Fillneib());
-            particles_par.ForAll(p => p.FillRos());
-            foreach(var p in Particles) {
-                p.P = GetP(p);
-            }
-            particles_par.ForAll(p => p.FillDs());
+            Parallel.ForEach(Particles,p => p.Fillneib());
+            Parallel.ForEach(Particles,p => p.FillRos());
+            Parallel.ForEach(Particles,p => p.P = GetP(p));
+            Parallel.ForEach(Particles,p => p.FillDs());
+            //particles_par.ForAll(p => p.FillDs());
             
             //Particles.ForEach(p => p.FillDs());
 

@@ -102,7 +102,8 @@ namespace SPHmain {
                 int j0 = YInd - 1 >= 0 ? YInd - 1 : YInd;
                 int i1 = XInd + 1 < cells.GetLength(0) ? XInd + 1 : XInd;
                 int j1 = YInd + 1 < cells.GetLength(1) ? YInd + 1 : YInd;
-                IEnumerable<IParticle2D> allPart = null;
+                var allPart = Enumerable.Empty<IParticle2D>();
+                
                 for(int i = i0; i < i1; i++) {
                     for(int j = j0; j < j1; j++) {
                         allPart = allPart.Concat(cells[i,j].Particles);
@@ -112,24 +113,6 @@ namespace SPHmain {
                 foreach(var particle in Particles) {
                     particle.Neibs.Clear();
                     particle.Neibs.AddRange(allPlst.Where(p => !p.Equals(particle)));
-                }
-            }
-
-            /// <summary>
-            /// Вызывает метод DuStuff1 у всех частиц
-            /// </summary>
-            public void ParticleUpdate1() {
-                foreach(var p in Particles) {
-                    p.DoStuff1();
-                }
-            }
-
-            /// <summary>
-            /// Вызывает метод DuStuff2 у всех частиц
-            /// </summary>
-            public void ParticleUpdate2() {
-                foreach(var p in Particles) {
-                    p.DoStuff2();
                 }
             }
         }
@@ -187,6 +170,8 @@ namespace SPHmain {
         /// Лист с частицами, представляющими "стены"
         /// </summary>
         public List<IParticle2D> WallParticles = new List<IParticle2D>();
+
+        public int MaxStuffCount { get; private set; }
 
         #endregion
 
@@ -247,15 +232,17 @@ namespace SPHmain {
         /// Вызываем методы DoStuff1(), и DoStuff2() у ВСЕХ частиц 
         /// </summary>
         void UpdateParticles() {
-            //Работаем с частицами 1
+            //Заполняем соседей
             Parallel.ForEach(Cells.Where(c => c.Particles.Count > 0),c => {
-                c.ParticleUpdate1();
+                c.FillAllNeibs(CellNet);
             });
 
-            //Работаем с частицами 2
-            Parallel.ForEach(Cells.Where(c => c.Particles.Count > 0),c => {
-                c.ParticleUpdate2();
-            });
+            //Заполняем d/dt
+            for(int i = 0; i < MaxStuffCount; i++) {
+                Parallel.ForEach(AllParticles.Where(p => i < p.StuffCount), p => {
+                    p.DoStuff(i);
+                });
+            }
         }
 
         /// <summary>
@@ -297,6 +284,8 @@ namespace SPHmain {
             Particles.AddRange(integrParticles);
             WallParticles.AddRange(wall);
             AllParticles.AddRange(integrParticles.Concat(wall));
+
+            MaxStuffCount = AllParticles.Max(p => p.StuffCount);
 
             foreach(var p in Particles) {
                 AddChild(p);

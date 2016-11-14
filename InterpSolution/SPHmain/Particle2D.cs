@@ -30,6 +30,11 @@ namespace SPHmain {
         double dY { get; }
 
         /// <summary>
+        /// Скорость
+        /// </summary>
+        IPosition2D Vel { get; }
+
+        /// <summary>
         /// Соседи частицы
         /// </summary>
         List<IParticle2D> Neibs { get; }
@@ -42,35 +47,23 @@ namespace SPHmain {
         double GetDistTo(IParticle2D particle);
 
         /// <summary>
-        /// Первое действе над частицей при интегрировании
+        /// Сколько зависимых операций необходимо частице на каждом шаге интегрирования
         /// </summary>
-        void DoStuff1();
+        int StuffCount { get; }
 
         /// <summary>
-        /// Второе действе над частицей при интерировании
+        /// Произвести зависимую операцию под индексом stuffIndex
         /// </summary>
-        void DoStuff2();
+        /// <param name="stuffIndex"></param>
+        void DoStuff(int stuffIndex);
     }
 
     /// <summary>
     /// Абстрактный класс представляющий частицу для SPH 2D
     /// </summary>
     public abstract class Particle2D: Position2D, IParticle2D {
-        public Position2D Vel;
-        public double hmax;
-        public Particle2D(double hmax) {
-            this.hmax = hmax;
-
-            Vel = new Position2D();
-            Vel.Name = "Vel";
-            AddChild(Vel);
-
-            AddDiffVect(Vel);
-            Neibs = new List<IParticle2D>(30);
-
-            Name = "Particle";
-        }
-
+        #region IParticle 2D impl
+        public IPosition2D Vel { get; private set; }
         public double dX {
             get {
                 return Vel.X;
@@ -92,20 +85,33 @@ namespace SPHmain {
         }
 
         public List<IParticle2D> Neibs { get; private set; }
-
         public double GetDistTo(IParticle2D particle) {
             double deltX = X - particle.X;
             double deltY = Y - particle.Y;
             return Sqrt(deltX * deltX + deltY * deltY);
         }
+        #endregion
+        
+        public double hmax;
+        public Particle2D(double hmax) {
+            this.hmax = hmax;
 
+            Vel = new Position2D();
+            Vel.Name = "Vel";
+            AddChild(Vel);
 
-        /// <summary>
-        /// Сделать что-то первое (например что-то высчитать)
-        /// </summary>
-        public abstract void DoStuff1();
+            AddDiffVect(Vel);
+            Neibs = new List<IParticle2D>(30);
 
-        public abstract void DoStuff2();
+            Name = "Particle";
+        }
+
+        #region Abstract
+        public abstract int StuffCount { get; }
+
+        public abstract void DoStuff(int stuffIndex);
+        #endregion
+
     }
 
 }
