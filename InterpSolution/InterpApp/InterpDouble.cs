@@ -31,34 +31,34 @@ namespace Interpolator {
     [Serializable]
     public class Interp<T> : InterpAbs<T, double>, IInterpElem where T: IInterpElem {
     
-        public override double InterpMethodLine(params double[] t) {
+        public override double InterpMethodLine(int n, params double[] t) {
             double t1, t2, y1, y2;
-            t1 = _data.Keys[N];
-            t2 = _data.Keys[N + 1];
-            y1 = GetVSub(t);
-            N = N + 1;
-            y2 = GetVSub(t);
+            t1 = _data.Keys[n];
+            t2 = _data.Keys[n + 1];
+            y1 = GetVSub(n,t);
+            n = n + 1;
+            y2 = GetVSub(n, t);
             return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
         }
 
-        public override double InerpMethodSpecial4_3_17(params double[] t) {
+        public override double InerpMethodSpecial4_3_17(int n, params double[] t) {
             double t1, t2, y1, y2;
-            t1 = _data.Keys[N];
-            t2 = _data.Keys[N + 1];
-            y1 = GetVSub(t);
-            N = N + 1;
-            y2 = GetVSub(t);
+            t1 = _data.Keys[n];
+            t2 = _data.Keys[n + 1];
+            y1 = GetVSub(n, t);
+            n++;
+            y2 = GetVSub(n, t);
             if(y2 == 0 && y1 != 0) {
                 double _2z_l = t[0];
                 double _2y_l = t[1];
                 double D_2 = t[2];
                 double koeff = (_2z_l - D_2) / (1 - D_2);
-                N = N - 1;
+                n--;
                 _2z_l = t1 + koeff * (1 - t1);
-                y1 = GetVSub(t1 + koeff * (1 - t1),_2y_l,D_2);
-                N = N + 1;
+                y1 = GetVSub(n, t1 + koeff * (1 - t1),_2y_l,D_2);
+                n++;
                 _2z_l = t2 + koeff * (1 - t2);
-                y2 = GetVSub(t2 + koeff * (1 - t2),_2y_l,D_2);
+                y2 = GetVSub(n, t2 + koeff * (1 - t2),_2y_l,D_2);
             }
 
             return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
@@ -108,89 +108,57 @@ namespace Interpolator {
             }
             _isSynch = true;
         }
-        public double InterpMethodXYLine(double t) {
-            return _k[N] * t + _b[N];
+        public double InterpMethodXYLine(int n, double t) {
+            return _k[n] * t + _b[n];
         }
         public override int SetN(double t) {
             try {
+                int n = N;
                 if(!_isSynch)
                     SynchArrays();
                 if(_length < 1)
                     return 0;
-                if(N < 0) {
+                if(n < 0) {
                     if(_x[0] > t)
                         return -1;
-                    N = 0;
+                    n = 0;
                 }
                 int min, max;
                 int lengthM1 = _length - 1;
-                if(_x[N] <= t) {
-                    if(N == lengthM1 || _x[N + 1] > t)
-                        return N;
-                    ++N;
-                    if(N == lengthM1 || _x[N + 1] > t)
-                        return N;
+                if(_x[n] <= t) {
+                    if(n == lengthM1 || _x[n + 1] > t)
+                        return n;
+                    ++n;
+                    if(n == lengthM1 || _x[n + 1] > t)
+                        return n;
                     if(_x.Last() <= t) {
-                        N = lengthM1;
+                        n = lengthM1;
                         return lengthM1;
                     }
-                    min = N;
+                    min = n;
                     max = lengthM1;
                 } else {
-                    if(N == 0 || _x[N - 1] <= t)
-                        return --N;
+                    if(n == 0 || _x[n - 1] <= t)
+                        return --n;
                     if(_x[0] > t) {
-                        N = -1;
-                        return N;
+                        n = -1;
+                        return n;
                     }
                     min = 0;
-                    max = N;
+                    max = n;
                 }
                 while(min != max) {
-                    N = (min + max) / 2;
-                    if(_x[N] <= t) {
-                        if(_x[N + 1] > t)
-                            return N;
-                        min = N;
+                    n = (min + max) / 2;
+                    if(_x[n] <= t) {
+                        if(_x[n + 1] > t)
+                            return n;
+                        min = n;
                     } else
-                        max = N;
+                        max = n;
                 }
-                N = min;
-                return N;
-                //if (_length < 1)
-                //    return 0;
-                //if (N < 0)
-                //{
-                //    if (_x[0] > t)
-                //        return -1;
-                //    N = 0;
-                //}
-                //if (N == _length - 1 && _x[N] <= t)
-                //{
-                //    return N;
-                //}
-                //if (_length > 1 && _x[N] <= t && _x[N + 1] > t)
-                //    return N;
+                n = min;
+                return n;
 
-                //if (_x[N] > t)
-                //    for (int i = N; i >= 0; i--)
-                //    {
-                //        if (_x[i] <= t)
-                //        {
-                //            break;
-                //        }
-                //        N = i - 1;
-                //    }
-                //else
-                //    for (int i = N; i < _length; i++)
-                //    {
-                //        if (_x[i] > t)
-                //        {
-                //            break;
-                //        }
-                //        N = i;
-                //    }
-                //return N;
             }
             catch(Exception) {
                 return 0;
@@ -198,39 +166,41 @@ namespace Interpolator {
         }
         public override double GetV(params double[] t) {
             var tt = t[0];
-            SetN(tt);
-
+            int n = SetN(tt);
+            
             //Экстраполяция (пока только 2 типа)
-            if(N < 0 || N == _length - 1 || _length == 1) {
-                ExtrapolType ET_temp = N < 0 ? ET_left : ET_right;
-                N = N < 0 ? 0 : N;
+            if(n < 0 || n == _length - 1 || _length == 1) {
+                ExtrapolType ET_temp = n < 0 ? ET_left : ET_right;
+                n = n < 0 ? 0 : n;
+                N = n;
                 switch(ET_temp) {
                     case ExtrapolType.etZero:
-                    if(N == _length - 1 && (tt == _x[0] || tt == _x[_length - 1])) {
-                        return _y[N];
+                    if(n == _length - 1 && (tt == _x[0] || tt == _x[_length - 1])) {
+                        return _y[n];
                     }
                     return 0;
                     case ExtrapolType.etValue:
-                    return _y[N];
+                    return _y[n];
                     case ExtrapolType.etMethod_Line: {
-                        N -= N == _length - 1 ?
+                        n -= n == _length - 1 ?
                             1 :
                             0;
-                        return InterpMethodXYLine(tt);
+                        N = n;
+                        return InterpMethodXYLine(n, tt);
                     }
                     case ExtrapolType.etRepeat:
                     //Не забыть изменить в Interp<>
                     RepeatShift(ref tt);
                     return GetV(tt);
                     default:
-                    return _y[N];
+                    return _y[n];
                 }
             }
             if(InterpType == InterpolType.itLine)
-                return InterpMethodXYLine(tt);
+                return InterpMethodXYLine(n, tt);
             if(InterpType == InterpolType.itStep)
-                return _y[N];
-            return InterpMethodXYLine(tt);
+                return _y[n];
+            return InterpMethodXYLine(n, tt);
         }
 
         public int Add(double t,double value,bool allowDublicates = false) {

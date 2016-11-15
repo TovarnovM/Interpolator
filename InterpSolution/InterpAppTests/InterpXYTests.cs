@@ -181,58 +181,63 @@ namespace Interpolator.Tests
 
         [TestMethod]
         public void ThreadSafeTest() {
-            //Fail already(
-
-
+ 
             sInterp5elem.InterpType = InterpolType.itLine;
             sInterp1elem.InterpType = InterpolType.itLine;
             sInterp2elem.InterpType = InterpolType.itLine;
-            int N = 1000;
-            var tsks = new List<Task>(N);
+            int N = 100;
+            var tsks = new List<Task<bool>>(N);
             for(int i = 0; i < N; i++) {
-                tsks.Add(Task.Factory.StartNew(() => {
-                   
-                    Assert.AreEqual(3.0,sInterp1elem.GetV(3));
+                tsks.Add(Task<bool>.Factory.StartNew(() => {
+                    var rnd = new Random();
+                    Thread.Sleep(100+(int)(rnd.NextDouble()*20));
+                    //Assert.AreEqual(3.0,sInterp1elem.GetV(3));
 
+
+                    //Assert.AreEqual(1.0,sInterp2elem.GetV(1));
+                    //Assert.AreEqual(1,sInterp2elem.GetV(3));
+                    //Assert.AreEqual(4,sInterp2elem.GetV(4));
+
+
+                    //Assert.AreEqual(-2.0,sInterp5elem.GetV(-1));
+                    //Assert.AreEqual(-2.0,sInterp5elem.GetV(-0.1));
+                    //Assert.AreEqual(1.0,sInterp5elem.GetV(6));
+                    //Assert.AreEqual(-1.0,sInterp5elem.GetV(2));
+                    //Assert.AreEqual(7.0,sInterp5elem.GetV(10));
+
+                    bool res = false;
+                    for(int k = 0; k < 10000; k++) {
+                        bool tmpres = 
+                        Math.Abs(3.0 - sInterp1elem.GetV(3)) >= 0.0001 ||
+
+
+                        Math.Abs(1.0 - sInterp2elem.GetV(1)) >= 0.0001 ||
+                        Math.Abs(3.0 - sInterp2elem.GetV(3)) >= 0.0001 ||
+                        Math.Abs(4.0 - sInterp2elem.GetV(4)) >= 0.0001 ||
+
+
+                        Math.Abs(-2.0 - sInterp5elem.GetV(-1)) >= 0.0001 ||
+                        Math.Abs(-0.2 - sInterp5elem.GetV(-0.1)) >= 0.0001 ||
+                        Math.Abs(2.2 - sInterp5elem.GetV(6)) >= 0.0001 ||
+                        Math.Abs(0.0 - sInterp5elem.GetV(3)) >= 0.0001 ||
+                        Math.Abs(-0.5 - sInterp5elem.GetV(2)) >= 0.0001 ||
+                        Math.Abs(7.0 - sInterp5elem.GetV(10)) >= 0.0001;
+
+                        res = res || tmpres;
+                    }
                     
-                    Assert.AreEqual(1.0,sInterp2elem.GetV(1));
-                    Assert.AreEqual(1,sInterp2elem.GetV(3));
-                    Assert.AreEqual(4,sInterp2elem.GetV(4));
-
-                
-                    Assert.AreEqual(-2.0,sInterp5elem.GetV(-1));
-                    Assert.AreEqual(-2.0,sInterp5elem.GetV(-0.1));
-                    Assert.AreEqual(1.0,sInterp5elem.GetV(6));
-                    Assert.AreEqual(-1.0,sInterp5elem.GetV(2));
-                    Assert.AreEqual(7.0,sInterp5elem.GetV(10));
-                    //Thread.Sleep(100);
-                    //bool res =
-                    //Math.Abs(3.0 - sInterp1elem.GetV(3)) >= 0.0001 ||
-
-
-                    //Math.Abs(1.0 - sInterp2elem.GetV(1)) >= 0.0001 ||
-                    //Math.Abs(3.0 - sInterp2elem.GetV(3)) >= 0.0001 ||
-                    //Math.Abs(4.0 - sInterp2elem.GetV(4)) >= 0.0001 ||
-
-
-                    //Math.Abs(-2.0 - sInterp5elem.GetV(-1)) >= 0.0001 ||
-                    //Math.Abs(-0.2 - sInterp5elem.GetV(-0.1)) >= 0.0001 ||
-                    //Math.Abs(2.2 - sInterp5elem.GetV(6)) >= 0.0001 ||
-                    //Math.Abs(0.0 - sInterp5elem.GetV(3)) >= 0.0001 ||
-                    //Math.Abs(-0.5 - sInterp5elem.GetV(2)) >= 0.0001 ||
-                    //Math.Abs(7.0 - sInterp5elem.GetV(10)) >= 0.0001;
 
 
 
 
-                    //return res;
+                    return res;
 
                 }));
             }
 
             var fin = Task.WhenAll(tsks);
             fin.Wait();
-            //Assert.IsTrue(tsks.Where(t => t.Result).Count() == 0);
+            Assert.IsTrue(tsks.Where(t => t.Result).Count() == 0);
         }
     }
 }

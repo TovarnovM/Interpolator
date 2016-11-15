@@ -25,17 +25,17 @@ namespace Interpolator {
     [Serializable]
     public class InterpVec<T> : InterpAbs<T,Vector>, IInterpVecN where T : IInterpVecN {
 
-        public override Vector InterpMethodLine(params double[] t) {
-            Vector t1 = _data.Keys[N];
-            Vector t2 = _data.Keys[N + 1];
-            Vector y1 = GetVSub(t);
-            N = N + 1;
-            Vector y2 = GetVSub(t);
+        public override Vector InterpMethodLine(int n, params double[] t) {
+            Vector t1 = _data.Keys[n];
+            Vector t2 = _data.Keys[n + 1];
+            Vector y1 = GetVSub(n,t);
+            n++;
+            Vector y2 = GetVSub(n,t);
             return y1 + (y2 - y1) * (t.Last() - t1) / (t2 - t1);
         }
 
-        public override Vector InerpMethodSpecial4_3_17(params double[] t) {
-            return InterpMethodLine(t);
+        public override Vector InerpMethodSpecial4_3_17(int n, params double[] t) {
+            return InterpMethodLine(n,t);
 
         }
     }

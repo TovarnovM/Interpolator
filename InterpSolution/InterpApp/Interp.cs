@@ -94,7 +94,7 @@ namespace Interpolator {
 
 
         //делегат функции по реализации метода интерполяции
-        public delegate TRes InterpolMethod(params double[] t);
+        public delegate TRes InterpolMethod(int n, params double[] t);
         protected InterpolMethod InterpMethodCurr { get; set; }
         protected InterpolType _interpType;
         public InterpolType InterpType {
@@ -126,15 +126,15 @@ namespace Interpolator {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        protected TRes GetVSub(params double[] t) {
+        protected TRes GetVSub(int n, params double[] t) {
             if(t.Length == 1)
-                return _data.Values[_n].GetV();
+                return _data.Values[n].GetV();
             else if(t.Length == 2)
-                return _data.Values[_n].GetV(t[0]);
+                return _data.Values[n].GetV(t[0]);
             else if(t.Length > 2) {
                 var t_next = new double[t.Length - 1];
                 Array.Copy(t,t_next,t.Length - 1);
-                return _data.Values[_n].GetV(t_next);
+                return _data.Values[n].GetV(t_next);
             }
             return default(TRes);
         }
@@ -159,101 +159,67 @@ namespace Interpolator {
         //-1 - находится левее 0 точки, = length - нахиодтся справа последней
         public virtual int SetN(double t) {
             try {
+                int n = _n;
                 if(_data.Count < 1)
                     return 0;
-                if(_n < 0) {
+                if(n < 0) {
                     if(_data.Keys[0] > t)
                         return -1;
-                    _n = 0;
+                    n = 0;
                 }
                 int min, max;
                 int lengthM1 = _data.Count - 1;
-                if(_data.Keys[_n] <= t) {
+                if(_data.Keys[n] <= t) {
                     //проверка "на прошлый вызванный интервал"
-                    if(_n == lengthM1 || _data.Keys[_n + 1] > t)
-                        return _n;
-                    ++_n;
+                    if(n == lengthM1 || _data.Keys[n + 1] > t)
+                        return n;
+                    ++n;
                     //проверка на соседний правый интервал
-                    if(_n == lengthM1 || _data.Keys[_n + 1] > t)
-                        return _n;
+                    if(n == lengthM1 || _data.Keys[n + 1] > t)
+                        return n;
                     //проверка на экстраполяцию справа
                     if(_data.Keys.Last() <= t) {
-                        _n = lengthM1;
+                        n = lengthM1;
                         return lengthM1;
                     }
-                    min = _n;
+                    min = n;
                     max = lengthM1;
                 } else {
                     //проверка на ближайший левый интервал, относительно прошлого вызванного интервала
-                    if(_n == 0 || _data.Keys[_n - 1] <= t)
-                        return --_n;
+                    if(n == 0 || _data.Keys[n - 1] <= t)
+                        return --n;
                     //проверка на экстраполяцию слева
                     if(_data.Keys[0] > t) {
-                        _n = -1;
-                        return _n;
+                        n = -1;
+                        return n;
                     }
                     min = 0;
-                    max = _n;
+                    max = n;
                 }
                 //Бинарный поиск
                 while(min != max) {
-                    _n = (min + max) / 2;
-                    if(_data.Keys[_n] <= t) {
-                        if(_data.Keys[_n + 1] > t)
-                            return _n;
-                        min = _n;
+                    n = (min + max) / 2;
+                    if(_data.Keys[n] <= t) {
+                        if(_data.Keys[n + 1] > t)
+                            return n;
+                        min = n;
                     } else
-                        max = _n;
+                        max = n;
                 }
-                _n = min;
-                return _n;
-                //OLD linear search
-                //if (_data.Count < 1)
-                //    return 0;
-                //if (_n < 0)
-                //{
-                //    if (_data.Keys[0] > t)
-                //        return -1;
-                //    _n = 0;
-                //}
-                //if(_n == _data.Count-1 && _data.Keys[_n] <= t)
-                //{
-                //    return _n;
-                //}
-                //if (_data.Count > 1 && _data.Keys[_n] <= t && _data.Keys[_n + 1] > t)
-                //    return _n;
-
-                //if (_data.Keys[_n] > t)
-                //    for (int i = _n; i >= 0; i--)
-                //    {
-                //        if (_data.Keys[i] <= t)
-                //        {
-                //            break;
-                //        }
-                //        _n = i - 1;
-                //    }
-                //else
-                //    for (int i = _n; i < _data.Count; i++)
-                //    {
-                //        if (_data.Keys[i] > t)
-                //        {
-                //            break;
-                //        }
-                //        _n = i;
-                //    }
-                //return _n;
+                n = min;
+                return n;
             }
             catch(Exception) {
                 return 0;
             }
         }
         //Метод интерполяции "ступенька" возр. знач. = ближ левому точке
-        public virtual TRes InterpMethodStep(params double[] t) {
-            return GetVSub(t);
+        public virtual TRes InterpMethodStep(int n, params double[] t) {
+            return GetVSub(n, t);
         }
-        public abstract TRes InterpMethodLine(params double[] t);
+        public abstract TRes InterpMethodLine(int n,params double[] t);
 
-        public abstract TRes InerpMethodSpecial4_3_17(params double[] t);
+        public abstract TRes InerpMethodSpecial4_3_17(int n,params double[] t);
 
         public TRes this[params double[] t] {
             get {
@@ -274,24 +240,26 @@ namespace Interpolator {
         public virtual TRes GetV(params double[] t) {
             if(_data.Count == 0 || t.Length == 0)
                 return default(TRes);
-            SetN(t.Last());
+            int n = SetN(t.Last());
             //Экстраполяция (пока только 2 типа)
-            if(_n < 0 || _n == _data.Count - 1 || _data.Count == 1) {
-                ExtrapolType ET_temp = _n < 0 ? ET_left : ET_right;
-                _n = _n < 0 ? 0 : _n;
+            if(n < 0 || n == _data.Count - 1 || _data.Count == 1) {
+                ExtrapolType ET_temp = n < 0 ? ET_left : ET_right;
+                n = n < 0 ? 0 : n;
+                _n = n;
                 switch(ET_temp) {
                     case ExtrapolType.etZero:
-                    if(_n == _data.Count - 1 && _data.ContainsKey(t[0])) {
-                        return GetVSub(t);
+                    if(n == _data.Count - 1 && _data.ContainsKey(t[0])) {
+                        return GetVSub(n, t);
                     }
                     return default(TRes);
                     case ExtrapolType.etValue:
-                    return GetVSub(t);
+                    return GetVSub(n, t);
                     case ExtrapolType.etMethod_Line: {
-                        _n -= _n == _data.Count - 1 ?
+                        n -= n == _data.Count - 1 ?
                             1 :
                             0;
-                        return InterpMethodLine(t);
+                        _n = n;
+                        return InterpMethodLine(n,t);
                     }
                     case ExtrapolType.etRepeat:
                     //Не забыть изменить в InterpXY
@@ -302,10 +270,10 @@ namespace Interpolator {
                     return GetV(shiftParams);
 
                     default:
-                    return GetVSub(t);
+                    return GetVSub(n, t);
                 }
             }
-            return InterpMethodCurr(t);
+            return InterpMethodCurr(n, t);
         }
         public void RepeatShift(ref double t) {
             double first = _data.Keys.First();
