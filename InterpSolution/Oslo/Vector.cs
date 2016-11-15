@@ -181,6 +181,17 @@ namespace Microsoft.Research.Oslo
             return (v0 * (t1 - t) + v1 * (t - t0)) / (t1 - t0);
         }
 
+        /// <summary>
+        /// Fast swap
+        /// </summary>
+        /// <param name="v1"></param>
+        /// <param name="v2"></param>
+        public static void Swap(ref Vector v1,ref Vector v2) {
+            var vtemp = v1.v;
+            v1.v = v2.v;
+            v2.v = vtemp;
+        }
+
         /// <summary>Gets or sets vector element at specified index</summary>
         /// <exception cref="NullReferenceException">Thrown when vector is not initialized</exception>
         /// <exception cref="IndexOutOfRangeException">Throws when <paramref name="idx"/> is out of range</exception>

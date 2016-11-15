@@ -152,6 +152,22 @@ namespace Oslo.Tests
             Assert.IsFalse(v1.Equals(v2));
         }
 
+        [TestMethod]
+        public void SwapTest() {
+            var v1 = new Vector(-1,2);
+            var v2 = new Vector(3,2,-5);
+
+            var v3 = new Vector(-1,2);
+            var v4 = new Vector(3,2,10);
+
+            Vector.Swap(ref v1,ref v2);
+
+            Assert.IsTrue(v2.Equals(v3));
+            Assert.IsTrue(v2.Equals(v2));
+            Assert.IsFalse(v1.Equals(v4));
+            Assert.IsFalse(v1.Equals(v2));
+        }
+
         private void AssertVectorEqualsEps(Vector A, Vector B)
         {
             double sum = 0.0;

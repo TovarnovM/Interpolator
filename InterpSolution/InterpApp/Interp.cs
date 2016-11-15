@@ -73,7 +73,7 @@ namespace Interpolator {
         public ExtrapolType ET_left { get; set; } = ExtrapolType.etValue;
         public ExtrapolType ET_right { get; set; } = ExtrapolType.etValue;
 
-        //[ThreadStatic]
+        [ThreadStatic]
         private int _n = 0;
         //номер интервала (левого элемента), в который попала искомая точка
         [XmlIgnore]

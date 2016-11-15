@@ -40,6 +40,12 @@ namespace SPHmain {
         List<IParticle2D> Neibs { get; }
 
         /// <summary>
+        /// получить максимальный радиус сглаживания
+        /// </summary>
+        /// <returns></returns>
+        double GetHmax();
+
+        /// <summary>
         /// Расстояние до частицы
         /// </summary>
         /// <param name="particle">до этой частицы</param>
@@ -56,12 +62,14 @@ namespace SPHmain {
         /// </summary>
         /// <param name="stuffIndex"></param>
         void DoStuff(int stuffIndex);
+
+
     }
 
     /// <summary>
     /// Абстрактный класс представляющий частицу для SPH 2D
     /// </summary>
-    public abstract class Particle2D: Position2D, IParticle2D {
+    public abstract class Particle2DBase: Position2D, IParticle2D {
         #region IParticle 2D impl
         public IPosition2D Vel { get; private set; }
         public double dX {
@@ -90,10 +98,13 @@ namespace SPHmain {
             double deltY = Y - particle.Y;
             return Sqrt(deltX * deltX + deltY * deltY);
         }
+        public double GetHmax() {
+            return hmax;
+        }
         #endregion
-        
+
         public double hmax;
-        public Particle2D(double hmax) {
+        public Particle2DBase(double hmax) {
             this.hmax = hmax;
 
             Vel = new Position2D();
@@ -110,6 +121,9 @@ namespace SPHmain {
         public abstract int StuffCount { get; }
 
         public abstract void DoStuff(int stuffIndex);
+
+        
+
         #endregion
 
     }

@@ -12,7 +12,7 @@ namespace SPHmain {
     /// Интегратор, представляющий двумерную задачу SPH метода
     /// В качестве частицы выступает интерфейс IParticle2D
     /// </summary>
-    public class Sph2D: ScnObjDummy {
+    public class Sph2D: ScnObjDummy, IScnObj {
         #region local classes
 
         /// <summary>
@@ -180,6 +180,7 @@ namespace SPHmain {
         /// "пересобрать ячейки"
         /// </summary>
         void RebuildCells() {
+            if(CellNet!=null)
             foreach(var cell in CellNet) {
                 cell.Particles.Clear();
             }
@@ -187,10 +188,10 @@ namespace SPHmain {
             Cells.Clear();
             if(AllParticles.Count == 0)
                 return;
-            xmin = AllParticles.Min(p => p.X);
-            ymin = AllParticles.Min(p => p.Y);
-            xmax = AllParticles.Max(p => p.X);
-            ymax = AllParticles.Max(p => p.Y);
+            xmin = AllParticles.Min(p => p.X) - hmax;
+            ymin = AllParticles.Min(p => p.Y) - hmax;
+            xmax = AllParticles.Max(p => p.X) + hmax;
+            ymax = AllParticles.Max(p => p.Y) + hmax;
 
             Nrows = (int)Ceiling((ymax - ymin) / hmax);
             Ncols = (int)Ceiling((xmax - xmin) / hmax);
@@ -210,7 +211,7 @@ namespace SPHmain {
         /// <summary>
         /// Заполнить ячейки
         /// </summary>
-        void FillCells() {
+        public void FillCells() {
             //Оставляем только хорошие частицы, остальное в Lost
             Parallel.ForEach(Cells.Where(c=>c.Particles.Count>0),c => {
                 c.DumpBadParticles(LostPatricleStack);
@@ -229,14 +230,18 @@ namespace SPHmain {
         }
 
         /// <summary>
-        /// Вызываем методы DoStuff1(), и DoStuff2() у ВСЕХ частиц 
+        /// Заполняем соседей
         /// </summary>
-        void UpdateParticles() {
-            //Заполняем соседей
+        public void FillNeibs() {
             Parallel.ForEach(Cells.Where(c => c.Particles.Count > 0),c => {
                 c.FillAllNeibs(CellNet);
             });
+        }
 
+        /// <summary>
+        /// Вызываем методы DoStuff(1)...DoStuff(n) у ВСЕХ частиц 
+        /// </summary>
+        void UpdateParticles() {
             //Заполняем d/dt
             for(int i = 0; i < MaxStuffCount; i++) {
                 Parallel.ForEach(AllParticles.Where(p => i < p.StuffCount), p => {
@@ -286,14 +291,20 @@ namespace SPHmain {
             AllParticles.AddRange(integrParticles.Concat(wall));
 
             MaxStuffCount = AllParticles.Max(p => p.StuffCount);
+            hmax = AllParticles.Max(p => p.GetHmax());
 
+            int i = 0;
             foreach(var p in Particles) {
-                AddChild(p);
+                p.Name = $"particle{i++}";
+                AddChildUnsafe(p);
+            }
+            i = 0;
+            foreach(var w in WallParticles) {
+                w.Name = $"wall{i++}";
             }
 
             LostPatricleStack.PushRange(AllParticles.ToArray());
             RebuildCells();
-            FillCells();
 
             SynchMeBefore += SynchBeforeAction;
         }

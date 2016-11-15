@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneDemSPHTests", "OneDemSPH
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPHmain", "SPHmain\SPHmain.csproj", "{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPHmainTests", "SPHmainTests\SPHmainTests.csproj", "{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -182,6 +184,14 @@ Global
 		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|Any CPU.Build.0 = Release|Any CPU
 		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|x86.ActiveCfg = Release|Any CPU
 		{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}.Release|x86.Build.0 = Release|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Debug|x86.Build.0 = Debug|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

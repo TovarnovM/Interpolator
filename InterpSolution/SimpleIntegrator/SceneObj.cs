@@ -191,6 +191,12 @@ namespace SimpleIntegrator {
             Children.Add(newChild);
             newChild.Owner = this;
         }
+
+        public void AddChildUnsafe(IScnObj newChild) {
+            Children.Add(newChild);
+            newChild.Owner = this;
+        }
+
         public void RemoveChild(IScnObj child) {
             if(Children.Remove(child))
                 child.Owner = null;
