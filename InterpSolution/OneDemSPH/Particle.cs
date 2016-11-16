@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneDemSPH {
+namespace SPH_1D {
     public class Particle : ScnObjDummy {
         public int MInd { get; set; }
 

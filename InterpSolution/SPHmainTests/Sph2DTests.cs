@@ -1,12 +1,12 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SPHmain;
+using SPH_2D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPHmain.Tests {
+namespace SPH_2D.Tests {
     [TestClass()]
     public class Sph2DTests {
         class ParticleDummy : Particle2DBase {
@@ -26,22 +26,22 @@ namespace SPHmain.Tests {
 
         [TestMethod()]
         public void Sph2DTest() {
-            var part = new List<ParticleDummy>();
+            var part = new List<IsotropicGas>();
             double hmax = 0.499;
             double shagX = 0.25, shagY = 0.25;
             for(int i = 0; i < 30; i++) {
                 for(int j = 0; j < 20; j++) {
-                    var p = new ParticleDummy(hmax);
+                    var p = new IsotropicGas(0.1, hmax);
                     p.X = i * shagX;
                     p.Y = j * shagY;
                    // p.Name = $"p{i * j}";
                     part.Add(p);
                 }
             }
-            var wall = new List<ParticleDummy>();
+            var wall = new List<IsotropicGas>();
             for(int i = 0; i < 30; i++) {
                 for(int j = 0; j < 5; j++) {
-                    var p = new ParticleDummy(hmax);
+                    var p = new IsotropicGas(0.1, hmax);
                     p.X = i * shagX;
                     p.Y = -shagY - j * shagY;
                    // p.Name = $"w{i * j}";
@@ -51,12 +51,19 @@ namespace SPHmain.Tests {
 
 
             var sph = new Sph2D(part,wall);
-            sph.Rebuild();
+            var v0 = sph.Rebuild();
             sph.FillCells();
             sph.FillNeibs();
 
             var maxNeibs = sph.AllParticles.Max(p => p.Neibs.Where(n => p.GetDistTo(n)<hmax).Count());
             var minNeibs = sph.AllParticles.Min(p => p.Neibs.Where(n => p.GetDistTo(n) < hmax).Count());
+            var gr = from p in sph.AllParticles
+                     group p by p.Neibs.Where(n => p.GetDistTo(n) < hmax).Count() into groups
+                     select new {
+                         groups.Key,
+                         N = groups.Count()
+                     };
+            var dict = gr.ToDictionary(g => g.Key);
 
             Assert.AreEqual(8,maxNeibs);
             Assert.AreEqual(3,minNeibs);

@@ -1,9 +1,9 @@
-﻿<Window x:Class="OneDemSPH.MainWindow"
+﻿<Window x:Class="SPH_1D.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:OneDemSPH"
+        xmlns:local="clr-namespace:SPH_1D"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">

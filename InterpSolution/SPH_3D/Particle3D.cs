@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 using static System.Math;
 
-namespace SPH_2D {
-    public interface IParticle2D : IScnObj {
+namespace SPH_3D {
+    public interface IParticle3D : IScnObj {
         /// <summary>
         /// Х координата частицы
         /// </summary>
@@ -20,24 +20,34 @@ namespace SPH_2D {
         double Y { get; }
 
         /// <summary>
+        /// Z координата частицы
+        /// </summary>
+        double Z { get; }
+
+        /// <summary>
         /// Скорость по X
         /// </summary>
-        double dX { get; }
+        double Vx { get; }
 
         /// <summary>
         /// Скорость по Y
         /// </summary>
-        double dY { get; }
+        double Vy { get; }
+
+        /// <summary>
+        /// Скорость по Z
+        /// </summary>
+        double Vz { get; }
 
         /// <summary>
         /// Скорость
         /// </summary>
-        IPosition2D Vel { get; }
+        IPosition3D Vel { get; }
 
         /// <summary>
         /// Соседи частицы
         /// </summary>
-        List<IParticle2D> Neibs { get; }
+        List<IParticle3D> Neibs { get; }
 
         /// <summary>
         /// получить максимальный радиус сглаживания
@@ -50,7 +60,7 @@ namespace SPH_2D {
         /// </summary>
         /// <param name="particle">до этой частицы</param>
         /// <returns></returns>
-        double GetDistTo(IParticle2D particle);
+        double GetDistTo(IParticle3D particle);
 
         /// <summary>
         /// Сколько зависимых операций необходимо частице на каждом шаге интегрирования
@@ -69,10 +79,10 @@ namespace SPH_2D {
     /// <summary>
     /// Абстрактный класс представляющий частицу для SPH 2D
     /// </summary>
-    public abstract class Particle2DBase: Position2D, IParticle2D {
-        #region IParticle 2D impl
-        public IPosition2D Vel { get; private set; }
-        public double dX {
+    public abstract class Particle3DBase: Position3D, IParticle3D {
+        #region IParticle 3D impl
+        public IPosition3D Vel { get; private set; }
+        public double Vx {
             get {
                 return Vel.X;
             }
@@ -82,7 +92,7 @@ namespace SPH_2D {
             }
         }
 
-        public double dY {
+        public double Vy {
             get {
                 return Vel.Y;
             }
@@ -92,11 +102,22 @@ namespace SPH_2D {
             }
         }
 
-        public List<IParticle2D> Neibs { get; private set; }
-        public double GetDistTo(IParticle2D particle) {
+        public double Vz {
+            get {
+                return Vel.Z;
+            }
+
+            set {
+                Vel.Z = value;
+            }
+        }
+
+        public List<IParticle3D> Neibs { get; private set; }
+        public double GetDistTo(IParticle3D particle) {
             double deltX = X - particle.X;
             double deltY = Y - particle.Y;
-            return Sqrt(deltX * deltX + deltY * deltY);
+            double deltZ = Z - particle.Z;
+            return Sqrt(deltX * deltX + deltY * deltY + deltZ * deltZ);
         }
         public double GetHmax() {
             return hmax;
@@ -104,15 +125,15 @@ namespace SPH_2D {
         #endregion
 
         public double hmax;
-        public Particle2DBase(double hmax) {
+        public Particle3DBase(double hmax) {
             this.hmax = hmax;
 
-            Vel = new Position2D();
+            Vel = new Position3D();
             Vel.Name = "Vel";
             AddChild(Vel);
 
             AddDiffVect(Vel);
-            Neibs = new List<IParticle2D>(30);
+            Neibs = new List<IParticle3D>(30);
 
             Name = "Particle";
         }
@@ -122,46 +143,8 @@ namespace SPH_2D {
 
         public abstract void DoStuff(int stuffIndex);
 
+        
 
-
-        #endregion
-
-        #region Static
-        /// <summary>
-        /// Из диссертации
-        /// </summary>
-        /// <param name="r_shtr"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        public static double W_func(double r_shtr,double h) {
-            double fi = r_shtr / h;
-            if(fi >= 2d)
-                return 0d;
-            double n = 0.7 * PI * h * h; //2D
-            if(fi > 0d) {
-                if(fi < 1d)
-                    return (1d - 3 * fi * fi / 2d + 3 * fi * fi * fi / 4d) / n;
-                var ss = (2d - fi);
-                return ss * ss * ss / (4d * n);
-            }
-            throw new ArgumentException("Baaaad data");
-
-        }
-
-        public static double dW_func(double r_shtr,double h) {
-            double fi = r_shtr / h;
-            if(fi >= 2d)
-                return 0d;
-            double n1 = 28d * PI * h * h * h; //2D
-            if(fi > 0d) {
-                if(fi < 1d)
-                    return (-12d * fi + 9d * fi * fi) / n1;
-                var ss = (2d - fi);
-                return -3d * ss * ss / n1;
-            }
-            throw new ArgumentException("Baaaad data");
-
-        }
         #endregion
 
     }

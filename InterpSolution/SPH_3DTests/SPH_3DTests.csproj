@@ -3,11 +3,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9821C9D6-0D1B-421F-BB80-D1426ADA8A4D}</ProjectGuid>
+    <ProjectGuid>{290F9F89-5AD1-4FCE-A1D4-FD5681A9993F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPHmainTests</RootNamespace>
-    <AssemblyName>SPHmainTests</AssemblyName>
+    <RootNamespace>SPH_3DTests</RootNamespace>
+    <AssemblyName>SPH_3DTests</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -52,7 +52,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sph2DTests.cs" />
+    <Compile Include="Sph3DTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Oslo\Oslo.csproj">
@@ -63,9 +63,9 @@
       <Project>{FCCF7D41-C6A6-4991-BFE3-769D77D9B314}</Project>
       <Name>SimpleIntegrator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SPHmain\SPHmain.csproj">
-      <Project>{49F6DEE7-A531-46D7-8B9E-25B1041B4D26}</Project>
-      <Name>SPHmain</Name>
+    <ProjectReference Include="..\SPH_3D\SPH_3D.csproj">
+      <Project>{9BC20C83-DF88-40CA-8D2C-3317A0BDC205}</Project>
+      <Name>SPH_3D</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

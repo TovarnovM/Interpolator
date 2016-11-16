@@ -7,58 +7,64 @@ using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using static System.Math;
 
-namespace SPH_2D {
+namespace SPH_3D {
     /// <summary>
     /// Интегратор, представляющий двумерную задачу SPH метода
     /// В качестве частицы выступает интерфейс IParticle2D
     /// </summary>
-    public class Sph2D: ScnObjDummy, IScnObj {
+    public class Sph3D: ScnObjDummy, IScnObj {
         #region local classes
 
         /// <summary>
         /// Класс представляющий плоскую ячейку с частицами (необходим для быстрого и параллельного определения соседей частиц)
         /// </summary>
-        class Cell2D {
+        class Cell3D {
 
             /// <summary>
             /// Частицы, находящиеся в ячейке
             /// </summary>
-            public List<IParticle2D> Particles = new List<IParticle2D>();
+            public List<IParticle3D> Particles = new List<IParticle3D>();
 
 
             /// <summary>
             /// Стек с частицами, добавленными в ячейку асинхронными методом. Необходимо перенести их в Particles методом DumpStack()
             /// </summary>
-            public ConcurrentStack<IParticle2D> ParticleStack = new ConcurrentStack<IParticle2D>();
+            public ConcurrentStack<IParticle3D> ParticleStack = new ConcurrentStack<IParticle3D>();
 
             /// <summary>
             /// Индексы ячейки в сетке ячеек
             /// </summary>
-            public int XInd, YInd;
+            public int XInd, YInd, ZInd;
 
             /// <summary>
             /// Границы ячейки.
             /// Левая и нижняя границы включены в пространство ячейки,
             /// Правая и верхняя границы не включены в пространство ячейки
             /// </summary>
-            public double X0, X1, Y0, Y1;
+            public double X0, X1, Y0, Y1, Z0, Z1;
 
             /// <summary>
             /// Конструктор
             /// </summary>
             /// <param name="XInd">Индекс колонки ячейки в сетке ячеек</param>
             /// <param name="YInd">Индекс строки ячейки в сетке ячеек</param>
+            /// <param name="ZInd">Индекс "слоя" ячейки в сетке ячеек</param>
             /// <param name="X0">Левая граница (включена в пространство ячейки)</param>
             /// <param name="X1">Правая граница (включена в пространство ячейки)</param>
             /// <param name="Y0">Нижняя граница (не включена в пространство ячейки)</param>
             /// <param name="Y1">Верхняя граница(не включена в пространство ячейки)</param>
-            public Cell2D(int XInd,int YInd,double X0,double X1,double Y0,double Y1) {
+            /// <param name="Z0">Ближняя граница (не включена в пространство ячейки)</param>
+            /// <param name="Z1">Дальняя граница(не включена в пространство ячейки)</param>
+            public Cell3D(int XInd,int YInd,int ZInd,double X0,double X1,double Y0,double Y1, double Z0, double Z1) {
                 this.XInd = XInd;
                 this.YInd = YInd;
+                this.ZInd = ZInd;
                 this.X0 = X0;
                 this.X1 = X1;
                 this.Y0 = Y0;
                 this.Y1 = Y1;
+                this.Z0 = Z0;
+                this.Z1 = Z1;
             }
 
             /// <summary>
@@ -67,9 +73,10 @@ namespace SPH_2D {
             /// </summary>
             /// <param name="particle"></param>
             /// <returns></returns>
-            bool GoodParticle(IParticle2D particle) {
+            bool GoodParticle(IParticle3D particle) {
                 return !(particle.X < X0 || particle.X >= X1
-                       || particle.Y < Y0 || particle.Y >= Y1);
+                       || particle.Y < Y0 || particle.Y >= Y1
+                       || particle.Z < Z0 || particle.Z >= Z1);
             }
 
             /// <summary>
@@ -86,7 +93,7 @@ namespace SPH_2D {
             /// неподходяцие частицы переносятся в ConcurrentStack<IParticle2D> toThis
             /// </summary>
             /// <param name="toThis">Push'ит неподходяцие частицы сюда</param>
-            public void DumpBadParticles(ConcurrentStack<IParticle2D> toThis) {
+            public void DumpBadParticles(ConcurrentStack<IParticle3D> toThis) {
                 var badParticles = Particles.Where(p => !GoodParticle(p)).ToArray();
                 toThis.PushRange(badParticles);
                 Particles = Particles.Except(badParticles).ToList();
@@ -97,16 +104,20 @@ namespace SPH_2D {
             /// В качестве соседей для частицы выступают ВСЕ частицы, находящиеся в этой и в соседних ячейках (за исключением самой частицы)
             /// </summary>
             /// <param name="cells"></param>
-            public void FillAllNeibs(Cell2D[,] cells) {
+            public void FillAllNeibs(Cell3D[,,] cells) {
                 int i0 = XInd - 1 >= 0 ? XInd - 1 : XInd;
                 int j0 = YInd - 1 >= 0 ? YInd - 1 : YInd;
+                int k0 = ZInd - 1 >= 0 ? ZInd - 1 : ZInd;
                 int i1 = XInd + 1 < cells.GetLength(0) ? XInd + 1 : XInd;
                 int j1 = YInd + 1 < cells.GetLength(1) ? YInd + 1 : YInd;
-                var allPart = Enumerable.Empty<IParticle2D>();
-                
+                int k1 = ZInd + 1 < cells.GetLength(2) ? ZInd + 1 : ZInd;
+                var allPart = Enumerable.Empty<IParticle3D>();
+
                 for(int i = i0; i <= i1; i++) {
                     for(int j = j0; j <= j1; j++) {
-                        allPart = allPart.Concat(cells[i,j].Particles);
+                        for(int k = k0; k <= k1; k++) {
+                            allPart = allPart.Concat(cells[i,j,k].Particles);
+                        }
                     }
                 }
                 var allPlst = allPart.ToList();
@@ -126,17 +137,17 @@ namespace SPH_2D {
         /// [столбец, строка]
         /// Размерность [Ncols, Nrows]
         /// </summary>
-        Cell2D[,] CellNet;
+        Cell3D[,,] CellNet;
 
         /// <summary>
         /// Кол-во строк и столбцов в матрице ячеек
         /// </summary>
-        int Nrows, Ncols;
+        int Nrows, Ncols, Naisles;
 
         /// <summary>
         /// Они же, но только в списке (для параллельного перебора)
         /// </summary>
-        List<Cell2D> Cells = new List<Cell2D>();
+        List<Cell3D> CellsList = new List<Cell3D>();
 
         /// <summary>
         /// Характеристики сетки ячеек
@@ -146,12 +157,14 @@ namespace SPH_2D {
             xmin, //левая минимальная координата сетки (она же минимальная Х координата частиц)
             xmax, //правая максимальная координата сетки (она же максимальная Х координата частиц)
             ymin, //нижняя минимальная координата сетки (она же минимальная Y координата частиц)
-            ymax; //верхнияя максимальная координата сетки (она же максимальная Y координата частиц)
+            ymax, //верхнияя максимальная координата сетки (она же максимальная Y координата частиц)
+            zmin, //нижняя минимальная координата сетки (она же минимальная Y координата частиц)
+            zmax; //верхнияя максимальная координата сетки (она же максимальная Y координата частиц)
 
         /// <summary>
         /// Тут лежат частицы, которым нужно распределение по ячейкам
         /// </summary>
-        ConcurrentStack<IParticle2D> LostPatricleStack = new ConcurrentStack<IParticle2D>();
+        ConcurrentStack<IParticle3D> LostPatricleStack = new ConcurrentStack<IParticle3D>();
         #endregion
 
         #region public fields
@@ -159,17 +172,17 @@ namespace SPH_2D {
         /// <summary>
         /// Лист c интегрируемыми частицами (добавляются в Children)
         /// </summary>
-        public List<IParticle2D> Particles = new List<IParticle2D>();
+        public List<IParticle3D> Particles = new List<IParticle3D>();
 
         /// <summary>
         /// Лист со всеми частицами 
         /// </summary>
-        public List<IParticle2D> AllParticles = new List<IParticle2D>();
+        public List<IParticle3D> AllParticles = new List<IParticle3D>();
 
         /// <summary>
         /// Лист с частицами, представляющими "стены"
         /// </summary>
-        public List<IParticle2D> WallParticles = new List<IParticle2D>();
+        public List<IParticle3D> WallParticles = new List<IParticle3D>();
 
         public int MaxStuffCount { get; private set; }
 
@@ -180,30 +193,37 @@ namespace SPH_2D {
         /// "пересобрать ячейки"
         /// </summary>
         void RebuildCells() {
-            if(CellNet!=null)
-            foreach(var cell in CellNet) {
+            foreach(var cell in CellsList) {
                 cell.Particles.Clear();
             }
             CellNet = null;
-            Cells.Clear();
+            CellsList.Clear();
             if(AllParticles.Count == 0)
                 return;
             xmin = AllParticles.Min(p => p.X) - hmax * 0.5;
             ymin = AllParticles.Min(p => p.Y) - hmax * 0.5;
+            zmin = AllParticles.Min(p => p.Z) - hmax * 0.5;
             xmax = AllParticles.Max(p => p.X) + hmax * 0.5;
             ymax = AllParticles.Max(p => p.Y) + hmax * 0.5;
+            zmax = AllParticles.Max(p => p.Z) + hmax * 0.5;
 
-            Nrows = (int)Ceiling((ymax - ymin) / hmax)+1;
-            Ncols = (int)Ceiling((xmax - xmin) / hmax)+1;
-            CellNet = new Cell2D[Ncols,Nrows];
+            Nrows = (int)Ceiling((ymax - ymin) / hmax);
+            Ncols = (int)Ceiling((xmax - xmin) / hmax);
+            Naisles = (int)Ceiling((zmax - zmin) / hmax);
+            CellNet = new Cell3D[Ncols,Nrows,Naisles];
             for(int i = 0; i < Ncols; i++) {
                 for(int j = 0; j < Nrows; j++) {
-                    double x0 = xmin + i * hmax;
-                    double x1 = x0 + hmax;
-                    double y0 = ymin + j * hmax;
-                    double y1 = y0 + hmax;
-                    CellNet[i,j] = new Cell2D(i,j,x0,x1,y0,y1);
-                    Cells.Add(CellNet[i,j]);
+                    for(int k = 0; k < Naisles; k++) {
+                        double x0 = xmin + i * hmax;
+                        double x1 = x0 + hmax;
+                        double y0 = ymin + j * hmax;
+                        double y1 = y0 + hmax;
+                        double z0 = zmin + j * hmax;
+                        double z1 = z0 + hmax;
+                        CellNet[i,j,k] = new Cell3D(i,j,k,x0,x1,y0,y1,z0,z1);
+                        CellsList.Add(CellNet[i,j,k]);
+                    }
+
                 }
             }
         }
@@ -213,18 +233,18 @@ namespace SPH_2D {
         /// </summary>
         public void FillCells() {
             //Оставляем только хорошие частицы, остальное в Lost
-            Parallel.ForEach(Cells.Where(c=>c.Particles.Count>0),c => {
+            Parallel.ForEach(CellsList.Where(c=>c.Particles.Count>0),c => {
                 c.DumpBadParticles(LostPatricleStack);
             });
 
             //Распределяем Lost по ячейкам
             Parallel.ForEach(LostPatricleStack,p => {
-                CellNet[GetHashXInd(p),GetHashYInd(p)].ParticleStack.Push(p);
+                CellNet[GetHashXInd(p),GetHashYInd(p),GetHashZInd(p)].ParticleStack.Push(p);
             });
             LostPatricleStack.Clear();
 
             //Оставляем только хорошие частицы, остальное в Lost
-            Parallel.ForEach(Cells.Where(c => c.ParticleStack.Count > 0),c => {
+            Parallel.ForEach(CellsList.Where(c => c.ParticleStack.Count > 0),c => {
                 c.DumpStack();
             });
         }
@@ -233,7 +253,7 @@ namespace SPH_2D {
         /// Заполняем соседей
         /// </summary>
         public void FillNeibs() {
-            Parallel.ForEach(Cells.Where(c => c.Particles.Count > 0),c => {
+            Parallel.ForEach(CellsList.Where(c => c.Particles.Count > 0),c => {
                 c.FillAllNeibs(CellNet);
             });
         }
@@ -264,7 +284,7 @@ namespace SPH_2D {
         /// </summary>
         /// <param name="particle"></param>
         /// <returns></returns>
-        int GetHashXInd(IParticle2D particle) {
+        int GetHashXInd(IParticle3D particle) {
             return (int)Floor((particle.X - xmin) / hmax);
         }
 
@@ -273,8 +293,17 @@ namespace SPH_2D {
         /// </summary>
         /// <param name="particle"></param>
         /// <returns></returns>
-        int GetHashYInd(IParticle2D particle) {
+        int GetHashYInd(IParticle3D particle) {
             return (int)Floor((particle.Y - ymin) / hmax);
+        }
+
+        /// <summary>
+        /// Вычисляет индекс ячейки (z) в сетке CellNet, подходящей для частицы
+        /// </summary>
+        /// <param name="particle"></param>
+        /// <returns></returns>
+        int GetHashZInd(IParticle3D particle) {
+            return (int)Floor((particle.Z - zmin) / hmax);
         }
         #endregion
 
@@ -285,7 +314,7 @@ namespace SPH_2D {
         /// </summary>
         /// <param name="integrParticles">Интегрируемые частицы</param>
         /// <param name="wall">неинтегрируемые частицы</param>
-        public Sph2D(IEnumerable<IParticle2D> integrParticles,IEnumerable<IParticle2D> wall) {
+        public Sph3D(IEnumerable<IParticle3D> integrParticles,IEnumerable<IParticle3D> wall) {
             Particles.AddRange(integrParticles);
             WallParticles.AddRange(wall);
             AllParticles.AddRange(integrParticles.Concat(wall));

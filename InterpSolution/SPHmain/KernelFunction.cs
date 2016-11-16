@@ -4,10 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SPHmain {
+namespace SPH_2D {
     public class KernelFunction {
-        
-
         public static class KernelF {
             public static double dWdr(double r_shtr,double h) {
                 double q = Math.Abs(r_shtr) / h;

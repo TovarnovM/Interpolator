@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace OneDemSPH {
+namespace SPH_1D {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>

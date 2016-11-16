@@ -14,7 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace OneDemSPH {
+namespace SPH_1D {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -33,7 +33,7 @@ namespace OneDemSPH {
             v0 = pr.Rebuild();
             pr.dt = 0.001;
 
-            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStep(0.01).GetEnumerator();
+            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStep(0.005).GetEnumerator();
             vm.Draw(pr);
         }
 

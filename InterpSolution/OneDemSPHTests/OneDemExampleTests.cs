@@ -1,13 +1,13 @@
 ﻿using Microsoft.Research.Oslo;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OneDemSPH;
+using SPH_1D;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OneDemSPH.Tests {
+namespace SPH_1D.Tests {
     [TestClass()]
     public class OneDemExampleTests {
         [TestMethod()]

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace OneDemSPH.Properties {
+namespace SPH_1D.Properties {
 
 
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

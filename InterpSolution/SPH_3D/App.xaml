@@ -1,7 +1,7 @@
-﻿<Application x:Class="SPH_2D.App"
+﻿<Application x:Class="SPH_3D.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:SPH_2D"
+             xmlns:local="clr-namespace:SPH_3D"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

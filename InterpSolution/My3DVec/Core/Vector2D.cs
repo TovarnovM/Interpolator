@@ -134,6 +134,17 @@ namespace Sharp3D.Math.Core
 			get { return _y; }
 			set { _y = value;}
 		}
+
+        /// <summary>
+        /// Unitvec
+        /// </summary>
+        public Vector2D Norm {
+            get {
+                var res = new Vector2D(this);
+                res.Normalize();
+                return res;
+            }
+        }
 		#endregion
 
 		#region ICloneable Members
@@ -769,13 +780,23 @@ namespace Sharp3D.Math.Core
 		{
 			return Vector2D.Multiply(v,s);
 		}
-		/// <summary>
-		/// Multiplies a vector by a scalar.
-		/// </summary>
-		/// <param name="v">A <see cref="Vector2D"/> instance.</param>
-		/// <param name="s">A scalar.</param>
-		/// <returns>A new <see cref="Vector2D"/> containing the result.</returns>
-		public static Vector2D operator*(double s, Vector2D v)
+
+        /// <summary>
+        /// Multiplies a vector by a scalar.
+        /// </summary>
+        /// <param name="v">A <see cref="Vector2D"/> instance.</param>
+        /// <param name="s">A scalar.</param>
+        /// <returns>A new <see cref="Vector2D"/> containing the result.</returns>
+        public static double operator *(Vector2D v,Vector2D u) {
+            return Vector2D.DotProduct(v,u);
+        }
+        /// <summary>
+        /// Multiplies a vector by a scalar.
+        /// </summary>
+        /// <param name="v">A <see cref="Vector2D"/> instance.</param>
+        /// <param name="s">A scalar.</param>
+        /// <returns>A new <see cref="Vector2D"/> containing the result.</returns>
+        public static Vector2D operator*(double s, Vector2D v)
 		{
 			return Vector2D.Multiply(v,s);
 		}
