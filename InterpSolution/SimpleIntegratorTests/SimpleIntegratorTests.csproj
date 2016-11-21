@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="Orient3DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScnObjDummyTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">

@@ -398,6 +398,31 @@ namespace SimpleIntegrator {
                 _res[i] = DiffArr[i].MyDiff.GetVal(((StateStruct)state).t);
             }
         }
+
+        public IDictionary<string, double> SaveToDict(double t) {
+            var res = new Dictionary<string,double>(AllParamsNames.Count);
+            foreach(var par in GetAllParams()) {
+                res.Add(par.FullName,par.GetVal(t));
+            }
+            return res;
+        }
+
+        public void LoadFromDict(IDictionary<string,double> dict,double t,bool safeBackup = true) {
+            if(dict == null)
+                return;
+            IDictionary<string,double> backup = safeBackup ? SaveToDict(t) :null;
+            try {
+                var prms = GetAllParams().ToDictionary(p => p.FullName);
+                foreach(var elem in dict) {
+                    prms[elem.Key].SetVal(elem.Value);
+                }
+            }
+            catch(Exception e) {
+                LoadFromDict(backup,t,false);
+                throw e;
+            }
+            
+        }
         #endregion
     }
 }
