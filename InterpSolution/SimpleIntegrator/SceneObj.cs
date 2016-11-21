@@ -1,10 +1,13 @@
 ﻿using Interpolator;
 using Microsoft.Research.Oslo;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SimpleIntegrator {
     public delegate bool FlagFunct(params SolPoint[] sp);
@@ -58,6 +61,8 @@ namespace SimpleIntegrator {
 
 
         private ParallelQuery<IScnPrm> DiffArr_parallel;
+        public double TimeSynch { get; private set; }
+
         public void SynchMeTo(double t,ref Vector y) {
             //if(DiffArrN != y.Length)
             //    throw new InvalidOperationException("разные длины векторов in out");
@@ -65,6 +70,7 @@ namespace SimpleIntegrator {
                 DiffArr[i].SetVal(y[i]);
             }
             SynchMe(t);
+            
         }
 
         public Vector f(double t,Vector y) {
@@ -138,6 +144,8 @@ namespace SimpleIntegrator {
             }
 
             SynchMeAfter?.Invoke(t);
+
+            TimeSynch = t;
         }
 
         public int AddParam(IScnPrm prm) {
@@ -398,31 +406,72 @@ namespace SimpleIntegrator {
                 _res[i] = DiffArr[i].MyDiff.GetVal(((StateStruct)state).t);
             }
         }
-
-        public IDictionary<string, double> SaveToDict(double t) {
-            var res = new Dictionary<string,double>(AllParamsNames.Count);
+        #endregion
+        #region Save/Load
+        public IDictionary<string, double> SaveToDict() {
+            var res = new Dictionary<string,double>(AllParamsNames.Count+1);
             foreach(var par in GetAllParams()) {
-                res.Add(par.FullName,par.GetVal(t));
+                res.Add(par.FullName,par.GetVal(TimeSynch));
             }
+            res.Add("TimeSynch",TimeSynch);
             return res;
         }
 
-        public void LoadFromDict(IDictionary<string,double> dict,double t,bool safeBackup = true) {
+        public double LoadFromDict(IDictionary<string,double> dict,bool safeBackup = true) {
             if(dict == null)
-                return;
-            IDictionary<string,double> backup = safeBackup ? SaveToDict(t) :null;
+                return 0;
+            IDictionary<string,double> backup = safeBackup ? SaveToDict() :null;
             try {
                 var prms = GetAllParams().ToDictionary(p => p.FullName);
-                foreach(var elem in dict) {
-                    prms[elem.Key].SetVal(elem.Value);
+                foreach(var prm in prms) {
+                    prm.Value.SetVal(dict[prm.Key]);
                 }
+                TimeSynch = dict["TimeSynch"];
+                return TimeSynch;
             }
             catch(Exception e) {
-                LoadFromDict(backup,t,false);
+                return LoadFromDict(backup,false);
                 throw e;
             }
             
         }
+
+        public static void Serialize(TextWriter writer,IDictionary<string,double> dictionary) {
+            List<DictEntry> entries = new List<DictEntry>(dictionary.Count);
+            foreach(var key in dictionary.Keys) {
+                entries.Add(new DictEntry(key,dictionary[key]));
+            }
+            XmlSerializer serializer = new XmlSerializer(typeof(List<DictEntry>));
+            serializer.Serialize(writer,entries);
+
+            
+        }
+
+        public static void Deserialize(TextReader reader,IDictionary dictionary) {
+            dictionary.Clear();
+            XmlSerializer serializer = new XmlSerializer(typeof(List<DictEntry>));
+            List<DictEntry> list = (List<DictEntry>)serializer.Deserialize(reader);
+            foreach(DictEntry entry in list) {
+                dictionary[entry.Key] = entry.Value;
+            }
+        }
+        class DictEntry {
+            [XmlAttribute]
+            public string Key;
+            [XmlAttribute]
+            public double Value;
+            public DictEntry() {
+            }
+
+            public DictEntry(string key,double value) {
+                Key = key;
+                Value = value;
+            }
+        }
         #endregion
+
+
     }
+
+
 }

@@ -82,6 +82,10 @@
       <Project>{FCCF7D41-C6A6-4991-BFE3-769D77D9B314}</Project>
       <Name>SimpleIntegrator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SPHmain\SPH_2D.csproj">
+      <Project>{49f6dee7-a531-46d7-8b9e-25b1041b4d26}</Project>
+      <Name>SPH_2D</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">
