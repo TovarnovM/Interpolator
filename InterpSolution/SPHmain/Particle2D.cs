@@ -106,6 +106,7 @@ namespace SPH_2D {
         public double hmax;
         public Particle2DBase(double hmax) {
             this.hmax = hmax;
+            Name = "Particle";
 
             Vel = new Position2D();
             Vel.Name = "Vel";
@@ -114,7 +115,7 @@ namespace SPH_2D {
             AddDiffVect(Vel);
             Neibs = new List<IParticle2D>(30);
 
-            Name = "Particle";
+            
         }
 
         #region Abstract
@@ -137,8 +138,9 @@ namespace SPH_2D {
             double fi = r_shtr / h;
             if(fi >= 2d)
                 return 0d;
-            double n = 0.7 * PI * h * h; //2D
-            if(fi > 0d) {
+            //double n = 0.7 * PI * h * h; //2D
+            double n = 1.5 * h;//1D
+            if(fi >= 0d) {
                 if(fi < 1d)
                     return (1d - 3 * fi * fi / 2d + 3 * fi * fi * fi / 4d) / n;
                 var ss = (2d - fi);
@@ -152,8 +154,9 @@ namespace SPH_2D {
             double fi = r_shtr / h;
             if(fi >= 2d)
                 return 0d;
-            double n1 = 28d * PI * h * h * h; //2D
-            if(fi > 0d) {
+            //double n1 = 28d * PI * h * h * h; //2D
+            double n1 = 6d * h * h; //1D
+            if(fi >= 0d) {
                 if(fi < 1d)
                     return (-12d * fi + 9d * fi * fi) / n1;
                 var ss = (2d - fi);

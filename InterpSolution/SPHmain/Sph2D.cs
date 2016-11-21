@@ -88,6 +88,8 @@ namespace SPH_2D {
             /// <param name="toThis">Push'ит неподходяцие частицы сюда</param>
             public void DumpBadParticles(ConcurrentStack<IParticle2D> toThis) {
                 var badParticles = Particles.Where(p => !GoodParticle(p)).ToArray();
+                if(badParticles.Length == 0)
+                    return;
                 toThis.PushRange(badParticles);
                 Particles = Particles.Except(badParticles).ToList();
             }
@@ -193,8 +195,8 @@ namespace SPH_2D {
             xmax = AllParticles.Max(p => p.X) + hmax * 0.5;
             ymax = AllParticles.Max(p => p.Y) + hmax * 0.5;
 
-            Nrows = (int)Ceiling((ymax - ymin) / hmax)+1;
-            Ncols = (int)Ceiling((xmax - xmin) / hmax)+1;
+            Nrows = (int)Ceiling((ymax - ymin) / hmax);
+            Ncols = (int)Ceiling((xmax - xmin) / hmax);
             CellNet = new Cell2D[Ncols,Nrows];
             for(int i = 0; i < Ncols; i++) {
                 for(int j = 0; j < Nrows; j++) {
@@ -219,7 +221,12 @@ namespace SPH_2D {
 
             //Распределяем Lost по ячейкам
             Parallel.ForEach(LostPatricleStack,p => {
-                CellNet[GetHashXInd(p),GetHashYInd(p)].ParticleStack.Push(p);
+                int xind = GetHashXInd(p);
+                int yind = GetHashYInd(p);
+                if(xind<0 || xind >= Ncols || yind < 0 || yind >= Nrows) {
+                    int j = 0;
+                }
+                CellNet[xind,yind].ParticleStack.Push(p);
             });
             LostPatricleStack.Clear();
 
@@ -254,9 +261,12 @@ namespace SPH_2D {
         /// ScnObjDummy.SynchMeBefore()
         /// </summary>
         /// <param name="t"></param>
-        void SynchBeforeAction(double t) {
+        void SynchAfterAction(double t) {
             FillCells();
+            FillNeibs();
             UpdateParticles();
+
+          //  var px0 = AllParticles.FirstOrDefault(p => p.X == 0d) as IsotropicGasParticle;
         }
 
         /// <summary>
@@ -287,8 +297,9 @@ namespace SPH_2D {
         /// <param name="wall">неинтегрируемые частицы</param>
         public Sph2D(IEnumerable<IParticle2D> integrParticles,IEnumerable<IParticle2D> wall) {
             Particles.AddRange(integrParticles);
-            WallParticles.AddRange(wall);
-            AllParticles.AddRange(integrParticles.Concat(wall));
+            if(wall != null)
+                WallParticles.AddRange(wall);
+            AllParticles.AddRange(integrParticles.Concat(WallParticles));
 
             MaxStuffCount = AllParticles.Max(p => p.StuffCount);
             hmax = AllParticles.Max(p => p.GetHmax());
@@ -306,7 +317,7 @@ namespace SPH_2D {
             LostPatricleStack.PushRange(AllParticles.ToArray());
             RebuildCells();
 
-            SynchMeBefore += SynchBeforeAction;
+            SynchMeAfter += SynchAfterAction;
         }
         #endregion
 

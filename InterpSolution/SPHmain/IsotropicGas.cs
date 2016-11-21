@@ -7,9 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SPH_2D {
-    public class IsotropicGas : Particle2DBase {
+    public class IsotropicGasParticle : Particle2DBase {
+        public bool isWall = false;
+
         public double D;
-        public double alpha; //для формулы 1.19
+        public double alpha = 1.4d; //для формулы 1.19
 
         public double M;
 
@@ -33,12 +35,14 @@ namespace SPH_2D {
         public double k = 1.4;
 
         #region Constructor + Abstracts realiz
-        public IsotropicGas(double d, double hmax) : base(hmax) {
+        public IsotropicGasParticle(double d, double hmax) : base(hmax) {
             this.D = d;
 
             dV = new Position2D();
+            dV.Name = "dV";
             AddChild(dV);
-            Vel.AddDiffVect(dV,true);
+            Vel.AddDiffVect(dV,false);
+           
 
             AddDiffPropToParam(pRo,pdRo);
             AddDiffPropToParam(pE,pdE);
@@ -57,7 +61,8 @@ namespace SPH_2D {
                     break;
                 }
                 case 1: {
-                    FillDts();
+                    if(!isWall)
+                        FillDts();
                     break;
                 }
 
@@ -67,7 +72,7 @@ namespace SPH_2D {
         }
 
         public void FillDts() {
-            foreach(var neib in Neibs.Where(n=>GetDistTo(n) < hmax).Cast<IsotropicGas>()) {
+            foreach(var neib in Neibs.Where(n=>GetDistTo(n) < hmax).Cast<IsotropicGasParticle>()) {
                 double h = alpha * (D + neib.D) * 0.5;
                 double dw = dW_func(GetDistTo(neib),h);
                 if(dw == 0d)
@@ -77,6 +82,9 @@ namespace SPH_2D {
                 double P_j = neib.P;
                 double Cl_j = neib.GetCl(); //скорость звука
                 double Cl_i = neib.GetCl();
+
+                double x = X;
+
                 Vector2D Rji_norm = (neib.Vec2D - Vec2D).Norm;
                 double U_Ri = Vel.Vec2D * Rji_norm;
                 double U_Rj = neib.Vel.Vec2D * Rji_norm;
@@ -86,12 +94,27 @@ namespace SPH_2D {
                 double mn4VandE = 2d * m_j * P_starij / (Ro * Ro_j)* dw;
 
                 dRo += -2d * m_j * Ro / Ro_j * dw * (U_Ri - U_starRij); //1.24
-                dV.Vec2D += mn4VandE  * Rji_norm;//1.25
+                var dVelVec = mn4VandE  * Rji_norm;
+                dV.X += dVelVec.X;
+                dV.Y += dVelVec.Y;
                 dE += -0.5*mn4VandE * (U_Ri - U_starRij);//1.26
+                if(X == 0d) {
+                    int i = 1;
+                }
             }
+
+
+
         }
 
         public void SetP() {
+            
+            //Ro = Neibs.Cast<IsotropicGasParticle>().Sum(n => {
+            //    double h = alpha * (D + n.D) * 0.5;
+            //    double w = W_func(GetDistTo(n),h);
+            //    return n.M * w;
+
+            //});
             P = (k - 1d) * Ro * E;
             dRo = 0d;
             dE = 0d;
@@ -103,7 +126,7 @@ namespace SPH_2D {
         /// </summary>
         /// <returns></returns>
         public double GetCl() {
-            return 343.1;
+            return 100;
         }
         #endregion
     }   

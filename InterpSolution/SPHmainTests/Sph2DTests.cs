@@ -26,22 +26,22 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void Sph2DTest() {
-            var part = new List<IsotropicGas>();
+            var part = new List<IsotropicGasParticle>();
             double hmax = 0.499;
             double shagX = 0.25, shagY = 0.25;
             for(int i = 0; i < 30; i++) {
                 for(int j = 0; j < 20; j++) {
-                    var p = new IsotropicGas(0.1, hmax);
+                    var p = new IsotropicGasParticle(0.1, hmax);
                     p.X = i * shagX;
                     p.Y = j * shagY;
                    // p.Name = $"p{i * j}";
                     part.Add(p);
                 }
             }
-            var wall = new List<IsotropicGas>();
+            var wall = new List<IsotropicGasParticle>();
             for(int i = 0; i < 30; i++) {
                 for(int j = 0; j < 5; j++) {
-                    var p = new IsotropicGas(0.1, hmax);
+                    var p = new IsotropicGasParticle(0.1, hmax);
                     p.X = i * shagX;
                     p.Y = -shagY - j * shagY;
                    // p.Name = $"w{i * j}";

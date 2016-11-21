@@ -86,6 +86,7 @@
     <Compile Include="IsotropicGas.cs" />
     <Compile Include="Particle2D.cs" />
     <Compile Include="Sph2D.cs" />
+    <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

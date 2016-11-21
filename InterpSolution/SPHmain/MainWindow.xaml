@@ -4,9 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SPH_2D"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TabControl x:Name="tabControl" Margin="0,0,0,0">
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5"/>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="274*"/>
+                        <RowDefinition Height="45*"/>
+                    </Grid.RowDefinitions>
+                    <oxy:PlotView Model="{Binding Model1}" Grid.Row="0"/>
+                    <Button x:Name="button" Content="Click Me" Grid.Row="1" Click="button_Click"/>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>

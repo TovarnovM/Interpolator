@@ -117,7 +117,11 @@ namespace SimpleIntegrator {
         }
 
         public IEnumerable<IScnPrm> GetDiffPrms() {
-            return Prms.Where(a => a.MyDiff != null);
+            var chldrenDiffs = Enumerable.Empty<IScnPrm>();
+            foreach(var ch in Children) {
+                chldrenDiffs = chldrenDiffs.Concat(ch.GetDiffPrms());
+            }
+            return Prms.Where(a => a.MyDiff != null).Concat(chldrenDiffs);
         }
 
         public void SynchMe(double t) {
