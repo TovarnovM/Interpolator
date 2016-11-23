@@ -108,13 +108,13 @@ namespace SPH_2D {
         }
 
         public void SetP() {
-            
+
             //Ro = Neibs.Cast<IsotropicGasParticle>().Sum(n => {
             //    double h = alpha * (D + n.D) * 0.5;
             //    double w = W_func(GetDistTo(n),h);
             //    return n.M * w;
 
-            //});
+            //}) + M* W_func(0,1);
             P = (k - 1d) * Ro * E;
             dRo = 0d;
             dE = 0d;
@@ -126,7 +126,7 @@ namespace SPH_2D {
         /// </summary>
         /// <returns></returns>
         public double GetCl() {
-            return 100;
+            return 340;
         }
         #endregion
     }   

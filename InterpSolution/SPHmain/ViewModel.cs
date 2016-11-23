@@ -1,6 +1,8 @@
-﻿using OxyPlot;
+﻿using Microsoft.Research.Oslo;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using ReactiveODE;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,40 +16,59 @@ namespace SPH_2D {
         private ScatterSeries P;
         private ScatterSeries E;
         double Ro0,  P0, E0;
+
+        public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
+        Sph2D _curr4Draw;
+
         public ViewModel(Sph2D curr) {
+            _curr4Draw = MainWindow.GetTest();
+            _curr4Draw.Rebuild();
+
             Fill0s(curr);
-            Model1 = GetNewModel("params","X","p,Ro,V");
-            P = new ScatterSeries() {
-                Title = "P",
-                MarkerType = MarkerType.Triangle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Green
-            };
-            Model1.Series.Add(P);
 
-            Ro = new ScatterSeries() {
-                Title = "Ro",
-                MarkerType = MarkerType.Diamond,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.DarkOrange
-            };
-            Model1.Series.Add(Ro);
+            Model1Rx = new VMPropRx<PlotModel,SolPoint>(
+                () => {
+                    var Model1 = GetNewModel("params","X","p,Ro,V");
+                    P = new ScatterSeries() {
+                        Title = "P",
+                        MarkerType = MarkerType.Triangle,
+                        MarkerSize = 2,
+                        MarkerFill = OxyColors.Green
+                    };
+                    Model1.Series.Add(P);
 
-            V = new ScatterSeries() {
-                Title = "V",
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Blue
-            };
-            Model1.Series.Add(V);
+                    Ro = new ScatterSeries() {
+                        Title = "Ro",
+                        MarkerType = MarkerType.Diamond,
+                        MarkerSize = 2,
+                        MarkerFill = OxyColors.DarkOrange
+                    };
+                    Model1.Series.Add(Ro);
 
-            E = new ScatterSeries() {
-                Title = "E",
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Red
-            };
-            Model1.Series.Add(E);
+                    V = new ScatterSeries() {
+                        Title = "V",
+                        MarkerType = MarkerType.Circle,
+                        MarkerSize = 2,
+                        MarkerFill = OxyColors.Blue
+                    };
+                    Model1.Series.Add(V);
+
+                    E = new ScatterSeries() {
+                        Title = "E",
+                        MarkerType = MarkerType.Circle,
+                        MarkerSize = 2,
+                        MarkerFill = OxyColors.Red
+                    };
+                    Model1.Series.Add(E);
+                    return Model1;
+                },
+                (sp,pm) => {
+                    _curr4Draw.SynchMeTo(sp);
+                    Draw(sp.T,pm);
+                    return pm;
+                });
+
+
         }
 
         public void Fill0s(Sph2D curr) {
@@ -56,21 +77,21 @@ namespace SPH_2D {
             E0 = curr.AllParticles.Cast<IsotropicGasParticle>().Max(p => p.E);
         }
 
-        public void Draw(Sph2D curr) {
+        public void Draw(double t, PlotModel pm) {
             Ro.Points.Clear();
             V.Points.Clear();
             P.Points.Clear();
             E.Points.Clear();
-            foreach(var p in curr.AllParticles.Cast<IsotropicGasParticle>()) {
+            foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
                 Ro.Points.Add(new ScatterPoint(p.X,p.Ro/Ro0));
                 V.Points.Add(new ScatterPoint(p.X,p.Vel.X/p.GetCl()));
                 P.Points.Add(new ScatterPoint(p.X,p.P/P0));
                 E.Points.Add(new ScatterPoint(p.X,p.E/E0));
             }
-            Model1.InvalidatePlot(true);
+            pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.P):0.###}";
+            pm.InvalidatePlot(true);
         }
-
-        public PlotModel Model1 { get; set; }
+        
         public PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {
             var m = new PlotModel { Title = title };
             var linearAxis1 = new LinearAxis();

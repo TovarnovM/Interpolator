@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using Microsoft.Research.Oslo;
+using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using ReactiveODE;
@@ -15,56 +16,75 @@ namespace SPH_1D {
         private ScatterSeries P;
         private ScatterSeries E;
 
+        public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
+        OneDemExample _curr4Draw;
+
         public ViewModel() {
-            Model1 = GetNewModel("params", "X", "p,Ro,V");
-            P = new ScatterSeries() {
-                Title = "P",
-                MarkerType = MarkerType.Triangle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Green
-            };
-            Model1.Series.Add(P);
+            _curr4Draw = new OneDemExample();
+            _curr4Draw.Rebuild();
+            Model1Rx = new VMPropRx<PlotModel,SolPoint>(() => {
+                var Model1 = GetNewModel("params","X","p,Ro,V");
+                P = new ScatterSeries() {
+                    Title = "P",
+                    MarkerType = MarkerType.Triangle,
+                    MarkerSize = 2,
+                    MarkerFill = OxyColors.Green
+                };
+                Model1.Series.Add(P);
 
-            Ro = new ScatterSeries() {
-                Title = "Ro",
-                MarkerType = MarkerType.Diamond,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.DarkOrange
-            };
-            Model1.Series.Add(Ro);
+                Ro = new ScatterSeries() {
+                    Title = "Ro",
+                    MarkerType = MarkerType.Diamond,
+                    MarkerSize = 2,
+                    MarkerFill = OxyColors.DarkOrange
+                };
+                Model1.Series.Add(Ro);
 
-            V = new ScatterSeries() {
-                Title = "V",
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Blue
-            };
-            Model1.Series.Add(V);
+                V = new ScatterSeries() {
+                    Title = "V",
+                    MarkerType = MarkerType.Circle,
+                    MarkerSize = 2,
+                    MarkerFill = OxyColors.Blue
+                };
+                Model1.Series.Add(V);
 
-            E = new ScatterSeries() {
-                Title = "E",
-                MarkerType = MarkerType.Circle,
-                MarkerSize = 2,
-                MarkerFill = OxyColors.Red
-            };
-            Model1.Series.Add(E);
+                E = new ScatterSeries() {
+                    Title = "E",
+                    MarkerType = MarkerType.Circle,
+                    MarkerSize = 2,
+                    MarkerFill = OxyColors.Red
+                };
+                Model1.Series.Add(E);
+                return Model1;
+
+            },
+            (sp,pm) => {
+                _curr4Draw.SynchMeTo(sp);
+                Draw(sp.T,pm);
+                return pm;
+            }
+            );
+
+
         }
 
-        public void Draw(OneDemExample curr) {
+        
+
+        public void Draw(double t, PlotModel pm) {
             Ro.Points.Clear();
             V.Points.Clear();
             P.Points.Clear();
             E.Points.Clear();
-            foreach(var p in curr.AllParticles) {
+            foreach(var p in _curr4Draw.AllParticles) {
                 Ro.Points.Add(new ScatterPoint(p.X,p.Ro));
                 V.Points.Add(new ScatterPoint(p.X,p.V));
                 P.Points.Add(new ScatterPoint(p.X,p.P));
                 E.Points.Add(new ScatterPoint(p.X,p.E));
             }
-            Model1.InvalidatePlot(true);
+            pm.Title = $"{t:0.###} s,  RoMax = {_curr4Draw.Particles.Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Max(p => p.P):0.###}";
+            pm.InvalidatePlot(true);
         }
-
-        public PlotModel Model1 { get; set; }
+        
         public PlotModel GetNewModel(string title = "", string xname ="",string yname = "") {
             
             var m = new PlotModel { Title = title };

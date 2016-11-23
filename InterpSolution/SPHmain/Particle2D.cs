@@ -134,36 +134,69 @@ namespace SPH_2D {
         /// <param name="r_shtr"></param>
         /// <param name="h"></param>
         /// <returns></returns>
-        public static double W_func(double r_shtr,double h) {
-            double fi = r_shtr / h;
-            if(fi >= 2d)
-                return 0d;
-            //double n = 0.7 * PI * h * h; //2D
-            double n = 1.5 * h;//1D
-            if(fi >= 0d) {
-                if(fi < 1d)
-                    return (1d - 3 * fi * fi / 2d + 3 * fi * fi * fi / 4d) / n;
-                var ss = (2d - fi);
-                return ss * ss * ss / (4d * n);
-            }
-            throw new ArgumentException("Baaaad data");
+        //public static double W_func(double r_shtr,double h) {
+        //    double fi = r_shtr / h;
+        //    if(fi >= 2d)
+        //        return 0d;
+        //    //double n = 0.7 * PI * h * h; //2D
+        //    double n = 1.5 * h;//1D
+        //    if(fi >= 0d) {
+        //        if(fi < 1d)
+        //            return (1d - 3 * fi * fi / 2d + 3 * fi * fi * fi / 4d) / n;
+        //        var ss = (2d - fi);
+        //        return ss * ss * ss / (4d * n);
+        //    }
+        //    throw new ArgumentException("Baaaad data");
 
-        }
+        //}
+
+        //public static double dW_func(double r_shtr,double h) {
+        //    double fi = r_shtr / h;
+        //    if(fi >= 2d)
+        //        return 0d;
+        //    //double n1 = 28d * PI * h * h * h; //2D
+        //    double n1 = 6d * h * h; //1D
+        //    if(fi >= 0d) {
+        //        if(fi < 1d)
+        //            return (-12d * fi + 9d * fi * fi) / n1;
+        //        var ss = (2d - fi);
+        //        return -3d * ss * ss / n1;
+        //    }
+        //    throw new ArgumentException("Baaaad data");
+
+        //}
+
 
         public static double dW_func(double r_shtr,double h) {
-            double fi = r_shtr / h;
-            if(fi >= 2d)
-                return 0d;
-            //double n1 = 28d * PI * h * h * h; //2D
-            double n1 = 6d * h * h; //1D
-            if(fi >= 0d) {
-                if(fi < 1d)
-                    return (-12d * fi + 9d * fi * fi) / n1;
-                var ss = (2d - fi);
-                return -3d * ss * ss / n1;
-            }
-            throw new ArgumentException("Baaaad data");
+            double q = Math.Abs(r_shtr) / h;
+            if(q > 2.0)
+                return 0.0;
 
+            double a = -2.0 / (3.0 * h * h);
+            double result = 0;
+
+            if(q < 0.66666)
+                result = 1;
+            else if(q >= 0.66666 && q < 1.0)
+                result = 3.0 * q * (4.0 - 3.0 * q) / 4.0;
+            else if(q >= 1.0 && q <= 2.0)
+                result = 3.0 * (2.0 - q) * (2.0 - q) / 4.0;
+
+            return result * a;
+        }
+        public static double W_func(double r_shtr,double h) {
+            double q = Math.Abs(r_shtr) / h;
+            if(q > 2.0)
+                return 0.0;
+            double a = 2.0 / (3.0 * h);
+            double result = 0;
+
+            if(q >= 0 && q <= 1.0)
+                result = 0.25 * (4d - 6 * q * q + 3 * q * q * q);
+            else if(q > 1.0 && q <= 2.0)
+                result = 0.25 * (2.0 - q) * (2.0 - q) * (2.0 - q);
+
+            return result * a;
         }
         #endregion
 

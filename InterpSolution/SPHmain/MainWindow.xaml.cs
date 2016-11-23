@@ -1,5 +1,7 @@
 ﻿using Microsoft.Research.Oslo;
+using ReactiveODE;
 using System;
+using Microsoft.Research.Oslo;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,39 +22,40 @@ namespace SPH_2D {
     /// </summary>
     public partial class MainWindow : Window {
         private Sph2D pr;
-        private IEnumerator<SolPoint> sol;
+        private IObservable<SolPoint> sol;
+        IEquasionController controller;
         private Microsoft.Research.Oslo.Vector v0;
         public ViewModel vm { get; set; }
 
         public MainWindow() {
-            InitializeComponent();
             pr = GetTest();
             vm = new ViewModel(pr);
             DataContext = vm;
+            InitializeComponent();
+            
+            
 
             //(0.001875+0.0075) * 0.5
             v0 = pr.Rebuild();
-            var dt = 0.00000001;
+            var dt = 0.0000001;
 
-            sol = Ode.RK45(0,v0,pr.f,dt).WithStep(0.001).GetEnumerator();
-            vm.Draw(pr);
+            sol = Ode.RK45(0,v0,pr.f,dt).ToRx(out controller);
+            controller.Pause();
+            sol.Subscribe(sp => {
+                vm.Model1Rx.Update(sp);
+            });
         }
 
 
 
         private void button_Click(object sender,RoutedEventArgs e) {
-            for(int i = 0; i < 1; i++) {
-
+            controller.Paused = !controller.Paused;
+            string txt = controller.Paused ? "Paused" : "Playing";
+            button.Content = txt;
             
-            sol.MoveNext();
-            var x = sol.Current.X;
-            pr.SynchMeTo(sol.Current.T,ref x);
-            vm.Draw(pr);
-            button.Content = $"{sol.Current.T:0.##########} s,  RoMax = {pr.Particles.Cast<IsotropicGasParticle>().Max(p => p.Ro):0.###},  Pmax = {pr.Particles.Cast<IsotropicGasParticle>().Max(p => p.P):0.###}";
-            }
         }
 
-        private Sph2D GetTest() {
+        public static Sph2D GetTest() {
             int N = 200;
             double L = 0.1 ,shag = L/N, xL = 0.5*L;
             double d = L / N, hmax = 1.4 * 2 * d;

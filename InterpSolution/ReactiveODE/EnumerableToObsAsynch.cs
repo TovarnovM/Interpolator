@@ -27,10 +27,10 @@ namespace ReactiveODE {
         protected bool _go;
         protected bool getStarted;
 
-        public EnumerableToObsAnsynch(IEnumerable<T> source) {
+        public EnumerableToObsAnsynch(IEnumerable<T> source, bool paused = true) {
             getStarted = false;
             this.source = source;
-            _go = true;
+            _go = !paused;
             cts = new CancellationTokenSource();
             Sbj = new Subject<T>();
         }
@@ -38,10 +38,10 @@ namespace ReactiveODE {
         protected virtual void DoStuff() {
             while(!cts.IsCancellationRequested 
                 && enumenator.MoveNext()) {
-                Sbj.OnNext(enumenator.Current);
                 lock(_locker)
                     while(!_go)
-                        Monitor.Wait(_locker);            
+                        Monitor.Wait(_locker);
+                Sbj.OnNext(enumenator.Current);
             }
             Sbj.OnCompleted();
 
