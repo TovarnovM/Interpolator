@@ -25,7 +25,7 @@ namespace ReactiveODE {
                 else {
                     _isBusy = true;
                     _stack.Clear();
-                    Task.Factory.StartNew(UpdateFuncWrapper,info,_cts.Token).ContinueWith(UpdateFuncContinue);
+                    Task.Factory.StartNew(UpdateFuncWrapper,info,_cts.Token,TaskCreationOptions.None,TaskScheduler.Default).ContinueWith(UpdateFuncContinue,TaskScheduler.Default);
                 }
             }
         }

@@ -38,7 +38,7 @@ namespace SPH_1D {
             v0 = pr.Rebuild();
             pr.dt = 0.001;
 
-            sol = Ode.RK45(0,v0,pr.f,pr.dt).ToRx(out controller);
+            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStepRx(0.1,out controller);
             controller.Pause();
             sol.Subscribe(sp => {
                 vm.Model1Rx.Update(sp);

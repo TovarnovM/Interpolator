@@ -39,7 +39,7 @@ namespace SPH_2D {
             v0 = pr.Rebuild();
             var dt = 0.0000001;
 
-            sol = Ode.RK45(0,v0,pr.f,dt).ToRx(out controller);
+            sol = Ode.RK45(0,v0,pr.f,dt).WithStepRx(dt * 10,out controller);
             controller.Pause();
             sol.Subscribe(sp => {
                 vm.Model1Rx.Update(sp);
@@ -56,9 +56,9 @@ namespace SPH_2D {
         }
 
         public static Sph2D GetTest() {
-            int N = 200;
-            double L = 0.1 ,shag = L/N, xL = 0.5*L;
-            double d = L / N, hmax = 1.4 * 2 * d;
+            int N = 300;
+            double L = 0.01 ,shag = L/N, xL = 0.5*L;
+            double d = 5*L / N, hmax = 1.4 * 2 * d;
             double P1 = 3E4, P2 = 1E4;
             double Ro1 = 1500, Ro2 = 1200;
             double k1 = 3, k2 = 3;
@@ -79,7 +79,7 @@ namespace SPH_2D {
             for(int i = 0; i <1; i++) {
 
                 particles.ForEach(p => {
-                    p.M = p.Ro * Math.Pow(p.D,1);
+                    p.M = p.Ro * Math.Pow(shag,1);
                     
 
                 });
