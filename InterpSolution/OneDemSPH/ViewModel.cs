@@ -1,6 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using ReactiveODE;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,6 +66,7 @@ namespace SPH_1D {
 
         public PlotModel Model1 { get; set; }
         public PlotModel GetNewModel(string title = "", string xname ="",string yname = "") {
+            
             var m = new PlotModel { Title = title };
             var linearAxis1 = new LinearAxis();
             linearAxis1.MajorGridlineStyle = LineStyle.Solid;

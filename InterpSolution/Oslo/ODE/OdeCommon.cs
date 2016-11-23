@@ -77,7 +77,7 @@ namespace Microsoft.Research.Oslo
         /// <summary>Create solution point from time value and phase vector</summary>
         /// <param name="t">Current time value</param>
         /// <param name="x">Current phase vector</param>
-        internal SolPoint(double t, Vector x)
+        public SolPoint(double t, Vector x)
         {
             this.x = x;
             this.t = t;

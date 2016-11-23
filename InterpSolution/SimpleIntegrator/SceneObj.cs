@@ -73,6 +73,12 @@ namespace SimpleIntegrator {
             
         }
 
+        public void SynchMeTo(SolPoint sp) {
+            var v = sp.X;
+            var t = sp.T;
+            SynchMeTo(t,ref v);
+        }
+
         public Vector f(double t,Vector y) {
 
             SynchMeTo(t,ref y);
