@@ -251,7 +251,9 @@ namespace Sharp3D.Math.Core
 		#endregion
 
 		#region Public Static Vector Arithmetics
-		/// <summary>
+		
+
+        /// <summary>
 		/// Adds two vectors.
 		/// </summary>
 		/// <param name="v">A <see cref="Vector3D"/> instance.</param>

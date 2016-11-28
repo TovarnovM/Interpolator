@@ -32,8 +32,13 @@ namespace ReactiveODE {
             SolPoint prev = en.Current;
             double n = Math.Ceiling(prev.T / delta);
             double tout = n * delta;
-            if(tout == prev.T)
+            if(tout == prev.T) {
+                lock(_locker)
+                    while(!_go)
+                        Monitor.Wait(_locker);
                 Sbj.OnNext(prev);
+            }
+                
             
             n++;
             tout = n * delta;
@@ -44,10 +49,12 @@ namespace ReactiveODE {
                 
                 SolPoint current = en.Current;
                 while(current.T >= tout) {
-                    Sbj.OnNext(new SolPoint(tout,Vector.Lerp(tout,prev.T,prev.X,current.T,current.X)));
                     lock(_locker)
                         while(!_go)
                             Monitor.Wait(_locker);
+
+                    Sbj.OnNext(new SolPoint(tout,Vector.Lerp(tout,prev.T,prev.X,current.T,current.X)));
+ 
                     n++;
                     tout = n * delta;
                 }

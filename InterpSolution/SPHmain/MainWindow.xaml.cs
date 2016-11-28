@@ -16,6 +16,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reactive.Linq;
+using Microsoft.Win32;
+using System.IO;
+using SimpleIntegrator;
 
 namespace SPH_2D {
     /// <summary>
@@ -33,23 +36,13 @@ namespace SPH_2D {
             vm = new ViewModel(pr);
             DataContext = vm;
             InitializeComponent();
-            
-            
+
+
 
             //(0.001875+0.0075) * 0.5
-            v0 = pr.Rebuild();
-            var dt = 0.0000001;
-
-            sol = Ode.RK45(0,v0,pr.f,dt).WithStepRx(dt * 10,out controller);
-            controller.Pause();
+            initObs(pr);
 
             var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged");
-
-            sol.ObserveOnDispatcher().Subscribe(sp => {
-                vm.SolPointList.Update(sp);
-                slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
-            });
-
 
             trackbarch.Subscribe(i => {
                 int newVal = (int)i.EventArgs.NewValue;
@@ -60,6 +53,18 @@ namespace SPH_2D {
             });
         }
 
+        private void initObs(Sph2D calc) {
+            pr = calc;
+            v0 = pr.Rebuild(pr.TimeSynch);
+            var dt = 0.000000001;
+            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt*1000,out controller);
+            controller.Pause();
+
+            sol.ObserveOnDispatcher().Subscribe(sp => {
+                vm.SolPointList.Update(sp);
+                slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
+            });
+        }
 
 
         private void button_Click(object sender,RoutedEventArgs e) {
@@ -195,6 +200,53 @@ namespace SPH_2D {
             #endregion
         }
 
+        private void button_Save_Click(object sender,RoutedEventArgs e) {
+            controller.Pause();
+            button.Content = "Paused";
+            var unit4save = GetTest();
+            unit4save.Rebuild();
+
+            int newVal = (int)slider.Value;
+            int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
+            if(index < 0)
+                return;
+            unit4save.SynchMeTo(vm.SolPointList.Value[index]);
+            var sd = new SaveFileDialog() {
+                Filter = "XML Files|*.xml",
+                FileName = "sph2D"
+            };
+            if(sd.ShowDialog() == true) {
+                var sw = new StreamWriter(sd.FileName);
+                unit4save.Serialize(sw);
+                sw.Close();
+            }
+
+
+        }
+
+        private void button_Copy1_Click(object sender,RoutedEventArgs e) {
+            controller.Pause();
+            button.Content = "Paused";
+            var unit4load = GetTest();
+            unit4load.Rebuild();
+            var sd = new OpenFileDialog() {
+                Filter = "XML Files|*.xml",
+                FileName = "sph2D"
+            };
+            if(sd.ShowDialog() == true) {
+                var sr = new StreamReader(sd.FileName);
+                unit4load.Deserialize(sr);
+                sr.Close();
+
+                controller.Cancel();
+                vm.SolPointList.Value.Clear();
+                initObs(unit4load);
+
+
+
+            }
+
+        }
 
     }
 }

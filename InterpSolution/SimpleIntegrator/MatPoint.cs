@@ -6,6 +6,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace SimpleIntegrator {
+    public interface IVelPos3D: IPosition3D {
+        IPosition3D Vel { get; set; }
+    }
+
     public interface IMaterialPoint : IOrient3D {
         IPosition3D Vel { get; set; }
         IPosition3D Acc { get; set; }
@@ -19,7 +23,7 @@ namespace SimpleIntegrator {
     /// <summary>
     /// X, y, z, - желательно, чтобы были в WORLD СК
     /// </summary>
-    public class MaterialPointNewton : Orient3D, IMaterialPoint {
+    public class MaterialPointNewton : Orient3D, IMaterialPoint, IVelPos3D {
         public IPosition3D Vel { get; set; }
         public IPosition3D Acc { get; set; }
         public IMassPoint Mass { get; set; }
@@ -80,7 +84,7 @@ namespace SimpleIntegrator {
         double GetRotEnergy();
     }
 
-    public class MaterialObjectNewton : MaterialPointNewton, IMaterialObject {
+    public class MaterialObjectNewton : MaterialPointNewton, IMaterialObject, IVelPos3D {
         public new IMass3D Mass { get; set; } = new Mass3D();
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
