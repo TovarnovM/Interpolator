@@ -15,10 +15,12 @@ namespace SPH_2D {
         private ScatterSeries V;
         private ScatterSeries P;
         private ScatterSeries E;
-        double Ro0,  P0, E0;
+        double Ro0, P0, E0;
 
         public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
         Sph2D _curr4Draw;
+
+        public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
 
         public ViewModel(Sph2D curr) {
             _curr4Draw = MainWindow.GetTest();
@@ -68,6 +70,12 @@ namespace SPH_2D {
                     return pm;
                 });
 
+            SolPointList = new VMPropRx<List<SolPoint>,SolPoint>(
+                () => new List<SolPoint>(),
+                (sp,lst) => {
+                    lst.Add(sp);
+                    return lst;
+                });
 
         }
 
@@ -77,21 +85,21 @@ namespace SPH_2D {
             E0 = curr.AllParticles.Cast<IsotropicGasParticle>().Max(p => p.E);
         }
 
-        public void Draw(double t, PlotModel pm) {
+        public void Draw(double t,PlotModel pm) {
             Ro.Points.Clear();
             V.Points.Clear();
             P.Points.Clear();
             E.Points.Clear();
             foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
-                Ro.Points.Add(new ScatterPoint(p.X,p.Ro/Ro0));
-                V.Points.Add(new ScatterPoint(p.X,p.Vel.X/p.GetCl()));
-                P.Points.Add(new ScatterPoint(p.X,p.P/P0));
-                E.Points.Add(new ScatterPoint(p.X,p.E/E0));
+                Ro.Points.Add(new ScatterPoint(p.X,p.Ro / Ro0));
+                V.Points.Add(new ScatterPoint(p.X,p.Vel.X / p.GetCl()));
+                P.Points.Add(new ScatterPoint(p.X,p.P / P0));
+                E.Points.Add(new ScatterPoint(p.X,p.E / E0));
             }
             pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.P):0.###}";
             pm.InvalidatePlot(true);
         }
-        
+
         public PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {
             var m = new PlotModel { Title = title };
             var linearAxis1 = new LinearAxis();

@@ -16,6 +16,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Reactive.Linq;
 using System.Reactive.Concurrency;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace SPH_1D {
     /// <summary>
@@ -38,13 +40,27 @@ namespace SPH_1D {
             v0 = pr.Rebuild();
             pr.dt = 0.001;
 
-            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStepRx(0.1,out controller);
+            sol = Ode.RK45(0,v0,pr.f,pr.dt).WithStepRx(0.01, out controller);
             controller.Pause();
-            sol.Subscribe(sp => {
-                vm.Model1Rx.Update(sp);
+
+            var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged");
+
+
+
+            sol.ObserveOnDispatcher().Subscribe(sp => {
+                vm.SolPointList.Update(sp);
+                slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
             });
 
-            
+            trackbarch.Subscribe(i => {
+                int newVal = (int)i.EventArgs.NewValue;
+                int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
+                if(index < 0)
+                    return;
+                vm.Model1Rx.Update(vm.SolPointList.Value[index]);
+            });
+
+
         }
 
         
@@ -55,5 +71,6 @@ namespace SPH_1D {
             button.Content = txt;
 
         }
+
     }
 }

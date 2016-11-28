@@ -5,8 +5,10 @@ using OxyPlot.Series;
 using ReactiveODE;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SPH_1D {
@@ -17,7 +19,9 @@ namespace SPH_1D {
         private ScatterSeries E;
 
         public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
+        public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
         OneDemExample _curr4Draw;
+
 
         public ViewModel() {
             _curr4Draw = new OneDemExample();
@@ -65,6 +69,13 @@ namespace SPH_1D {
             }
             );
 
+            SolPointList = new VMPropRx<List<SolPoint>,SolPoint>(
+                () => new List<SolPoint>(),
+                (sp,lst) => {
+                    lst.Add(sp);
+                    return lst;
+                });
+
 
         }
 
@@ -83,6 +94,7 @@ namespace SPH_1D {
             }
             pm.Title = $"{t:0.###} s,  RoMax = {_curr4Draw.Particles.Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Max(p => p.P):0.###}";
             pm.InvalidatePlot(true);
+            //Thread.Sleep(1000);
         }
         
         public PlotModel GetNewModel(string title = "", string xname ="",string yname = "") {

@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reactive.Linq;
 
 namespace SPH_2D {
     /// <summary>
@@ -41,8 +42,21 @@ namespace SPH_2D {
 
             sol = Ode.RK45(0,v0,pr.f,dt).WithStepRx(dt * 10,out controller);
             controller.Pause();
-            sol.Subscribe(sp => {
-                vm.Model1Rx.Update(sp);
+
+            var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged");
+
+            sol.ObserveOnDispatcher().Subscribe(sp => {
+                vm.SolPointList.Update(sp);
+                slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
+            });
+
+
+            trackbarch.Subscribe(i => {
+                int newVal = (int)i.EventArgs.NewValue;
+                int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
+                if(index < 0)
+                    return;
+                vm.Model1Rx.Update(vm.SolPointList.Value[index]);
             });
         }
 
