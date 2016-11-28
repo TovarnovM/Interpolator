@@ -442,6 +442,24 @@ namespace SimpleIntegrator {
             
         }
 
+        #endregion
+
+
+    }
+
+    public static class DummyIOHelper {
+
+        public static void Serialize(this ScnObjDummy dummy,TextWriter writer) {
+            var dict = dummy.SaveToDict();
+            Serialize(writer,dict);
+        }
+
+        public static void Deserialize(this ScnObjDummy dummy,TextReader reader) {
+            var dict = new Dictionary<string,double>();
+            Deserialize(reader,dict);
+            dummy.LoadFromDict(dict);
+        }
+
         public static void Serialize(TextWriter writer,IDictionary<string,double> dictionary) {
             List<DictEntry> entries = new List<DictEntry>(dictionary.Count);
             foreach(var key in dictionary.Keys) {
@@ -450,7 +468,7 @@ namespace SimpleIntegrator {
             XmlSerializer serializer = new XmlSerializer(typeof(List<DictEntry>));
             serializer.Serialize(writer,entries);
 
-            
+
         }
 
         public static void Deserialize(TextReader reader,IDictionary dictionary) {
@@ -461,7 +479,9 @@ namespace SimpleIntegrator {
                 dictionary[entry.Key] = entry.Value;
             }
         }
-        class DictEntry {
+
+
+        public class DictEntry {
             [XmlAttribute]
             public string Key;
             [XmlAttribute]
@@ -474,9 +494,6 @@ namespace SimpleIntegrator {
                 Value = value;
             }
         }
-        #endregion
-
-
     }
 
 

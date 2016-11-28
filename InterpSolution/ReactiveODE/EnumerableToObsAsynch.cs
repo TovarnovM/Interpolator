@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace ReactiveODE {
     public interface IEquasionController {
         void Start();
-        void Cancel();
+        void Cancel(bool waitEnd = true);
         void Pause();
         void Resume();
         bool Paused { get; set; }
@@ -26,6 +26,7 @@ namespace ReactiveODE {
         protected readonly object _locker = new object();
         protected bool _go;
         protected bool getStarted;
+        private Task dostuffTsk;
 
         public EnumerableToObsAnsynch(IEnumerable<T> source, bool paused = true) {
             getStarted = false;
@@ -47,8 +48,14 @@ namespace ReactiveODE {
 
         }
 
-        public void Cancel() {
+        public void Cancel(bool waitEnd = true) {
             cts.Cancel();
+            if(waitEnd) {
+                Resume();
+                dostuffTsk.Wait();
+            }
+                
+
         }
 
         public void Resume() {
@@ -81,7 +88,7 @@ namespace ReactiveODE {
                 if(!getStarted) {
                     getStarted = true;
                     enumenator = source.GetEnumerator();
-                    Task.Factory.StartNew(DoStuff);
+                    dostuffTsk = Task.Factory.StartNew(DoStuff,cts.Token);
                 }
             }
         }
