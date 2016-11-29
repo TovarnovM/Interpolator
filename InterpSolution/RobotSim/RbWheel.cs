@@ -32,8 +32,8 @@ namespace RobotSim {
             AddDiffPropToParam(pBetta,pOmegaX);
         }
 
-        public Vector3D GetWorldPos(int spikeIndex) {
+        //public Vector3D GetWorldPos(int spikeIndex) {
 
-        }
+        //}
     }
 }

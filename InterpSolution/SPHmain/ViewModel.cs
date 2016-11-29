@@ -15,10 +15,14 @@ namespace SPH_2D {
         private ScatterSeries V;
         private ScatterSeries P;
         private ScatterSeries E;
+        private ScatterSeries colorSer2D;
         double Ro0, P0, E0;
 
         public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
+        public int DrawState { get; set; } = 0;
+        public int WichGraph { get; set; } = 0;
         Sph2D _curr4Draw;
+        private LinearColorAxis colorAxis;
 
         public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
 
@@ -35,7 +39,8 @@ namespace SPH_2D {
                         Title = "P",
                         MarkerType = MarkerType.Triangle,
                         MarkerSize = 2,
-                        MarkerFill = OxyColors.Green
+                        //ColorAxisKey = colorAxis.Key,
+                        
                     };
                     Model1.Series.Add(P);
 
@@ -43,7 +48,7 @@ namespace SPH_2D {
                         Title = "Ro",
                         MarkerType = MarkerType.Diamond,
                         MarkerSize = 2,
-                        MarkerFill = OxyColors.DarkOrange
+                        //ColorAxisKey = colorAxis.Key
                     };
                     Model1.Series.Add(Ro);
 
@@ -51,7 +56,7 @@ namespace SPH_2D {
                         Title = "V",
                         MarkerType = MarkerType.Circle,
                         MarkerSize = 2,
-                        MarkerFill = OxyColors.Blue
+                       // ColorAxisKey = colorAxis.Key
                     };
                     Model1.Series.Add(V);
 
@@ -59,14 +64,32 @@ namespace SPH_2D {
                         Title = "E",
                         MarkerType = MarkerType.Circle,
                         MarkerSize = 2,
-                        MarkerFill = OxyColors.Red
+                       // ColorAxisKey = colorAxis.Key
                     };
                     Model1.Series.Add(E);
+
+                    colorSer2D = new ScatterSeries() {
+                        Title = "Color",
+                        MarkerType = MarkerType.Circle,
+                        MarkerSize = 2,
+                        ColorAxisKey = colorAxis.Key
+                    };
+                    Model1.Series.Add(colorSer2D);
+
                     return Model1;
                 },
                 (sp,pm) => {
                     _curr4Draw.SynchMeTo(sp);
-                    Draw(sp.T,pm);
+                    switch(DrawState) {
+                        case 1: {
+                            Draw2D(sp.T,pm,WichGraph);
+                            break;
+                        }
+                        default:
+                            Draw(sp.T,pm);
+                        break;
+                    }
+                    
                     return pm;
                 });
 
@@ -86,15 +109,66 @@ namespace SPH_2D {
         }
 
         public void Draw(double t,PlotModel pm) {
+            //pm.Axes.Remove(colorAxis);
             Ro.Points.Clear();
+            Ro.MarkerFill = OxyColors.DarkOrange;
+            V.Points.Clear();
+            V.MarkerFill = OxyColors.Red;
+            P.Points.Clear();
+            P.MarkerFill = OxyColors.Green;
+            E.Points.Clear();
+            E.MarkerFill = OxyColors.Blue;
+            colorSer2D.Points.Clear();
+            foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
+                Ro.Points.Add(new ScatterPoint(p.X,p.Ro / Ro0,value: p.Ro / Ro0));
+                V.Points.Add(new ScatterPoint(p.X,p.Vel.X / p.GetCl(),value: p.Vel.X / p.GetCl()));
+                P.Points.Add(new ScatterPoint(p.X,p.P / P0,value: p.P / P0));
+                E.Points.Add(new ScatterPoint(p.X,p.E / E0,value: p.E / E0));
+            }
+            pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.P):0.###}";
+            pm.InvalidatePlot(true);
+        }
+
+        public void Draw2D(double t, PlotModel pm, int ind) {
+           // pm.Axes.Add(colorAxis);
+            Ro.Points.Clear();
+
             V.Points.Clear();
             P.Points.Clear();
+            
             E.Points.Clear();
-            foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
-                Ro.Points.Add(new ScatterPoint(p.X,p.Ro / Ro0));
-                V.Points.Add(new ScatterPoint(p.X,p.Vel.X / p.GetCl()));
-                P.Points.Add(new ScatterPoint(p.X,p.P / P0));
-                E.Points.Add(new ScatterPoint(p.X,p.E / E0));
+
+            colorSer2D.Points.Clear();
+
+            switch(ind) {
+                case 0:
+                    foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
+                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y,value: p.P / P0));
+                        
+                    }
+                    break;
+                case 1:
+                foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
+                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y,value: p.Ro / Ro0));
+                    
+                }
+                break;
+                case 2:
+                foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
+
+                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y / p.GetCl(),value: p.Vel.X / p.GetCl()));
+                   
+
+                }
+                break;
+                default:               
+                foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
+
+                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y,value: p.E / E0));
+                    
+                }
+                break;
+                
             }
             pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IsotropicGasParticle>().Max(p => p.P):0.###}";
             pm.InvalidatePlot(true);
@@ -117,6 +191,15 @@ namespace SPH_2D {
             linearAxis2.MinorGridlineStyle = LineStyle.Dot;
             linearAxis2.Title = yname;
             m.Axes.Add(linearAxis2);
+
+            colorAxis = new LinearColorAxis {
+                Position = AxisPosition.Right,
+                Palette = OxyPalettes.Jet(200),
+                Minimum = 0,
+                Maximum = 1
+            };
+            m.Axes.Add(colorAxis);
+
             return m;
         }
     }

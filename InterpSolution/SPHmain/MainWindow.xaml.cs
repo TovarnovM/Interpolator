@@ -46,18 +46,15 @@ namespace SPH_2D {
 
             trackbarch.Subscribe(i => {
                 int newVal = (int)i.EventArgs.NewValue;
-                int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
-                if(index < 0)
-                    return;
-                vm.Model1Rx.Update(vm.SolPointList.Value[index]);
+                redrawVm(newVal);
             });
         }
 
         private void initObs(Sph2D calc) {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
-            var dt = 0.000000001;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt*1000,out controller);
+            var dt = 0.00001;
+            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt*10,out controller);
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -248,5 +245,41 @@ namespace SPH_2D {
 
         }
 
+        void redrawVm(int newVal) {
+            int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
+            if(index < 0)
+                return;
+            vm.Model1Rx.Update(vm.SolPointList.Value[index]);
+        }
+
+        private void radioButton_Checked(object sender,RoutedEventArgs e) {
+            vm.DrawState = 0;
+            redrawVm((int)slider.Value);
+        }
+
+        private void radioButton_Copy_Checked(object sender,RoutedEventArgs e) {
+            vm.DrawState = 1;
+            redrawVm((int)slider.Value);
+        }
+
+        private void radioButton_Copy1_Checked(object sender,RoutedEventArgs e) {
+            vm.WichGraph = 0;
+            redrawVm((int)slider.Value);
+        }
+
+        private void radioButton_Copy2_Checked(object sender,RoutedEventArgs e) {
+            vm.WichGraph = 1;
+            redrawVm((int)slider.Value);
+        }
+
+        private void radioButton_Copy3_Checked(object sender,RoutedEventArgs e) {
+            vm.WichGraph = 2;
+            redrawVm((int)slider.Value);
+        }
+
+        private void radioButton_Copy4_Checked(object sender,RoutedEventArgs e) {
+            vm.WichGraph = 3;
+            redrawVm((int)slider.Value);
+        }
     }
 }
