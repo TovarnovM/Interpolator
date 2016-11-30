@@ -70,7 +70,7 @@ namespace SPH_2D {
         private void initObs(Sph2D calc) {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
-            var dt = 0.00001;
+            var dt = 0.0000001;
             sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller);//.StartWith(new SolPoint(pr.TimeSynch,v0));
             controller.Pause();
 
@@ -118,7 +118,7 @@ namespace SPH_2D {
                 });
 
                 particles.ForEach(p => {
-                    p.Ro = particles.Sum(n => IsotropicGasParticle.W_func(n.GetDistTo(p),p.alpha * (p.D + n.D) * 0.5) * n.M);
+                   // p.Ro = particles.Sum(n => My_IsotropicGas.W_func(n.GetDistTo(p),p.alpha * (p.D + n.D) * 0.5) * n.M);
                     p.E = p.P / ((p.k - 1d) * p.Ro);
                 });
             }

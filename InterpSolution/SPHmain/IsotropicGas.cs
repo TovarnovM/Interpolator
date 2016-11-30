@@ -71,7 +71,7 @@ namespace SPH_2D {
             }
         }
 
-        public void FillDts() {
+        public virtual void FillDts() {
             foreach(var neib in Neibs.Where(n=>GetDistTo(n) < hmax).Cast<IsotropicGasParticle>()) {
                 double h = alpha * (D + neib.D) * 0.5;
                 double dw = dW_func(GetDistTo(neib),h);
