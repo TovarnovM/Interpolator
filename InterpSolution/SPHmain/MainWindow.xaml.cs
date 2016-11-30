@@ -19,6 +19,7 @@ using System.Reactive.Linq;
 using Microsoft.Win32;
 using System.IO;
 using SimpleIntegrator;
+using System.Threading;
 
 namespace SPH_2D {
     /// <summary>
@@ -41,12 +42,28 @@ namespace SPH_2D {
 
             //(0.001875+0.0075) * 0.5
             initObs(pr);
+            vm.Model1Rx.Update(new SolPoint(pr.TimeSynch,pr.Rebuild()));
 
-            var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged");
+            var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged").Select(i=>(int)i.EventArgs.NewValue);
+            var rb0 = Observable.FromEventPattern<RoutedEventArgs>(radioButton,"Checked").Select(e => 0);
+            var rb1 = Observable.FromEventPattern<RoutedEventArgs>(radioButton_Copy,"Checked").Select(e => 1);
+            var grType = rb0.Merge(rb1).StartWith(0);
+            
 
-            trackbarch.Subscribe(i => {
-                int newVal = (int)i.EventArgs.NewValue;
-                redrawVm(newVal);
+            var rb10 = Observable.FromEventPattern<RoutedEventArgs>(radioButton_Copy1,"Checked").Select(e => 0);
+            var rb11 = Observable.FromEventPattern<RoutedEventArgs>(radioButton_Copy2,"Checked").Select(e => 1);
+            var rb12 = Observable.FromEventPattern<RoutedEventArgs>(radioButton_Copy3,"Checked").Select(e => 2);
+            var rb13 = Observable.FromEventPattern<RoutedEventArgs>(radioButton_Copy4,"Checked").Select(e => 3);
+            var wichGraph = rb10.Merge(rb11).Merge(rb12).Merge(rb13).StartWith(0);
+
+            var all = trackbarch.CombineLatest(grType,wichGraph,(i,gT,wG) => new Tuple<int,int,int>(i,gT,wG));
+
+            all.
+            Subscribe(t => {
+                vm.DrawState = t.Item2;
+                vm.WichGraph = t.Item3;
+
+                redrawVm(t.Item1);
             });
         }
 
@@ -54,7 +71,7 @@ namespace SPH_2D {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
             var dt = 0.00001;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt*10,out controller);
+            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller);//.StartWith(new SolPoint(pr.TimeSynch,v0));
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -238,7 +255,7 @@ namespace SPH_2D {
                 controller.Cancel();
                 vm.SolPointList.Value.Clear();
                 initObs(unit4load);
-
+                vm.Model1Rx.Update(new SolPoint(pr.TimeSynch,pr.Rebuild()));
 
 
             }
@@ -250,36 +267,6 @@ namespace SPH_2D {
             if(index < 0)
                 return;
             vm.Model1Rx.Update(vm.SolPointList.Value[index]);
-        }
-
-        private void radioButton_Checked(object sender,RoutedEventArgs e) {
-            vm.DrawState = 0;
-            redrawVm((int)slider.Value);
-        }
-
-        private void radioButton_Copy_Checked(object sender,RoutedEventArgs e) {
-            vm.DrawState = 1;
-            redrawVm((int)slider.Value);
-        }
-
-        private void radioButton_Copy1_Checked(object sender,RoutedEventArgs e) {
-            vm.WichGraph = 0;
-            redrawVm((int)slider.Value);
-        }
-
-        private void radioButton_Copy2_Checked(object sender,RoutedEventArgs e) {
-            vm.WichGraph = 1;
-            redrawVm((int)slider.Value);
-        }
-
-        private void radioButton_Copy3_Checked(object sender,RoutedEventArgs e) {
-            vm.WichGraph = 2;
-            redrawVm((int)slider.Value);
-        }
-
-        private void radioButton_Copy4_Checked(object sender,RoutedEventArgs e) {
-            vm.WichGraph = 3;
-            redrawVm((int)slider.Value);
         }
     }
 }

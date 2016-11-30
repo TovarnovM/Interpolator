@@ -24,13 +24,13 @@
                     <Slider x:Name="slider" VerticalAlignment="Top" Grid.Row="1" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.ColumnSpan="2" />
                     <Button x:Name="button_Save" Content="Save" Grid.Row="1" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Save_Click"/>
                     <Button x:Name="button_Copy1" Content="Load" Grid.Row="1" Height="21" VerticalAlignment="Bottom" Margin="300,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click"/>
-                    <RadioButton x:Name="radioButton" Content="f(x)" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" Checked="radioButton_Checked"/>
-                    <RadioButton x:Name="radioButton_Copy" Content="2D + color" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,15,0,0" Checked="radioButton_Copy_Checked"/>
+                    <RadioButton x:Name="radioButton" Content="f(x)" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" IsChecked="True" />
+                    <RadioButton x:Name="radioButton_Copy" Content="2D + color" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,15,0,0" />
                     <Grid Margin="5,35,10,155" Grid.Row="0" Grid.Column="1">
-                        <RadioButton x:Name="radioButton_Copy1" Content="P" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,5,0,0" IsChecked="True" Checked="radioButton_Copy1_Checked"  />
-                        <RadioButton x:Name="radioButton_Copy2" Content="Ro" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,20,0,0" Checked="radioButton_Copy2_Checked" />
-                        <RadioButton x:Name="radioButton_Copy3" Content="V" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,35,0,0" Checked="radioButton_Copy3_Checked"/>
-                        <RadioButton x:Name="radioButton_Copy4" Content="E" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,50,0,0" Checked="radioButton_Copy4_Checked" />
+                        <RadioButton x:Name="radioButton_Copy1" Content="P" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,5,0,0" IsChecked="True"   />
+                        <RadioButton x:Name="radioButton_Copy2" Content="Ro" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,20,0,0"  />
+                        <RadioButton x:Name="radioButton_Copy3" Content="V" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,35,0,0" />
+                        <RadioButton x:Name="radioButton_Copy4" Content="E" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,50,0,0"  />
                     </Grid>
                 </Grid>
             </TabItem>
