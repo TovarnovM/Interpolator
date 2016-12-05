@@ -5,16 +5,17 @@ using Sharp3D.Math.Core;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SimpleIntegrator;
+using Microsoft.Research.Oslo;
 
 namespace SPH_2D
 {
     public class FileReader
     {
-        private static List<My_IsotropicGas> ConstructBountPart(List<Tuple<Vector2D, Vector2D>> boundaries,
-            double boundaryDensity)
+        private static List<My_IsotropicGas> ConstructBountPart(double boundaryDensity)
         {
             List<My_IsotropicGas> WallParticles = new List<My_IsotropicGas>();
-            foreach (var side in boundaries)
+            foreach (var side in My_Sph2D.boundaries)
             {
                 Vector2D vector = side.Item2 - side.Item1;
                 int partN = Convert.ToInt32((Math.Abs(vector.GetLength())) * boundaryDensity);
@@ -53,30 +54,45 @@ namespace SPH_2D
             return boundaries_;
         }
 
-        public static List<My_IsotropicGas> ConstructBountPart(string pathToBound, List<Tuple<Vector2D, Vector2D>> boundaries)
+        public static List<My_IsotropicGas> ConstructBountPart(string pathToBound, double bdensity)
         {
-            boundaries = CreateBoundaries(pathToBound);
-            List<My_IsotropicGas> WallParticles = ConstructBountPart(boundaries, 1.0);
+            if (bdensity < 0.01) return null;
+            My_Sph2D.boundaries = CreateBoundaries(pathToBound);
+            List<My_IsotropicGas> WallParticles = ConstructBountPart(bdensity);
             return WallParticles;
         }
 
         public static List<My_IsotropicGas> FillRegion(List<Vector2D> region, bool shape, int N)
         {
-            //плотность давление масса скорость (x,y)
-            double[] cond = { 1, 1, 1, 0, 1 };
+           
+            double e = 4.29 * 10E6;
+            double p = 1.63;
+            double P = 0.4 * p * e;
+            double M = 0;
             double X = Math.Abs(region[0].X - region[3].X);
             double Y = Math.Abs(region[0].Y - region[1].Y);
+            if (!shape)
+            {
+                double r = (region[2].X - region[0].X) / 2;
+                M = (p * Math.PI * Math.Pow(r, 2) / 2) / N;
+            }
+            else
+            {
+                M = (p * Math.PI * X * Y / 2) / N;
+            }
             // double XYratio = X / Y;
             int per_y = (int)Math.Sqrt(N);
             int per_x = per_y;//number / per_y;
             double xstep = X / per_x;
             double ystep = Y / per_y;
             //
-
+            //плотность давление масса скорость (x,y)
+            double[] cond = { p, P, M, 0, 0 };
             List<My_IsotropicGas> particles = new List<My_IsotropicGas>();
+            double h = 4 * xstep;
             for (int i = 0; i < N; ++i)
             {
-                particles.Add(new My_IsotropicGas(1, 1, false, cond));
+                particles.Add(new My_IsotropicGas(1, h, false, cond));
             }
 
             for (int i = 0; i < per_y; ++i)
@@ -153,16 +169,28 @@ namespace SPH_2D
 
             foreach (var regShape in regionsAndShapes)
             {
-                particles.AddRange(FillRegion(regShape.Reg, regShape.Shape, 100));
+                particles.AddRange(FillRegion(regShape.Reg, regShape.Shape, 10));
             }
             //
             return particles;
         }
     }
 
-    public class My_IsotropicGas : IsotropicGasParticle
-    {
-        bool isboundary;
+    public class My_IsotropicGas : IsotropicGasParticle, IMy_IsotropicGas {
+        public bool isboundary { get; set; }
+
+        IMy_IsotropicGas CreateMiracleClone(List<Tuple<Vector2D, Vector2D>> boundaries)
+        {
+            
+            Tuple<double, double> MirrorCoordinates = FindMirrorPartPos(boundaries);
+            double[] cond = { Ro, P, M, -Vel.X, -Vel.Y };
+            My_IsotropicGasMiracleDummy MiracleParticle = new My_IsotropicGasMiracleDummy(this,false,cond);
+
+            MiracleParticle.X = MirrorCoordinates.Item1;
+            MiracleParticle.Y = MirrorCoordinates.Item2;
+
+            return MiracleParticle;
+        }
 
         public My_IsotropicGas(double d, double hmax, bool boundarytype = false, double[] cond = null) : base(d, hmax)
         {
@@ -188,7 +216,7 @@ namespace SPH_2D
             return new Tuple<double, double, double, double>(A, B, C, distance);
         }
         //принимает границы, находит ближайшую к точке линию и возвращает координаты симетричной точки
-        public Tuple<double, double> createMirrorPart(List<Tuple<Vector2D, Vector2D>> boundaries)
+        public Tuple<double, double> FindMirrorPartPos(List<Tuple<Vector2D, Vector2D>> boundaries)
         {
             Tuple<double, double, double, double> result = calcDistanse(boundaries[0]);
             foreach (var side in boundaries)
@@ -219,47 +247,68 @@ namespace SPH_2D
         //
         public override void FillDts()
         {
-            Ro = 0;
-            foreach (var neib in Neibs.Where(n => GetDistTo(n) < hmax).Cast<My_IsotropicGas>())
+
+
+            //Список зеркальных частиц
+            var miracleList = new List<IMy_IsotropicGas>();
+
+
+
+            //Создаем зеркальные частицы
+            //if(Neibs.Any(n => (n as My_IsotropicGas).isboundary))
+            foreach(var neib in Neibs.Cast<My_IsotropicGas>().Where(n => !n.isboundary).Concat(new[] { this })) {
+                //Если у соседа есть в соседях граница, то 
+                if(neib.Neibs.Cast<My_IsotropicGas>().Any(nn => nn.isboundary)) {
+                    //Отображаем соседа
+                    var mir = neib.CreateMiracleClone(My_Sph2D.boundaries);
+                    miracleList.Add(mir);
+                }
+            }
+
+            foreach (var neib in Neibs.Where(n => GetDistTo(n) < hmax).Cast<IMy_IsotropicGas>())//.Concat(miracleList.Where(mp => mp.GetDistTo(this) < hmax)))
             {
-                Vector2D Rji = neib.Vec2D - Vec2D;
-                Vector2D Rji_norm = Rji.Norm;
+                Vector2D deltaV = Vel.Vec2D - neib.Vel.Vec2D;
+                Vector2D deltaR = Vec2D - neib.Vec2D;
                 if (!neib.isboundary)
                 {
+                   
                     double mj = neib.M;
-                    double deltax = X - neib.X;
-                    double deltay = Y - neib.Y;
-                    double deltaVx = Vel.X - neib.Vel.X;
-                    double deltaVy = Vel.Y - neib.Vel.Y;
-                    double r = Math.Sqrt(deltax * deltax + deltay * deltay);
-
+                    double r = deltaR.GetLength();
                     //
                     double H = 0;
-                    if ((deltaVx * deltax + deltaVy * deltay) >= 0)
+                    double scalar = deltaV * deltaR;
+                    if  ( scalar < 0)
                     {
-                        double alpha_ = 1.1;
-                        double beta_ = 1.1;
-                        double V = Math.Sqrt(deltaVx * deltaVx + deltaVy * deltaVy);
-                        double phi = hmax * r * V / (Math.Pow(r, 2) + Math.Pow(0.1 * hmax, 2));
-                        H = 2 * (-alpha_ * 0.5 * (C() + neib.C()) * phi + beta_ * Math.Pow(phi, 2)) / (Ro + neib.Ro);
+                        double alpha_ = 0.9;
+                        double beta_ = 0.9;
+                        double phi_ = 0.1;
+                        double phi = hmax * scalar / (Math.Pow(r, 2) + Math.Pow(phi_ * hmax, 2));
+                        double Ro_ = (Ro + neib.Ro) / 2;
+                        double C_ = ( C() + neib.C() ) / 2;
+
+                        H = (-alpha_ * C_ * phi + beta_ * Math.Pow(phi, 2)) / Ro_;
+                       
                     }
-
                     //
-                    double brackets = mj * (P / (Ro * Ro) + neib.P / (neib.Ro * neib.Ro) + H);
-                    Vector2D dW = new Vector2D((deltax / r) * dW_func(r, hmax), (deltay / r) * dW_func(r, hmax));
+                    double brackets = mj * ( P / (Ro * Ro) + neib.P / (neib.Ro * neib.Ro) + 0 );
+                    if (H > 1)
+                    {
+                        double res = brackets / H;
+                        int a = 0;
+                    }
+                    Vector2D dW = new Vector2D((deltaR.X / r) * dW_func(r, hmax), (deltaR.Y / r) * dW_func(r, hmax));
                     //плотность
-                    Ro += mj * W_func(r, hmax);
+                    //Ro += mj * W_func(r, hmax);
                     //скорости
-                    dV.X += brackets * dW.X;
-                    dV.Y += brackets * dW.Y;
+                    dV.X += -brackets * dW.X;
+                    dV.Y += -brackets * dW.Y;
                     //энергия
-                    dE += 0.5 * brackets * Vel.Vec2D * dW;
-
+                    dE += 0.5 * brackets * deltaV * dW;
                 }
                 else
                 {
-                    double r0 = 1;
-                    double rij = Rji.GetLength();
+                    double r0 = 2;
+                    double rij = deltaR.GetLength();
                     if (r0 / rij <= 1)
                     {
                         double n1 = 12;
@@ -267,9 +316,10 @@ namespace SPH_2D
                         double D = (Vel.Vec2D.GetLength() > neib.Vel.Vec2D.GetLength()) ?
                             Vel.Vec2D.GetLength() * Vel.Vec2D.GetLength() :
                             neib.Vel.Vec2D.GetLength() * neib.Vel.Vec2D.GetLength();
-                        double brackets = D * (Math.Pow(r0 / rij, n1) - Math.Pow(r0 / rij, n2)) / (rij * rij);
-                        double PDijx = brackets * (X - neib.X);
-                        double PDijy = brackets * (Y - neib.Y);
+                        D = D * 2;
+                        double brackets = -D * (Math.Pow(r0 / rij, n1) - Math.Pow(r0 / rij, n2)) / (rij * rij);
+                        double PDijx = brackets * deltaR.X;
+                        double PDijy = brackets * deltaR.Y;
                         //
                         dV.X += PDijx / M;
                         dV.Y += PDijy / M;
@@ -279,7 +329,56 @@ namespace SPH_2D
 
         }
 
+        public override void DoStuff(int stuffIndex)
+        {
+
+            switch (stuffIndex)
+            {
+                case 0:
+                    {
+                    /*
+                     ВОТ ТУТ ИЗМЕНЕНИЕ !!!!
+                     ДОБАВИЛ
+                     if(!isboundary)
+                     
+                     */
+                        if(!isboundary)
+                            SetP();
+                        break;
+                    }
+                case 1:
+                    {
+                        if (!isboundary)
+                            FillDts();
+                        break;
+                    }
+
+                default:
+                    break;
+            }
+        }
+
+        public override void SetP()
+        {
+
+            //Ro = Neibs.Cast<IsotropicGasParticle>().Sum(n => {
+            //    double h = alpha * (D + n.D) * 0.5;
+            //    double w = W_func(GetDistTo(n),h);
+            //    return n.M * w;
+
+            //}) + M* W_func(0,1);
+            P = (k - 1d) * Ro * E;
+            Ro = M* W_func(0, hmax);
+            dE = 0d;
+            dV.Vec2D = Vector2D.Zero;
+            foreach (var neib in Neibs.Cast<My_IsotropicGas>())
+            {
+                Ro += neib.M * W_func(this.GetDistTo(neib), hmax);
+            }
+        }
     }
+
+
 
     public class My_Sph2D : Sph2D
     {
@@ -287,18 +386,273 @@ namespace SPH_2D
         public static List<Tuple<Vector2D, Vector2D>> boundaries;
 
         public My_Sph2D(string pathToreal, string pathToBound) :
-            base(FileReader.ConstructRealPart(pathToreal), FileReader.ConstructBountPart(pathToBound, boundaries))
+            base(FileReader.ConstructRealPart(pathToreal), FileReader.ConstructBountPart(pathToBound, 4))
         {
             int i = 0;
             i++;
         }
 
     }
+
+
+
+//Для отображения
+    internal interface IMy_IsotropicGas  {
+        bool isboundary { get; }
+        IPosition2D Vel { get; }
+        Vector2D Vec2D { get; }
+        double X { get; set; }
+        double Y { get; set; }
+        double GetDistTo(IParticle2D particle);
+        double M { get; }
+        double Ro { get; }
+        double P { get; }
+        double C();
+
+
+    }
+
+    public class VelDummy : IPosition2D {
+        public List<string> AllParamsNames {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
+        public List<IScnObj> Children {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Dictionary<string,FlagFunct> FlagDict {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string FullName {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
+        public List<ILaw> Laws {
+            get {
+                throw new NotImplementedException();
+            }
+        }
+
+        public string Name {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IScnObj Owner {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IScnPrm pX {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IScnPrm pY {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Action RebuildStructureAction {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Action<double> SynchMeAfter {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Action<double> SynchMeBefore {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Action<double> SynchMeForNext {
+            get {
+                throw new NotImplementedException();
+            }
+
+            set {
+                throw new NotImplementedException();
+            }
+        }
+
+        public Vector2D Vec2D { get { return new Vector2D(X,Y); } set { X = value.X; Y = value.Y; } }
+        public double X { get; set; }
+        public double Y { get; set; }
+
+        public void AddChild(IScnObj child) {
+            throw new NotImplementedException();
+        }
+
+        public void AddDiffPropToParam(IScnPrm prm,IScnPrm dPrmDt,bool removeOldDt,bool getNewName) {
+            throw new NotImplementedException();
+        }
+
+        public void AddDiffVect(IPosition1D dXdt,bool getNewName) {
+            throw new NotImplementedException();
+        }
+
+        public void AddDiffVect(IPosition2D dV2Ddt,bool getNewName) {
+            throw new NotImplementedException();
+        }
+
+        public void AddLaw(ILaw newLaw) {
+            throw new NotImplementedException();
+        }
+
+        public int AddParam(IScnPrm prm) {
+            throw new NotImplementedException();
+        }
+
+        public bool ApplyLaws() {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose() {
+            throw new NotImplementedException();
+        }
+
+        public Vector f(double t,Vector y) {
+            throw new NotImplementedException();
+        }
+
+        public IScnPrm FindParam(string paramName) {
+            throw new NotImplementedException();
+        }
+
+        public Vector f_parallel(double t,Vector y) {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IScnPrm> GetAllParams() {
+            throw new NotImplementedException();
+        }
+
+        public Vector GetAllParamsValues(double t,Vector y) {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<IScnPrm> GetDiffPrms() {
+            throw new NotImplementedException();
+        }
+
+        public Vector Rebuild(double toTime) {
+            throw new NotImplementedException();
+        }
+
+        public void RebuildStruct() {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveChild(IScnObj child) {
+            throw new NotImplementedException();
+        }
+
+        public void RemoveParam(IScnPrm prm) {
+            throw new NotImplementedException();
+        }
+
+        public int ResetAllParams() {
+            throw new NotImplementedException();
+        }
+
+        public void ResetParam(string nameOfProp) {
+            throw new NotImplementedException();
+        }
+
+        public void SetParam(string name,object value) {
+            throw new NotImplementedException();
+        }
+
+        public void SynchMe(double t) {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class My_IsotropicGasMiracleDummy: IMy_IsotropicGas {
+        public My_IsotropicGas parent;
+        public IPosition2D Vel { get; set; }
+        public Vector2D Vec2D { get { return new Vector2D(X,Y); } set { X = value.X;  Y = value.Y; } }
+        public double X { get; set; }
+        public double Y { get; set; }
+        public bool isboundary { get; set; }
+        public double M { get; set; }
+        public double Ro { get; set; }
+        public double P { get; set; }
+        public double E { get; private set; }
+
+        public double C() {
+            return parent.C();
+        }
+        public double GetDistTo(IParticle2D particle) {
+            double deltX = X - particle.X;
+            double deltY = Y - particle.Y;
+            return Math.Sqrt(deltX * deltX + deltY * deltY);
+        }
+        public My_IsotropicGasMiracleDummy(My_IsotropicGas parent,bool boundarytype = false,double[] cond = null)
+        {
+            this.parent = parent;
+            Vel = new VelDummy();
+            //cond -  плотность давление масса скорость (x,y)
+            isboundary = boundarytype;
+            if(cond != null) {
+                Ro = cond[0];
+                P = cond[1];
+                M = cond[2];
+                Vel.X = cond[3];
+                Vel.Y = cond[4];
+                E = P / (0.4 * Ro);
+            }
+        }
+    }
+
+    
 }
 
-//string pathToBoundaries = "D:\\diploma\\case1.txt";
-//boundaries = CreateBoundaries(pathToBoundaries);
-
-//Particles.AddRange(integrParticles);
-//            if (wall != null)
-//                constructBountPart

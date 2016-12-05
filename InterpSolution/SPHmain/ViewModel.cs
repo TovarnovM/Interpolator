@@ -156,7 +156,7 @@ namespace SPH_2D {
                 case 2:
                 foreach(var p in _curr4Draw.AllParticles.Cast<IsotropicGasParticle>()) {
 
-                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y / p.GetCl(),value: p.Vel.X / p.GetCl()));
+                    colorSer2D.Points.Add(new ScatterPoint(p.X,p.Y,value: p.Vel.Vec2D.GetLength() / p.GetCl()));
                    
 
                 }

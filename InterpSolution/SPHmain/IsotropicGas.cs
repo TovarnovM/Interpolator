@@ -13,7 +13,7 @@ namespace SPH_2D {
         public double D;
         public double alpha = 1.4d; //для формулы 1.19
 
-        public double M;
+        public double M { get; set; }
 
         public double Ro { get; set; }
         public IScnPrm pRo { get; set; }
@@ -44,7 +44,7 @@ namespace SPH_2D {
             Vel.AddDiffVect(dV,false);
            
 
-            AddDiffPropToParam(pRo,pdRo);
+           // AddDiffPropToParam(pRo,pdRo);
             AddDiffPropToParam(pE,pdE);
         }
 
@@ -107,7 +107,7 @@ namespace SPH_2D {
 
         }
 
-        public void SetP() {
+        public virtual void SetP() {
 
             //Ro = Neibs.Cast<IsotropicGasParticle>().Sum(n => {
             //    double h = alpha * (D + n.D) * 0.5;

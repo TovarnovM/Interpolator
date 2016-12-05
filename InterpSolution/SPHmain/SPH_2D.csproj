@@ -169,6 +169,15 @@
       <Name>SimpleIntegrator</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\b1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\i1.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="bin\Debug\b2.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
