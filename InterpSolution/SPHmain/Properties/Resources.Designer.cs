@@ -59,30 +59,5 @@ namespace SPH_2D.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 0,0,0,1000
-        ///0,1000,1000,1000,
-        ///1000,1000,1000,0
-        ///1000,0,0,0.
-        /// </summary>
-        internal static string b1 {
-            get {
-                return ResourceManager.GetString("b1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to circle
-        ///475,475
-        ///475,525
-        ///525,525
-        ///525,475.
-        /// </summary>
-        internal static string i1 {
-            get {
-                return ResourceManager.GetString("i1", resourceCulture);
-            }
-        }
     }
 }

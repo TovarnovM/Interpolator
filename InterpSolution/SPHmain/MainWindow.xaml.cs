@@ -94,7 +94,7 @@ namespace SPH_2D {
         public static Sph2D GetTest() {
             string real = "i1.txt";
             string bound = "b1.txt";
-            return new My_Sph2D(real, bound);
+            return new My_Sph2D( real, bound);
         }
 
         private void button_Save_Click(object sender,RoutedEventArgs e) {
