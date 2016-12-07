@@ -33,6 +33,7 @@ namespace SPH_2D {
         public ViewModel vm { get; set; }
 
         public MainWindow() {
+            //hello
             pr = GetTest();
             vm = new ViewModel(pr);
             DataContext = vm;
