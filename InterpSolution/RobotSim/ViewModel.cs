@@ -23,7 +23,7 @@ namespace RobotSim {
                 var Model1 = GetNewModel("params","X","Y");
                 bSer = new LineSeries() {
                     Title = "Body",
-                    StrokeThickness = 2,
+                   // StrokeThickness = 2,
                     Color = OxyColors.Green
                 };
                 Model1.Series.Add(bSer);
@@ -55,20 +55,30 @@ namespace RobotSim {
             _curr4Draw.SynchMe(t);
             var xAxisNorm = -Vector3D.ZAxis;
             var yAxisNorm = Vector3D.YAxis;
-            for(int i = 0; i < 7; i++) {
-                bSer.Points.Add(new DataPoint(_curr4Draw.GetUgol(i) * xAxisNorm,_curr4Draw.GetUgol(i) * yAxisNorm));
-            }
-            
 
-            //foreach(var p in _curr4Draw.AllParticles) {
-            //    Ro.Points.Add(new ScatterPoint(p.X,p.Ro));
-            //    V.Points.Add(new ScatterPoint(p.X,p.V));
-            //    P.Points.Add(new ScatterPoint(p.X,p.P));
-            //    E.Points.Add(new ScatterPoint(p.X,p.E));
-            //}
-            //pm.Title = $"{t:0.###} s,  RoMax = {_curr4Draw.Particles.Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Max(p => p.P):0.###}";
+            DrawLineBody(0,1,xAxisNorm,yAxisNorm);
+            DrawLineBody(1,2,xAxisNorm,yAxisNorm);
+            DrawLineBody(2,3,xAxisNorm,yAxisNorm);
+            DrawLineBody(3,0,xAxisNorm,yAxisNorm);
+            DrawLineBody(4,5,xAxisNorm,yAxisNorm);
+            DrawLineBody(5,6,xAxisNorm,yAxisNorm);
+            DrawLineBody(6,7,xAxisNorm,yAxisNorm);
+            DrawLineBody(7,4,xAxisNorm,yAxisNorm);
+            DrawLineBody(0,4,xAxisNorm,yAxisNorm);
+            DrawLineBody(1,5,xAxisNorm,yAxisNorm);
+            DrawLineBody(2,6,xAxisNorm,yAxisNorm);
+            DrawLineBody(3,7,xAxisNorm,yAxisNorm);
+
+
+            pm.Title = $"{t:0.###} s";
             pm.InvalidatePlot(true);
             //Thread.Sleep(1000);
+        }
+
+        void DrawLineBody(int i0, int i1 , Vector3D xAxisNorm, Vector3D yAxisNorm) {
+            bSer.Points.Add(new DataPoint(double.NaN,double.NaN));
+            bSer.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
+            bSer.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
         }
 
         public PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {

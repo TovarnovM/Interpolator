@@ -26,10 +26,8 @@ namespace RobotSim {
     /// </summary>
     public partial class MainWindow : Window {
         private RobotDynamics pr;
-        private IObservable<SolPoint> sol;
         IEquasionController controller;
         private Microsoft.Research.Oslo.Vector v0;
-        private IObservable<EventPattern<RoutedPropertyChangedEventArgs<double>>> trackbarch;
 
         public ViewModel vm { get; set; }
 
@@ -39,20 +37,23 @@ namespace RobotSim {
             InitializeComponent();
 
             var sol = new RobotDynamics();
-            sol.Body.AddForce(new Force(0.5,new Position3D(1,2,3),sol.wheels[0],sol.Body));
-
+            sol.Body.AddForce(new Force(1,new Position3D(1,2,3),sol.wheels[0],sol.Body));
+            sol.Body.AddForce(new Force(1,new Position3D(-1,-2,-3),sol.wheels[2],sol.Body));
             initObs(sol);//(0.001875+0.0075) * 0.5
 
 
-            trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged");
-
-            trackbarch.Subscribe(i => {
+            var trackbarch = Observable.FromEventPattern<RoutedPropertyChangedEventArgs<double>>(slider,"ValueChanged").Select(i => {
                 int newVal = (int)i.EventArgs.NewValue;
                 int index = newVal < vm.SolPointList.Value.Count ? newVal : vm.SolPointList.Value.Count - 1;
-                if(index < 0)
+                return index;
+            }).Publish();
+
+            trackbarch.Subscribe(i => {
+                if(i < 0)
                     return;
-                vm.Model1Rx.Update(vm.SolPointList.Value[index]);
+                vm.Model1Rx.Update(vm.SolPointList.Value[i]);
             });
+            trackbarch.Connect();
 
 
 
@@ -61,26 +62,27 @@ namespace RobotSim {
         private void initObs(RobotDynamics calc) {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
-            var dt = 0.01;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.1,out controller);
+            var dt = 0.0001;
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
                 vm.SolPointList.Update(sp);
                 slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
             });
+            sol.Connect();
         }
 
 
 
-        private void button_Click(object sender,RoutedEventArgs e) {
+        private void button_Click_1(object sender,RoutedEventArgs e) {
             controller.Paused = !controller.Paused;
             string txt = controller.Paused ? "Paused" : "Playing";
             button.Content = txt;
 
         }
 
-        private void button_Save_Click(object sender,RoutedEventArgs e) {
+        private void button_Save_Click_1(object sender,RoutedEventArgs e) {
             controller.Pause();
             button.Content = "Paused";
             var unit4save = new RobotDynamics();
@@ -104,7 +106,7 @@ namespace RobotSim {
 
         }
 
-        private void button_Copy1_Click(object sender,RoutedEventArgs e) {
+        private void button_Copy1_Click_1(object sender,RoutedEventArgs e) {
             controller.Pause();
             button.Content = "Paused";
             var unit4load = new RobotDynamics();
@@ -127,5 +129,6 @@ namespace RobotSim {
             }
 
         }
+
     }
 }
