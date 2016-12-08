@@ -13,6 +13,9 @@ namespace RobotSim {
         public double l, h, w;
         public List<RbWheel> wheels = new List<RbWheel>(4);
 
+        public RbSurfFloor floor;
+        public ForceCenter FloorForce;
+
 
 
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
@@ -26,6 +29,8 @@ namespace RobotSim {
             AddChild(Body);
             Body.SynchMeAfter += SynchWheelsToBodyPos;
 
+            FloorForce = new ForceCenter(1,new Position3D(0,1,0),null);
+            Body.AddForce(FloorForce);
             SynchMassGeometry();
 
             for(int i = 0; i < 4; i++) {
@@ -56,6 +61,8 @@ namespace RobotSim {
             foreach(var wheel in wheels) {
                 wheel.Vec3D = matr * wheel.localPos;
             }
+
+
             
         }
 
