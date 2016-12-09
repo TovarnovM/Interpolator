@@ -51,6 +51,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MPAPI", "MPAPI\MPAPI\MPAPI.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegistrationServer", "MPAPI\RegistrationServer\RegistrationServer.csproj", "{47A22F9B-BC4B-4AC2-A569-36E11AC71B7D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PTUR", "PTUR\PTUR.csproj", "{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -350,6 +352,18 @@ Global
 		{47A22F9B-BC4B-4AC2-A569-36E11AC71B7D}.Release|x64.Build.0 = Release|Any CPU
 		{47A22F9B-BC4B-4AC2-A569-36E11AC71B7D}.Release|x86.ActiveCfg = Release|Any CPU
 		{47A22F9B-BC4B-4AC2-A569-36E11AC71B7D}.Release|x86.Build.0 = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|x64.Build.0 = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Debug|x86.Build.0 = Debug|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|x64.ActiveCfg = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|x64.Build.0 = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA6D02AE-5599-48F1-A5DD-EB8CBE5DAA79}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
