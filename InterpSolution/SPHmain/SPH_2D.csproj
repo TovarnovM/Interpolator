@@ -105,6 +105,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IsotropicGas.cs" />
+    <Compile Include="GasParticleVer3.cs" />
     <Compile Include="My_IsotropicGas.cs" />
     <Compile Include="Particle2D.cs" />
     <Compile Include="Sph2D.cs" />

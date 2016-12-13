@@ -74,7 +74,7 @@ namespace SPH_2D {
             v0 = pr.Rebuild(pr.TimeSynch);
             //var dt = 0.0000001;
             var dt = 5 * 10E-6;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller);//.StartWith(new SolPoint(pr.TimeSynch,v0));
+            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 2,out controller);//.StartWith(new SolPoint(pr.TimeSynch,v0));
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -92,9 +92,21 @@ namespace SPH_2D {
         }
 
         public static Sph2D GetTest() {
-            string real = "i1.txt";
-            string bound = "b1.txt";
-            return new My_Sph2D( real, bound);
+            //string real = "i1.txt";
+            //string bound = "b1.txt";
+            //return new My_Sph2D(real,bound);
+
+
+            //double lt = initcond[0]; //длина трубы
+            //double ht = initcond[1]; //высота трубы
+            //double x0t = initcond[2];//отностиельная граница по Икс
+            //double p1t = initcond[3]; //Давление слева
+            //double ro1t = initcond[4]; //Плотность слева
+            //double p2t = initcond[5]; //Давление справа
+            //double ro2t = initcond[6]; //Плотность справа
+            SPH2D_Ver3.h_default = 1d / 100;
+            return SPH2D_Ver3.TestTruba(1,0.2,0.5,1,1,0.1,0.125);
+
         }
 
         private void button_Save_Click(object sender,RoutedEventArgs e) {
