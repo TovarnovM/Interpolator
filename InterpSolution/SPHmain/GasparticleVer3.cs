@@ -73,10 +73,15 @@ namespace SPH_2D {
             vHloc += vdelta;
             p2loc += 2 * vdelta;
             return p2loc * vHloc > 0 && p2loc.GetLengthSquared() > vHloc.GetLengthSquared();
-
         }
-
-       
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector2D ReflectPos(Vector2D pos) {
+            return pos + 2 * GetNormalToMe(pos);
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector2D ReflectVel(Vector2D vel) {
+            return vel + 2 * GetNormalToMe(p1 + vel);
+        }
     }
 
 
@@ -304,8 +309,8 @@ namespace SPH_2D {
             res.E = E;
             res.P = P;
             res.C = C;
-            res.Vec2D = Vec2D + 2 * mirrorSegment.GetNormalToMe(this);
-            res.VelVec2D = VelVec2D + 2 * mirrorSegment.GetNormalToMe(VelVec2D + mirrorSegment.p1);
+            res.Vec2D = mirrorSegment.ReflectPos(Vec2D);
+            res.VelVec2D = mirrorSegment.ReflectVel(VelVec2D);
 
             return res;
         }

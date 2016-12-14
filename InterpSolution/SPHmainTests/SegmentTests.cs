@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Sharp3D.Math.Core;
 using SPH_2D;
 using System;
 using System.Collections.Generic;
@@ -127,6 +128,26 @@ namespace SPH_2D.Tests {
                 Y = 0.5
             };
             Assert.IsFalse(segm.CloseToMe(p,0.5));
+        }
+
+        [TestMethod()]
+        public void ReflectPosTest1() {
+            var segm = new Segment(1,1,2,2);
+            var pos = new Vector2D(10,0);
+
+            var reflectpos = segm.ReflectPos(pos);
+            var rightReflectPOs = new Vector2D(0,10);
+            Assert.IsTrue(Vector2D.ApproxEqual(rightReflectPOs,reflectpos,0.0000001));
+        }
+
+        [TestMethod()]
+        public void ReflectVelTest() {
+            var segm = new Segment(1,1,2,2);
+            var vel = new Vector2D(10,5);
+
+            var reflectVel = segm.ReflectVel(vel);
+            var rightReflectVel = new Vector2D(5,10);
+            Assert.IsTrue(Vector2D.ApproxEqual(rightReflectVel,reflectVel,0.0000001));
         }
     }
 }
