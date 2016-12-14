@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Math;
 
 namespace SPH_2D {
     
@@ -134,10 +135,9 @@ namespace SPH_2D {
             }
         }
 
-        public ConcurrentStack<IGasParticleVer3> MiracleStack = new ConcurrentStack<IGasParticleVer3>();
+        public ConcurrentStack<IParticle2D> MiracleStack = new ConcurrentStack<IParticle2D>();
         public List<IGasParticleVer3> BestNeibs;
-
-        #region Constructor + Abstracts realiz
+        
         public GasParticleVer3(double h,double hmax, List<Segment> boundaries = null) : base(hmax) {
             Boundaries = boundaries ?? new List<Segment>();
             this.h = h;
@@ -215,7 +215,8 @@ namespace SPH_2D {
         }
 
         private void FillBestNeibsPlusRO() {
-            BestNeibs =  Neibs.Where(n => !ReferenceEquals(n,this)).Cast<IGasParticleVer3>().Where(n => GetDistTo(n) < hmax).ToList();//.Concat(MiracleStack).Where(n => GetDistTo(n) < hmax);
+            BestNeibs = Neibs.Where(n => !ReferenceEquals(n,this)).Concat(MiracleStack).Where(n => GetDistTo(n) < hmax).Cast<IGasParticleVer3>().ToList();
+            
             Ro = BestNeibs.Sum(n => {
                 double w = W_func(GetDistTo(n),h);
                 return n.M * w;
@@ -292,7 +293,7 @@ namespace SPH_2D {
                 return (k * (k - 1) * E);
             }
         }
-        #endregion
+        
 
         public GasParticleVer3Dummy CreateMiracleDummy(Segment mirrorSegment) {
             var res = new GasParticleVer3Dummy(hmax);
@@ -354,6 +355,8 @@ namespace SPH_2D {
             double dy = ht / Ny;
 
             double delta = Math.Min(dx,dy);
+            double m1 = GetMass(delta,h_default,ro1t);
+            double m2 = GetMass(delta,h_default,ro2t);
 
             var particles = new List<GasParticleVer3>(Nx * Ny+10);
 
@@ -366,6 +369,7 @@ namespace SPH_2D {
                     p.Y = y;
                     p.P = x < lt * x0t ? p1t : p2t;
                     p.Ro = x < lt * x0t ? ro1t : ro2t;
+                    p.M = x < lt * x0t ? m1 : m2;
                     particles.Add(p);
 
                     y += delta;
@@ -373,15 +377,45 @@ namespace SPH_2D {
                 x += delta;
 
             } while(x<lt);
-
-            var allMass = lt * x0t * ht * ro1t + lt * (1 - x0t) * ht * ro2t;
-            var partmass = allMass / particles.Count;
+            
             particles.ForEach(p => {
-                p.M = partmass;
-                p.E = p.P /(p.k - 1d) * p.Ro ;
+                p.E = p.P /((p.k - 1d) * p.Ro) ;
             });
             return new Sph2D(particles,null);
 
+        }
+
+        struct W_helper {
+            public double x, y, w;
+            public W_helper(double x, double y, double w) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+            }
+        }
+        public static double GetMass(double delta, double h, double ro) {
+            double x = 0;
+            double y = 0;
+            double f;
+            var lst = new List<W_helper>();
+            
+            do {
+                do {
+                    f = Particle2DBase.W_func(Sqrt(x*x+y*y),h);
+                    lst.Add(new W_helper(x,y,f));
+                    x += delta;
+                } while(f > 0d);
+                y += delta;
+                x = 0;
+                f = Particle2DBase.W_func(Sqrt(x * x + y * y),h);
+            } while(f > 0d);
+
+            double sum = 0;
+            sum += lst.Where(wh => wh.x == 0 ^ wh.y == 0).Sum(wh => wh.w * 2);
+            sum += lst.Where(wh => wh.x == 0 && wh.y == 0).Sum(wh => wh.w);
+            sum += lst.Where(wh => wh.x != 0 && wh.y != 0).Sum(wh => wh.w * 4);
+
+            return ro / sum;
         }
 
     }

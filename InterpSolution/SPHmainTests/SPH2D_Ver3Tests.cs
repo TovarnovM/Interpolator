@@ -22,5 +22,18 @@ namespace SPH_2D.Tests {
             //System.Core.dll!System.Linq.Enumerable.ConcatIterator<SimpleIntegrator.IScnPrm>(System.Collections.Generic.IEnumerable < SimpleIntegrator.IScnPrm > first,System.Collections.Generic.IEnumerable < SimpleIntegrator.IScnPrm > second)    Unknown
 
         }
+
+        [TestMethod()]
+        public void GetMassTest() {
+            double delta = 1, h = 2, ro = 10;
+            var m = SPH2D_Ver3.GetMass(delta,h,ro);
+            var ro_answ = 0d;
+            for(int i = -10; i <= 10; i++) {
+                for(int j = -10; j <= 10; j++) {
+                    ro_answ += m*Particle2DBase.W_func(Math.Sqrt(i * delta * i * delta + j * delta * j * delta),h);
+                }
+            }
+            Assert.AreEqual(ro,ro_answ,0.0000001);
+        }
     }
 }
