@@ -73,8 +73,10 @@ namespace SPH_2D {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
             //var dt = 0.0000001;
-            var dt = 100 * 10E-6;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller).StartWith(new SolPoint(pr.TimeSynch,v0));
+            var dt = 10 * 1E-6;
+            SPH2D_Ver3.dt = dt;
+            //sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller).StartWith(new SolPoint(pr.TimeSynch,v0));
+            sol = SPH2D_Ver3.CoolIntegration(calc as Sph2D_improoveIntegr).WithStepRx(dt * 100,out controller).StartWith(new SolPoint(pr.TimeSynch,v0));
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -97,16 +99,13 @@ namespace SPH_2D {
             //return new My_Sph2D(real,bound);
 
 
-            //double lt = initcond[0]; //длина трубы
-            //double ht = initcond[1]; //высота трубы
-            //double x0t = initcond[2];//отностиельная граница по Икс
-            //double p1t = initcond[3]; //Давление слева
-            //double ro1t = initcond[4]; //Плотность слева
-            //double p2t = initcond[5]; //Давление справа
-            //double ro2t = initcond[6]; //Плотность справа
-            SPH2D_Ver3.h_default = 1d / 100;
-            //return SPH2D_Ver3.TestTruba(1,0.2,0.5,1,1,0.1,0.125);
-            return SPH2D_Ver3.TestGasBall(1,1,0);
+            SPH2D_Ver3.h_default = 1d /100;
+            SPH2D_Ver3.k = 3;
+            SPH2D_Ver3.options = GasParticleOptions.DiffAll();
+            //return SPH2D_Ver3.TestTruba(1,0.2,0.5,1,1,0.1,0.125,SPH2D_Ver3.h_default/2);
+            //return SPH2D_Ver3.TestGasBall(1,1,0);
+            //return new Sph2D_improoveIntegr(SPH2D_Ver3.TestTrubaParticles(1,0.2,0.5,3E4,1500,1E4,1200,SPH2D_Ver3.h_default));
+            return new Sph2D_improoveIntegr(SPH2D_Ver3.TestGasBallParticles(1,1,0));
 
         }
 

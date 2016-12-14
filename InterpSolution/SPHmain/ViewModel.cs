@@ -121,7 +121,7 @@ namespace SPH_2D {
             colorSer2D.Points.Clear();
             foreach(var p in _curr4Draw.AllParticles.Cast<IGasParticleVer3>()) {
                 Ro.Points.Add(new ScatterPoint(p.X,p.Ro / Ro0,value: p.Ro / Ro0));
-                V.Points.Add(new ScatterPoint(p.X,p.VelVec2D.X / p.C,value: p.VelVec2D.X / p.C));
+                V.Points.Add(new ScatterPoint(p.X,p.VelVec2D.GetLength() / p.C,value: p.VelVec2D.GetLength() / p.C));
                 P.Points.Add(new ScatterPoint(p.X,p.P / P0,value: p.P / P0));
                 E.Points.Add(new ScatterPoint(p.X,p.E / E0,value: p.E / E0));
             }

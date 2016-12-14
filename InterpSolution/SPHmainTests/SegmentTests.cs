@@ -12,7 +12,7 @@ namespace SPH_2D.Tests {
     public class SegmentTests {
         [TestMethod()]
         public void GetNormalToMeTest1() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var p = new Particle2DDummyBase(1) {
                 X = 2,
                 Y = 1
@@ -26,7 +26,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void GetNormalToMeTest2() {
-            var segm = new Segment(1,1,2,1);
+            var segm = new BorderSegment(1,1,2,1);
             var p = new Particle2DDummyBase(1) {
                 X = 3,
                 Y = 4
@@ -40,7 +40,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void GetNormalToMeTest3() {
-            var segm = new Segment(1,1,1,2);
+            var segm = new BorderSegment(1,1,1,2);
             var p = new Particle2DDummyBase(1) {
                 X = 0,
                 Y = 0.5
@@ -54,7 +54,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void GetNormalToMeTest4() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var p = new Particle2DDummyBase(1) {
                 X = 1.5,
                 Y = 1.5
@@ -68,7 +68,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void GetNormalToMeTest5() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var p = new Particle2DDummyBase(1) {
                 X = 0,
                 Y = 0
@@ -82,7 +82,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void CloseToMeTest1() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var p = new Particle2DDummyBase(1) {
                 X = 1,
                 Y = 0.5
@@ -92,7 +92,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void CloseToMeTest2() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var p = new Particle2DDummyBase(1) {
                 X = 1,
                 Y = 0.1
@@ -102,7 +102,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void CloseToMeTest3() {
-            var segm = new Segment(1,1,2,1);
+            var segm = new BorderSegment(1,1,2,1);
             var p = new Particle2DDummyBase(1) {
                 X = 2.499,
                 Y = 0.5
@@ -112,7 +112,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void CloseToMeTest4() {
-            var segm = new Segment(1,1,2,1);
+            var segm = new BorderSegment(1,1,2,1);
             var p = new Particle2DDummyBase(1) {
                 X = 2.5001,
                 Y = 0.5
@@ -122,7 +122,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void CloseToMeTest5() {
-            var segm = new Segment(1,1,2,1);
+            var segm = new BorderSegment(1,1,2,1);
             var p = new Particle2DDummyBase(1) {
                 X = 0.4999,
                 Y = 0.5
@@ -132,7 +132,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void ReflectPosTest1() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var pos = new Vector2D(10,0);
 
             var reflectpos = segm.ReflectPos(pos);
@@ -142,7 +142,7 @@ namespace SPH_2D.Tests {
 
         [TestMethod()]
         public void ReflectVelTest() {
-            var segm = new Segment(1,1,2,2);
+            var segm = new BorderSegment(1,1,2,2);
             var vel = new Vector2D(10,5);
 
             var reflectVel = segm.ReflectVel(vel);
