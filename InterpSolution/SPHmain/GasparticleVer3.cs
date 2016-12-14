@@ -211,7 +211,7 @@ namespace SPH_2D {
                 if(bound.CloseToMe(this,hmax)) {
                     var mirrorClone = CreateMiracleDummy(bound);
                     foreach(var neib in Neibs) {
-                        if(neib is GasParticleVer3) {
+                        if((neib is GasParticleVer3) && !(neib as GasParticleVer3).isboundary) {
                             (neib as GasParticleVer3).MiracleStack.Push(mirrorClone);
                         }
                     }
@@ -222,10 +222,11 @@ namespace SPH_2D {
         private void FillBestNeibsPlusRO() {
             BestNeibs = Neibs.Where(n => !ReferenceEquals(n,this)).Concat(MiracleStack).Where(n => GetDistTo(n) < hmax).Cast<IGasParticleVer3>().ToList();
             
-            Ro = BestNeibs.Sum(n => {
+            Ro = BestNeibs.Where(bn => !bn.isboundary).Sum(n => {
                 double w = W_func(GetDistTo(n),h);
                 return n.M * w;
             });
+            Ro += M * W_func(0,h);
         }
 
         public void FillDts() {
@@ -337,59 +338,7 @@ namespace SPH_2D {
 
     public static class SPH2D_Ver3  {
         public static double h_default = 1d / 300;
-
-        public static Sph2D TestTruba(params double[] initcond) {
-            double lt = initcond[0]; //длина трубы
-            double ht = initcond[1]; //высота трубы
-            double x0t = initcond[2];//отностиельная граница по Икс
-            double p1t = initcond[3]; //Давление слева
-            double ro1t = initcond[4]; //Плотность слева
-            double p2t = initcond[5]; //Давление справа
-            double ro2t = initcond[6]; //Плотность справа
-
-            var bounds = new List<Segment>(4);
-            bounds.Add(new Segment(0,0,0,ht));
-            bounds.Add(new Segment(0,ht,lt,ht));
-            bounds.Add(new Segment(lt,ht,lt,0));
-            bounds.Add(new Segment(lt,0,0,0));
-
-            int Nx = (int)Math.Round(lt / h_default);
-            double dx = lt / Nx;
-
-            int Ny = (int)Math.Round(ht / h_default);
-            double dy = ht / Ny;
-
-            double delta = Math.Min(dx,dy);
-            double m1 = GetMass(delta,h_default,ro1t);
-            double m2 = GetMass(delta,h_default,ro2t);
-
-            var particles = new List<GasParticleVer3>(Nx * Ny+10);
-
-            double x = 0.5 * delta;
-            do {
-                double y = 0.5 * delta;
-                do {
-                    var p = new GasParticleVer3(h_default,2 * h_default,bounds);
-                    p.X = x;
-                    p.Y = y;
-                    p.P = x < lt * x0t ? p1t : p2t;
-                    p.Ro = x < lt * x0t ? ro1t : ro2t;
-                    p.M = x < lt * x0t ? m1 : m2;
-                    particles.Add(p);
-
-                    y += delta;
-                } while(y < ht);
-                x += delta;
-
-            } while(x<lt);
-            
-            particles.ForEach(p => {
-                p.E = p.P /((p.k - 1d) * p.Ro) ;
-            });
-            return new Sph2D(particles,null);
-
-        }
-
+        #region Helpers
         struct W_helper {
             public double x, y, w;
             public W_helper(double x, double y, double w) {
@@ -421,6 +370,143 @@ namespace SPH_2D {
             sum += lst.Where(wh => wh.x != 0 && wh.y != 0).Sum(wh => wh.w * 4);
 
             return ro / sum;
+        }
+        #endregion
+
+        /// <summary>
+        /// Test 1D tube
+        /// </summary>
+        /// <param name="initcond"> [0]длина трубы;
+        /// [1]высота трубы;
+        /// [2]отностиельная граница по Икс
+        /// [3]Давление слева
+        /// [4]Плотность слева
+        /// [5]Давление справа
+        /// [6]Плотность справа</param>
+        /// <returns></returns>
+        public static Sph2D TestTruba(params double[] initcond) {
+            double lt = initcond[0]; //длина трубы
+            double ht = initcond[1]; //высота трубы
+            double x0t = initcond[2];//отностиельная граница по Икс
+            double p1t = initcond[3]; //Давление слева
+            double ro1t = initcond[4]; //Плотность слева
+            double p2t = initcond[5]; //Давление справа
+            double ro2t = initcond[6]; //Плотность справа
+
+            var bounds = new List<Segment>(4);
+            bounds.Add(new Segment(0,0,0,ht));
+            bounds.Add(new Segment(0,ht,lt,ht));
+            bounds.Add(new Segment(lt,ht,lt,0));
+            bounds.Add(new Segment(lt,0,0,0));
+
+            int Nx = (int)Round(lt / h_default);
+            double dx = lt / Nx;
+
+            int Ny = (int)Round(ht / h_default);
+            double dy = ht / Ny;
+
+            double delta = Min(dx,dy);
+            double m1 = GetMass(delta,h_default,ro1t);
+            double m2 = GetMass(delta,h_default,ro2t);
+
+            var particles = new List<GasParticleVer3>(Nx * Ny+10);
+
+            double x = 0.5 * delta;
+            do {
+                double y = 0.5 * delta;
+                do {
+                    var p = new GasParticleVer3(h_default,2 * h_default,bounds);
+                    p.X = x;
+                    p.Y = y;
+                    p.P = x < lt * x0t ? p1t : p2t;
+                    p.Ro = x < lt * x0t ? ro1t : ro2t;
+                    p.M = x < lt * x0t ? m1 : m2;
+                    particles.Add(p);
+
+                    y += delta;
+                } while(y < ht);
+                x += delta;
+
+            } while(x<lt);
+            
+            particles.ForEach(p => {
+                p.E = p.P /((p.k - 1d) * p.Ro) ;
+            });
+            return new Sph2D(particles,null);
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="initcond"> [0]давление внутри шара;
+        /// [1]плотность внутри шара;
+        /// [2]скорость шара (мах)</param>
+        /// <returns></returns>
+        public static Sph2D TestGasBall(params double[] initcond) {
+            double p1 = initcond[0];
+            double ro1 = initcond[1];
+            double mach1 = initcond[2];
+            double k = 1.4;
+            double E = p1 / ((k - 1d) * ro1);
+            double Vx = (k * (k - 1) * E) * mach1;
+
+            double ht = 0.5;
+            double lt = 0.5;     
+
+            int Nx = (int)Round(lt / h_default);
+            double delta = lt / Nx;
+
+            int Ny = Nx;
+            double m1 = GetMass(delta,h_default,ro1);
+
+            var particles = new List<GasParticleVer3>(Nx * Ny + 10);
+            var center = new Particle2DDummyBase(1) {
+                X = lt * 0.5,
+                Y = lt * 0.5
+            };
+
+            var bounds = new List<Segment>(1);
+            bounds.Add(new Segment(lt+0.5*delta,0,lt + 0.5 * delta,ht));
+
+            double x = 0.5 * delta;
+            double y;
+            do {
+                y = 0.5 * delta;
+                do {
+                    var p = new GasParticleVer3(h_default,2.01 * h_default,bounds);
+                    p.X = x;
+                    p.Y = y;
+                    p.P = p1;
+                    p.Ro =ro1;
+                    p.M = m1;
+                    p.E = E;
+                    p.Vel.X = Vx;
+                    p.k = k;
+                    if(p.GetDistTo(center)<lt*0.5)
+                        particles.Add(p);
+
+                    y += delta;
+                } while(y < lt);
+                x += delta;
+
+            } while(x < lt);
+
+            var borders = new List<GasParticleVer3Dummy>(400);
+            borders.Add(new GasParticleVer3Dummy(2 * h_default) { X = -0.25*lt,Y = -0.25 * lt,isboundary = true });
+            borders.Add(new GasParticleVer3Dummy(2 * h_default) { X = -0.25 * lt,Y = 1.5 * lt,isboundary = true });
+
+            //borders.Add(new GasParticleVer3Dummy(2 * h_default) { X = 1.25 * lt,Y = -0.25 * lt,isboundary = true });
+            //borders.Add(new GasParticleVer3Dummy(2 * h_default) { X = 1.25 * lt,Y = 1.5 * lt,isboundary = true });
+
+            y = -0.25 * lt;
+            do {
+                borders.Add(new GasParticleVer3Dummy(2 * h_default) { X = lt + 4 * delta,Y = y,isboundary = true });
+                y += (delta / 5);
+            } while(y < 1.5 * lt);
+
+            return new Sph2D(particles, borders);
+            
         }
 
     }

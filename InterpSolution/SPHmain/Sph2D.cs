@@ -252,20 +252,14 @@ namespace SPH_2D {
         void UpdateParticles() {
             //Заполняем d/dt
             for(int i = 0; i < MaxStuffCount; i++) {
-                //Parallel.ForEach(AllParticles.Where(p => i < p.StuffCount),p => {
-                //    p.DoStuff(i);
-                //});
+                Parallel.ForEach(Particles.Where(p => i < p.StuffCount),p => {
+                    p.DoStuff(i);
+                });
 
                 //foreach(var p in AllParticles.Where(p => i < p.StuffCount)) {
                 //    p.DoStuff(i);
 
                 //}
-
-                Parallel.ForEach(Cells.Where(c => c.Particles.Count > 0),c => {
-                    foreach(var p in c.Particles) {
-                        p.DoStuff(i);
-                    };
-                });
             }
         }
 

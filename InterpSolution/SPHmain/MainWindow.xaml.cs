@@ -73,8 +73,8 @@ namespace SPH_2D {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
             //var dt = 0.0000001;
-            var dt = 5 * 10E-6;
-            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 2,out controller);//.StartWith(new SolPoint(pr.TimeSynch,v0));
+            var dt = 100 * 10E-6;
+            sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(dt * 10,out controller).StartWith(new SolPoint(pr.TimeSynch,v0));
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -105,7 +105,8 @@ namespace SPH_2D {
             //double p2t = initcond[5]; //Давление справа
             //double ro2t = initcond[6]; //Плотность справа
             SPH2D_Ver3.h_default = 1d / 100;
-            return SPH2D_Ver3.TestTruba(1,0.2,0.5,1,1,0.1,0.125);
+            //return SPH2D_Ver3.TestTruba(1,0.2,0.5,1,1,0.1,0.125);
+            return SPH2D_Ver3.TestGasBall(1,1,0);
 
         }
 
