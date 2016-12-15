@@ -4,18 +4,21 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MassDrummer"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525" Loaded="Window_Loaded">
+        Title="MainWindow" Height="416.451" Width="536.726" Loaded="Window_Loaded">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto" MinHeight="117"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="178*"/>
-            <ColumnDefinition Width="339*"/>
+            <ColumnDefinition Width="168"/>
+            <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="254" VerticalAlignment="Top" Width="143" >
-
-        </Image>
-
-        <TabControl x:Name="tabControl" Grid.Column="1" SelectionChanged="tabControl_SelectionChanged">
+        <Image x:Name="image" Grid.RowSpan="2" Margin="0,0,0,80" />
+        <oxy:PlotView Model="{Binding Model1}" Grid.Row="0" Grid.Column="1"/>
+        <TabControl x:Name="tabControl" Grid.Column="1" SelectionChanged="tabControl_SelectionChanged" Grid.Row="1">
             <TabItem x:Name="ti1" Header="1">
                 <Grid>
                     <TextBox x:Name="tb1H" HorizontalAlignment="Left" Height="19" Margin="40,0,0,9" TextWrapping="Wrap" Text="0,5" VerticalAlignment="Bottom" Width="82" ToolTip="в миллиметрах"/>
@@ -75,13 +78,14 @@
                     <CheckBox x:Name="chbx5h" Margin="128,0,0,57" VerticalAlignment="Bottom" ToolTip="Найти!" HorizontalAlignment="Left" Width="16"/>
                 </Grid>
             </TabItem>
+            
         </TabControl>
-        <TextBox x:Name="tbM" HorizontalAlignment="Left" Margin="62,0,0,7" TextWrapping="Wrap" Text="10" Width="74" ToolTip="в миллиграммах" Height="23" VerticalAlignment="Bottom"/>
-        <Label x:Name="label1" Content="Mass = " HorizontalAlignment="Left" Margin="10,0,0,7" Width="52" Height="26" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="tbRo" HorizontalAlignment="Left" Height="23" Margin="62,0,0,34" TextWrapping="Wrap" Text="2,7" VerticalAlignment="Bottom" Width="74" ToolTip="в г/см^3" TextChanged="textBox_Copy_TextChanged"/>
-        <Label x:Name="label1_C0opy" Content="Плотн.= " HorizontalAlignment="Left" Margin="10,0,0,34" Width="58" Height="26" VerticalAlignment="Bottom"/>
-        <CheckBox x:Name="chbxRo" Margin="142,0,0,37" VerticalAlignment="Bottom" ToolTip="Найти!" HorizontalAlignment="Left" Width="16" />
-        <CheckBox x:Name="chbxM" Margin="142,0,0,11" VerticalAlignment="Bottom" ToolTip="Найти!" HorizontalAlignment="Left" Width="16" IsChecked="True" Checked="chbxM_Checked"/>
-
+        <TextBox x:Name="tbM" HorizontalAlignment="Left" Margin="62,0,0,7" TextWrapping="Wrap" Text="10" Width="74" ToolTip="в миллиграммах" Height="23" VerticalAlignment="Bottom" Grid.Row="1"/>
+        <Label x:Name="label1" Content="Mass = " HorizontalAlignment="Left" Margin="10,0,0,7" Width="52" Height="26" VerticalAlignment="Bottom" Grid.Row="1"/>
+        <TextBox x:Name="tbRo" HorizontalAlignment="Left" Height="23" Margin="62,0,0,34" TextWrapping="Wrap" Text="2,7" VerticalAlignment="Bottom" Width="74" ToolTip="в г/см^3" TextChanged="textBox_Copy_TextChanged" Grid.Row="1"/>
+        <Label x:Name="label1_C0opy" Content="Плотн.= " HorizontalAlignment="Left" Margin="10,0,0,34" Width="58" Height="26" VerticalAlignment="Bottom" Grid.Row="1"/>
+        <CheckBox x:Name="chbxRo" Margin="142,0,0,37" VerticalAlignment="Bottom" ToolTip="Найти!" HorizontalAlignment="Left" Width="16" Height="15" Grid.Row="1" />
+        <CheckBox x:Name="chbxM" Margin="142,0,0,11" VerticalAlignment="Bottom" ToolTip="Найти!" HorizontalAlignment="Left" Width="16" IsChecked="True" Checked="chbxM_Checked" Height="15" Grid.Row="1"/>
+        <Button x:Name="button" Content="Button" Height="100" Width="75" Click="button_Click"/>
     </Grid>
 </Window>

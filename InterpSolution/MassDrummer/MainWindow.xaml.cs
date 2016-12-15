@@ -58,6 +58,7 @@ namespace MassDrummer {
 
            // chBxesAllStreams.TakeLast()
         }
+        ViewModel vm;
 
         Dictionary<string,TextBox> tb_dict = new Dictionary<string,TextBox>(20);
         List<IObservable<Tuple<string,double>>> tb_valsStreams = new List<IObservable<Tuple<string,double>>>(20);
@@ -102,7 +103,10 @@ namespace MassDrummer {
         }
 
         public MainWindow() {
+            vm = new ViewModel();
+            DataContext = vm;
             InitializeComponent();
+            
             FillListChBx();
             
             var tbStream = Observable.FromEventPattern<SelectionChangedEventArgs>(tabControl,"SelectionChanged")
@@ -122,8 +126,6 @@ namespace MassDrummer {
                 });
             tbStream.Subscribe(recheckWhenTabCh);
             chBxesAllStreams.Subscribe(s => Title = s);
-
-
         }
 
         void recheckWhenTabCh(int tbi) {
@@ -186,6 +188,15 @@ namespace MassDrummer {
         private void Window_Loaded(object sender,RoutedEventArgs e) {
             fillTxtBxes();
             tb_AllStreams.ObserveOnDispatcher().Subscribe(tss => Title = $"{tss.Item1}   val = {tss.Item2}");
+        }
+
+        private void button_Click(object sender,RoutedEventArgs e) {
+            var d = new Ellipse_Obrez();
+            d.D1 = 10;
+            d.D2 = 5;
+            d.H = 7;
+         
+            vm.Draw(d);
         }
     }
 }
