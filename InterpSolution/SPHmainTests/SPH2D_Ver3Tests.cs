@@ -18,7 +18,7 @@ namespace SPH_2D.Tests {
             //double ro1t = initcond[4]; //Плотность слева
             //double p2t = initcond[5]; //Давление справа
             //double ro2t = initcond[6]; //Плотность справа
-            var tst = SPH2D_Ver3.TestTruba(1,0.3,0.5,1,1,0.1,0.125);
+            //var tst = SPH2D_Ver3.TestTruba(1,0.3,0.5,1,1,0.1,0.125);
             //System.Core.dll!System.Linq.Enumerable.ConcatIterator<SimpleIntegrator.IScnPrm>(System.Collections.Generic.IEnumerable < SimpleIntegrator.IScnPrm > first,System.Collections.Generic.IEnumerable < SimpleIntegrator.IScnPrm > second)    Unknown
 
         }
