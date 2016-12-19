@@ -29,13 +29,13 @@ namespace MassDrummer {
             Model1.Series.Add(kont);
         }
 
-        public void Draw(ShapeBase shape) {
+        public void Draw(ShapeBase shape, string parName, double parVal) {
             //pm.Axes.Remove(colorAxis);
             kont.Points.Clear();
             kont.Points2.Clear();
             kont.Points.AddRange(shape.GetPoints());
             kont.Points2.AddRange(shape.GetPoints2());
-            //Model1.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.P):0.###}";
+            Model1.Title = $"{parName} = {parVal:0.####}";
             Model1.InvalidatePlot(true);
         }
 

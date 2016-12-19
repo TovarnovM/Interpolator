@@ -26,10 +26,12 @@ namespace MassDrummer {
         public abstract double F_ot_x(double x);
         public abstract IList<DataPoint> GetPoints();
 
+        protected string pred = "";
+
         public virtual IList<DataPoint> GetPoints2() {
             return GetPoints().Select(p => new DataPoint(p.X,-p.Y)).ToList();
         }
-        protected Dictionary<string,double> Params = new Dictionary<string,double>(10);
+        public Dictionary<string,double> Params = new Dictionary<string,double>(10);
         public double this[string key] {
             get { return Params[key];  }
             set { Params[key] = value; }
@@ -141,17 +143,18 @@ namespace MassDrummer {
 
 
         public double H {
-            get { return Params["H"]; }
-            set { Params["H"] = value; }
+            get { return Params[pred + "H"]; }
+            set { Params[pred + "H"] = value; }
         }
         public double D {
-            get { return Params["D"]; }
-            set { Params["D"] = value; }
+            get { return Params[pred + "D"]; }
+            set { Params[pred + "D"] = value; }
         }
 
-        public Cylynder() {
-            Params.Add("H",0.1);
-            Params.Add("D",0.1);
+        public Cylynder(string pred = "") {
+            this.pred = pred;
+            Params.Add(pred + "H",0.1);
+            Params.Add(pred + "D",0.1);
         }
     }
 
@@ -200,17 +203,18 @@ namespace MassDrummer {
 
 
         public double D1 {
-            get { return Params["D1"]; }
-            set { Params["D1"] = value; }
+            get { return Params[pred + "D1"]; }
+            set { Params[pred + "D1"] = value; }
         }
         public double D2 {
-            get { return Params["D2"]; }
-            set { Params["D2"] = value; }
+            get { return Params[pred + "D2"]; }
+            set { Params[pred + "D2"] = value; }
         }
 
-        public Ellipse() {
-            Params.Add("D1",0.1);
-            Params.Add("D2",0.1);
+        public Ellipse(string pred = "") {
+            this.pred = pred;
+            Params.Add(pred + "D1",0.1);
+            Params.Add(pred + "D2",0.1);
         }
     }
 
@@ -227,13 +231,13 @@ namespace MassDrummer {
 
 
         public double H {
-            get { return Params["H"]; }
-            set { Params["H"] = value; }
+            get { return Params[pred + "H"]; }
+            set { Params[pred + "H"] = value; }
         }
 
 
-        public Ellipse_Obrez() {
-            Params.Add("H",0.1);
+        public Ellipse_Obrez(string pred = ""):base(pred) {
+            Params.Add(pred + "H",0.1);
         }
     }
 
@@ -279,26 +283,27 @@ namespace MassDrummer {
 
 
         public double H1 {
-            get { return Params["H1"]; }
-            set { Params["H1"] = value; }
+            get { return Params[pred + "H1"]; }
+            set { Params[pred + "H1"] = value; }
         }
         public double H2 {
-            get { return Params["H2"]; }
-            set { Params["H2"] = value; }
+            get { return Params[pred + "H2"]; }
+            set { Params[pred + "H2"] = value; }
         }
         public double D {
-            get { return Params["D"]; }
-            set { Params["D"] = value; }
+            get { return Params[pred + "D"]; }
+            set { Params[pred + "D"] = value; }
         }
 
-        public ConeCone() {
-            Params.Add("H1",0.1);
-            Params.Add("H2",0.1);
-            Params.Add("D",0.1);
+        public ConeCone(string pred = "") {
+            this.pred = pred;
+            Params.Add(pred + "H1",0.1);
+            Params.Add(pred + "H2",0.1);
+            Params.Add(pred + "D",0.1);
         }
     }
 
-    public class ShereShell : ShapeBase {
+    public class SphereShell : ShapeBase {
         public override double X0 {
             get {
                 return 0d;
@@ -339,7 +344,11 @@ namespace MassDrummer {
                 res.Add(new DataPoint(x,F_ot_x(x)));
                 x += dx;
             }
-            return res;
+            res.Add(new DataPoint(H,0));
+
+            var inv = res.Select(p => new DataPoint(p.X,-p.Y)).ToList();
+            inv.Reverse();
+            return res.Concat(inv).ToList();
         }
 
         public override IList<DataPoint> GetPoints2() {
@@ -356,27 +365,32 @@ namespace MassDrummer {
                 res.Add(new DataPoint(x,y));
                 x += dx;
             }
-            return res;
+            res.Add(new DataPoint(H-h,0));
+
+            var inv = res.Select(p => new DataPoint(p.X,-p.Y)).ToList();
+            inv.Reverse();
+            return res.Concat(inv).ToList();
 
         }
 
         public double H {
-            get { return Params["H"]; }
-            set { Params["H"] = value; }
+            get { return Params[pred + "H"]; }
+            set { Params[pred + "H"] = value; }
         }
         public double R {
-            get { return Params["R"]; }
-            set { Params["R"] = value; }
+            get { return Params[pred + "R"]; }
+            set { Params[pred + "R"] = value; }
         }
         public double h {
-            get { return Params["h"]; }
-            set { Params["h"] = value; }
+            get { return Params[pred + "h"]; }
+            set { Params[pred + "h"] = value; }
         }
 
-        public ShereShell() {
-            Params.Add("h",0.1);
-            Params.Add("H",0.1);
-            Params.Add("R",0.1);
+        public SphereShell(string pred = "") {
+            this.pred = pred;
+            Params.Add(pred+"h",0.1);
+            Params.Add(pred + "H",0.1);
+            Params.Add(pred + "R",0.1);
         }
     }
 }

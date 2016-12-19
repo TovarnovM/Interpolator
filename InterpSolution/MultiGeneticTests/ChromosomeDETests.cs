@@ -15,13 +15,13 @@ namespace MultiGenetic.Tests {
         [TestMethod(), TestInitialize()]
         public void ChromosomeDETest() {
             var gi = new List<IGeneInfo>();
-            gi.Add(new DoubleRange("double1",0,7));
-            gi.Add(new DoubleRange("double2",1,7));
-            gi.Add(new DoubleRange("double3",-7,0));
-            gi.Add(new DoubleRange("double4",-1,60));
-            gi.Add(new StringRange("strRange1","sr10","sr11","sr12"));
-            gi.Add(new StringRange("strRange2","sr20","sr21"));
-            gi.Add(new StringRange("strRange3","sr30","sr31","sr32","sr33"));
+            gi.Add(new GeneDoubleRange("double1",0,7));
+            gi.Add(new GeneDoubleRange("double2",1,7));
+            gi.Add(new GeneDoubleRange("double3",-7,0));
+            gi.Add(new GeneDoubleRange("double4",-1,60));
+            gi.Add(new GeneStringEnum("strRange1","sr10","sr11","sr12"));
+            gi.Add(new GeneStringEnum("strRange2","sr20","sr21"));
+            gi.Add(new GeneStringEnum("strRange3","sr30","sr31","sr32","sr33"));
 
             cr1 = new ChromosomeDE(gi);
             cr1[0] = 1d;

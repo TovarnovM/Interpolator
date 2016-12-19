@@ -57,6 +57,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassDrummer", "MassDrummer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassDrummerTests", "MassDrummerTests\MassDrummerTests.csproj", "{B418281C-2A8F-4180-BA6A-BA3CDCB4AC61}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeneticNik", "GeneticNik\GeneticNik.csproj", "{D2A3FED7-2842-4947-B37C-66EF17162604}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -392,6 +394,18 @@ Global
 		{B418281C-2A8F-4180-BA6A-BA3CDCB4AC61}.Release|x64.Build.0 = Release|Any CPU
 		{B418281C-2A8F-4180-BA6A-BA3CDCB4AC61}.Release|x86.ActiveCfg = Release|Any CPU
 		{B418281C-2A8F-4180-BA6A-BA3CDCB4AC61}.Release|x86.Build.0 = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|x64.Build.0 = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Debug|x86.Build.0 = Debug|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|x64.ActiveCfg = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|x64.Build.0 = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|x86.ActiveCfg = Release|Any CPU
+		{D2A3FED7-2842-4947-B37C-66EF17162604}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

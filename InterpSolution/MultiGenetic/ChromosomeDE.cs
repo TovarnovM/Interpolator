@@ -8,6 +8,7 @@ using static System.Math;
 using Microsoft.CSharp.RuntimeBinder;
 using GeneticSharp.Domain.Populations;
 using Sharp3D.Math.Core;
+using System.Runtime.CompilerServices;
 
 namespace MultiGenetic {
     public interface IGeneInfo {
@@ -16,7 +17,8 @@ namespace MultiGenetic {
         bool ValidateValue(dynamic value);
     }
 
-    public class DoubleRange : IGeneInfo {
+    public class GeneDoubleRange : IGeneInfo {
+        public double eps = 0.000000001;
         public string Name { get; set; }
         public dynamic GetRandValue() {
             return RandomizationProvider.Current.GetDouble(Left, Right);
@@ -41,29 +43,34 @@ namespace MultiGenetic {
                     _max = Left;
             }
         }
-        public DoubleRange(string name, double min, double max) {
+        public GeneDoubleRange(string name, double min, double max) {
             Name = name;
             _min = min < max ? min : max;
             _max = max > min ? max : min;
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public double Gauss(double x, double xm, double sko) {
             return Exp(-0.5 * (x - xm) * (x - xm) / (sko * sko)) / (2.506628274631000502415765284811 * sko);
         }
         public double GetRandValue_Norm(double xm, double sko) {
-            if (sko < Double.Epsilon)
+            if (sko < eps)
                 return xm >= Left && xm <= Right ? xm : GetRandValue();
+            const double SIGMARULE = 3.5;
+            double x1 = Max(_min,xm - SIGMARULE * sko);
+            double x2 = Min(_max,xm + SIGMARULE * sko);
+            if(x1 >= x2)
+                return xm <= _min ? _min : _max; 
 
-            double amplit = xm >= Left && xm <= Right ?
+            double amplit = xm >= x1 && xm <= x2 ?
                 Gauss(xm, xm, sko) :
-                Max(Gauss(Left, xm, sko), Gauss(Right, xm, sko));
-            double x1, h, f;
+                Max(Gauss(x1, xm, sko), Gauss(x2, xm, sko));
+            double x, h, f;
             do {
-                x1 = GetRandValue();
+                x = RandomizationProvider.Current.GetDouble(x1,x2);
                 h = RandomizationProvider.Current.GetDouble();
-                f = Gauss(x1, xm, sko) / amplit;
+                f = Gauss(x, xm, sko) / amplit;
             } while (f <= h);
-            return x1;
+            return x;
         }
         public double GetRandValue_Uniform(double x1, double x2) {
             double lft = Min(x1, x2);
@@ -84,13 +91,13 @@ namespace MultiGenetic {
         }
     }
 
-    public class StringRange : IGeneInfo {
+    public class GeneStringEnum : IGeneInfo {
         private List<string> _elements;
         public string Name { get; set; }
         public dynamic GetRandValue() {
             return RandomizationProvider.Current.GetInt(0, Count);
         }
-        public StringRange(string name, params string[] elements) {
+        public GeneStringEnum(string name, params string[] elements) {
             Name = name;
             _elements = new List<string>(elements.Length);
             foreach (var elem in elements) {
@@ -173,7 +180,7 @@ namespace MultiGenetic {
     }
 
 
-    public class ChromosomeDE : ChromosomeBase {
+    public class ChromosomeDE : ChromosomeBase, IChromosome {
         private IList<IGeneInfo> _gInfo;
         public IList<IGeneInfo> GInfo { get { return _gInfo; } }
 
@@ -226,10 +233,10 @@ namespace MultiGenetic {
                 if(IndexOrString is int) {
                     index = IndexOrString;
                 }
-                if(_gInfo[index] is DoubleRange)
+                if(_gInfo[index] is GeneDoubleRange)
                     return (double)GetGene(index).Value;
-                if(_gInfo[index] is StringRange)
-                    return (_gInfo[index] as StringRange)[(int)GetGene(index).Value];
+                if(_gInfo[index] is GeneStringEnum)
+                    return (_gInfo[index] as GeneStringEnum)[(int)GetGene(index).Value];
                 return null;
             } set {
                 int index = 0;
@@ -244,18 +251,19 @@ namespace MultiGenetic {
                     if(index < 0 || index >= _gInfo.Count)
                         throw new ArgumentOutOfRangeException();
                 }
-                if(_gInfo[index] is DoubleRange && value is double) {
-                    if(_gInfo[index].ValidateValue(value))
-                        ReplaceGene(index,new Gene((double)value));
+                if(_gInfo[index] is GeneDoubleRange && IsNumber(value)) {
+                    double val = ToDouble(value);
+                    if(_gInfo[index].ValidateValue(val))
+                        ReplaceGene(index,new Gene(val));
                     else
-                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as DoubleRange).Left} ; {(_gInfo[index] as DoubleRange).Right}]");
+                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as GeneDoubleRange).Left} ; {(_gInfo[index] as GeneDoubleRange).Right}]");
                 }
                     
-                if(_gInfo[index] is StringRange) {
+                if(_gInfo[index] is GeneStringEnum) {
                     if(!_gInfo[index].ValidateValue(value))
                         throw new ArgumentException("Такой разновидности гена нет ",value.ToString());
                     if(value is string)
-                        ReplaceGene(index,new Gene((_gInfo[index] as StringRange).IndexOf((string)value)));
+                        ReplaceGene(index,new Gene((_gInfo[index] as GeneStringEnum).IndexOf((string)value)));
                     if(value is int)
                         ReplaceGene(index,new Gene((int)value));
                 }
@@ -355,13 +363,13 @@ namespace MultiGenetic {
                 crGroup.
                 First().
                 GInfo.
-                Where(gInfo => gInfo is DoubleRange).
+                Where(gInfo => gInfo is GeneDoubleRange).
                 Select(gInfo => {
                     int gIndex = crGroup.First().GInfo.IndexOf(gInfo);
                     var max = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
                     var min = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
                     return new {
-                        Info = gInfo as DoubleRange,
+                        Info = gInfo as GeneDoubleRange,
                         Delta = max - min,
                         TooSmall = (max - min) < 1E-10
                     };
@@ -376,12 +384,12 @@ namespace MultiGenetic {
                     var r = 0d;
                     foreach(var gInfo in cr.GInfo) {
                         var rr2 = 0d;
-                        if(gInfo is DoubleRange) {
+                        if(gInfo is GeneDoubleRange) {
                             var gRange = dRange.First(rn => rn.Info == gInfo);
                             if(gRange.TooSmall)
                                 continue;
                             rr2 = Math.Abs((double)crIn[gInfo.Name] - (double)cr[gInfo.Name]) / gRange.Delta;
-                        } else if(gInfo is StringRange)
+                        } else if(gInfo is GeneStringEnum)
                             rr2 = (int)crIn[gInfo.Name] != (int)cr[gInfo.Name] ? 0d : 1d;
                         rr2 *= rr2;
                         r += rr2;
@@ -433,6 +441,35 @@ namespace MultiGenetic {
             return rMatr;
         }
         #endregion
+
+        public static bool IsNumber(object value) {
+            return value is sbyte
+                    || value is byte
+                    || value is short
+                    || value is ushort
+                    || value is int
+                    || value is uint
+                    || value is long
+                    || value is ulong
+                    || value is float
+                    || value is double
+                    || value is decimal;
+        }
+
+        public static double ToDouble(object value) {
+            return value is sbyte ? (sbyte)value :
+                   value is byte ? (byte)value :
+                   value is short ? (short)value :
+                   value is ushort ? (ushort)value :
+                   value is int ? (int)value :
+                   value is uint ? (uint)value :
+                   value is long ? (long)value :
+                   value is ulong ? (ulong)value :
+                   value is float ? (float)value :
+                   value is double ? (double)value :
+                   value is decimal ? Decimal.ToDouble((decimal)value) :
+                   0d;
+        }
     }
 
 }

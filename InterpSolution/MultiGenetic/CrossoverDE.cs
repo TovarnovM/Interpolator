@@ -23,8 +23,8 @@ namespace MultiGenetic {
                 var child1 = result[0] as ChromosomeDE;
                 var child2 = result[1] as ChromosomeDE;
                 for (int i = 0; i < child1.GInfo.Count; i++) {
-                    if (child1.GInfo[i] is DoubleRange) {
-                        var gi = child1.GInfo[i] as DoubleRange;
+                    if (child1.GInfo[i] is GeneDoubleRange) {
+                        var gi = child1.GInfo[i] as GeneDoubleRange;
                         var x1 = Min(
                             (double)child1.GetGene(i).Value,
                             (double)child2.GetGene(i).Value);
@@ -46,6 +46,10 @@ namespace MultiGenetic {
             }
 
             return result;
+        }
+
+        public IList<IChromosome> PerformCross4Test(IList<IChromosome> parents) {
+            return PerformCross(parents);
         }
 
 

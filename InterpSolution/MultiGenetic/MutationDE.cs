@@ -69,8 +69,8 @@ namespace MultiGenetic {
                 }
 
                 if (RandomizationProvider.Current.GetDouble() <= probability) {
-                    if (chromosome is ChromosomeDE && ((chromosome as ChromosomeDE).GInfo[i] is DoubleRange)) {
-                        var gi = (chromosome as ChromosomeDE).GInfo[i] as DoubleRange;
+                    if (chromosome is ChromosomeDE && ((chromosome as ChromosomeDE).GInfo[i] is GeneDoubleRange)) {
+                        var gi = (chromosome as ChromosomeDE).GInfo[i] as GeneDoubleRange;
                         var center = (double)chromosome.GetGene(i).Value;
                         var radius = Math.Abs(gi.Right - gi.Left) * Radius;
                         chromosome.ReplaceGene(i, new Gene(gi.GetRandValue_Uniform(center - radius, center + radius)));
