@@ -175,13 +175,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\b1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\i1.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="bin\Debug\b2.txt" />
+    <Folder Include="bin\Debug\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

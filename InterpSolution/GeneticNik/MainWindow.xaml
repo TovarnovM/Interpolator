@@ -13,15 +13,30 @@
             <RowDefinition Height="21*"/>
         </Grid.RowDefinitions>
         <TabControl x:Name="tabControl" Margin="0,0,0,5">
-            <TabItem Header="TabItem">
+            <TabItem Header="Params">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="412*"/>
+                        <ColumnDefinition Width="97*"/>
+                    </Grid.ColumnDefinitions>
 
 
-                    <oxy:PlotView Model="{Binding Model1Rx.Value}" Grid.Row="0" Grid.Column="0"/>
-                    <Grid Margin="5,35,10,155" Grid.Row="0" Grid.Column="1"/>
+                    <oxy:PlotView Model="{Binding PM_params_Rx.Value}" Grid.Row="0" Grid.Column="0"/>
+                    <Grid Margin="5,35,10,155" Grid.Row="0" Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="DataGrid">
+                <Grid>
+                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Height="243" Width="509"/>
 
+                </Grid>
+            </TabItem>
+            <TabItem Header="Fitness">
+                <Grid>
+                    <oxy:PlotView Model="{Binding PM_fitness_Rx.Value}"/>
+                    
+                </Grid>
+            </TabItem>
 
 
         </TabControl>

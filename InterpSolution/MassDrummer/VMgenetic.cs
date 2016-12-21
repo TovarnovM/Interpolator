@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace MassDrummer {
-    public class ViewModel {
+    public class VMgenetic {
         private AreaSeries kont;
 
         public PlotModel Model1 { get; private set; }
@@ -18,7 +18,7 @@ namespace MassDrummer {
 
 
 
-        public ViewModel() {
+        public VMgenetic() {
             Model1 = GetNewModel("Ударники для Натусика)","X, мм","Y, мм");
             Model1.PlotType = PlotType.Cartesian;
             kont = new AreaSeries() {

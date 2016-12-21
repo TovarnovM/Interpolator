@@ -57,7 +57,7 @@ namespace MassDrummer {
             chBxesAllStreams.Subscribe(uncheckall);
            // chBxesAllStreams.TakeLast()
         }
-        ViewModel vm;
+        VMgenetic vm;
 
         Dictionary<string,TbTuple> tb_dict = new Dictionary<string,TbTuple>(20);
         List<IObservable<Tuple<string,double>>> tb_valsStreams = new List<IObservable<Tuple<string,double>>>(20);
@@ -111,7 +111,7 @@ namespace MassDrummer {
         }
 
         public MainWindow() {
-            vm = new ViewModel();
+            vm = new VMgenetic();
             DataContext = vm;
             InitializeComponent();
            
@@ -320,16 +320,16 @@ namespace MassDrummer {
         #endregion
 
         private void image_Loaded(object sender,RoutedEventArgs e) {
-            // ... Create a new BitmapImage.
-            BitmapImage b = new BitmapImage();
-            b.BeginInit();
-            b.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\bin\\Debug\\pic.jpg");
-            b.EndInit();
+            //// ... Create a new BitmapImage.
+            //BitmapImage b = new BitmapImage();
+            //b.BeginInit();
+            //b.UriSource = new Uri(AppDomain.CurrentDomain.BaseDirectory + "\\bin\\Debug\\pic.jpg");
+            //b.EndInit();
 
-            // ... Get Image reference from sender.
-            var image = sender as Image;
-            // ... Assign Source.
-            image.Source = b;
+            //// ... Get Image reference from sender.
+            //var image = sender as Image;
+            //// ... Assign Source.
+            //image.Source = b;
         }
     }
 }

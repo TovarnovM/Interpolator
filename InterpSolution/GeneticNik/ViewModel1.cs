@@ -1,4 +1,5 @@
-﻿using Microsoft.Research.Oslo;
+﻿using GeneticSharp.Domain.Populations;
+using Microsoft.Research.Oslo;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -10,98 +11,81 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace GeneticNik {
-    public class ViewModel1 {
-        private ScatterSeries Ro;
-        private ScatterSeries V;
-        private ScatterSeries P;
-        private ScatterSeries E;
-        private ScatterSeries colorSer2D;
-        double Ro0, P0, E0;
+    public class VMgenetic {
+        ScatterSeries ChromosParams;
+        LineSeries FitnessAverSer;
+        AreaSeries FitnessMinMaxSer;
 
-        public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
-        public int DrawState { get; set; } = 1;
-        public int WichGraph { get; set; } = 0;
-        //Sph2D _curr4Draw;
+        public VMPropRx<PlotModel,Generation> PM_params_Rx { get; private set; }
+        public VMPropRx<PlotModel,Population> PM_fitness_Rx { get; private set; }
+        public string paramX { get; set; }
+        public string paramY { get; set; }
+        Generation _curr4Draw;
         private LinearColorAxis colorAxis;
 
-        public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
+        public VMgenetic() {
+            _curr4Draw = null;
 
-        public ViewModel1() {
-            _curr4Draw = MainWindow.GetTest();
-            _curr4Draw.Rebuild();
-
-            
-
-            Model1Rx = new VMPropRx<PlotModel,SolPoint>(
+            PM_params_Rx = new VMPropRx<PlotModel,Generation>(
                 () => {
-                    var Model1 = GetNewModel("params","X","p,Ro,V");
-                    P = new ScatterSeries() {
-                        Title = "P",
-                        MarkerType = MarkerType.Triangle,
-                        MarkerSize = 2,
-                        //ColorAxisKey = colorAxis.Key,
+                    var modelP = GetNewModel("params");
 
+                    colorAxis = new LinearColorAxis {
+                        Position = AxisPosition.Right,
+                        Palette = OxyPalettes.Jet(200),
+                        Minimum = 0,
+                        Maximum = 1
                     };
-                    Model1.Series.Add(P);
 
-                    Ro = new ScatterSeries() {
-                        Title = "Ro",
+                    ChromosParams = new ScatterSeries() {
+                        Title = "Chromosomes",
                         MarkerType = MarkerType.Diamond,
-                        MarkerSize = 2,
-                        //ColorAxisKey = colorAxis.Key
-                    };
-                    Model1.Series.Add(Ro);
-
-                    V = new ScatterSeries() {
-                        Title = "V",
-                        MarkerType = MarkerType.Circle,
-                        MarkerSize = 2,
-                        // ColorAxisKey = colorAxis.Key
-                    };
-                    Model1.Series.Add(V);
-
-                    E = new ScatterSeries() {
-                        Title = "E",
-                        MarkerType = MarkerType.Circle,
-                        MarkerSize = 2,
-                        // ColorAxisKey = colorAxis.Key
-                    };
-                    Model1.Series.Add(E);
-
-                    colorSer2D = new ScatterSeries() {
-                        Title = "Color",
-                        MarkerType = MarkerType.Circle,
                         MarkerSize = 2,
                         ColorAxisKey = colorAxis.Key
                     };
-                    Model1.Series.Add(colorSer2D);
+                    modelP.Series.Add(ChromosParams);
 
-                    return Model1;
+                    modelP.Axes.Add(colorAxis);
+
+                    return modelP;
                 },
-                (sp,pm) => {
-                    _curr4Draw.SynchMeTo(sp);
-                    switch(DrawState) {
-                        case 1: {
-                            Draw2D(sp.T,pm,WichGraph);
-                            break;
-                        }
-                        default:
-                        Draw(sp.T,pm);
-                        break;
-                    }
-
+                (g,pm) => {
+                    DrawParams(pm,g);
                     return pm;
                 });
 
-            SolPointList = new VMPropRx<List<SolPoint>,SolPoint>(
-                () => new List<SolPoint>(),
-                (sp,lst) => {
-                    lst.Add(sp);
-                    return lst;
-                });
 
+
+            PM_fitness_Rx = new VMPropRx<PlotModel,Population>(
+                () => {
+                    var Model1 = GetNewModel("fitness","generations","p,Ro,V");
+                    FitnessAverSer = new LineSeries() {
+                        Title = "Fitness Aver",
+                        Color = OxyColors.Blue,
+                        StrokeThickness = 2
+                        //ColorAxisKey = colorAxis.Key,
+
+                    };
+                    Model1.Series.Add(FitnessAverSer);
+
+                    FitnessMinMaxSer = new AreaSeries();
+                    Model1.Series.Add(FitnessMinMaxSer);
+                    return Model1;
+                },
+                (pop,pm) => {
+                    DrawFitness(pop,pm);
+
+                    return pm;
+                });
         }
 
+        private void DrawParams(PlotModel pm,Generation g) {
+            throw new NotImplementedException();
+        }
+
+        private void DrawFitness(Population pop,PlotModel pm) {
+            throw new NotImplementedException();
+        }
 
         public void Draw(double t,PlotModel pm) {
             //pm.Axes.Remove(colorAxis);
@@ -120,8 +104,8 @@ namespace GeneticNik {
             //    P.Points.Add(new ScatterPoint(p.X,p.P / P0,value: p.P / P0));
             //    E.Points.Add(new ScatterPoint(p.X,p.E / E0,value: p.E / E0));
             //}
-            pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.P):0.###}";
-            pm.InvalidatePlot(true);
+            //pm.Title = $"{t:0.##########} s,  RoMax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.Ro):0.###},  Pmax = {_curr4Draw.Particles.Cast<IGasParticleVer3>().Max(p => p.P):0.###}";
+            //pm.InvalidatePlot(true);
         }
 
 
@@ -142,14 +126,6 @@ namespace GeneticNik {
             linearAxis2.MinorGridlineStyle = LineStyle.Dot;
             linearAxis2.Title = yname;
             m.Axes.Add(linearAxis2);
-
-            colorAxis = new LinearColorAxis {
-                Position = AxisPosition.Right,
-                Palette = OxyPalettes.Jet(200),
-                Minimum = 0,
-                Maximum = 1
-            };
-            m.Axes.Add(colorAxis);
 
             return m;
         }
