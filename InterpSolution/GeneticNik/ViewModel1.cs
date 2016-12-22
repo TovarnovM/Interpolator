@@ -18,14 +18,14 @@ namespace GeneticNik {
         AreaSeries FitnessMinMaxSer;
 
         public VMPropRx<PlotModel,Generation> PM_params_Rx { get; private set; }
-        public VMPropRx<PlotModel,Population> PM_fitness_Rx { get; private set; }
+        public VMPropRx<PlotModel,List<Generation>> PM_fitness_Rx { get; private set; }
         public string paramX { get; set; }
         public string paramY { get; set; }
-        Generation _curr4Draw;
         private LinearColorAxis colorAxis;
 
+        public string sX = "Vd", sY = "pmax";
+
         public VMgenetic() {
-            _curr4Draw = null;
 
             PM_params_Rx = new VMPropRx<PlotModel,Generation>(
                 () => {
@@ -57,7 +57,7 @@ namespace GeneticNik {
 
 
 
-            PM_fitness_Rx = new VMPropRx<PlotModel,Population>(
+            PM_fitness_Rx = new VMPropRx<PlotModel,List<Generation>>(
                 () => {
                     var Model1 = GetNewModel("fitness","generations","p,Ro,V");
                     FitnessAverSer = new LineSeries() {
@@ -74,25 +74,55 @@ namespace GeneticNik {
                     return Model1;
                 },
                 (pop,pm) => {
-                    DrawFitness(pop,pm);
+                    DrawFitness(pop,pm,false);
 
                     return pm;
                 });
         }
 
         private void DrawParams(PlotModel pm,Generation g) {
+            pm.Title = "Generation " + g.Number.ToString();
             ChromosParams.Points.Clear();
+            PM_params_Rx.Value.DefaultXAxis.Title = sX;
+            PM_params_Rx.Value.DefaultYAxis.Title = sY;
             foreach(var c in g.Chromosomes.Cast<ChromosomeD>()) {
 
-                var dp = new ScatterPoint(c["Lcone"],c["Lpiston"],value: c.Fitness ?? 0);
+                var dp = new ScatterPoint(c[sX],c[sY],value: c.Fitness ?? 0);
                 ChromosParams.Points.Add(dp);
             }
             colorAxis.Maximum = g.Chromosomes.Cast<ChromosomeD>().Max(c => c.Fitness ?? 0);
             pm.InvalidatePlot(true);
+            
         }
 
-        private void DrawFitness(Population pop,PlotModel pm) {
-            throw new NotImplementedException();
+        private void DrawFitness(List<Generation> pop,PlotModel pm,bool redrawall = false) {
+            if(redrawall) {
+                FitnessAverSer.Points.Clear();
+                FitnessMinMaxSer.Points.Clear();
+                FitnessMinMaxSer.Points2.Clear();
+            }
+            for(int i = FitnessAverSer.Points.Count; i < pop.Count; i++) {
+                var min = pop[i].Chromosomes[0].Fitness ?? 0d;
+                var max = pop[i].Chromosomes[0].Fitness ?? 0d;
+                var sum = 0d;
+                for(int j = 0; j < pop[i].Chromosomes.Count; j++) {
+                    var c = pop[i].Chromosomes[j];
+                    if(c == null)
+                        continue;
+                    var f = c.Fitness ?? 0d;
+                    if(f < min)
+                        min = f;
+                    if(f > max)
+                        max = f;
+                    sum += f;
+
+                }
+                FitnessMinMaxSer.Points.Add(new DataPoint(i + 1,max));
+                FitnessMinMaxSer.Points2.Add(new DataPoint(i + 1,min));
+                FitnessAverSer.Points.Add(new DataPoint(i + 1,sum/ pop[i].Chromosomes.Count));
+
+            }
+            pm.InvalidatePlot(true);
         }
 
         public void Draw(double t,PlotModel pm) {

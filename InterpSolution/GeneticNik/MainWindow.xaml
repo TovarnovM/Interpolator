@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:GeneticNik"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="370.021" Width="522.775">
+        Title="MainWindow" Height="375.829" Width="526.923">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="92*"/>
@@ -16,21 +16,20 @@
             <TabItem Header="Params">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="375*"/>
-                        <ColumnDefinition Width="62*"/>
-                        <ColumnDefinition Width="62
-                                          *"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="64"/>
+                        <ColumnDefinition Width="63"/>
                     </Grid.ColumnDefinitions>
 
 
                     <oxy:PlotView Model="{Binding PM_params_Rx.Value}" Grid.Row="0" Grid.Column="0"/>
-                    <ListBox x:Name="lbY" Grid.Column="1" HorizontalAlignment="Left" Height="243" VerticalAlignment="Top" Width="62"/>
+                    <ListBox x:Name="lbY" Grid.Column="1" HorizontalAlignment="Left" Height="243" VerticalAlignment="Top" Width="62" SelectionChanged="lbY_SelectionChanged"/>
                     <ListBox x:Name="lbX" Grid.Column="2" HorizontalAlignment="Left" Height="243" VerticalAlignment="Top" Width="62"/>
                 </Grid>
             </TabItem>
             <TabItem Header="DataGrid">
                 <Grid>
-                    <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" VerticalAlignment="Top" Height="243" Width="509"/>
+                    <DataGrid x:Name="dataGrid"/>
 
                 </Grid>
             </TabItem>
@@ -43,7 +42,7 @@
 
 
         </TabControl>
-        <Slider x:Name="slider" VerticalAlignment="Top" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.Row="1" />
+        <Slider x:Name="slider" VerticalAlignment="Top" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.Row="1" Maximum="0" />
         <Button x:Name="button" Content="Click Me" Click="button_Click" HorizontalAlignment="Left" Width="145" Height="21" VerticalAlignment="Bottom" Margin="1,0,0,10" Grid.Row="1"/>
         <Button x:Name="button_Save" Content="Save" Height="21" VerticalAlignment="Bottom" Margin="151,0,0,10" HorizontalAlignment="Left" Width="145" Click="button_Save_Click" Grid.Row="1"/>
         <Button x:Name="button_Copy1" Content="Load" Height="21" VerticalAlignment="Bottom" Margin="301,0,0,10" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click" Grid.Row="1"/>

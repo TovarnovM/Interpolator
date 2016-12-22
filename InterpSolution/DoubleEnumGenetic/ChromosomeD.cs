@@ -21,6 +21,10 @@ namespace DoubleEnumGenetic {
             }
         }
 
+        public IEnumerable<string> GetAllNames() {
+            return _gInfoDouble.Select(gi => gi.Name).Concat(Crits.Keys);
+        }
+
         public void AddCrit(ChromosomeD critsFrom,bool copyValues = false) {
             foreach(var ci in critsFrom.Crits.Values) {
                 AddCrit(ci.Info,copyValues ? ci.Value : null);
@@ -44,7 +48,7 @@ namespace DoubleEnumGenetic {
             Crits = new Dictionary<string,Criteria>();
             if(crits != null)
                 foreach(var crit in crits) {
-                    AddCrit(crit);
+                    AddCrit(new Criteria(crit));
                 }
             _gInfoDouble = geneInfos;
             CreateGenes();
@@ -84,7 +88,7 @@ namespace DoubleEnumGenetic {
                     }
                         
                     index = _gInfoDouble.IndexOf(item);
-                } else
+                } //else
                 //if(DoubleGeneName is int) {
                 //    index = DoubleGeneName;
                 //    if(index < 0 || index >= _gInfoDouble.Count)

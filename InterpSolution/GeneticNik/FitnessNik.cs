@@ -16,6 +16,10 @@ namespace GeneticNik {
         public IList<GeneDoubleRange> GInfo { get; set; }
         public IList<CritInfo> CrInfo { get; set; }
 
+        public IEnumerable<string> GetAllNames() {
+            return GInfo.Select(gi => gi.Name).Concat(CrInfo.Select(ci => ci.Name));
+        }
+
         public FitnessNik() {
              prep();
             //var tst = new GeneDoubleRange("Lcone",0.3,0.7);
@@ -54,8 +58,14 @@ namespace GeneticNik {
             lock(_locks[n]) {
                 delegs[n](ref l,ref d,ref lp,ref m1,ref m2,ref Vd,ref pmax);
             }
-            //c["Vd"] = Vd;
-            //c["pmax"] = pmax;
+            if(!c.Crits.ContainsKey("Vd")) {
+                c.Crits.Add("Vd",new Criteria(CrInfo[0]));
+            }
+            c.Crits["Vd"].Value = Vd;
+            if(!c.Crits.ContainsKey("pmax")) {
+                c.Crits.Add("pmax",new Criteria(CrInfo[1]));
+            }
+            c.Crits["pmax"].Value = pmax;
             if(float.IsNaN(Vd)) {
                 return -1000d;
             } else if(Abs(Vd) > 300000) {
