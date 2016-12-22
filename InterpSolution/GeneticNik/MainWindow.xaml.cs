@@ -20,6 +20,7 @@ using GeneticSharp.Domain.Terminations;
 using System.Reactive.Linq;
 using GeneticSharp.Domain.Populations;
 using GeneticSharp.Domain.Reinsertions;
+using System.Runtime.InteropServices;
 
 namespace GeneticNik {
     /// <summary>
@@ -68,8 +69,10 @@ namespace GeneticNik {
             var selection = new TournamentSelection(2,true);
 
             var cross = new CrossoverD(0.5);
+            cross.TailLength = 0.5;
 
-            var mutation = new MutationD();
+            var mutation = new MutationD(true);
+            mutation.Radius = 0.2;
 
             ga = new GeneticAlgorithm(pop,fit,selection,cross,mutation);
             ga.Termination = new FitnessStagnationTermination(20); //GenerationNumberTermination(10);
@@ -79,7 +82,7 @@ namespace GeneticNik {
             ga.TaskExecutor = taskEx;
             ga.Reinsertion = new ElitistReinsertion();
             ga.TerminationReached += Ga_TerminationReached;
-            ga.MutationProbability = 0.4f;
+            ga.MutationProbability = 0.5f;
             
 
             subscrP = pop.ObserveOnDispatcher().Subscribe(g => {
@@ -159,7 +162,14 @@ namespace GeneticNik {
         }
 
         private void button_Copy1_Click(object sender,RoutedEventArgs e) {
-            
+            float l = 0.5f, d = 0.1f, lp = 0.5f, m1 = 7f, m2 = 7f, Vd = 0f, pmax = 0f;
+
+            UniBallS0(ref l,ref d,ref lp,ref m1,ref m2,ref Vd,ref pmax);
+            button_Copy1.Content = Vd.ToString() + "  " + pmax.ToString();
         }
+        [DllImport("Nik.dll",EntryPoint = "UniBallS",CharSet = CharSet.Auto)]
+        static extern void UniBallS0(ref float Lcone,ref float dout,ref float Lpiston,ref float m1,ref float m2,ref float Vd,ref float pmax);
+
+
     }
 }
