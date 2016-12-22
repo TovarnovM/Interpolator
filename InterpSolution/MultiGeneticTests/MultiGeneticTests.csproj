@@ -105,12 +105,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MultiGenetic\MultiGenetic.csproj">
-      <Project>{66F60176-5369-4FF0-9FAA-9C5BEB384117}</Project>
-      <Name>MultiGenetic</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

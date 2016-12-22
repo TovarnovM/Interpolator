@@ -12,6 +12,7 @@ namespace GeneticNik {
         Subject<Generation> subj;
         public PopulationRx(int minSize,int maxSize,IChromosome adamChromosome) : base(minSize,maxSize,adamChromosome) {
             subj = new Subject<Generation>();
+            GenerationStrategy = new TrackingGenerationStrategy();
         }
         public override void EndCurrentGeneration() {
             base.EndCurrentGeneration();

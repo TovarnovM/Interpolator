@@ -1,4 +1,5 @@
-﻿using GeneticSharp.Domain.Populations;
+﻿using DoubleEnumGenetic;
+using GeneticSharp.Domain.Populations;
 using Microsoft.Research.Oslo;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -63,7 +64,7 @@ namespace GeneticNik {
                         Title = "Fitness Aver",
                         Color = OxyColors.Blue,
                         StrokeThickness = 2
-                        //ColorAxisKey = colorAxis.Key,
+                        
 
                     };
                     Model1.Series.Add(FitnessAverSer);
@@ -80,7 +81,14 @@ namespace GeneticNik {
         }
 
         private void DrawParams(PlotModel pm,Generation g) {
-            throw new NotImplementedException();
+            ChromosParams.Points.Clear();
+            foreach(var c in g.Chromosomes.Cast<ChromosomeD>()) {
+
+                var dp = new ScatterPoint(c["Lcone"],c["Lpiston"],value: c.Fitness ?? 0);
+                ChromosParams.Points.Add(dp);
+            }
+            colorAxis.Maximum = g.Chromosomes.Cast<ChromosomeD>().Max(c => c.Fitness ?? 0);
+            pm.InvalidatePlot(true);
         }
 
         private void DrawFitness(Population pop,PlotModel pm) {

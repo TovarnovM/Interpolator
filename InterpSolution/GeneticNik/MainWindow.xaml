@@ -16,13 +16,16 @@
             <TabItem Header="Params">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="412*"/>
-                        <ColumnDefinition Width="97*"/>
+                        <ColumnDefinition Width="375*"/>
+                        <ColumnDefinition Width="62*"/>
+                        <ColumnDefinition Width="62
+                                          *"/>
                     </Grid.ColumnDefinitions>
 
 
                     <oxy:PlotView Model="{Binding PM_params_Rx.Value}" Grid.Row="0" Grid.Column="0"/>
-                    <Grid Margin="5,35,10,155" Grid.Row="0" Grid.ColumnSpan="2"/>
+                    <ListBox x:Name="lbY" Grid.Column="1" HorizontalAlignment="Left" Height="243" VerticalAlignment="Top" Width="62"/>
+                    <ListBox x:Name="lbX" Grid.Column="2" HorizontalAlignment="Left" Height="243" VerticalAlignment="Top" Width="62"/>
                 </Grid>
             </TabItem>
             <TabItem Header="DataGrid">
@@ -34,7 +37,7 @@
             <TabItem Header="Fitness">
                 <Grid>
                     <oxy:PlotView Model="{Binding PM_fitness_Rx.Value}"/>
-                    
+
                 </Grid>
             </TabItem>
 
