@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using GeneticSharp.Domain.Terminations;
 using System.Reactive.Linq;
 using GeneticSharp.Domain.Populations;
+using GeneticSharp.Domain.Reinsertions;
 
 namespace GeneticNik {
     /// <summary>
@@ -61,23 +62,24 @@ namespace GeneticNik {
             
 
             var adam = fit.GetNewChromosome();
+            int n = int.Parse(textBox.Text);
+            var pop = new PopulationRx(n,n+20,adam);
 
-            var pop = new PopulationRx(100,120,adam);
-
-            var selection = new TournamentSelection(4,true);
+            var selection = new TournamentSelection(2,true);
 
             var cross = new CrossoverD(0.5);
 
             var mutation = new MutationD();
 
             ga = new GeneticAlgorithm(pop,fit,selection,cross,mutation);
-            ga.Termination = new FitnessStagnationTermination(10); //GenerationNumberTermination(10);
+            ga.Termination = new FitnessStagnationTermination(20); //GenerationNumberTermination(10);
             var taskEx = new SmartThreadPoolTaskExecutor();
             taskEx.MinThreads = 2;
             taskEx.MaxThreads = Environment.ProcessorCount;
             ga.TaskExecutor = taskEx;
+            ga.Reinsertion = new ElitistReinsertion();
             ga.TerminationReached += Ga_TerminationReached;
-            ga.MutationProbability = 0.3f;
+            ga.MutationProbability = 0.4f;
             
 
             subscrP = pop.ObserveOnDispatcher().Subscribe(g => {

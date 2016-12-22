@@ -41,7 +41,7 @@ namespace GeneticNik {
                     ChromosParams = new ScatterSeries() {
                         Title = "Chromosomes",
                         MarkerType = MarkerType.Diamond,
-                        MarkerSize = 2,
+                        MarkerSize = 4,
                         ColorAxisKey = colorAxis.Key
                     };
                     modelP.Series.Add(ChromosParams);
