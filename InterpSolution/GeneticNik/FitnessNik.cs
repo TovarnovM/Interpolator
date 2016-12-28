@@ -13,7 +13,7 @@ using DoubleEnumGenetic;
 
 namespace GeneticNik {
     public class FitnessNik  : IFitness {
-        public IList<GeneDoubleRange> GInfo { get; set; }
+        public IList<IGeneDE> GInfo { get; set; }
         public IList<CritInfo> CrInfo { get; set; }
 
         public IEnumerable<string> GetAllNames() {
@@ -23,7 +23,7 @@ namespace GeneticNik {
         public FitnessNik() {
              prep();
             //var tst = new GeneDoubleRange("Lcone",0.3,0.7);
-            GInfo = new List<GeneDoubleRange>(5);
+            GInfo = new List<IGeneDE>(5);
             GInfo.Add(new GeneDoubleRange("Lcone",0.3,0.7));
             GInfo.Add(new GeneDoubleRange("dout",0.07,0.125));
             GInfo.Add(new GeneDoubleRange("Lpiston",0.3,0.7));

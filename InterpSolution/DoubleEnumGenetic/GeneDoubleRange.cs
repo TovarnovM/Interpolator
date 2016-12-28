@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using static System.Math;
 
 namespace DoubleEnumGenetic {
-    public class GeneDoubleRange {
+    public class GeneDoubleRange : IGeneDE {
         public double eps = 0.000000001;
         public string Name { get; set; }
         public double GetRandValue() {

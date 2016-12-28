@@ -389,38 +389,22 @@ namespace SimpleIntegrator {
             FlagDict = null;
         }
         #region Parallel
-        public int ThreadsCount { get; set; } = 7;
+        
         private Vector _res;
-        private struct StateStruct {
-            public double t;
-            public int fromind;
-            public int toind;
+        private double _t_for_res;
+        void fillResAct(int ind) {
+            _res[ind] = DiffArr[ind].MyDiff.GetVal(_t_for_res);
         }
         public Vector f_parallel(double t,Vector y) {
             SynchMeTo(t,ref y);
+            _t_for_res = t;
             _res = Vector.Zeros(DiffArrN);
 
-            int piece = DiffArrN / ThreadsCount;
-            var tasks = new List<Task>(DiffArrN);
-            for(int i = 0; i < ThreadsCount; i++) {
-                StateStruct s;
-                s.t = t;
-                s.fromind = i * piece;
-                s.toind = (i + 1) * piece - 1;
-                s.toind = s.toind > DiffArrN ? DiffArrN : s.toind;
-                tasks.Add(Task.Factory.StartNew(FillResVector,s));
-            }
-            Task.WhenAll(tasks);
+            Parallel.For(0,DiffArrN,fillResAct);
 
             return _res;
         }
 
-        private void FillResVector(object state) {
-            var str = state ;
-            for(int i = ((StateStruct)state).fromind; i <= ((StateStruct)state).toind; i++) {
-                _res[i] = DiffArr[i].MyDiff.GetVal(((StateStruct)state).t);
-            }
-        }
         #endregion
         #region Save/Load
         public IDictionary<string, double> SaveToDict() {

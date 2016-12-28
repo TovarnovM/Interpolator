@@ -11,6 +11,7 @@ namespace DoubleEnumGenetic {
         public CritExtremum Extremum { get; set; }
         public double? Min { get; set; }
         public double? Max { get; set; }
+        public bool matters { get; set; } = true;
         public string Name { get; set; }
         public CritInfo(string name,CritExtremum extr = CritExtremum.maximize,double? min = null,double? max = null) {
             Name = name;

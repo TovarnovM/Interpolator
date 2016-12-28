@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace DoubleEnumGenetic {
     public class ChromosomeD : ChromosomeBase, IChromosome {
-        private IList<GeneDoubleRange> _gInfoDouble;
-        public IList<GeneDoubleRange> GInfoDouble { get { return _gInfoDouble; } }
+        private IList<IGeneDE> _gInfo;
+        public IList<IGeneDE> GInfoDouble { get { return _gInfo; } }
 
         public Dictionary<string,Criteria> Crits { get; set; }
 
@@ -22,7 +22,7 @@ namespace DoubleEnumGenetic {
         }
 
         public IEnumerable<string> GetAllNames() {
-            return _gInfoDouble.Select(gi => gi.Name).Concat(Crits.Keys);
+            return _gInfo.Select(gi => gi.Name).Concat(Crits.Keys);
         }
 
         public void AddCrit(ChromosomeD critsFrom,bool copyValues = false) {
@@ -44,13 +44,14 @@ namespace DoubleEnumGenetic {
             }
         }
 
-        public ChromosomeD(IList<GeneDoubleRange> geneInfos,IEnumerable<CritInfo> crits = null) : base(geneInfos.Count()) {
+        public ChromosomeD(IList<IGeneDE> geneInfos,IEnumerable<CritInfo> crits = null) : base(geneInfos.Count()) {
             Crits = new Dictionary<string,Criteria>();
             if(crits != null)
-                foreach(var crit in crits) {
-                    AddCrit(new Criteria(crit));
-                }
-            _gInfoDouble = geneInfos;
+                AddCrit(crits.ToArray());
+                //foreach(var crit in crits) {
+                //    AddCrit(new Criteria(crit));
+                //}
+            _gInfo = geneInfos;
             CreateGenes();
         }
 
@@ -59,67 +60,47 @@ namespace DoubleEnumGenetic {
             get {
                 int index = 0;
                 //if(DoubleGeneName is string) {
-                var item = _gInfoDouble.FirstOrDefault(gi => gi.Name == (string)DoubleGeneName);
+                var item = _gInfo.FirstOrDefault(gi => gi.Name == (string)DoubleGeneName);
                 if(item == null) {
                     if(Crits.ContainsKey(DoubleGeneName))
                         return Crits[DoubleGeneName].Value ?? 0d;
                     throw new ArgumentException("Такого гена нет ",DoubleGeneName.ToString());
                 }
                     
-                index = _gInfoDouble.IndexOf(item);
-                // } else
-                //if(IndexOrString is int) {
-                //    index = IndexOrString;
-                //}
-                //if(_gInfoDouble[index] is GeneDoubleRange)
+                index = _gInfo.IndexOf(item);
                 return (double)GetGene(index).Value;
-                //if(_gInfoDouble[index] is GeneStringEnum)
-                //    return (_gInfoDouble[index] as GeneStringEnum)[(int)GetGene(index).Value];
-                //return null;
             }
             set {
                 int index = 0;
-                if(DoubleGeneName is string && _gInfoDouble.Any(gi => gi.Name == DoubleGeneName)) {
-                    var item = _gInfoDouble.FirstOrDefault(gi => gi.Name == DoubleGeneName);
-                    if(item == null) {
-                        if(Crits.ContainsKey(DoubleGeneName))
-                            Crits[DoubleGeneName].Value = value;
-                        throw new ArgumentException("Такого гена нет ",DoubleGeneName.ToString());
+                var item = _gInfo.FirstOrDefault(gi => gi.Name == DoubleGeneName);
+                if(item == null) {
+                    if(Crits.ContainsKey(DoubleGeneName)) {
+                        Crits[DoubleGeneName].Value = value;
+                        return;
                     }
                         
-                    index = _gInfoDouble.IndexOf(item);
-                } //else
-                //if(DoubleGeneName is int) {
-                //    index = DoubleGeneName;
-                //    if(index < 0 || index >= _gInfoDouble.Count)
-                //        throw new ArgumentOutOfRangeException();
-                //}
-                if(_gInfoDouble[index] is GeneDoubleRange && IsNumber(value)) {
+                    throw new ArgumentException("Такого гена нет ",DoubleGeneName.ToString());
+                }
+                        
+                index = _gInfo.IndexOf(item);
+                 
+                if(_gInfo[index] is GeneDoubleRange && IsNumber(value)) {
                     double val = ToDouble(value);
-                    if(_gInfoDouble[index].ValidateValue(val))
+                    if(_gInfo[index].ValidateValue(val))
                         ReplaceGene(index,new Gene(val));
                     else
-                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfoDouble[index] as GeneDoubleRange).Left} ; {(_gInfoDouble[index] as GeneDoubleRange).Right}]");
+                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as GeneDoubleRange).Left} ; {(_gInfo[index] as GeneDoubleRange).Right}]");
                 }
 
-                //if(_gInfoDouble[index] is GeneStringEnum) {
-                //    if(!_gInfoDouble[index].ValidateValue(value))
-                //        throw new ArgumentException("Такой разновидности гена нет ",value.ToString());
-                //    if(value is string)
-                //        ReplaceGene(index,new Gene((_gInfoDouble[index] as GeneStringEnum).IndexOf((string)value)));
-                //    if(value is int)
-                //        ReplaceGene(index,new Gene((int)value));
-                //}
-                //throw new ArgumentException("Такого гена нет ",IndexOrString.ToString());
             }
         }
 
         public override IChromosome CreateNew() {
-            return new ChromosomeD(_gInfoDouble,CritsInfos());
+            return new ChromosomeD(_gInfo,CritsInfos());
         }
 
         public override Gene GenerateGene(int geneIndex) {
-            return new Gene(_gInfoDouble[geneIndex].GetRandValue());
+            return new Gene(_gInfo[geneIndex].GetRandValue());
 
             throw new Exception($"Чет не так с типом или индексом гена( {nameof(ChromosomeD)} - GenerateGene Method");
         }
@@ -147,10 +128,9 @@ namespace DoubleEnumGenetic {
         /// <returns>1 - first cooler by pareto, 0 - pareto ==, -1 second cooler</returns>
         public static int MAX_PAR = 100;
         public static int ParetoRel(ChromosomeD first,ChromosomeD second) {
-            bool firstCooler = true;
-            ;
+            bool firstCooler = true;          
             bool secondCooler = true;
-            foreach(var critName in first.Crits.Keys) {
+            foreach(var critName in first.Crits.Where(c => c.Value.Info.matters).Select(c => c.Key)) {
                 if(first.Crits[critName].Value == second.Crits[critName].Value)
                     continue;
                 var kritBattle = first.Crits[critName].Info.Extremum == CritExtremum.maximize ?
@@ -167,42 +147,54 @@ namespace DoubleEnumGenetic {
                 secondCooler ? -1 :
                 0;
         }
-        public static void TryGetInPareto(IList<ChromosomeD> pareto,ChromosomeD candidate) {
+        public static bool TryGetInPareto(IList<ChromosomeD> pareto,ChromosomeD candidate) {
             for(int i = pareto.Count - 1; i >= 0; i--) {
                 var pr = pareto[i];
-                switch(ChromosomeD.ParetoRel(pr,candidate)) {
-                    case 1: {
-                        return;
-                    }
-                    case -1: {
-                        pareto.RemoveAt(i);
-                    }
-                    break;
-                    default:
-                    break;
-                }
+                var answ = ChromosomeD.ParetoRel(pr,candidate);
+                if(answ == 1)
+                    return false;
+                if(answ == -1)
+                    pareto.RemoveAt(i);
             }
             pareto.Add(candidate);
+            return true;
         }
-        public static IList<ChromosomeD> Pareto(IEnumerable<IChromosome> all) {
+        public static IList<ChromosomeD> Pareto(List<ChromosomeD> all, bool removeParFromAll = false) {
             var par = new List<ChromosomeD>();
             foreach(var chr in all) {
-                TryGetInPareto(par,chr as ChromosomeD);
+                TryGetInPareto(par,chr);
+            }
+            if(removeParFromAll) {
+                all.RemoveAll(c => par.Any(cp => ReferenceEquals(cp,c)));
             }
             return par;
         }
-        public static void PerformParetoRange(IList<IChromosome> chromosomes) {
-            var allCr = new List<IChromosome>(chromosomes);
+        public static void PerformParetoRange(IList<ChromosomeD> chromosomes) {
+            var allCr = new List<ChromosomeD>(chromosomes);
             int i = MAX_PAR;
             while(allCr.Count > 0) {
-                var par = Pareto(allCr);
+                var par = Pareto(allCr, true);
                 foreach(var cr in par) {
                     cr.Fitness = i--;
-                    allCr.Remove(cr);
                 }
             }
         }
-        public static MatrixD GeneDifference(IList<ChromosomeD> crGroup) {
+
+        class DRange {
+            public DRange(GeneDoubleRange Info, double Delta) {
+                this.Info = Info;
+                this.Delta = Delta;
+                this.TooSmall = Delta < 1E-10;
+            }
+
+            public double Delta { get; private set; }
+            public GeneDoubleRange Info { get; private set; }
+            public bool TooSmall { get; private set; }
+        }
+
+
+
+        public static MatrixD GetGeneDifferenceMatrix(IList<ChromosomeD> crGroup) {
             var dRange =
                 crGroup.
                 First().
@@ -211,19 +203,16 @@ namespace DoubleEnumGenetic {
                 Select(gInfo => {
                     int gIndex = crGroup.First().GInfoDouble.IndexOf(gInfo);
                     var max = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
-                    var min = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
-                    return new {
-                        Info = gInfo as GeneDoubleRange,
-                        Delta = max - min,
-                        TooSmall = (max - min) < 1E-10
-                    };
-                });
+                    var min = crGroup.Min(cr => (double)cr.GetGene(gIndex).Value);
+                    return new DRange(gInfo as GeneDoubleRange,max - min);
+                }).
+                ToList();
 
             var rMatr = new MatrixD(crGroup.Count,crGroup.Count);
             for(int i = 0; i < crGroup.Count; i++) {
                 var cr = crGroup[i];
                 rMatr[i,i] = 0d;
-                for(int j = i; j < crGroup.Count; j++) {
+                for(int j = i+1; j < crGroup.Count; j++) {
                     var crIn = crGroup[j];
                     var r = 0d;
                     foreach(var gInfo in cr.GInfoDouble) {
@@ -233,9 +222,9 @@ namespace DoubleEnumGenetic {
                             if(gRange.TooSmall)
                                 continue;
                             rr2 = Math.Abs((double)crIn[gInfo.Name] - (double)cr[gInfo.Name]) / gRange.Delta;
-                        }
-                        //} else if(gInfo is GeneStringEnum)
-                        //    rr2 = (int)crIn[gInfo.Name] != (int)cr[gInfo.Name] ? 0d : 1d;
+                        
+                        } else if(gInfo is GeneEnumString)
+                            rr2 = (int)crIn[gInfo.Name] != (int)cr[gInfo.Name] ? 0d : 1d;
                         rr2 *= rr2;
                         r += rr2;
                     }
@@ -246,12 +235,13 @@ namespace DoubleEnumGenetic {
             }
             return rMatr;
         }
-        public static MatrixD CritDifference(IList<ChromosomeD> crGroup) {
+        public static MatrixD GetCritDifferenceMatrix(IList<ChromosomeD> crGroup) {
             var crRange =
                 crGroup.
                 First().
                 Crits.
                 Values.
+                Where(v => v.Info.matters).
                 Select(crit => {
                     var max = (double)crGroup.Max(cr => cr.Crits[crit.Info.Name].Value);
                     var min = (double)crGroup.Min(cr => cr.Crits[crit.Info.Name].Value);
@@ -266,7 +256,7 @@ namespace DoubleEnumGenetic {
             for(int i = 0; i < crGroup.Count; i++) {
                 var cr = crGroup[i];
                 rMatr[i,i] = 0d;
-                for(int j = i; j < crGroup.Count; j++) {
+                for(int j = i+1; j < crGroup.Count; j++) {
                     var crIn = crGroup[j];
                     var r = 0d;
                     foreach(var crRn in crRange) {
@@ -284,6 +274,42 @@ namespace DoubleEnumGenetic {
             }
 
             return rMatr;
+        }
+
+        class diffEntity {
+            public int index;
+            public double summdiff;
+            public diffEntity(int index, double diff) {
+                this.index = index;
+                this.summdiff = diff;
+            }
+        }
+
+        public static List<int> GetUniquestGuysIndexes(MatrixD diffMatr, int unicestCount) {
+            if(!diffMatr.IsSquare || !diffMatr.IsSymmetric)
+                throw new Exception("Матрица неправильная!) То ли не квадратная, то ли не симметричная");
+            var diffSums = Enumerable.Repeat(0d,diffMatr.Rows).ToList();
+            for(int i = 0; i < diffMatr.Rows; i++) {
+                for(int j = i+1; j < diffMatr.Columns; j++) {
+                    double diffIJ = diffMatr[i,j];
+                    diffSums[i] += diffIJ;
+                    diffSums[j] += diffIJ;
+                }
+            }
+            var diffs = new List<diffEntity>(diffSums.Count);
+            for(int i = 0; i < diffSums.Count; i++) {
+                diffs.Add(new diffEntity(i,diffSums[i]));
+            }
+            while(diffs.Count > unicestCount) {
+                int looserInd = diffs.OrderBy(de => de.summdiff).First().index;
+                diffs.RemoveAll(de => de.index == looserInd);
+                for(int i = 0; i < diffs.Count; i++) {
+                    diffs[i].summdiff -= diffMatr[looserInd,diffs[i].index];
+                }
+            }
+            var res = diffs.Select(de => de.index).OrderBy(ind => ind).ToList();
+            return res;
+
         }
         #endregion
 
@@ -315,6 +341,24 @@ namespace DoubleEnumGenetic {
                    value is decimal ? Decimal.ToDouble((decimal)value) :
                    0d;
         }
+
+        #region saveLoad
+        public Dictionary<string, double> SaveToDictionary() {
+            var res = GetAllNames().ToDictionary(s => s,s => this[s]);
+            res.Add("Fitness",Fitness ?? double.NaN);
+            return res;
+        }
+        public void LoadFromDictionary(IDictionary<string,double> dict) {
+            foreach(var s in GetAllNames()) {
+                this[s] = dict[s];
+            }
+            Fitness = null;
+            if(!Double.IsNaN(dict["Fitness"]))
+                Fitness = dict["Fitness"];
+        }
+        #endregion
     }
+
+
 
 }
