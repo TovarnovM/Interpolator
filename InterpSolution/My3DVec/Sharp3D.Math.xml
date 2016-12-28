@@ -10308,6 +10308,11 @@
             Indexer allowing to access the matrix elements by row and column.
             </summary>
         </member>
+        <member name="P:Sharp3D.Math.Core.MatrixD.Item(System.Int32)">
+            <summary>
+            Indexer allowing to access the matrix elements by row.
+            </summary>
+        </member>
         <member name="T:Sharp3D.Math.Core.MatrixF">
             <summary>
             Represents a n-dimentional single-precision floating point matrix.

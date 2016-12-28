@@ -14,5 +14,6 @@
         </Grid.RowDefinitions>
         <oxy:PlotView Model="{Binding pm}" />
         <Button x:Name="button" Content="Button" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="125" Click="button_Click"/>
+        <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Margin="140,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="136" Click="button1_Click"/>
     </Grid>
 </Window>

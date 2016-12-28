@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleEnumGenetic", "Double
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleEnumGeneticWPF", "DoubleEnumGeneticWPF\DoubleEnumGeneticWPF.csproj", "{E607A83D-BA49-40C6-BACA-A0973517D93B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleEnumGeneticTests", "DoubleEnumGeneticTests\DoubleEnumGeneticTests.csproj", "{754D644C-4821-4E36-B681-A1DC651A77D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -407,6 +409,18 @@ Global
 		{E607A83D-BA49-40C6-BACA-A0973517D93B}.Release|x64.Build.0 = Release|Any CPU
 		{E607A83D-BA49-40C6-BACA-A0973517D93B}.Release|x86.ActiveCfg = Release|Any CPU
 		{E607A83D-BA49-40C6-BACA-A0973517D93B}.Release|x86.Build.0 = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|x64.Build.0 = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Debug|x86.Build.0 = Debug|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x64.ActiveCfg = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x64.Build.0 = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

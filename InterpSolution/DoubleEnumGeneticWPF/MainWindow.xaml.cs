@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GeneticSharp.Domain;
 using GeneticSharp.Domain.Randomizations;
+using OxyPlot;
 
 namespace DoubleEnumGeneticWPF {
     /// <summary>
@@ -37,7 +38,7 @@ namespace DoubleEnumGeneticWPF {
             var pm = vm.pm;
             var tf = new TestFit11();
             cs = Enumerable
-                .Range(0,1000)
+                .Range(0,300)
                 .Select(_ => tf.GetNewChromosome())
                 .Where(c => {
                     var dx = 1500 - c["xg"];
@@ -77,38 +78,39 @@ namespace DoubleEnumGeneticWPF {
             }
 
 
-            int rank = 0;
-            while(rank < 1) {
-                var sss = new ScatterSeries() {
-                    Title = (rank++).ToString(),
-                    MarkerSize = 5
-                };
-                pm.Series.Add(sss);
-                int nAll = cs_tmp.Count;
-                par = ChromosomeD.Pareto(cs_tmp,true);
-                var nPar = par.Count;
-                foreach(var c in par) {
-                    sss.Points.Add(new ScatterPoint(c["x"],c["y"]));
-                }
-                var m = ChromosomeD.GetCritDifferenceMatrix(par);
-                var remAll = (nPar + cs_tmp.Count) == nAll;
-            }
+            //int rank = 0;
+            //while(rank < 1) {
+            //    var sss = new ScatterSeries() {
+            //        Title = (rank++).ToString(),
+            //        MarkerSize = 5
+            //    };
+            //    pm.Series.Add(sss);
+            //    int nAll = cs_tmp.Count;
+            //    par = ChromosomeD.Pareto(cs_tmp,true);
+            //    var nPar = par.Count;
+            //    foreach(var c in par) {
+            //        sss.Points.Add(new ScatterPoint(c["x"],c["y"]));
+            //    }
+            //    var m = ChromosomeD.GetCritDifferenceMatrix(par);
+            //    var remAll = (nPar + cs_tmp.Count) == nAll;
+            //}
             //pm.InvalidatePlot(true);
 
 
 
 
-
-            var diffM = ChromosomeD.GetCritDifferenceMatrix(par);
-            var inds = ChromosomeD.GetUniquestGuysIndexes(diffM,par.Count / 2);
+            var unic = cs_tmp;
+            var diffM = ChromosomeD.GetCritDifferenceMatrix(unic);
+            var inds = ChromosomeD.GetUniquestGuysIndexes(diffM,unic.Count/3);
             ss = new ScatterSeries() {
                 Title = "Uniquest",
-                MarkerSize = 3
+                MarkerSize = 4,
+                MarkerFill = OxyColors.Red
             };
             pm.Series.Add(ss);
             for(int ind = 0; ind < inds.Count; ind++) {
                 int i = inds[ind];
-                var c = par[i];
+                var c = unic[i];
                 ss.Points.Add(new ScatterPoint(c["x"],c["y"]));
             }
                 
@@ -119,6 +121,11 @@ namespace DoubleEnumGeneticWPF {
 
 
             
+        }
+
+        MarkovNameGenerator nameGener = MarkovNameGenerator.GetStandart();
+        private void button1_Click(object sender,RoutedEventArgs e) {
+            button1.Content = nameGener.GetNextName();
         }
     }
 

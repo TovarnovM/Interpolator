@@ -620,6 +620,13 @@ namespace Sharp3D.Math.Core
 			get { return _data[row][col]; }
 		}
 
-		#endregion
-	}
+        /// <summary>
+        /// Indexer allowing to access the matrix elements by row.
+        /// </summary>
+        public double[] this[int row] {
+            get { return _data[row]; }
+        }
+
+        #endregion
+    }
 }

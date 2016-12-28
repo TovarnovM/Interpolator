@@ -15,6 +15,8 @@ namespace DoubleEnumGenetic {
 
         public Dictionary<string,double> DopParams;
 
+        public string Name { get; set; }
+
         public IEnumerable<CritInfo> CritsInfos() {
             foreach(var crit in Crits.Values) {
                 yield return crit.Info;
@@ -285,7 +287,7 @@ namespace DoubleEnumGenetic {
             }
         }
 
-        public static List<int> GetUniquestGuysIndexes(MatrixD diffMatr, int unicestCount) {
+        public static List<int> GetUniquestGuysIndexes_old_and_wrong(MatrixD diffMatr, int unicestCount) {
             if(!diffMatr.IsSquare || !diffMatr.IsSymmetric)
                 throw new Exception("Матрица неправильная!) То ли не квадратная, то ли не симметричная");
             var diffSums = Enumerable.Repeat(0d,diffMatr.Rows).ToList();
@@ -309,6 +311,56 @@ namespace DoubleEnumGenetic {
             }
             var res = diffs.Select(de => de.index).OrderBy(ind => ind).ToList();
             return res;
+
+        }
+
+        public static List<int> GetUniquestGuysIndexes(MatrixD diffMatr,int unicestCount) {
+            if(!diffMatr.IsSquare || !diffMatr.IsSymmetric)
+                throw new Exception("Матрица неправильная!) То ли не квадратная, то ли не симметричная");
+            var uniqueIndexes = Enumerable.Range(0,diffMatr.Rows).ToList();
+            while(uniqueIndexes.Count > unicestCount) {
+                int iimin = 0, jjmin = 1;
+                double min_curr = diffMatr[uniqueIndexes[iimin],uniqueIndexes[jjmin]];
+                for(int ii = 0; ii < uniqueIndexes.Count; ii++) {
+                    int i = uniqueIndexes[ii];
+                    for(int jj = ii+1; jj < uniqueIndexes.Count; jj++) {
+                        int j = uniqueIndexes[jj];
+                        if(diffMatr[i,j] < min_curr) {
+                            min_curr = diffMatr[i,j];
+                            iimin = ii;
+                            jjmin = jj;
+                        }
+                    }
+                }
+
+                int imin = uniqueIndexes[iimin];
+                double miniinext_curr = 1e9;
+                for(int jj = 0; jj < uniqueIndexes.Count; jj++) {
+                    int j = uniqueIndexes[jj];
+                    if(j == imin || jj == jjmin)
+                        continue;
+                    if(diffMatr[imin][j] < miniinext_curr)
+                        miniinext_curr = diffMatr[imin][j];
+                }
+
+                int jmin = uniqueIndexes[jjmin];
+                double minjjnext_curr = 1e9;
+                for(int ii= 0; ii < uniqueIndexes.Count; ii++) {
+                    int i = uniqueIndexes[ii];
+                    if(i == jmin || ii == iimin)
+                        continue;
+                    if(diffMatr[jmin][i] < minjjnext_curr)
+                        minjjnext_curr = diffMatr[jmin][i];
+                }
+
+                if(minjjnext_curr < miniinext_curr) {
+                    uniqueIndexes.RemoveAt(jjmin);
+                } else {
+                    uniqueIndexes.RemoveAt(iimin);
+                }
+
+            }
+            return uniqueIndexes;
 
         }
         #endregion
