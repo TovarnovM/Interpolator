@@ -108,6 +108,7 @@
     <Compile Include="ChromosomeDIOHelper.cs" />
     <Compile Include="Criterias.cs" />
     <Compile Include="CrossoverD.cs" />
+    <Compile Include="DetermSearch.cs" />
     <Compile Include="GeneDoubleRange.cs" />
     <Compile Include="GeneEnumString.cs" />
     <Compile Include="IGeneDE.cs" />

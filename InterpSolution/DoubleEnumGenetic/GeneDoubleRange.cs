@@ -81,6 +81,9 @@ namespace DoubleEnumGenetic {
             return Left <= (double)value && (double)value <= Right;
         }
 
+        public GeneDoubleRange Copy() {
+            return new GeneDoubleRange(Name,Left,Right);
+        }
 
 
     }

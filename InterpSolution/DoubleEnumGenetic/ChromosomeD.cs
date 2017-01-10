@@ -252,7 +252,8 @@ namespace DoubleEnumGenetic {
                         Delta = max - min,
                         DeltaTooSmall = (max - min) < 1E-10
                     };
-                });
+                }).
+                ToList();
 
             var rMatr = new MatrixD(crGroup.Count,crGroup.Count);
             for(int i = 0; i < crGroup.Count; i++) {
