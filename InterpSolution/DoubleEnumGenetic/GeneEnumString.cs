@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace DoubleEnumGenetic {
     public class GeneEnumString: IGeneDE {
+        public bool Matters { get; set; } = true;
         public IList<string> Variants { get; private set; }
         int _min, _max;
         public GeneEnumString(string name, IList<string> variants) {
@@ -39,6 +40,12 @@ namespace DoubleEnumGenetic {
                 throw new Exception("Такого варианта нет");
             int v = (int)variant;
             return Variants[v];
+        }
+
+        public double GetNearestValidate(double value) {
+            return ValidateValue(value) ? (int)value :
+                value < _min ? _min :
+                _max;
         }
     }
 }

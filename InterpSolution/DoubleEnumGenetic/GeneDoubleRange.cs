@@ -10,6 +10,7 @@ using static System.Math;
 
 namespace DoubleEnumGenetic {
     public class GeneDoubleRange : IGeneDE {
+        public bool Matters { get; set; } = true;
         public double eps = 0.000000001;
         public string Name { get; set; }
         public double GetRandValue() {
@@ -85,6 +86,10 @@ namespace DoubleEnumGenetic {
             return new GeneDoubleRange(Name,Left,Right);
         }
 
-
+        public double GetNearestValidate(double value) {
+            return ValidateValue(value) ? value :
+                value <= Left ? Left :
+                Right;
+        }
     }
 }

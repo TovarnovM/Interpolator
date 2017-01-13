@@ -108,7 +108,12 @@
     <Compile Include="ChromosomeDIOHelper.cs" />
     <Compile Include="Criterias.cs" />
     <Compile Include="CrossoverD.cs" />
-    <Compile Include="DetermSearch.cs" />
+    <Compile Include="DetermSearch\DetermCross.cs" />
+    <Compile Include="DetermSearch\DetermMutation.cs" />
+    <Compile Include="DetermSearch\DetermPopulation.cs" />
+    <Compile Include="DetermSearch\DetermReinsertion.cs" />
+    <Compile Include="DetermSearch\DetermSelection.cs" />
+    <Compile Include="DetermSearch\DetermTermination.cs" />
     <Compile Include="GeneDoubleRange.cs" />
     <Compile Include="GeneEnumString.cs" />
     <Compile Include="IGeneDE.cs" />

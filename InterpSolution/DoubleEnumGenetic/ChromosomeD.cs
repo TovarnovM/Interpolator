@@ -8,14 +8,20 @@ using System.Threading.Tasks;
 
 namespace DoubleEnumGenetic {
     public class ChromosomeD : ChromosomeBase, IChromosome {
+        
         private IList<IGeneDE> _gInfo;
         public IList<IGeneDE> GInfoDouble { get { return _gInfo; } }
 
         public Dictionary<string,Criteria> Crits { get; set; }
 
-        public Dictionary<string,double> DopParams;
+        public object DopInfo = null;
 
         public string Name { get; set; }
+
+
+        public IEnumerable<IGeneDE> GetMatterGenes() {
+            return _gInfo.Where(gi => gi.Matters);
+        }
 
         public IEnumerable<CritInfo> CritsInfos() {
             foreach(var crit in Crits.Values) {
@@ -86,12 +92,13 @@ namespace DoubleEnumGenetic {
                         
                 index = _gInfo.IndexOf(item);
                  
-                if(_gInfo[index] is GeneDoubleRange && IsNumber(value)) {
+                if( IsNumber(value)) { //_gInfo[index] is GeneDoubleRange &&
                     double val = ToDouble(value);
                     if(_gInfo[index].ValidateValue(val))
                         ReplaceGene(index,new Gene(val));
                     else
-                        throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as GeneDoubleRange).Left} ; {(_gInfo[index] as GeneDoubleRange).Right}]");
+                        ReplaceGene(index,new Gene(_gInfo[index].GetNearestValidate(val)));
+                    //throw new ArgumentOutOfRangeException($"value = {value}",$"Значение находится за пределами [{(_gInfo[index] as GeneDoubleRange).Left} ; {(_gInfo[index] as GeneDoubleRange).Right}]");
                 }
 
             }
@@ -106,6 +113,12 @@ namespace DoubleEnumGenetic {
 
             throw new Exception($"Чет не так с типом или индексом гена( {nameof(ChromosomeD)} - GenerateGene Method");
         }
+        public ChromosomeD CloneWithoutFitness() {
+            var clone = Clone() as ChromosomeD;
+            clone.Fitness = null;
+            return clone;
+        }
+
 
         public override IChromosome Clone() {
             var clone = base.Clone() as ChromosomeD;

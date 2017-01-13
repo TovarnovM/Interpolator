@@ -9,5 +9,7 @@ namespace DoubleEnumGenetic {
         string Name { get; }
         double GetRandValue();
         bool ValidateValue(double value);
+        double GetNearestValidate(double value);
+        bool Matters { get; set; }
     }
 }
