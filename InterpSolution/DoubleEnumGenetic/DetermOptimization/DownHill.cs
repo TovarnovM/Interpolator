@@ -8,7 +8,7 @@ using GeneticSharp.Domain.Chromosomes;
 
 namespace DoubleEnumGenetic.DetermOptimization {
     public class DownHill : SearchMethodBase {
-        ChromosomeD _bs;
+        protected ChromosomeD _bs;
         public override ChromosomeD BestSolution {
             get {
                 return _bs;

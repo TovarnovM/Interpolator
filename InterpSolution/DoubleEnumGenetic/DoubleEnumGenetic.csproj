@@ -110,6 +110,7 @@
     <Compile Include="CrossoverD.cs" />
     <Compile Include="DetermOptimization\DownHill.cs" />
     <Compile Include="DetermOptimization\ISearchMethod.cs" />
+    <Compile Include="DetermOptimization\Nesterov.cs" />
     <Compile Include="DetermOptimization\Optimizator.cs" />
     <Compile Include="DetermOptimization\SearchMethodBase.cs" />
     <Compile Include="GeneDoubleRange.cs" />
@@ -123,6 +124,8 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ReinsertionD_ParetoCritRank.cs" />
+    <Compile Include="SelectionD_ParetoCritRank.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

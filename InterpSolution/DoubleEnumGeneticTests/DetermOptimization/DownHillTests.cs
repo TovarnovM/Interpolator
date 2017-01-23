@@ -96,5 +96,24 @@ namespace DoubleEnumGenetic.DetermOptimization.Tests {
             Assert.AreEqual(-10,y,0.0001);
 
         }
+
+        [TestMethod()]
+        public void OPtimizatorTest4() {
+            var f = new fitnessTest();
+            f.x0 = 0d;
+            f.y0 = 10;
+            var c = f.GetNewChromo(-0.5,-7);
+            var sm = new Nesterov();
+            sm.ShagNumber *= 3;
+            sm.etta = 0.5;
+            sm.eps = 0.00001;
+            var opt = new Optimizator(c,f,sm);
+
+            opt.Start();
+            var bs = opt.BestChromosome as ChromosomeD;
+            double x = bs["x"], y = bs["y"];
+            Assert.AreEqual(f.maximum,bs.Fitness.Value,sm.eps*10);
+
+        }
     }
 }
