@@ -108,12 +108,10 @@
     <Compile Include="ChromosomeDIOHelper.cs" />
     <Compile Include="Criterias.cs" />
     <Compile Include="CrossoverD.cs" />
-    <Compile Include="DetermSearch\DetermCross.cs" />
-    <Compile Include="DetermSearch\DetermMutation.cs" />
-    <Compile Include="DetermSearch\DetermPopulation.cs" />
-    <Compile Include="DetermSearch\DetermReinsertion.cs" />
-    <Compile Include="DetermSearch\DetermSelection.cs" />
-    <Compile Include="DetermSearch\DetermTermination.cs" />
+    <Compile Include="DetermOptimization\DownHill.cs" />
+    <Compile Include="DetermOptimization\ISearchMethod.cs" />
+    <Compile Include="DetermOptimization\Optimizator.cs" />
+    <Compile Include="DetermOptimization\SearchMethodBase.cs" />
     <Compile Include="GeneDoubleRange.cs" />
     <Compile Include="GeneEnumString.cs" />
     <Compile Include="IGeneDE.cs" />
@@ -146,6 +144,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
