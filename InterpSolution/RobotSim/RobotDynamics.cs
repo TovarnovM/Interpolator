@@ -29,8 +29,8 @@ namespace RobotSim {
             AddChild(Body);
             Body.SynchMeAfter += SynchWheelsToBodyPos;
 
-            FloorForce = new ForceCenter(1,new Position3D(0,1,0),null);
-            Body.AddForce(FloorForce);
+            //FloorForce = new ForceCenter(1,new Position3D(0,1,0),null);
+            //Body.AddForce(FloorForce);
             SynchMassGeometry();
 
             for(int i = 0; i < 4; i++) {

@@ -231,6 +231,12 @@ namespace SimpleIntegrator {
         public void RotateOZtoVec(Vector3D toVec) {
             RotateVecToVec(WorldTransformRot * Vector3D.ZAxis,toVec);
         }
+        public void RotateOxThenNearOy(Vector3D xAxis, Vector3D yAxisClose) {
+            RotateOXtoVec(xAxis);
+            xAxis.Normalize();
+            var tauY = (xAxis * yAxisClose)*xAxis;
+            RotateOYtoVec(yAxisClose - tauY);
+        }
 
     }
 

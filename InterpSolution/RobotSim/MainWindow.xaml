@@ -6,21 +6,34 @@
         xmlns:local="clr-namespace:RobotSim"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="403" Width="556">
+        Title="MainWindow" Height="435.445" Width="596.983">
     <Grid>
-        <TabControl x:Name="tabControl" Margin="0,0,0,0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="16*"/>
+        </Grid.RowDefinitions>
+        <TabControl x:Name="tabControl" Margin="0,0,0,0" Grid.RowSpan="2">
             <TabItem Header="TabItem">
                 <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="335*"/>
+                        <ColumnDefinition Width="207*"/>
+                    </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="274*"/>
-                        <RowDefinition Height="45*"/>
+                        <RowDefinition Height="156*"/>
+                        <RowDefinition Height="156*"/>
+                        <RowDefinition Height="49*"/>
                     </Grid.RowDefinitions>
-                    <oxy:PlotView Model="{Binding Model1Rx.Value}" Grid.Row="0"/>
-                    <Button x:Name="button" Content="Click Me" Grid.Row="1" HorizontalAlignment="Left" Width="145" Height="21" VerticalAlignment="Bottom" Click="button_Click_1"/>
-                    <Slider x:Name="slider" VerticalAlignment="Top" Grid.Row="1" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" />
-                    <Button x:Name="button_Save" Content="Save" Grid.Row="1" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Save_Click_1"/>
-                    <Button x:Name="button_Copy1" Content="Load" Grid.Row="1" Height="21" VerticalAlignment="Bottom" Margin="300,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click_1"/>
+                    <oxy:PlotView Model="{Binding ModelXY}" Grid.Row="0" Grid.Column="0"/>
+                    <oxy:PlotView Model="{Binding ModelZY}" Grid.Row="0" Grid.Column="1"/>
+                    <oxy:PlotView Model="{Binding ModelXZ}" Grid.Row="1" Grid.Column="0"/>
+                    <Button x:Name="button" Content="Click Me" Grid.Row="2" HorizontalAlignment="Left" Width="145" Height="21" VerticalAlignment="Bottom" Click="button_Click_1"/>
+                    <Slider x:Name="slider" VerticalAlignment="Top" Grid.Row="2" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.ColumnSpan="2" />
+                    <Button x:Name="button_Save" Content="Save" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Save_Click_1"/>
+                    <Button x:Name="button_Copy1" Content="Load" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="300,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click_1" Grid.ColumnSpan="2"/>
                 </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
             </TabItem>
         </TabControl>
 

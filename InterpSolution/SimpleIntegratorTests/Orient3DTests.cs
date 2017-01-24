@@ -111,7 +111,7 @@ namespace SimpleIntegrator.Tests {
             double min = -33d;
             double max = 33d;
             for(int i = 0; i < 333; i++) {
-                var v = new Vector3D(min + (max - min)*rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                var v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
                 //v.Normalize();
                 o.RotateOXtoVec(v);
                 v.Normalize();
@@ -150,5 +150,79 @@ namespace SimpleIntegrator.Tests {
 
         }
 
+        [TestMethod()]
+        public void RotatetoVecTest() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                var v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOXtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.XAxis).GetLength(),0.0000001);
+                v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOYtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.YAxis).GetLength(),0.0000001);
+                v = new Vector3D(min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble(),min + (max - min) * rnd.NextDouble());
+                //v.Normalize();
+                o.RotateOZtoVec(v);
+                v.Normalize();
+                Assert.AreEqual(0d,(v - o.ZAxis).GetLength(),0.0000001);
+            }
+
+        }
+
+        [TestMethod()]
+        public void RotateOxThenNearOyTes1t() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                double x = min + (max - min) * rnd.NextDouble();
+                double y = min + (max - min) * rnd.NextDouble();
+                double z = min + (max - min) * rnd.NextDouble();
+                var xAxis = new Vector3D(x,y,z);
+                var yAxis = new Vector3D(y,-x,0);
+                o.RotateOxThenNearOy(xAxis,yAxis);
+                xAxis.Normalize();
+                yAxis.Normalize();
+                Assert.IsTrue( Vector3D.ApproxEqual(xAxis,o.WorldTransformRot * Vector3D.XAxis,0.00001));
+                Assert.IsTrue(Vector3D.ApproxEqual(yAxis,o.WorldTransformRot * Vector3D.YAxis,0.00001));
+            }
+        }
+
+        [TestMethod()]
+        public void RotateOxThenNearOyTest2() {
+            var o = new Orient3D();
+            var rnd = new Random();
+            double min = -33d;
+            double max = 33d;
+            for(int i = 0; i < 333; i++) {
+                double x = min + (max - min) * rnd.NextDouble();
+                double y = min + (max - min) * rnd.NextDouble();
+                double z = min + (max - min) * rnd.NextDouble();
+                var xAxis = new Vector3D(x,y,z);
+                double x1 = min + (max - min) * rnd.NextDouble();
+                double y1 = min + (max - min) * rnd.NextDouble();
+                double z1 = min + (max - min) * rnd.NextDouble();
+                var yAxis = new Vector3D(x1,y1,z1);
+                o.RotateOxThenNearOy(xAxis,yAxis);
+                xAxis.Normalize();
+                var yAxisRight = yAxis - (xAxis * yAxis)*xAxis;
+                yAxisRight.Normalize();
+
+                //var zero = xAxis * yAxisRight;
+                Assert.IsTrue(Vector3D.ApproxEqual(xAxis,o.WorldTransformRot * Vector3D.XAxis,0.00001));
+                //var xpoluch = o.WorldTransformRot * Vector3D.XAxis;
+                //var ypoluch = o.WorldTransformRot * Vector3D.YAxis;
+                
+                Assert.IsTrue(Vector3D.ApproxEqual(yAxisRight,o.WorldTransformRot * Vector3D.YAxis,0.00001));
+            }
+        }
     }
 }
