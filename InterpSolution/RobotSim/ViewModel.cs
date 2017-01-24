@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace RobotSim {
     public class ViewModel {
-        private LineSeries bSer;
+        private LineSeries bSerXY, bSerXZ, bSerZY;
         private LineSeries Wheels;
 
         public PlotModel ModelXY { get; set; }
@@ -26,13 +26,7 @@ namespace RobotSim {
             Model1Rx = new VMPropRx<PlotModel,SolPoint>(
                 () => {
                     var Model1 = GetNewModel("params","X","Y");
-                    bSer = new LineSeries() {
-                        Title = "Body",
-                       // StrokeThickness = 2,
-                        Color = OxyColors.Green
-                    };
-                    Model1.Series.Add(bSer);
-
+                  
                     return Model1;
 
                 },
@@ -168,46 +162,80 @@ namespace RobotSim {
                 }
                 isInternalChangeZ = true;
                 axisZ_ZY.Zoom(axisZ_XZ.ActualMinimum,axisZ_XZ.ActualMaximum);
-                this.ModelXZ.InvalidatePlot(false);
+                this.ModelZY.InvalidatePlot(false);
                 isInternalChangeZ = false;
             };
 
+            bSerXY = new LineSeries() {
+                Title = "Body",
+                // StrokeThickness = 2,
+                Color = OxyColors.Green
+            };
+            ModelXY.Series.Add(bSerXY);
+            bSerXZ = new LineSeries() {
+                Title = "Body",
+                // StrokeThickness = 2,
+                Color = OxyColors.Green
+            };
+            ModelXZ.Series.Add(bSerXZ);
+            bSerZY = new LineSeries() {
+                Title = "Body",
+                // StrokeThickness = 2,
+                Color = OxyColors.Green
+            };
+            ModelZY.Series.Add(bSerZY);
         }
 
 
 
         public void Draw(double t,PlotModel pm) {
-            bSer.Points.Clear();
+            bSerXY.Points.Clear();
+            bSerXZ.Points.Clear();
+            bSerZY.Points.Clear();
             _curr4Draw.SynchMe(t);
-            var xAxisNorm = -Vector3D.ZAxis;
-            var yAxisNorm = Vector3D.YAxis;
+            
 
-            DrawBody(xAxisNorm,yAxisNorm);
+            DrawBody();
 
 
-            pm.Title = $"{t:0.###} s";
-            pm.InvalidatePlot(true);
+            ModelXY.InvalidatePlot(true);
+            ModelXZ.InvalidatePlot(true);
+            ModelZY.InvalidatePlot(true);
             //Thread.Sleep(1000);
         }
+        
+        void DrawLineBody(int i0, int i1) {
+            var xAxisNorm = Vector3D.XAxis;
+            var yAxisNorm = Vector3D.YAxis;
+            bSerXY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            bSerXY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
+            bSerXY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
 
-        void DrawLineBody(int i0, int i1 , Vector3D xAxisNorm, Vector3D yAxisNorm) {
-            bSer.Points.Add(new DataPoint(double.NaN,double.NaN));
-            bSer.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
-            bSer.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
+            xAxisNorm = Vector3D.XAxis;
+            yAxisNorm = Vector3D.ZAxis;
+            bSerXZ.Points.Add(new DataPoint(double.NaN,double.NaN));
+            bSerXZ.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
+            bSerXZ.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
+
+            xAxisNorm = Vector3D.ZAxis;
+            yAxisNorm = Vector3D.YAxis;
+            bSerZY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            bSerZY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
+            bSerZY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
         }
-        void DrawBody(Vector3D xAxisNorm,Vector3D yAxisNorm) {
-            DrawLineBody(0,1,xAxisNorm,yAxisNorm);
-            DrawLineBody(1,2,xAxisNorm,yAxisNorm);
-            DrawLineBody(2,3,xAxisNorm,yAxisNorm);
-            DrawLineBody(3,0,xAxisNorm,yAxisNorm);
-            DrawLineBody(4,5,xAxisNorm,yAxisNorm);
-            DrawLineBody(5,6,xAxisNorm,yAxisNorm);
-            DrawLineBody(6,7,xAxisNorm,yAxisNorm);
-            DrawLineBody(7,4,xAxisNorm,yAxisNorm);
-            DrawLineBody(0,4,xAxisNorm,yAxisNorm);
-            DrawLineBody(1,5,xAxisNorm,yAxisNorm);
-            DrawLineBody(2,6,xAxisNorm,yAxisNorm);
-            DrawLineBody(3,7,xAxisNorm,yAxisNorm);
+        void DrawBody() {
+            DrawLineBody(0,1);
+            DrawLineBody(1,2);
+            DrawLineBody(2,3);
+            DrawLineBody(3,0);
+            DrawLineBody(4,5);
+            DrawLineBody(5,6);
+            DrawLineBody(6,7);
+            DrawLineBody(7,4);
+            DrawLineBody(0,4);
+            DrawLineBody(1,5);
+            DrawLineBody(2,6);
+            DrawLineBody(3,7);
         }
 
         public PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {
