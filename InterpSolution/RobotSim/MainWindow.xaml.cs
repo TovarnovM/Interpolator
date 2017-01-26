@@ -31,21 +31,35 @@ namespace RobotSim {
         private Microsoft.Research.Oslo.Vector v0;
 
         public ViewModel vm { get; set; }
+        public static RobotDynamics GetNewRD() {
+            var sol = new RobotDynamics();
+            sol.Body.Vec3D = new Vector3D(20,100,0);
+            sol.floor = new RbSurfFloor(100,100,new Vector3D(1,0,1));
+
+            //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
+            //sol.Body.AddMoment(moment);
+
+            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+
+            var f1 = Force.GetForce(
+                new Vector3D(-0.1,0,0),null,
+                new Vector3D(0.05,0.025,0.1),sol.Body);
+
+            var f2 = Force.GetForce(
+                new Vector3D(0.1,0,0),null,
+                new Vector3D(0,0,0),sol.Body);
+
+            sol.Body.AddForce(f1);
+            sol.Body.AddForce(f2);
+            return sol;
+        }
 
         public MainWindow() {
             vm = new ViewModel();
             DataContext = vm;
             InitializeComponent();
 
-            var sol = new RobotDynamics();
-            sol.Body.Vec3D = new Vector3D(20,100,0);
-            sol.floor = new RbSurfFloor(100,100,new Vector3D(1,0,1));
-
-            var moment = Force.GetForceCentered(0.2,new Vector3D(0,1,0));
-            sol.Body.AddMoment(moment);
-
-            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
-
+            var sol = GetNewRD();
             //sol.Body.AddForce(new Force(0.1,new Position3D(0,1,0),new Position3D(1,1,1),null));
             //sol.Body.AddForce(new Force(0.1,new Position3D(0,-1,0),new Position3D(0,0,0),null));
             //sol.Body.AddForce(new ForceCenter(1,new Position3D(0,-1,0),null));

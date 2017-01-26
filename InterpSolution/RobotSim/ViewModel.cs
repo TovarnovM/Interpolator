@@ -1,19 +1,24 @@
 ﻿using Microsoft.Research.Oslo;
 using OxyPlot;
+using OxyPlot.Annotations;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using ReactiveODE;
 using Sharp3D.Math.Core;
 using System.Collections.Generic;
+using System;
+using SimpleIntegrator;
 
 namespace RobotSim {
     public class ViewModel {
         private LineSeries bSerXY, bSerXZ, bSerZY;
-        private LineSeries Wheels;
+        private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
 
         public PlotModel ModelXY { get; set; }
         public PlotModel ModelZY { get; set; }
         public PlotModel ModelXZ { get; set; }
+
+        public double ForceMashtab { get; set; } = 1d;
 
         public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
         public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
@@ -21,7 +26,7 @@ namespace RobotSim {
 
 
         public ViewModel() {
-            _curr4Draw = new RobotDynamics();
+            _curr4Draw = MainWindow.GetNewRD();
             _curr4Draw.Rebuild();
             Model1Rx = new VMPropRx<PlotModel,SolPoint>(
                 () => {
@@ -187,6 +192,10 @@ namespace RobotSim {
                 Color = OxyColors.Green
             };
             ModelZY.Series.Add(bSerZY);
+
+            fAnnotXY = new List<ArrowAnnotation>();
+            fAnnotXZ = new List<ArrowAnnotation>();
+            fAnnotZY = new List<ArrowAnnotation>();
         }
 
 
@@ -195,18 +204,64 @@ namespace RobotSim {
             bSerXY.Points.Clear();
             bSerXZ.Points.Clear();
             bSerZY.Points.Clear();
+
+            ModelXY.Annotations.Clear();
+            ModelXZ.Annotations.Clear();
+            ModelZY.Annotations.Clear();
+
             _curr4Draw.SynchMe(t);
             
 
             DrawBody();
-
+            DrawBodyForces();
 
             ModelXY.InvalidatePlot(true);
             ModelXZ.InvalidatePlot(true);
             ModelZY.InvalidatePlot(true);
             //Thread.Sleep(1000);
         }
-        
+
+        private void DrawBodyForces() {
+            foreach(var force in _curr4Draw.Body.Forces) {
+                DrawForce(force, _curr4Draw.Body, Vector3D.XAxis, Vector3D.YAxis,ModelXY, OxyColors.Red);
+                DrawForce(force,_curr4Draw.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Red);
+                DrawForce(force,_curr4Draw.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Red);
+            }
+
+            foreach(var moment in _curr4Draw.Body.Moments) {
+                DrawForce(moment,_curr4Draw.Body,Vector3D.XAxis,Vector3D.YAxis,ModelXY,OxyColors.Blue);
+                DrawForce(moment,_curr4Draw.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Blue);
+                DrawForce(moment,_curr4Draw.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Blue);
+            }
+        }
+
+
+
+        private void DrawForce(Force force, IOrient3D toBody,Vector3D xAxisNorm,Vector3D yAxisNorm, PlotModel m, OxyColor color) {          
+            double x1 = force.AppPoint == null
+                ? toBody.Vec3D * xAxisNorm
+                : force.AppPoint.Vec3D_World * xAxisNorm;
+            double y1 = force.AppPoint == null
+                ? toBody.Vec3D * yAxisNorm
+                : force.AppPoint.Vec3D_World * yAxisNorm;
+
+            double x2 = force.Vec3D_Dir_World * xAxisNorm * ForceMashtab + x1;
+            double y2 = force.Vec3D_Dir_World * yAxisNorm * ForceMashtab + y1;
+
+            DrawForce(m,x1,y1,x2,y2,force.Value.ToString(), color);
+        }
+
+        private void DrawForce(PlotModel pm, double x1, double y1, double x2, double y2, string title,OxyColor color) {
+            var a = new ArrowAnnotation() {
+                Color = color,
+                Text = title,
+                StartPoint = new DataPoint(x1,y1),
+                EndPoint = new DataPoint(x2,y2)
+            };
+            pm.Annotations.Add(a);
+            
+        }
+
         void DrawLineBody(int i0, int i1) {
             var xAxisNorm = Vector3D.XAxis;
             var yAxisNorm = Vector3D.YAxis;

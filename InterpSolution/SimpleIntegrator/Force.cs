@@ -203,15 +203,13 @@ namespace SimpleIntegrator {
         }
 
         public static Force GetForceCentered(Vector3D force, IOrient3D sk = null) {
-            var val = force.GetLength();
-            var dir = new RelativePoint(force,sk,"direction");
-            return new Force(val,dir);
+            return GetForceCentered(force.GetLength(),force,sk);
         }
 
         public static Force GetForceCentered(double value, Vector3D force,IOrient3D sk = null) {
             var val = value;
             var dir = new RelativePoint(force,sk,"direction");
-            return new Force(val,dir);
+            return new Force(val,dir) { Name = "forceCentered"};
         }
 
         public static Force GetMoment(double value,Vector3D force,IOrient3D sk = null) {
@@ -224,7 +222,7 @@ namespace SimpleIntegrator {
             var val = force.GetLength();
             var dir = new RelativePoint(force,skDir,"direction");
             var appP = new RelativePoint(appPoint,skAppPoint,"appPoint");
-            return new Force(val,dir,appP);
+            return new Force(val,dir,appP) { Name = "force"};
         }
 
     }
