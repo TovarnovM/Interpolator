@@ -12,9 +12,9 @@ namespace SimpleIntegrator {
             mp.Mass.Iy = 10;
             mp.Mass.Iz = 10;
 
-            mp.AddForce(new ForceCenter(10,new Position3D(0,-1,0,"Dir"),null,"G"));
-            mp.AddForce(new Force(1,new Position3D(0,1,0,"Dir"),new Position3D(1,0,0,"FPoint"),null));
-            mp.AddForce(new Force(1,new Position3D(0,-1,0,"Dir"),new Position3D(-1,0,0,"FPoint"),null));
+            //mp.AddForce(new ForceCenter(10,new Position3D(0,-1,0,"Dir"),null,"G"));
+            //mp.AddForce(new Force(1,new Position3D(0,1,0,"Dir"),new Position3D(1,0,0,"FPoint"),null));
+            //mp.AddForce(new Force(1,new Position3D(0,-1,0,"Dir"),new Position3D(-1,0,0,"FPoint"),null));
             //mp.AddMoment(new ForceCenter(2,new Position3D(1,0,0,"Dir"),null,"Moment"));
             //mp.Vel.X = 2;
             mp.Vel.Y = 100;

@@ -14,8 +14,8 @@ namespace SimpleIntegrator {
         IPosition3D Vel { get; set; }
         IPosition3D Acc { get; set; }
         IMassPoint Mass { get; set; }
-        List<IForceCenter> Forces { get; set; }
-        void AddForce(IForceCenter force,bool createNewSK);
+        List<Force> Forces { get; set; }
+        void AddForce(Force force);
         Vector3D GetImpulse();
         double GetEnergy();
 
@@ -27,13 +27,13 @@ namespace SimpleIntegrator {
         public IPosition3D Vel { get; set; }
         public IPosition3D Acc { get; set; }
         public IMassPoint Mass { get; set; }
-        public List<IForceCenter> Forces { get; set; }
+        public List<Force> Forces { get; set; }
         const string DEFNAME = "MatPoint";
         public MaterialPointNewton(object x,object y,object z,string name = DEFNAME):base(x,y,z,name) {
             Vel = new Position3D("Vel");
             Acc = new Position3D("Acc");
             Mass = Mass == null ? new MassPoint(): Mass;
-            Forces = new List<IForceCenter>();
+            Forces = new List<Force>();
             AddChild(Vel);
             AddChild(Acc);
             AddChild(Mass);
@@ -49,15 +49,14 @@ namespace SimpleIntegrator {
         public virtual void NewtonLaw(double t) {
             Vector3D fsumm = Vector3D.Zero;
             foreach(var force in Forces) {
-                fsumm += force.VecWorld;
+                fsumm += force.Vec3D_Dir_World;
             }
             Acc.Vec3D = fsumm / Mass.Value;
         }
 
-        public virtual void AddForce(IForceCenter force,bool createNewSK = false) {
-            AddChild(force as IScnObj);
-            Forces.Add(force);
-            force.SK = createNewSK || force.SK == null ? this : force.SK;
+        public virtual void AddForce(Force force) {
+            AddChild(force);
+            Forces.Add(force);           
         }
 
         public virtual Vector3D GetImpulse() {
@@ -74,12 +73,11 @@ namespace SimpleIntegrator {
     /// Угловые ускорения и скорости беруться в СВЯЗАННОЙ СК
     /// </summary>
     public interface IMaterialObject : IMaterialPoint {
-        List<IForceCenter> Moments { get; set; }
-        List<IForce> ForcesWithFPoints { get; set; }
+        List<Force> Moments { get; set; }
         IPosition3D Omega { get; set; }
         IPosition3D Eps { get; set; }
         new IMass3D Mass { get; set; }
-        void AddMoment(IForceCenter moment,bool createNewSK);
+        void AddMoment(Force moment);
         Vector3D GetL();
         double GetRotEnergy();
     }
@@ -88,8 +86,7 @@ namespace SimpleIntegrator {
         public new IMass3D Mass { get; set; } = new Mass3D();
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
-        public List<IForceCenter> Moments { get; set; }= new List<IForceCenter>();
-        public List<IForce> ForcesWithFPoints { get; set; } = new List<IForce>();
+        public List<Force> Moments { get; set; }= new List<Force>();
         const string DEFNAME = "MatObj";
         public MaterialObjectNewton(object x,object y,object z,string name = DEFNAME) : base(x,y,z,name) {
             AddChild(Omega);
@@ -109,12 +106,12 @@ namespace SimpleIntegrator {
             base.NewtonLaw(t);
             var momSum = Vector3D.Zero;
             foreach(var mom in Moments) {
-                momSum += mom.VecWorld;
+                momSum += mom.Vec3D_Dir_World;
             }
-            foreach(var force in ForcesWithFPoints) {
-                momSum += force.MomentWorld;
+            foreach(var force in Forces) {
+                momSum += force.GetMoment_World(Vec3D);
             }
-            momSum = WorldTransformRot * momSum;
+            momSum = WorldTransformRot_1 * momSum;
             var om = Omega.Vec3D;
             Eps.Vec3D = Mass.Tensor.Inverse* (momSum - Vector3D.CrossProduct(om,Mass.Tensor * om));
             dQWdt =-0.5 * (om.X * Qx + om.Y * Qy + om.Z * Qz);
@@ -122,15 +119,10 @@ namespace SimpleIntegrator {
             dQYdt = 0.5 * (om.Y * Qw - om.Z * Qx + om.X * Qz);
             dQZdt = 0.5 * (om.Z * Qw - om.X * Qy + om.Y * Qx);
         }
-        public override void AddForce(IForceCenter force,bool createNewSK = false) {
-            base.AddForce(force,createNewSK);
-            if(force is IForce)
-                ForcesWithFPoints.Add(force as IForce);
-        }
-        public virtual void AddMoment(IForceCenter moment,bool createNewSK = false) {
-            AddChild(moment as IScnObj);
+
+        public virtual void AddMoment(Force moment) {
+            AddChild(moment);
             Moments.Add(moment);
-            moment.SK = createNewSK ? this : moment.SK;
         }
         public IScnPrm pdQWdt { get; set; }
         public IScnPrm pdQXdt { get; set; }

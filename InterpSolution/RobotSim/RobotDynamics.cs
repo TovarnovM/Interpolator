@@ -14,7 +14,6 @@ namespace RobotSim {
         public List<RbWheel> wheels = new List<RbWheel>(4);
 
         public RbSurfFloor floor;
-        public ForceCenter FloorForce;
 
 
 

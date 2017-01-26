@@ -6,7 +6,7 @@ using System.Linq;
 namespace SimpleIntegrator {
 
 
-    public interface IOrient3D:IScnObj {
+    public interface IOrient3D:IPosition3D {
         /// <summary>
         /// матрица Перехода из Локальнойй СК в глобальную СК 
         /// </summary>
