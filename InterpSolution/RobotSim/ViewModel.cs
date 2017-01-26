@@ -76,6 +76,8 @@ namespace RobotSim {
             };
             var axisZ_XZ = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
+                StartPosition = 1,
+                EndPosition = 0,
                 MaximumPadding = 0,
                 MinimumPadding = 0,
                 MinorGridlineStyle = LineStyle.Dot,
@@ -174,6 +176,7 @@ namespace RobotSim {
             ModelXY.Series.Add(bSerXY);
             bSerXZ = new LineSeries() {
                 Title = "Body",
+                //LabelFormatString = "{2}",
                 // StrokeThickness = 2,
                 Color = OxyColors.Green
             };

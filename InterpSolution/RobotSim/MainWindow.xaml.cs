@@ -1,6 +1,7 @@
 ﻿using Microsoft.Research.Oslo;
 using Microsoft.Win32;
 using ReactiveODE;
+using Sharp3D.Math.Core;
 using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
@@ -39,7 +40,10 @@ namespace RobotSim {
             var sol = new RobotDynamics();
             sol.Body.Vec3D = new Sharp3D.Math.Core.Vector3D(0,0,0);
             sol.floor = new RbSurfFloor(100,100,new Sharp3D.Math.Core.Vector3D(1,0,1));
-            sol.Body.AddForce(new Force(0.1,new Position3D(0,1,0),new Position3D(1,1,1),null));
+            sol.Body.Vec3D = new Vector3D(10,20,30);
+            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+            //sol.Body.AddMoment(new ForceCenter(0.2,new Position3D(0,1,0),null), true);
+            sol.Body.AddForce(new Force(0.1,new Position3D(0,1,0),new Position3D(1,0,0),null));
             sol.Body.AddForce(new Force(0.1,new Position3D(0,-1,0),new Position3D(0,0,0),null));
             //sol.Body.AddForce(new ForceCenter(1,new Position3D(0,-1,0),null));
             initObs(sol);//(0.001875+0.0075) * 0.5

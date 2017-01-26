@@ -114,7 +114,7 @@ namespace SimpleIntegrator {
             foreach(var force in ForcesWithFPoints) {
                 momSum += force.MomentWorld;
             }
-            momSum = WorldTransformRot * momSum;
+            momSum = WorldTransformRot_1 * momSum;
             var om = Omega.Vec3D;
             Eps.Vec3D = Mass.Tensor.Inverse* (momSum - Vector3D.CrossProduct(om,Mass.Tensor * om));
             dQWdt =-0.5 * (om.X * Qx + om.Y * Qy + om.Z * Qz);

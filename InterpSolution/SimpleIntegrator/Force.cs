@@ -75,7 +75,7 @@ namespace SimpleIntegrator {
             get {
                 return
                     SK == null ?
-                    VecLoc :
+                    MomentLoc :
                     Matrix4D.TransformDir(SK.WorldTransform,MomentLoc);
             }
         }
