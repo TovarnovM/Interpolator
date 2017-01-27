@@ -33,7 +33,7 @@ namespace RobotSim.Tests {
             var toThis = new VelPosDummy(3,4,5,0,0,0);
 
             var diag = Math.Sqrt(3);
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,2*diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,2*diag);
             Assert.IsTrue(Vector3D.ApproxEqual(f,Vector3D.Zero,0.00000001));
 
         }
@@ -44,7 +44,7 @@ namespace RobotSim.Tests {
 
             var diag = Math.Sqrt(3);
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,3 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,3 * diag);
             Assert.AreEqual(diag * 10,f.GetLength(),0.00001);
             Assert.AreEqual(-10,f.X,0.00001);
             Assert.AreEqual(-10,f.Y,0.00001);
@@ -57,12 +57,12 @@ namespace RobotSim.Tests {
             var toThis = new VelPosDummy(3,4,5,0,0,0);
 
             var diag = Math.Sqrt(3);
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,2 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,2 * diag);
             Assert.IsTrue(Vector3D.ApproxEqual(f,Vector3D.Zero,0.00000001));
 
             me.Vel.Vec3D = new Vector3D(1,1,1);
 
-            f = Phys3DHelper.GetKMuForce(me,toThis,10,10,2 * diag);
+            f = Phys3D.GetKMuForce(me,toThis,10,10,2 * diag);
             Assert.AreEqual(diag * 10,f.GetLength(),0.00001);
             Assert.AreEqual(-10,f.X,0.00001);
             Assert.AreEqual(-10,f.Y,0.00001);
@@ -76,7 +76,7 @@ namespace RobotSim.Tests {
 
             var diag = 7;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,1 * diag);
             Assert.AreEqual(0,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);
@@ -89,7 +89,7 @@ namespace RobotSim.Tests {
 
             var diag = 7;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,1 * diag);
             Assert.AreEqual(0,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);
@@ -102,7 +102,7 @@ namespace RobotSim.Tests {
 
             var diag = 7;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,1 * diag);
             Assert.AreEqual(-10,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);
@@ -115,7 +115,7 @@ namespace RobotSim.Tests {
 
             var diag = 7;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,1 * diag);
             Assert.AreEqual(-20,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);
@@ -128,7 +128,7 @@ namespace RobotSim.Tests {
 
             var diag = 7;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,10,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,10,10,1 * diag);
             Assert.AreEqual(20,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);
@@ -141,7 +141,7 @@ namespace RobotSim.Tests {
 
             var diag = 6;
 
-            var f = Phys3DHelper.GetKMuForce(me,toThis,100,10,1 * diag);
+            var f = Phys3D.GetKMuForce(me,toThis,100,10,1 * diag);
             Assert.AreEqual(20 + 100,f.X,0.00001);
             Assert.AreEqual(0,f.Y,0.00001);
             Assert.AreEqual(0,f.Z,0.00001);

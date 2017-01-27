@@ -99,4 +99,40 @@ namespace RobotSim {
 
     }
 
+
+    public class TracksDummy:ScnObjDummy {
+        public List<RbTrack> Tracks { get; set; }
+        public Force f3 { get; set; }
+        public TracksDummy() {
+            int n = 7;
+            Tracks = new List<RbTrack>(n);
+            var tr1 = RbTrack.GetFlat();
+            var gForce = new Force(tr1.Mass.Value,new RelativePoint(0,-1,0));
+            tr1.AddForce(gForce);
+
+            var p1 = new Vector3D(0,10,-3);
+            tr1.SetPosition(3,p1);
+            Tracks.Add(tr1);
+            AddChild(tr1);
+            for(int i = 1; i < n; i++) {
+                var tr = RbTrack.GetFlat();
+                tr.AddForce(gForce);
+                tr.SetPosition(3,Tracks[i - 1].GetConnPWorld(1));
+                tr.SetPosition(2,Tracks[i - 1].GetConnPWorld(0));
+                Tracks.Add(tr);
+                AddChild(tr);
+
+                RbTrack.ConnectTracks(Tracks[i - 1],tr,1,3,0,2);
+            }
+
+            f3 = new Force(0,new RelativePoint(0,0,0));
+            tr1.AddForce(f3);
+            f3.SynchMeBefore += t => {
+                var ff = Phys3D.GetKMuForce(tr1.GetConnPWorld(3),tr1.GetConnPVelWorld(3),p1,Vector3D.Zero,1,1,0);
+                f3.Value = ff.GetLength();
+                f3.Direction.Vec3D = ff;
+                f3.AppPoint.Vec3D = tr1.GetConnPWorld(3);
+            };
+        }
+    }
 }

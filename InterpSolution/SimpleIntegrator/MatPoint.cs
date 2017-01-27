@@ -55,7 +55,8 @@ namespace SimpleIntegrator {
         }
 
         public virtual void AddForce(Force force) {
-            AddChild(force);
+            if(force.Owner == null)
+                AddChild(force);
             Forces.Add(force);           
         }
 
@@ -80,6 +81,7 @@ namespace SimpleIntegrator {
         void AddMoment(Force moment);
         Vector3D GetL();
         double GetRotEnergy();
+        Vector3D GetVelWorld(Vector3D pointLocal);
     }
 
     public class MaterialObjectNewton : MaterialPointNewton, IMaterialObject, IVelPos3D {
@@ -121,7 +123,8 @@ namespace SimpleIntegrator {
         }
 
         public virtual void AddMoment(Force moment) {
-            AddChild(moment);
+            if(moment.Owner == null)
+                AddChild(moment);
             Moments.Add(moment);
         }
         public IScnPrm pdQWdt { get; set; }
@@ -144,6 +147,10 @@ namespace SimpleIntegrator {
         public double GetRotEnergy() {
             var om = Omega.Vec3D;
             return 0.5*om * (Mass.Tensor * om);
+        }
+
+        public Vector3D GetVelWorld(Vector3D pointLocal) {
+            return WorldTransformRot * (Omega.Vec3D & pointLocal) + Vel.Vec3D;
         }
     }
 }

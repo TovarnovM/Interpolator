@@ -69,6 +69,18 @@ namespace RobotSim {
             //SynchQandM();
         }
 
+        public static void ConnectTracks(RbTrack tr1, RbTrack tr2, int indMe0, int indTo0, int indMe1, int indTo1) {
+            var f0_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe0],tr2.ConnP[indTo0]);
+            var f1_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe1],tr2.ConnP[indTo1]);
+            tr1.AddForce(f0_1);
+            tr1.AddForce(f1_1);
+
+            var f0_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo0],tr1.ConnP[indMe0]);
+            var f1_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo1],tr1.ConnP[indMe1]);
+            tr2.AddForce(f0_2);
+            tr2.AddForce(f1_2);
+        }
+
         public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00125, double mass = 0.0037) {
             var res = new RbTrack() {
                 W = w,
@@ -93,7 +105,43 @@ namespace RobotSim {
 
     }
 
-    public static class Phys3DHelper {
+    /// <summary>
+    /// Сила между двумя объектами.... сила приложена к 0 точке
+    /// </summary>
+    public class ForceBetween2Points : Force {
+        public IMaterialObject sk0, sk1;
+        public IPosition3D p0_loc, p1_loc;
+        public double k = 1, mu = 1, x0 = 0;
+        public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1,Vector3D p0_loc,Vector3D p1_loc): this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc)) {
+
+        }
+        public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1, IPosition3D p0_loc, IPosition3D p1_loc) : base(0,new RelativePoint(1,0,0),null) {
+            this.sk0 = sk0;
+            this.sk1 = sk1;
+            this.p0_loc = p0_loc;
+            this.p1_loc = p1_loc;
+            AppPoint = new RelativePoint(0,0,0);
+            SynchMeBefore += synchMeBeforeAct;
+        }
+
+        void synchMeBeforeAct(double t) {
+            var p0loc = p0_loc.Vec3D;
+            var p1loc = p1_loc.Vec3D;
+
+            var f = Phys3D.GetKMuForce(
+                sk0.WorldTransform * p0loc,
+                sk0.GetVelWorld(p0loc),
+                sk1.WorldTransform * p1loc,
+                sk1.GetVelWorld(p1loc),
+                k,mu,x0
+                );
+            Value = f.GetLength();
+            Direction.Vec3D = f;
+            AppPoint.Vec3D = sk0.WorldTransform * p0loc;
+        }
+    }
+
+    public static class Phys3D {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Vector3D GetKMuForce(IVelPos3D me,IVelPos3D toThis, double k, double mu, double x0) {
             return GetKMuForce(me.Vec3D,me.Vel.Vec3D,toThis.Vec3D,toThis.Vel.Vec3D,k,mu,x0);
