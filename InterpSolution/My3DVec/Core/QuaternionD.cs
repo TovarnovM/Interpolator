@@ -551,7 +551,15 @@ namespace Sharp3D.Math.Core
             var norm_u_norm_v = System.Math.Sqrt(u.GetLengthSquared() * v.GetLengthSquared());
             var w = u & v;
             var q = new QuaternionD(norm_u_norm_v + u * v, w.X, w.Y, w.Z);
-            q.Normalize();
+            if(q.GetModulusSquared()>0.000000001)
+                q.Normalize();
+            else {
+                if(System.Math.Abs(u.X) > 0.00000001)
+                    q = new QuaternionD(0,u.Y,-u.X,0);
+                else if(System.Math.Abs(u.Z) > 0.00000001)
+                    q = new QuaternionD(0,0,-u.Z,u.Y);
+                q.Normalize();
+            }
             return q;
         }
         //    float norm_u_norm_v = sqrt(sqlength(u) * sqlength(v));

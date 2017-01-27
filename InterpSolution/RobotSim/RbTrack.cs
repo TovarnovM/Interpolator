@@ -28,38 +28,45 @@ namespace RobotSim {
         /// <param name="worldPos">К какой точке повернуть</param>
         /// <param name="fixedPoints"></param>
         public void SetPosition(int pointIndex, Vector3D worldPos, params int[] fixedPoints) {
-            int n = fixedPoints.Count();
-            if(n > 2)
-                return;
-            if(fixedPoints.Contains(pointIndex))
-                return;
-            var center = Vec3D;
-
-            if(n == 0) {
-                RotateVecToVec(GetConnPWorld(pointIndex) - center,worldPos - center);
-                Vec3D += worldPos - GetConnPWorld(pointIndex);               
-            } else
-            if(n == 1) {
-                var fixedPoint = GetConnPWorld(fixedPoints[0]);               
-                RotateVecToVec(GetConnPWorld(pointIndex) - fixedPoint,worldPos - fixedPoint);
-                Vec3D += fixedPoint - GetConnPWorld(fixedPoints[0]);
-            } else
-            if(n == 2) {
-                var fixedPoint0 = GetConnPWorld(fixedPoints[0]);
-                var fixedPoint1 = GetConnPWorld(fixedPoints[1]);
-                var os0 = (fixedPoint1 - fixedPoint0).Norm;
-
-                var vec0 = GetConnPWorld(pointIndex) - fixedPoint0;
-                var vec0n = vec0 - (vec0 * os0) * os0;
-
-                var vec1 = worldPos - fixedPoint0;
-                var vec1n = vec1 - (vec1 * os0) * os0;
-
-                RotateVecToVec(vec0n,vec1n);
-                Vec3D += fixedPoint0 - GetConnPWorld(fixedPoints[0]);
+            int n = fixedPoints.Length;
+            var fp = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                fp[i] = GetConnPWorld(fixedPoints[i]);
             }
 
-            SynchQandM();
+            SetPosition(GetConnPWorld(pointIndex),worldPos,fp);
+            //int n = fixedPoints.Count();
+            //if(n > 2)
+            //    return;
+            //if(fixedPoints.Contains(pointIndex))
+            //    return;
+            //var center = Vec3D;
+
+            //if(n == 0) {
+            //    RotateVecToVec(GetConnPWorld(pointIndex) - center,worldPos - center);
+            //    Vec3D += worldPos - GetConnPWorld(pointIndex);               
+            //} else
+            //if(n == 1) {
+            //    var fixedPoint = GetConnPWorld(fixedPoints[0]);               
+            //    RotateVecToVec(GetConnPWorld(pointIndex) - fixedPoint,worldPos - fixedPoint);
+            //    Vec3D += fixedPoint - GetConnPWorld(fixedPoints[0]);
+            //} else
+            //if(n == 2) {
+            //    var fixedPoint0 = GetConnPWorld(fixedPoints[0]);
+            //    var fixedPoint1 = GetConnPWorld(fixedPoints[1]);
+            //    var os0 = (fixedPoint1 - fixedPoint0).Norm;
+
+            //    var vec0 = GetConnPWorld(pointIndex) - fixedPoint0;
+            //    var vec0n = vec0 - (vec0 * os0) * os0;
+
+            //    var vec1 = worldPos - fixedPoint0;
+            //    var vec1n = vec1 - (vec1 * os0) * os0;
+
+            //    RotateVecToVec(vec0n,vec1n);
+            //    Vec3D += fixedPoint0 - GetConnPWorld(fixedPoints[0]);
+            //}
+
+            //SynchQandM();
         }
 
         public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00125, double mass = 0.0037) {

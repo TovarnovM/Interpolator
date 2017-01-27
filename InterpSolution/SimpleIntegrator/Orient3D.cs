@@ -237,6 +237,41 @@ namespace SimpleIntegrator {
             var tauY = (xAxis * yAxisClose)*xAxis;
             RotateOYtoVec(yAxisClose - tauY);
         }
+        public void SetPosition(Vector3D currWorldPoint, Vector3D moveToIt, params Vector3D[] fixedWorldPoints) {
+            int n = fixedWorldPoints.Count();
+            if(n > 2)
+                return;
+            if(fixedWorldPoints.Contains(currWorldPoint))
+                return;
+            var center = Vec3D;
+            var localPoint = WorldTransform_1 * currWorldPoint;
+            if(n == 0) {
+                RotateVecToVec(currWorldPoint - center,moveToIt - center);
+                Vec3D += moveToIt - WorldTransform * localPoint;
+            } else
+            if(n == 1) {
+                var fixedPointLocal = WorldTransform_1 * fixedWorldPoints[0];
+                RotateVecToVec(currWorldPoint - fixedWorldPoints[0],moveToIt - fixedWorldPoints[0]);
+                Vec3D += fixedWorldPoints[0] - WorldTransform * fixedPointLocal;
+            } else
+            if(n == 2) {
+                var fixedPoint0 = fixedWorldPoints[0];
+                var fixedPoint0Local = WorldTransform_1 * fixedPoint0;
+                var fixedPoint1 = fixedWorldPoints[1];
+                var os0 = (fixedPoint1 - fixedPoint0).Norm;
+
+                var vec0 = currWorldPoint - fixedPoint0;
+                var vec0n = vec0 - (vec0 * os0) * os0;
+
+                var vec1 = moveToIt - fixedPoint0;
+                var vec1n = vec1 - (vec1 * os0) * os0;
+
+                RotateVecToVec(vec0n,vec1n);
+                Vec3D += fixedPoint0 - WorldTransform * fixedPoint0Local;
+            }
+
+            SynchQandM();
+        }
 
     }
 

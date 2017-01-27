@@ -130,6 +130,7 @@ namespace RobotSim.Tests {
         [TestMethod()]
         public void SetPositionTest2() {
             var tst = RbTrack.GetFlat();
+            tst.Rebuild();
             var point = new Vector3D(10,20,-30);
             int ind = 0;
             tst.SetPosition(ind,point);
@@ -151,9 +152,9 @@ namespace RobotSim.Tests {
         [TestMethod()]
         public void SetPositionTest3() {
             var tst = RbTrack.GetFlat();
+            tst.Rebuild();
             var point1 = new Vector3D(0,0,0);
             int ind1 = 0;
-            tst.SetPosition(ind1,new Vector3D(100,1000,100));
             tst.SetPosition(ind1,point1);
 
             var point2 = new Vector3D(1,1,0);
@@ -169,5 +170,38 @@ namespace RobotSim.Tests {
 
 
         }
+        [TestMethod()]
+        public void QuaternionTest() {
+            var v1 = new Vector3D(1,1,1);
+            var v2 = new Vector3D(-2,-2,-2);
+            var q = QuaternionD.FromTwoVectors(v1,v2);
+
+            var v3 = QuaternionD.Multiply(q,v1);
+        }
+
+        [TestMethod()]
+        public void World_1Test() {
+            var tst = RbTrack.GetFlat();
+            tst.Rebuild();
+            var point = new Vector3D(10,20,-30);
+            int ind = 0;
+            tst.SetPosition(ind,point);
+
+            var p1 = tst.GetConnPWorld(1);
+            Assert.IsTrue(Vector3D.ApproxEqual(tst.WorldTransform_1 * p1,tst.ConnP[1],0.00001));
+        }
+
+        [TestMethod()]
+        public void World_2Test() {
+            var tst = RbTrack.GetFlat();
+            tst.Rebuild();
+            var point = new Vector3D(10,20,-30);
+            int ind = 0;
+            tst.SetPosition(ind,point);
+
+            var p1 = tst.WorldTransform * tst.WorldTransform_1;
+            Assert.IsTrue(Vector3D.ApproxEqual( p1 * tst.ConnP[0],tst.ConnP[0],0.00001));
+        }
+
     }
 }

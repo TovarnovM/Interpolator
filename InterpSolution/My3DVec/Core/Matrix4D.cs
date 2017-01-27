@@ -928,7 +928,7 @@ namespace Sharp3D.Math.Core
         {
             Matrix3D rot = Rot;
             rot.Transpose();
-            Vector3D shiftInv = rot*Col4;
+            Vector3D shiftInv = rot*(-Col4);
             Rot = rot;
             Col4 = shiftInv;
         }
