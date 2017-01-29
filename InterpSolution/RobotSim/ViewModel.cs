@@ -11,8 +11,9 @@ using SimpleIntegrator;
 
 namespace RobotSim {
     public class ViewModel {
-        private LineSeries bSerXY, bSerXZ, bSerZY;
-        private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
+        private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY;
+        List<LineSeries> allLineSer = new List<LineSeries>();
+        //private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
 
         public PlotModel ModelXY { get; set; }
         public PlotModel ModelZY { get; set; }
@@ -193,32 +194,88 @@ namespace RobotSim {
             };
             ModelZY.Series.Add(bSerZY);
 
-            fAnnotXY = new List<ArrowAnnotation>();
-            fAnnotXZ = new List<ArrowAnnotation>();
-            fAnnotZY = new List<ArrowAnnotation>();
+            t1SerXY = new LineSeries() {
+                Title = "Track1",
+                // StrokeThickness = 2,
+                Color = OxyColors.CadetBlue
+            };
+            ModelXY.Series.Add(t1SerXY);
+            t1SerXZ = new LineSeries() {
+                Title = "Track1",
+                // StrokeThickness = 2,
+                Color = OxyColors.CadetBlue
+            };
+            ModelXZ.Series.Add(t1SerXZ);
+            t1SerZY = new LineSeries() {
+                Title = "Track1",
+                // StrokeThickness = 2,
+                Color = OxyColors.CadetBlue
+            };
+            ModelZY.Series.Add(t1SerZY);
+
+            allLineSer.Add(bSerXY);
+            allLineSer.Add(bSerXZ);
+            allLineSer.Add(bSerZY);
+            allLineSer.Add(t1SerXY);
+            allLineSer.Add(t1SerXZ);
+            allLineSer.Add(t1SerZY);
         }
 
 
 
         public void Draw(double t,PlotModel pm) {
-            bSerXY.Points.Clear();
-            bSerXZ.Points.Clear();
-            bSerZY.Points.Clear();
+            foreach(var ls in allLineSer) {
+                ls.Points.Clear();
+            }
 
             ModelXY.Annotations.Clear();
             ModelXZ.Annotations.Clear();
             ModelZY.Annotations.Clear();
 
             _curr4Draw.SynchMe(t);
-            
 
-            DrawBody();
-            DrawBodyForces();
+
+            //DrawBody();
+            //DrawBodyForces();
+
+            DrawTrack1();
 
             ModelXY.InvalidatePlot(true);
             ModelXZ.InvalidatePlot(true);
             ModelZY.InvalidatePlot(true);
             //Thread.Sleep(1000);
+        }
+
+        private void DrawTrack1() {
+            foreach(var track in _curr4Draw.tDummy.Tracks) {
+                DrawOneTrack(track);
+            }
+        }
+
+        private void DrawOneTrack(RbTrack track) {
+            var xAxisNorm = Vector3D.XAxis;
+            var yAxisNorm = Vector3D.YAxis;
+                      
+            t1SerXY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            var inds = new int[] { 0,1,3,2,0 };
+            foreach(var i in inds) {
+                t1SerXY.Points.Add(new DataPoint(track.GetConnPWorld(i) * xAxisNorm,track.GetConnPWorld(i) * yAxisNorm));
+            }
+
+
+            xAxisNorm = Vector3D.XAxis;
+            yAxisNorm = Vector3D.ZAxis;
+            t1SerXZ.Points.Add(new DataPoint(double.NaN,double.NaN));
+            foreach(var i in inds) {
+                t1SerXZ.Points.Add(new DataPoint(track.GetConnPWorld(i) * xAxisNorm,track.GetConnPWorld(i) * yAxisNorm));
+            }
+
+            xAxisNorm = Vector3D.ZAxis;
+            yAxisNorm = Vector3D.YAxis;
+            t1SerZY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            foreach(var i in inds) {
+                t1SerZY.Points.Add(new DataPoint(track.GetConnPWorld(i) * xAxisNorm,track.GetConnPWorld(i) * yAxisNorm));
+            }
         }
 
         private void DrawBodyForces() {

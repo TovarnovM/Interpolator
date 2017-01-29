@@ -81,11 +81,12 @@ namespace RobotSim {
             tr2.AddForce(f1_2);
         }
 
-        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00125, double mass = 0.0037) {
+        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00125, double mass = 0.037) {
             var res = new RbTrack() {
                 W = w,
                 L = l,
-                H = h
+                H = h,
+                Name = "Track"
             };
             res.ConnP[0] = new Vector3D(0.5 * shagConnL,connH,-0.5 * w);
             res.ConnP[1] = new Vector3D(0.5 * shagConnL,connH,0.5 * w);
@@ -99,7 +100,7 @@ namespace RobotSim {
             return res;
 
         }
-        public static RbTrack GetFlat(double w = 0.02,double l = 0.005,double mass = 0.0037) {
+        public static RbTrack GetFlat(double w = 0.02,double l = 0.005,double mass = 0.037) {
             return GetStandart(w,l,0,l,0,mass);
         }
 
@@ -111,7 +112,7 @@ namespace RobotSim {
     public class ForceBetween2Points : Force {
         public IMaterialObject sk0, sk1;
         public IPosition3D p0_loc, p1_loc;
-        public double k = 1, mu = 1, x0 = 0;
+        public double k = 10000, mu = 10000, x0 = 0;
         public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1,Vector3D p0_loc,Vector3D p1_loc): this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc)) {
 
         }

@@ -76,6 +76,7 @@ namespace RobotSim {
                 if(i < 0)
                     return;
                 vm.Model1Rx.Update(vm.SolPointList.Value[i]);
+                Title = vm.SolPointList.Value[i].T.ToString();
             });
             trackbarch.Connect();
 
@@ -86,8 +87,19 @@ namespace RobotSim {
         private void initObs(RobotDynamics calc) {
             pr = calc;
             v0 = pr.Rebuild(pr.TimeSynch);
-            var dt = 0.0001;
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
+            var dt = 0.00001;
+
+
+            //var s = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).SolveFromToStep(0,1,0.01);
+            //foreach(var ss in s) {
+            //    int f = 11;
+               
+            //}
+
+
+
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(1,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {

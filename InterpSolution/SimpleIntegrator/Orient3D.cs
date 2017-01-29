@@ -170,19 +170,19 @@ namespace SimpleIntegrator {
             m.Col4 = Vec3D;
             m_1 = Matrix4D.Inverse(m);
 
-            if(TransformChain.Count == 0) {
+            //if(TransformChain.Count == 0) {
                 worldTransform = m;
                 worldTransform_1 = m_1;
                 return;
-            }
+           // }
 
 
-            worldTransform = M;
+            //worldTransform = M;
 
-            foreach(var orient in TransformChain) {
-                worldTransform = orient.M * worldTransform;
-            }
-            worldTransform_1 = Matrix4D.Inverse(worldTransform);
+            //foreach(var orient in TransformChain) {
+            //    worldTransform = orient.M * worldTransform;
+            //}
+            //worldTransform_1 = Matrix4D.Inverse(worldTransform);
         }
 
         protected void MySynchMeBefore(double t) {
@@ -193,7 +193,7 @@ namespace SimpleIntegrator {
 
         public Orient3D(object x,object y,object z,string name = DEFNAME) :base(x,y,z,name) {
             SynchMeBefore += MySynchMeBefore;
-            RebuildStructureAction += RebuildTransformChain;
+           // RebuildStructureAction += RebuildTransformChain;
         }
 
         public Orient3D(Vector3D posVec,string name = DEFNAME) : this(posVec.X,posVec.Y,posVec.Z,name) { }
@@ -206,6 +206,7 @@ namespace SimpleIntegrator {
             while(daddy != null) {
                 if(daddy is IOrient3D) {
                     TransformChain.Add(daddy as IOrient3D);
+                    daddy = daddy.Owner;
                     continue;
                 }
                 var orient = (IOrient3D)daddy.Children.FirstOrDefault(ch => ch is IOrient3D);

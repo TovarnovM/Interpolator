@@ -200,6 +200,7 @@ namespace SimpleIntegrator {
 
         public Force(double value, RelativePoint direction, RelativePoint appPoint = null) {
             InitMe(value,direction,appPoint);
+            Name = "Force";
         }
 
         public static Force GetForceCentered(Vector3D force, IOrient3D sk = null) {
