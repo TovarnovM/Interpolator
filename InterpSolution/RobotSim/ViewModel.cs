@@ -353,7 +353,7 @@ namespace RobotSim {
             DrawLineBody(3,7);
         }
 
-        public PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {
+        public static PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {
 
             var m = new PlotModel { Title = title };
             m.PlotType = PlotType.Cartesian;

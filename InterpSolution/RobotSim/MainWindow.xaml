@@ -34,6 +34,15 @@
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="335*"/>
+                        <RowDefinition Height="41*"/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41" Click="button1_Click"/>
+                    <oxy:PlotView x:Name="tstPV" Model="{Binding ModelTest}" Grid.Row="0" Grid.Column="0"/>
+
+                </Grid>
             </TabItem>
         </TabControl>
 

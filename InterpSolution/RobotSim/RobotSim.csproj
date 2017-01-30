@@ -129,6 +129,7 @@
     <Compile Include="RbWheel.cs" />
     <Compile Include="Robot.cs" />
     <Compile Include="RobotDynamics.cs" />
+    <Compile Include="TestVM.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

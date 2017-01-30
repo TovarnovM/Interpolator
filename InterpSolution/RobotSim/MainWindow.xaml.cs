@@ -31,6 +31,9 @@ namespace RobotSim {
         private Microsoft.Research.Oslo.Vector v0;
 
         public ViewModel vm { get; set; }
+        TestVM tstVm { get; set; }
+
+
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
             sol.Body.Vec3D = new Vector3D(20,100,0);
@@ -81,7 +84,8 @@ namespace RobotSim {
             trackbarch.Connect();
 
 
-
+            tstVm = new TestVM();
+            tstPV.DataContext = tstVm;
         }
 
         private void initObs(RobotDynamics calc) {
@@ -99,7 +103,7 @@ namespace RobotSim {
 
 
 
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(1,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.5,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -166,5 +170,38 @@ namespace RobotSim {
 
         }
 
+        private async void button1_Click(object sender,RoutedEventArgs e) {
+            var m = new Majatnik();
+            var v0 = m.Rebuild();
+            double dt = 0.1, t0 = 0, t1 = 100;
+            var s = Ode.RK45(0,v0,m.f,0.0001).SolveFromToStep(t0,t1,dt);
+            var l = await getSol(s);
+            var ts = l.Select(ee => ee.T).ToList();
+
+
+            double v = 1d,
+                T = 2*3.14159*Math.Sqrt(10/9.8);
+            double omega = 1 / T;
+            double h = v * v / 2 / 9.8;
+            double A = Math.Sqrt(100 - (10 - h) * (10 - h));
+            var rightAnsw = ts.Select(t => A * Math.Sin(omega * t)).ToList();
+
+            var answrs = l.Select(sp => {
+                m.SynchMeTo(sp);
+                return m.X;
+            })
+            .ToList();
+
+            tstVm.Draw(ts,rightAnsw,answrs);
+
+
+        }
+
+         Task<List<SolPoint>> getSol(IEnumerable<SolPoint> s) {
+            return Task.Factory.StartNew<List<SolPoint>>(() => {
+                var answ = s.ToList();
+                return answ;
+            });
+         }
     }
 }
