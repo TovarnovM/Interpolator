@@ -94,9 +94,9 @@ namespace RobotSim {
             res.ConnP[3] = new Vector3D(-0.5 * shagConnL,connH,0.5 * w);
 
             res.Mass.Value = mass;
-            res.Mass.Ix = mass * (w * w + h * h) / 12d;
-            res.Mass.Iy = mass * (w * w + l * l) / 12d;
-            res.Mass.Iz = mass * (l * l + h * h) / 12d;
+            res.Mass3D.Ix = mass * (w * w + h * h) / 12d;
+            res.Mass3D.Iy = mass * (w * w + l * l) / 12d;
+            res.Mass3D.Iz = mass * (l * l + h * h) / 12d;
             return res;
 
         }
@@ -112,7 +112,7 @@ namespace RobotSim {
     public class ForceBetween2Points : Force {
         public IMaterialObject sk0, sk1;
         public IPosition3D p0_loc, p1_loc;
-        public double k = 10000, mu = 10000, x0 = 0;
+        public double k = 10000, mu = 100, x0 = 0;
         public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1,Vector3D p0_loc,Vector3D p1_loc): this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc)) {
 
         }

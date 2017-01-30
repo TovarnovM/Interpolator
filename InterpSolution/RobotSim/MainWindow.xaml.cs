@@ -103,7 +103,7 @@ namespace RobotSim {
 
 
 
-            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.5,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -173,18 +173,19 @@ namespace RobotSim {
         private async void button1_Click(object sender,RoutedEventArgs e) {
             var m = new Majatnik();
             var v0 = m.Rebuild();
-            double dt = 0.1, t0 = 0, t1 = 100;
+            double dt = 0.1, t0 = 0, t1 = 10;
+            double T = 2 * 3.14159 * Math.Sqrt(m.L / 9.8);
+double omega = 2 * 3.14159 / T;
+            double A = m.X;
+            double tetta0 = 3.14159 / 2;
+
+
             var s = Ode.RK45(0,v0,m.f,0.0001).SolveFromToStep(t0,t1,dt);
             var l = await getSol(s);
             var ts = l.Select(ee => ee.T).ToList();
 
-
-            double v = 1d,
-                T = 2*3.14159*Math.Sqrt(10/9.8);
-            double omega = 1 / T;
-            double h = v * v / 2 / 9.8;
-            double A = Math.Sqrt(100 - (10 - h) * (10 - h));
-            var rightAnsw = ts.Select(t => A * Math.Sin(omega * t)).ToList();
+            
+            var rightAnsw = ts.Select(t => A * Math.Sin(tetta0 + omega * t)).ToList();
 
             var answrs = l.Select(sp => {
                 m.SynchMeTo(sp);

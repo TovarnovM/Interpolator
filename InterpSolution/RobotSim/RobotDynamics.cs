@@ -53,9 +53,9 @@ namespace RobotSim {
 
 
         public void SynchMassGeometry() {
-            Body.Mass.Ix = Body.Mass.Value * (h * h + l * l) / 12d;
-            Body.Mass.Iy = Body.Mass.Value * (w * w + l * l) / 12d;
-            Body.Mass.Iz = Body.Mass.Value * (h * h + w * w) / 12d;
+            Body.Mass3D.Ix = Body.Mass.Value * (h * h + l * l) / 12d;
+            Body.Mass3D.Iy = Body.Mass.Value * (w * w + l * l) / 12d;
+            Body.Mass3D.Iz = Body.Mass.Value * (h * h + w * w) / 12d;
         }
 
         public void SynchWheelsToBodyPos(double t = 0) {
@@ -109,14 +109,16 @@ namespace RobotSim {
         public TracksDummy() {
 
             Name = "TrackDummy";
-            int n = 7;
+            int n = 77;
             Tracks = new List<RbTrack>(n);
             var tr1 = RbTrack.GetFlat();
             var gForce = new Force(tr1.Mass.Value*9.8,new RelativePoint(0,-1,0));
             tr1.AddForce(gForce);
 
-            var p1 = new Vector3D(0,10,-3);
+            var p1 = new Vector3D(10,10,-3);
             tr1.SetPosition(3,p1);
+            tr1.SetPosition(2,p1 + new Vector3D(0,-10,-10),3);
+            tr1.SetPosition(1,p1 + new Vector3D(10,0,0),2,3);
             var p2 = tr1.GetConnPWorld(2);
             Tracks.Add(tr1);
             AddChild(tr1);
@@ -124,7 +126,8 @@ namespace RobotSim {
                 var tr = RbTrack.GetFlat();
                 tr.AddForce(gForce);
                 tr.SetPosition(3,Tracks[i - 1].GetConnPWorld(1));
-                tr.SetPosition(2,Tracks[i - 1].GetConnPWorld(0));
+                tr.SetPosition(2,Tracks[i - 1].GetConnPWorld(0),3);
+                tr.SetPosition(1,Tracks[i - 1].GetConnPWorld(0) + new Vector3D(10,0,0),2,3);
                 Tracks.Add(tr);
                 AddChild(tr);
 
@@ -134,7 +137,7 @@ namespace RobotSim {
             f3 = new Force(0,new RelativePoint(0,0,0),new RelativePoint(tr1.ConnP[3],tr1));
             tr1.AddForce(f3);
             f3.SynchMeBefore += t => {
-                var ff = Phys3D.GetKMuForce(tr1.GetConnPWorld(3),tr1.GetConnPVelWorld(3),p1,Vector3D.Zero,10000,10000,0);
+                var ff = Phys3D.GetKMuForce(tr1.GetConnPWorld(3),tr1.GetConnPVelWorld(3),p1,Vector3D.Zero,1000,100,0);
                 f3.Value = ff.GetLength();
                 f3.Direction.Vec3D = ff;
                 //f3.AppPoint.Vec3D = tr1.GetConnPWorld(3);
@@ -143,7 +146,7 @@ namespace RobotSim {
             f2 = new Force(0,new RelativePoint(0,0,0),new RelativePoint(tr1.ConnP[2],tr1));
             tr1.AddForce(f2);
             f2.SynchMeBefore += t => {
-                var ff = Phys3D.GetKMuForce(tr1.GetConnPWorld(2),tr1.GetConnPVelWorld(2),p2,Vector3D.Zero,10000,10000,0);
+                var ff = Phys3D.GetKMuForce(tr1.GetConnPWorld(2),tr1.GetConnPVelWorld(2),p2,Vector3D.Zero,1000,100,0);
                 f2.Value = ff.GetLength();
                 f2.Direction.Vec3D = ff;
                 //f3.AppPoint.Vec3D = tr1.GetConnPWorld(3);

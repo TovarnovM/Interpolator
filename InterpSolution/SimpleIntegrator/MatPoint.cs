@@ -77,7 +77,7 @@ namespace SimpleIntegrator {
         List<Force> Moments { get; set; }
         IPosition3D Omega { get; set; }
         IPosition3D Eps { get; set; }
-        new IMass3D Mass { get; set; }
+        IMass3D Mass3D { get; set; }
         void AddMoment(Force moment);
         Vector3D GetL();
         double GetRotEnergy();
@@ -85,7 +85,7 @@ namespace SimpleIntegrator {
     }
 
     public class MaterialObjectNewton : MaterialPointNewton, IMaterialObject, IVelPos3D {
-        public new IMass3D Mass { get; set; } = new Mass3D();
+        public IMass3D Mass3D { get; set; } = new Mass3D();
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
         public List<Force> Moments { get; set; }= new List<Force>();
@@ -115,7 +115,7 @@ namespace SimpleIntegrator {
             }
             momSum = WorldTransformRot_1 * momSum;
             var om = Omega.Vec3D;
-            Eps.Vec3D = Mass.Tensor.Inverse* (momSum - Vector3D.CrossProduct(om,Mass.Tensor * om));
+            Eps.Vec3D = Mass3D.TensorInverse* (momSum - Vector3D.CrossProduct(om,Mass3D.Tensor * om));
             dQWdt =-0.5 * (om.X * Qx + om.Y * Qy + om.Z * Qz);
             dQXdt = 0.5 * (om.X * Qw - om.Y * Qz + om.Z * Qy);
             dQYdt = 0.5 * (om.Y * Qw - om.Z * Qx + om.X * Qz);
@@ -141,12 +141,12 @@ namespace SimpleIntegrator {
         }
 
         public Vector3D GetL() {
-            return Mass.Tensor * Omega.Vec3D;
+            return Mass3D.Tensor * Omega.Vec3D;
         }
 
         public double GetRotEnergy() {
             var om = Omega.Vec3D;
-            return 0.5*om * (Mass.Tensor * om);
+            return 0.5*om * (Mass3D.Tensor * om);
         }
 
         public Vector3D GetVelWorld(Vector3D pointLocal) {

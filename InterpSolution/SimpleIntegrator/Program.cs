@@ -8,9 +8,9 @@ namespace SimpleIntegrator {
     class Program {
         static void Main(string[] args) {
             var mp = new MaterialObjectNewton() { Name = "ball" };
-            mp.Mass.Ix = 10;
-            mp.Mass.Iy = 10;
-            mp.Mass.Iz = 10;
+            mp.Mass3D.Ix = 10;
+            mp.Mass3D.Iy = 10;
+            mp.Mass3D.Iz = 10;
 
             //mp.AddForce(new ForceCenter(10,new Position3D(0,-1,0,"Dir"),null,"G"));
             //mp.AddForce(new Force(1,new Position3D(0,1,0,"Dir"),new Position3D(1,0,0,"FPoint"),null));

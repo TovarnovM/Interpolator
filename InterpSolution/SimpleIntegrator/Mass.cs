@@ -7,14 +7,16 @@ namespace SimpleIntegrator {
         IScnPrm pValue { get; set; }
     }
 
-    public interface IMass3D: IMassPoint {
-        Matrix3D Tensor { get; set; }
+    public interface IMass3D {
+        Matrix3D Tensor { get; }
+        Matrix3D TensorInverse { get; }
         double Ix { get; set; }
         double Iy { get; set; }
         double Iz { get; set; }
         IScnPrm pIx { get; set; }
         IScnPrm pIy { get; set; }
         IScnPrm pIz { get; set; }
+        void SynchTensor();
     }
 
     public class MassPoint : ScnObjDummy, IMassPoint {
@@ -33,16 +35,20 @@ namespace SimpleIntegrator {
     }
 
 
-    public class Mass3D : MassPoint, IMass3D {
+    public class Mass3D : ScnObjDummy, IMass3D {
         private Matrix3D tensor = Matrix3D.Identity;
 
-        public Matrix3D Tensor { get; set; }
+        public Matrix3D Tensor {
+            get {
+                return tensor;
+            } }
         public double Ix {
             get {
                 return tensor.M11;
             }
             set {
                 tensor.M11 = value;
+                SynchTensor();
             }
         }
         public double Iy {
@@ -51,6 +57,7 @@ namespace SimpleIntegrator {
             }
             set {
                 tensor.M22 = value;
+                SynchTensor();
             }
         }
         public double Iz {
@@ -59,11 +66,23 @@ namespace SimpleIntegrator {
             }
             set {
                 tensor.M33 = value;
+                SynchTensor();
             }
         }
         public IScnPrm pIx { get; set; }
         public IScnPrm pIy { get; set; }
         public IScnPrm pIz { get; set; }
+
+        Matrix3D tensorInverse;
+        public Matrix3D TensorInverse {
+            get {
+                return tensorInverse;
+            }
+        }
+
+        public void SynchTensor() {
+            tensorInverse = tensor.Inverse;
+        }
 
 
 
