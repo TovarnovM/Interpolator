@@ -95,7 +95,7 @@ namespace RobotSim.Tests {
                     muH: 66);
 
             wheel.Betta = 30 * PI / 180;
-            var f = wheel.GetlocalTauForce(new Vector3D(0.4,-10,0));
+            var f = wheel.GetlocalKTauForce(new Vector3D(0.4,-10,0));
             var yansw = (0.2673 * 10 / 47.8570) * 66;
             var zansw = -(3.5664 * 10 / 47.8570) * 66;
             Assert.IsTrue(Vector3D.ApproxEqual(f, new Vector3D(0,yansw,zansw), 0.1));

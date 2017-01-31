@@ -107,7 +107,7 @@ namespace RobotSim {
         /// <param name="localPoint"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetlocalTauForce(Vector3D localPoint) {
+        public Vector3D GetlocalKTauForce(Vector3D localPoint) {
             
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();

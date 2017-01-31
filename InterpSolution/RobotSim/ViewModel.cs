@@ -235,10 +235,10 @@ namespace RobotSim {
             _curr4Draw.SynchMe(t);
 
 
-            //DrawBody();
-            //DrawBodyForces();
+            DrawBody();
+            DrawBodyForces();
 
-            DrawTrack1();
+            //DrawTrack1();
 
             ModelXY.InvalidatePlot(true);
             ModelXZ.InvalidatePlot(true);
