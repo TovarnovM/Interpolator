@@ -287,8 +287,8 @@ namespace RobotSim {
             DrawDummy.SynchMe(t);
 
 
-            DrawBody();
-            DrawBodyForces();
+           DrawBody();
+           // DrawBodyForces();
 
             DrawTrack1();
 
@@ -340,9 +340,15 @@ namespace RobotSim {
         }
 
         private void DrawTrack1() {
-            foreach(var track in DrawDummy.Tracks) {
+            foreach(var track in DrawDummy.Tracks1) {
                 DrawOneTrack(track);
             }
+            foreach(var track in DrawDummy.Tracks2) {
+                DrawOneTrack(track);
+            }
+            //foreach(var track in DrawDummy.tDummy.Tracks) {
+            //    DrawOneTrack(track);
+            //}
         }
 
         private void DrawOneTrack(RbTrack track) {

@@ -1,4 +1,5 @@
-﻿using Sharp3D.Math.Core;
+﻿using MoreLinq;
+using Sharp3D.Math.Core;
 using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,9 @@ namespace RobotSim {
         public Vector3D CenterPosOtnCM;
         public List<RbWheel> wheels = new List<RbWheel>(4);
 
-        public TracksDummy tDummy { get; set; }
-        public List<RbTrack> Tracks { get; set; }
+        public TracksDummy tDummy { get; set; } = new TracksDummy(0);
+        public List<RbTrack> Tracks1 { get; set; } = new List<RbTrack>();
+        public List<RbTrack> Tracks2 { get; set; } = new List<RbTrack>();
         public RbSurfFloor floor;
 
 
@@ -37,32 +39,7 @@ namespace RobotSim {
             //Body.AddForce(FloorForce);
             SynchMassGeometry();
 
-            for(int i = 0; i < 4; i++) {
-                var wheel = RbWheel.GetStandart();
-                wheel.Name = "wheel" + i.ToString();
-                wheels.Add(wheel);
-                Body.AddChild(wheel);
-            }
-            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * h / 4;
-            wheels[0].n0_body_loc = Vector3D.ZAxis;
             
-            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * h / 4;
-            wheels[1].n0_body_loc = Vector3D.ZAxis;
-            
-            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * h / 4;
-            wheels[2].n0_body_loc = -Vector3D.ZAxis;
-            
-            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * h / 4;
-            wheels[3].n0_body_loc = -Vector3D.ZAxis;
-
-            foreach(var w in wheels) {
-                ConnectWheelToBody(w);
-            }
-            var m = 0;
-            foreach(var w in wheels) {
-                w.MomentX.Value = (m++)*0.01;
-                //break;
-            }
 
             //double moment = 0.1;
             //foreach(var w in wheels) {
@@ -71,12 +48,6 @@ namespace RobotSim {
             //    moment += moment;
             //}
 
-            //tDummy = new TracksDummy();
-//AddChild(tDummy);
-            Tracks = GetTracks(wheels[0],wheels[1]);
-            foreach(var t in Tracks) {
-                AddChild(t);
-            }
             
         }
 
@@ -85,6 +56,37 @@ namespace RobotSim {
             Body.Mass3D.Iz = Body.Mass.Value * (h * h + l * l) / 12d;
             Body.Mass3D.Iy = Body.Mass.Value * (w * w + l * l) / 12d;
             Body.Mass3D.Ix = Body.Mass.Value * (h * h + w * w) / 12d;
+        }
+
+        public void CreateWheels() {
+            for(int i = 0; i < 4; i++) {
+                var wheel = RbWheel.GetStandart();
+                wheel.Name = "wheel" + i.ToString();
+                wheels.Add(wheel);
+                Body.AddChild(wheel);
+            }
+            var trackw05 = 0.01;
+            wheels[0].n0_body_loc = Vector3D.ZAxis;
+            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * h / 4 + wheels[0].n0_body_loc * trackw05;
+            
+            wheels[1].n0_body_loc = Vector3D.ZAxis;
+            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * h / 4 + wheels[1].n0_body_loc* trackw05;
+            
+            wheels[2].n0_body_loc = -Vector3D.ZAxis;
+            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * h / 4 + wheels[2].n0_body_loc * trackw05;
+
+            wheels[3].n0_body_loc = -Vector3D.ZAxis;
+            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * h / 4 + wheels[3].n0_body_loc * trackw05;
+
+
+            foreach(var w in wheels) {
+                ConnectWheelToBody(w);
+            }
+            var m = 0;
+            //foreach(var w in wheels) {
+            //    w.MomentX.Value = (m++) * 0.01;
+            //    //break;
+            //}
         }
 
         public void SynchWheelsToBodyPos(double t = 0) {
@@ -181,27 +183,54 @@ namespace RobotSim {
             return (w1.WorldTransform * w1.Zubya[0] - w2.WorldTransform * w2.Zubya[n]).GetLength();
         }
 
+        public void CreateTracks() {
+            Tracks1 = GetTracks(wheels[0],wheels[1]);
+            foreach(var t in Tracks1) {
+                AddChild(t);
+            }
+            Tracks2 = GetTracks(wheels[2],wheels[3]);
+            foreach(var t in Tracks2) {
+                AddChild(t);
+            }
+        }
+
+        public void CreateTrackDummy(int n = 11) {
+            tDummy = new TracksDummy(n);
+            AddChild(tDummy);
+        }
+
         List<RbTrack> GetTracks(RbWheel w1,RbWheel w2) {
             var l21 = RotateWheels(w1,w2);
-            var lst = new List<RbTrack>();
-            var r21 = (w2.Vec3D - w1.Vec3D);
+            var lst0 = new List<RbTrack>();
+            var r21 = w2.Vec3D - w1.Vec3D;
             var r21norm = r21.Norm;
 
             int n_z = w1.n_shag;
             RbWheel w = w1;
+            RbTrack b0 = null, b1, u0, u1 = null;
             for(int i = 0; i < n_z; i++) {
                 var v_dir = w.WorldTransformRot * w.Zubya[i];
                 if(v_dir * r21norm > 0)
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
                 var t0 = RbTrack.GetStandart();
-                t0.RotateOXtoVec(new Vector3D(32,-11,-55));
+                t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(1,0,0),w.WorldTransform * (w.Zubya[i] + w.Zubya_n[i]),new Vector3D(0,0,0),new Vector3D(0,0,1));
-                lst.Add(t0);
+                lst0.Add(t0);
+                if(i == 0)
+                    b0 = t0;
+
             }
+
+            u0 = lst0
+                .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
+                .MaxBy(yt => yt.y3)
+                .tr;
+         
+            var lst1 = new List<RbTrack>();
             w = w2;
             for(int i = 0; i < n_z; i++) {
                 var v_dir = w.WorldTransformRot * w.Zubya[i];
@@ -209,23 +238,88 @@ namespace RobotSim {
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
                 var t0 = RbTrack.GetStandart();
-                t0.RotateOXtoVec(new Vector3D(32,-11,-55));
+                t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(1,0,0),w.WorldTransform * (w.Zubya[i] + w.Zubya_n[i]),new Vector3D(0,0,0),new Vector3D(0,0,1));
-                lst.Add(t0);
+                lst1.Add(t0);
+                if(i == 0)
+                    u1 = t0;
             }
 
+            b1 = lst1
+                .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
+                .MinBy(yt => yt.y3)
+                .tr;
 
-            return lst;
+            lst0.AddRange(GetTrackBetween2Tracks(b0,b1));
+            lst0.AddRange(GetTrackBetween2Tracks(u1,u0));
 
+
+            lst0.AddRange(lst1);
+
+            //foreach(var t in lst0) {
+            //    t.SetPosition_LocalPoint_LocalMoveToIt(new Vector3D(1,0,0),new Vector3D(1.01,0,0));
+            //    t.SetPosition_LocalPoint_LocalMoveToIt(new Vector3D(0,1,0),new Vector3D(0,1.01,0));
+            //}
+
+
+
+            return ConnectTrackLoop(lst0);
+            //return lst0;
 
 
             //var shag = (t0.ConnP[3] - t0.ConnP[1]).GetLength();
             //int nVnizu = (int)Math.Floor(l21 / shag);
             //double shagFact = l21 / nVnizu;
 
+        }
+
+        List<RbTrack> ConnectTrackLoop(List<RbTrack> trackList) {
+            var tcurr = trackList.First();
+            var lst1 = new List<RbTrack>(trackList.Count);
+            while(trackList.Count != lst1.Count) {
+                var p1curr = tcurr.GetConnPWorld(1);
+                var tnext = trackList
+                    .Select(tr => new { p3 = tr.GetConnPWorld(3),tr })
+                    .MinBy(rec => (rec.p3 - p1curr).GetLength())
+                    .tr;
+                RbTrack.ConnectTracks(tcurr,tnext,1,3,0,2);
+                lst1.Add(tcurr);
+                tcurr = tnext;
+            }
+            return lst1;
+        }
+
+        List<RbTrack> GetTrackBetween2Tracks(RbTrack b0, RbTrack b1) {
+            var r_b0_1 = b0.GetConnPWorld(1);
+            var r_b1b0_31 = b1.GetConnPWorld(3) - r_b0_1;
+            var r_b1b0_31_norm = r_b1b0_31.Norm;
+
+            var r_b0_0 = b0.GetConnPWorld(0);
+            var r_b1b0_20 = b1.GetConnPWorld(2) - r_b0_0;
+            var r_b1b0_20_norm = r_b1b0_20.Norm;
+
+            var l0 = (b0.ConnP[3] - b0.ConnP[1]).GetLength();
+            int n = (int)Math.Floor(r_b1b0_20.GetLength() / l0);
+            var lfact = r_b1b0_20.GetLength() / n;
+            var dl = (r_b1b0_20.GetLength() - l0 * n) / (n + 1);
+
+            var r0_1 = r_b0_1 + r_b1b0_31_norm * dl;
+            var r0_0 = r_b0_0 + r_b1b0_20_norm * dl;
+
+            var lst0 = new List<RbTrack>();
+            for(int i = 0; i < n; i++) {
+                var t0 = RbTrack.GetStandart();
+                t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,9933,-11));
+                t0.SetPosition_LocalPoint(t0.ConnP[3],r0_1 + r_b1b0_20_norm * ((dl + l0) * i));
+                t0.SetPosition_LocalPoint_LocalFixed(t0.ConnP[2],r0_0 + r_b1b0_20_norm * ((dl + l0) * i),t0.ConnP[3]);
+                t0.SetPosition_LocalPoint_LocalFixed(t0.ConnP[1],r0_1 + r_b1b0_31_norm * ((dl + l0) * (i + 1)),t0.ConnP[2],t0.ConnP[3]);
+                lst0.Add(t0);
+
+            }
+            return lst0;
         }
         #endregion
 
@@ -235,10 +329,9 @@ namespace RobotSim {
     public class TracksDummy:ScnObjDummy {
         public List<RbTrack> Tracks { get; set; }
         public Force f3, f2;
-        public TracksDummy() {
+        public TracksDummy(int n = 11) {
 
             Name = "TrackDummy";
-            int n = 1;
             Tracks = new List<RbTrack>(n);
             var tr1 = RbTrack.GetFlat();
             var gForce = new Force(tr1.Mass.Value*9.8,new RelativePoint(0,-1,0));

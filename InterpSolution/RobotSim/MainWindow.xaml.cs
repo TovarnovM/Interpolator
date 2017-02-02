@@ -36,18 +36,24 @@ namespace RobotSim {
 
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
-            //sol.Body.Vec3D = new Vector3D(20,100,0);
-            //sol.Body.SynchQandM();
-            //sol.SynchWheelsToBodyPos();
+
+            sol.Body.Vec3D = new Vector3D(11,11,-2);
+            sol.Body.SynchQandM();
+            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+            sol.Body.SynchQandM();
+
+            sol.CreateWheels();
+            sol.SynchWheelsToBodyPos();
             sol.floor = new RbSurfFloor(100,100,new Vector3D(1,0,1));
 
             //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
             //sol.Body.AddMoment(moment);
 
-            //sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
-            //sol.Body.SynchQandM();
-            sol.SynchWheelsToBodyPos();
 
+            //sol.SynchWheelsToBodyPos();
+
+            sol.CreateTracks();
+            //sol.CreateTrackDummy(50);
             //var f1 = Force.GetForce(
             //    new Vector3D(-0.1,0,0),null,
             //    sol.GetUgolLocal(6),sol.Body);
@@ -57,7 +63,7 @@ namespace RobotSim {
             //    new Vector3D(0,0,0),sol.Body);
 
             //sol.Body.AddForce(f1);
-            // sol.Body.AddForce(f2);
+            //sol.Body.AddForce(f2);
 
             //sol.SynchWheelsToBodyPos();
             //var w0 = sol.wheels[0];
@@ -112,7 +118,7 @@ namespace RobotSim {
 
 
 
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.0001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
