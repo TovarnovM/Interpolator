@@ -15,7 +15,9 @@ namespace SimpleIntegrator {
         IPosition3D Acc { get; set; }
         IMassPoint Mass { get; set; }
         List<Force> Forces { get; set; }
+        List<Force> ForcesNegative { get; set; }
         void AddForce(Force force);
+        void AddForceNegative(Force force);
         Vector3D GetImpulse();
         double GetEnergy();
 
@@ -28,12 +30,14 @@ namespace SimpleIntegrator {
         public IPosition3D Acc { get; set; }
         public IMassPoint Mass { get; set; }
         public List<Force> Forces { get; set; }
+        public List<Force> ForcesNegative { get; set; }
         const string DEFNAME = "MatPoint";
         public MaterialPointNewton(object x,object y,object z,string name = DEFNAME):base(x,y,z,name) {
             Vel = new Position3D("Vel");
             Acc = new Position3D("Acc");
             Mass = Mass == null ? new MassPoint(): Mass;
             Forces = new List<Force>();
+            ForcesNegative = new List<Force>();
             AddChild(Vel);
             AddChild(Acc);
             AddChild(Mass);
@@ -50,6 +54,9 @@ namespace SimpleIntegrator {
             Vector3D fsumm = Vector3D.Zero;
             foreach(var force in Forces) {
                 fsumm += force.Vec3D_Dir_World;
+            }
+            foreach(var force in ForcesNegative) {
+                fsumm -= force.Vec3D_Dir_World;
             }
             Acc.Vec3D = fsumm / Mass.Value;
         }
@@ -68,6 +75,12 @@ namespace SimpleIntegrator {
             var vel =  Vel.Vec3D.GetLength();
             return Mass.Value * vel * vel;
         }
+
+        public void AddForceNegative(Force force) {
+            if(force.Owner == null)
+                AddChild(force);
+            ForcesNegative.Add(force);
+        }
     }
 
     /// <summary>
@@ -75,10 +88,12 @@ namespace SimpleIntegrator {
     /// </summary>
     public interface IMaterialObject : IMaterialPoint {
         List<Force> Moments { get; set; }
+        List<Force> MomentsNegative { get; set; }
         IPosition3D Omega { get; set; }
         IPosition3D Eps { get; set; }
         IMass3D Mass3D { get; set; }
         void AddMoment(Force moment);
+        void AddMomentNegative(Force moment);
         Vector3D GetL();
         double GetRotEnergy();
         Vector3D GetVelWorld(Vector3D pointLocal);
@@ -89,6 +104,7 @@ namespace SimpleIntegrator {
         public IPosition3D Omega { get; set; } = new Position3D("Omega");
         public IPosition3D Eps { get; set; } = new Position3D("Eps");
         public List<Force> Moments { get; set; }= new List<Force>();
+        public List<Force> MomentsNegative { get; set; } = new List<Force>();
         const string DEFNAME = "MatObj";
         public MaterialObjectNewton(object x,object y,object z,string name = DEFNAME) : base(x,y,z,name) {
             AddChild(Omega);
@@ -110,9 +126,16 @@ namespace SimpleIntegrator {
             foreach(var mom in Moments) {
                 momSum += mom.Vec3D_Dir_World;
             }
+            foreach(var mom in MomentsNegative) {
+                momSum -= mom.Vec3D_Dir_World;
+            }
             foreach(var force in Forces) {
                 momSum += force.GetMoment_World(Vec3D);
             }
+            foreach(var force in ForcesNegative) {
+                momSum += force.GetMoment_World(Vec3D);
+            }
+
             momSum = WorldTransformRot_1 * momSum;
             var om = Omega.Vec3D;
             Eps.Vec3D = Mass3D.TensorInverse* (momSum - Vector3D.CrossProduct(om,Mass3D.Tensor * om));
@@ -151,6 +174,12 @@ namespace SimpleIntegrator {
 
         public Vector3D GetVelWorld(Vector3D pointLocal) {
             return WorldTransformRot * (Omega.Vec3D & pointLocal) + Vel.Vec3D;
+        }
+
+        public void AddMomentNegative(Force moment) {
+            if(moment.Owner == null)
+                AddChild(moment);
+            MomentsNegative.Add(moment);
         }
     }
 }

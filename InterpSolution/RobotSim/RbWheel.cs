@@ -9,13 +9,7 @@ using System.Threading.Tasks;
 using static System.Math;
 
 namespace RobotSim {
-    public class RbWheel: Orient3D {
-        public double Ix { get; set; }
-        public double Mass { get; set; }
-        public double Mx { get; set; }
-
-        public Vector3D localPos;
-
+    public class RbWheel: MaterialObjectNewton {
         public double R;
         public double R_max;
         public double H_wheel;
@@ -26,18 +20,18 @@ namespace RobotSim {
         public double muH;
 
         public int n_shag;
+        public Vector3D[] Zubya, Zubya_n;
         public double gamma;
 
-        public double OmegaX { get; set; }
-        public IScnPrm pOmegaX { get; set; }
-
-        public double Betta { get; set; }
-        public IScnPrm pBetta { get; set; }
-
+        public Force MomentX;
+        public Vector3D 
+            p0_body_loc = new Vector3D(0,0,0), 
+            n0_body_loc = new Vector3D(1,0,0);
         public RbWheel(
             int n, 
             double R, 
             double R_max,
+            double mass,
             double H_wheel, 
             double H_zac,
             double kR = 1E5, 
@@ -55,11 +49,21 @@ namespace RobotSim {
             this.muR = muR;
             this.kH = kH;
             this.muH = muH;
-            this.localPos = Vector3D.Zero;
 
             gamma = 2 * PI / n;
+            Zubya = new Vector3D[n];
+            Zubya_n = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                Zubya[i] = new Vector3D(0,R * Math.Cos(gamma * i),R * Math.Sin(gamma * i));
+                Zubya_n[i] = new Vector3D(0,Math.Cos(gamma * i + Math.PI/2),Math.Sin(gamma * i + Math.PI / 2));
+            }
 
-            AddDiffPropToParam(pBetta,pOmegaX);
+            Mass3D.Ix = mass * R * R / 2;
+            Mass3D.Iy = mass * (3*R * R + H_wheel* H_wheel) / 12;
+            Mass3D.Iz = Mass3D.Iy;
+
+            MomentX = Force.GetMoment(0,new Vector3D(1,0,0),this);
+            AddMoment(MomentX);
         }
         public static RbWheel GetStandart() {
             return GetStandart(Vector3D.Zero);
@@ -68,24 +72,21 @@ namespace RobotSim {
         public static RbWheel GetStandart(Vector3D localPos) {
             int n = 11;
             double r_real = 0.015;
-            double R_ideal = 0.009 / (2 * Sin(PI / n));
+            double R_ideal = 0.0105 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
             var mass = PI * r_real * r_real * 0.021 * 1080;
-            var ix = mass * r_real * r_real / 2;
-            var res = new RbWheel(n,R_ideal,R_ideal + 0.002,0.01,0.009 / 4) {
-                Mass = 0.002242,
-                Ix = ix
-            };
-            res.localPos = localPos;
+            var res = new RbWheel(n,R_ideal,R_ideal + 0.002,0.002242,0.01,0.009 / 4);
+   
             return res;
         }
 
         /// <summary>
-        /// Вычисляется локальная сила, действующая в радиальном направлении и направлении оси Х
+        /// Вычисляется глобальная сила, действующая в радиальном направлении и направлении оси Х
         /// </summary>
-        /// <param name="localPoint"></param>
+        /// <param name="globalPoint"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetLocalRH_wheelForce(Vector3D localPoint) {
+        public Vector3D GetLocalRH_wheelForce(Vector3D globalPoint) {
+            var localPoint = worldTransform_1 * globalPoint;
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();
             if(rp>R_max)
@@ -98,32 +99,32 @@ namespace RobotSim {
                 ? Vector3D.Zero 
                 : -kH * (new Vector3D(localPoint.X,0,0));
 
-            return f_r + f_h;
+            return worldTransform * (f_r + f_h);
         }
 
         /// <summary>
-        /// Вычисляется локальная сила, действующая в тангенциальном направлении (только в окрестностях "зубцов")
+        /// Вычисляется глобальная сила, действующая в тангенциальном направлении (только в окрестностях "зубцов")
         /// </summary>
-        /// <param name="localPoint"></param>
+        /// <param name="globalPoint"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetlocalKTauForce(Vector3D localPoint) {
-            
+        public Vector3D GetlocalKTauForce(Vector3D globalPoint) {
+            var localPoint = worldTransform_1 * globalPoint;
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();
             if(rp > R_max || Abs(localPoint.X) > H_wheel * 0.5)
                 return Vector3D.Zero;
 
             int closestInd = GetClosestInd(localPoint);
-            var angle0 = Betta % (2 * PI) + gamma * closestInd;
-            
+            var angle0 = gamma * closestInd;//Betta % (2 * PI) + gamma * closestInd;
+
             var n0 = new Vector3D(0,Cos(angle0+0.5*PI),Sin(angle0 + 0.5 * PI));
             var dh = n0 * rlocalVec;
 
             if(Abs(dh) > H_zac)
                 return Vector3D.Zero;
 
-            return -kH * dh * n0;
+            return worldTransform*(-kH * dh * n0);
         }
 
         /// <summary>
@@ -136,7 +137,7 @@ namespace RobotSim {
             const double _2PI = 2 * PI;
             var angle = Atan2(localPoint.Z,localPoint.Y);
             angle += angle < 0 ? _2PI : 0;
-            var betta = Betta % _2PI;
+            var betta = 0d;//Betta % _2PI;
             var bettaOtn = angle - betta;
             bettaOtn += bettaOtn < 0 ? _2PI : 0;
             int answ = (int)Round(bettaOtn / gamma);

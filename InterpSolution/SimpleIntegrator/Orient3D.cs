@@ -58,11 +58,11 @@ namespace SimpleIntegrator {
 
     public class Orient3D : Position3D, IOrient3D {
         public List<IOrient3D> TransformChain { get; private set; } = new List<IOrient3D>();
-        private Matrix4D m = Matrix4D.Identity;
-        private Matrix4D m_1 = Matrix4D.Identity;
-        private Matrix4D worldTransform = Matrix4D.Identity;
-        private Matrix4D worldTransform_1 = Matrix4D.Identity;
-        private QuaternionD q = QuaternionD.Identity;
+        protected Matrix4D m = Matrix4D.Identity;
+        protected Matrix4D m_1 = Matrix4D.Identity;
+        protected Matrix4D worldTransform = Matrix4D.Identity;
+        protected Matrix4D worldTransform_1 = Matrix4D.Identity;
+        protected QuaternionD q = QuaternionD.Identity;
 
         public Matrix3D MRot { get { return m.Rot; } }
         public Matrix3D MRot_1 { get { return m_1.Rot; } }
@@ -134,6 +134,9 @@ namespace SimpleIntegrator {
             }
         }
 
+        /// <summary>
+        /// матрица перехода из Локальнойй СК в МИРОВУЮ СК
+        /// </summary>
         public Matrix4D WorldTransform {
             get {
                 return worldTransform;
@@ -238,7 +241,7 @@ namespace SimpleIntegrator {
             var tauY = (xAxis * yAxisClose)*xAxis;
             RotateOYtoVec(yAxisClose - tauY);
         }
-        public void SetPosition(Vector3D currWorldPoint, Vector3D moveToIt, params Vector3D[] fixedWorldPoints) {
+        public void SetPosition(Vector3D currWorldPoint, Vector3D moveToItWorld, params Vector3D[] fixedWorldPoints) {
             int n = fixedWorldPoints.Count();
             if(n > 2)
                 return;
@@ -247,12 +250,12 @@ namespace SimpleIntegrator {
             var center = Vec3D;
             var localPoint = WorldTransform_1 * currWorldPoint;
             if(n == 0) {
-                RotateVecToVec(currWorldPoint - center,moveToIt - center);
-                Vec3D += moveToIt - WorldTransform * localPoint;
+                RotateVecToVec(currWorldPoint - center,moveToItWorld - center);
+                Vec3D += moveToItWorld - WorldTransform * localPoint;
             } else
             if(n == 1) {
                 var fixedPointLocal = WorldTransform_1 * fixedWorldPoints[0];
-                RotateVecToVec(currWorldPoint - fixedWorldPoints[0],moveToIt - fixedWorldPoints[0]);
+                RotateVecToVec(currWorldPoint - fixedWorldPoints[0],moveToItWorld - fixedWorldPoints[0]);
                 Vec3D += fixedWorldPoints[0] - WorldTransform * fixedPointLocal;
             } else
             if(n == 2) {
@@ -264,7 +267,7 @@ namespace SimpleIntegrator {
                 var vec0 = currWorldPoint - fixedPoint0;
                 var vec0n = vec0 - (vec0 * os0) * os0;
 
-                var vec1 = moveToIt - fixedPoint0;
+                var vec1 = moveToItWorld - fixedPoint0;
                 var vec1n = vec1 - (vec1 * os0) * os0;
 
                 RotateVecToVec(vec0n,vec1n);
@@ -274,7 +277,82 @@ namespace SimpleIntegrator {
             SynchQandM();
         }
 
+        public void SetPosition_LocalPoint(Vector3D currLocalPoint,Vector3D moveToItWorld,params Vector3D[] fixedWorldPoints) {
+            SetPosition(worldTransform * currLocalPoint,moveToItWorld,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalMoveToIt(Vector3D currWorldPoint,Vector3D moveToItLocal,params Vector3D[] fixedWorldPoints) {
+            SetPosition(currWorldPoint,worldTransform * moveToItLocal,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalFixed(Vector3D currWorldPoint,Vector3D moveToItWorld,params Vector3D[] fixedLocalPoints) {
+            var n = fixedLocalPoints.Length;
+            if(n == 0) {
+                SetPosition(currWorldPoint,moveToItWorld);
+                return;
+            }
+
+
+            var fixedWorldPoints = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                fixedWorldPoints[i] = worldTransform * fixedLocalPoints[i];
+            }
+            SetPosition(currWorldPoint,moveToItWorld,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalPoint_LocalMoveToIt(Vector3D currLocalPoint,Vector3D moveToItLocal,params Vector3D[] fixedWorldPoints) {
+            SetPosition(worldTransform * currLocalPoint,worldTransform * moveToItLocal,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalPoint_LocalFixed(Vector3D currLocalPoint,Vector3D moveToItWorld,params Vector3D[] fixedLocalPoints) {
+            var n = fixedLocalPoints.Length;
+            if(n == 0) {
+                SetPosition(worldTransform * currLocalPoint,moveToItWorld);
+                return;
+            }
+
+
+            var fixedWorldPoints = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                fixedWorldPoints[i] = worldTransform * fixedLocalPoints[i];
+            }
+            SetPosition(worldTransform * currLocalPoint,moveToItWorld,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalmoveToIt_LocalFixed(Vector3D currWorldPoint,Vector3D moveToItLocal,params Vector3D[] fixedLocalPoints) {
+            var n = fixedLocalPoints.Length;
+            if(n == 0) {
+                SetPosition(currWorldPoint,worldTransform * moveToItLocal);
+                return;
+            }
+
+
+            var fixedWorldPoints = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                fixedWorldPoints[i] = worldTransform * fixedLocalPoints[i];
+            }
+            SetPosition(currWorldPoint,worldTransform * moveToItLocal,fixedWorldPoints);
+        }
+
+        public void SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D currLocalPoint,Vector3D moveToItLocal,params Vector3D[] fixedLocalPoints) {
+            var n = fixedLocalPoints.Length;
+            if(n == 0) {
+                SetPosition(worldTransform * currLocalPoint,worldTransform * moveToItLocal);
+                return;
+            }
+
+
+            var fixedWorldPoints = new Vector3D[n];
+            for(int i = 0; i < n; i++) {
+                fixedWorldPoints[i] = worldTransform * fixedLocalPoints[i];
+            }
+            SetPosition(worldTransform * currLocalPoint,worldTransform * moveToItLocal,fixedWorldPoints);
+        }
+
+
     }
+
+
 
     //public class Orient2D : ScnObjDummy, IOrient2D {
     //    private Matrix2D m = Matrix2D.Identity;

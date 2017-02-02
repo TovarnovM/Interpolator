@@ -111,7 +111,7 @@ namespace SimpleIntegrator {
     //=============================================================================================================
 
     public class RelativePoint: Position3D {
-        public IOrient3D SK { get; set; } = null;
+        public IOrient3D SK = null;
         public Vector3D Vec3D_World {
             get {
                 return SK == null
@@ -144,7 +144,6 @@ namespace SimpleIntegrator {
         public RelativePoint(object x, object y, object z, IOrient3D sk = null,string name = "relPoint"):base(x,y,z,name) {
             SK = sk;
         }
-
     }
 
     public class Force : ScnObjDummy {
@@ -207,14 +206,14 @@ namespace SimpleIntegrator {
             return GetForceCentered(force.GetLength(),force,sk);
         }
 
-        public static Force GetForceCentered(double value, Vector3D force,IOrient3D sk = null) {
+        public static Force GetForceCentered(double value, Vector3D direction,IOrient3D sk = null) {
             var val = value;
-            var dir = new RelativePoint(force,sk,"direction");
+            var dir = new RelativePoint(direction,sk,"direction");
             return new Force(val,dir) { Name = "forceCentered"};
         }
 
-        public static Force GetMoment(double value,Vector3D force,IOrient3D sk = null) {
-            var m = GetForceCentered(value,force,sk);
+        public static Force GetMoment(double value,Vector3D direction,IOrient3D sk = null) {
+            var m = GetForceCentered(value,direction,sk);
             m.Name = "moment";
             return m;
         }

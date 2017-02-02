@@ -105,9 +105,9 @@ namespace SimpleIntegrator {
             }
 
             var diffArrSeq = GetDiffPrms();
-            foreach(var child in Children) {
-                diffArrSeq = diffArrSeq.Concat(child.GetDiffPrms());
-            }
+            //foreach(var child in Children) {
+            //    diffArrSeq = diffArrSeq.Concat(child.GetDiffPrms());
+            //}
             DiffArr = diffArrSeq.ToArray();
             DiffArrN = DiffArr.Length;
             for(int i = 0; i < DiffArrN; i++) {

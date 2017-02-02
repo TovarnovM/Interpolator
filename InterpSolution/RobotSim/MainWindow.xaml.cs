@@ -36,24 +36,33 @@ namespace RobotSim {
 
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
-            sol.Body.Vec3D = new Vector3D(20,100,0);
+            //sol.Body.Vec3D = new Vector3D(20,100,0);
+            //sol.Body.SynchQandM();
+            //sol.SynchWheelsToBodyPos();
             sol.floor = new RbSurfFloor(100,100,new Vector3D(1,0,1));
 
             //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
             //sol.Body.AddMoment(moment);
 
-            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+            //sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+            //sol.Body.SynchQandM();
+            sol.SynchWheelsToBodyPos();
 
-            var f1 = Force.GetForce(
-                new Vector3D(-0.1,0,0),null,
-                new Vector3D(0.05,0.025,0.1),sol.Body);
+            //var f1 = Force.GetForce(
+            //    new Vector3D(-0.1,0,0),null,
+            //    sol.GetUgolLocal(6),sol.Body);
 
-            var f2 = Force.GetForce(
-                new Vector3D(0.1,0,0),null,
-                new Vector3D(0,0,0),sol.Body);
+            //var f2 = Force.GetForce(
+            //    new Vector3D(0.1,0,0),null,
+            //    new Vector3D(0,0,0),sol.Body);
 
-            sol.Body.AddForce(f1);
-            sol.Body.AddForce(f2);
+            //sol.Body.AddForce(f1);
+            // sol.Body.AddForce(f2);
+
+            //sol.SynchWheelsToBodyPos();
+            //var w0 = sol.wheels[0];
+            //w0.SetPosition_LocalPoint(new Vector3D(-w0.H_wheel,0,0),new Vector3D(1,1,1));
+            //w0.SetPosition_LocalPoint_LocalFixed(new Vector3D(w0.H_wheel,0,0),new Vector3D(1,1,3),new Vector3D(-w0.H_wheel,0,0));
             return sol;
         }
 
@@ -103,7 +112,7 @@ namespace RobotSim {
 
 
 
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.0001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -173,7 +182,7 @@ namespace RobotSim {
         private async void button1_Click(object sender,RoutedEventArgs e) {
             var m = new Majatnik();
             var v0 = m.Rebuild();
-            double dt = 0.1, t0 = 0, t1 = 10;
+            double dt = 0.1, t0 = 0, t1 = 100;
             double T = 2 * 3.14159 * Math.Sqrt(m.L / 9.8);
 double omega = 2 * 3.14159 / T;
             double A = m.X;

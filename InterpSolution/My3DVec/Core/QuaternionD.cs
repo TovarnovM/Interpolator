@@ -558,6 +558,8 @@ namespace Sharp3D.Math.Core
                     q = new QuaternionD(0,u.Y,-u.X,0);
                 else if(System.Math.Abs(u.Z) > 0.00000001)
                     q = new QuaternionD(0,0,-u.Z,u.Y);
+                else if(System.Math.Abs(u.Y) > 0.00000001)
+                    q = new QuaternionD(0,0,-u.Z,u.Y);
                 q.Normalize();
             }
             return q;

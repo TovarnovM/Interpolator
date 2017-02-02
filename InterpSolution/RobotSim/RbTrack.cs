@@ -113,15 +113,33 @@ namespace RobotSim {
         public IMaterialObject sk0, sk1;
         public IPosition3D p0_loc, p1_loc;
         public double k = 10000, mu = 100, x0 = 0;
-        public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1,Vector3D p0_loc,Vector3D p1_loc): this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc)) {
+        public ForceBetween2Points(
+            IMaterialObject sk0,
+            IMaterialObject sk1,
+            Vector3D p0_loc,
+            Vector3D p1_loc,
+            double k = 10000d,
+            double mu = 100d,
+            double x0 = 0d) : this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc),k,mu,x0) {
 
         }
-        public ForceBetween2Points(IMaterialObject sk0,IMaterialObject sk1, IPosition3D p0_loc, IPosition3D p1_loc) : base(0,new RelativePoint(1,0,0),null) {
+        public ForceBetween2Points(
+            IMaterialObject sk0,
+            IMaterialObject sk1, 
+            IPosition3D p0_loc, 
+            IPosition3D p1_loc, 
+            double k = 10000d, 
+            double mu = 100d, 
+            double x0 = 0d) : base(0,new RelativePoint(1,0,0),null) {
+
             this.sk0 = sk0;
             this.sk1 = sk1;
             this.p0_loc = p0_loc;
             this.p1_loc = p1_loc;
             AppPoint = new RelativePoint(0,0,0);
+            this.k = k;
+            this.mu = mu;
+            this.x0 = x0;
             SynchMeBefore += synchMeBeforeAct;
         }
 

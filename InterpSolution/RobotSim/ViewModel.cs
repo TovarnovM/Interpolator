@@ -11,7 +11,8 @@ using SimpleIntegrator;
 
 namespace RobotSim {
     public class ViewModel {
-        private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY;
+        private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY; 
+        List<LineSeries> wheelSerListXY, wheelSerListXZ, wheelSerListZY;
         List<LineSeries> allLineSer = new List<LineSeries>();
         //private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
 
@@ -23,21 +24,68 @@ namespace RobotSim {
 
         public VMPropRx<PlotModel,SolPoint> Model1Rx { get; private set; }
         public VMPropRx<List<SolPoint>,SolPoint> SolPointList { get; private set; }
-        RobotDynamics _curr4Draw;
+        RobotDynamics DrawDummy;
 
 
         public ViewModel() {
-            _curr4Draw = MainWindow.GetNewRD();
-            _curr4Draw.Rebuild();
+            CreateDrawDummy();
+            //=============================================
+            CreatePlotModels();
+            CreateAxis();
+            CreateBodyLineSer(OxyColors.Green);
+            CreateTrackLineSer(OxyColors.CadetBlue);
+            CreateWheelLineSer(OxyColors.Blue);
+        }
+
+        void CreateWheelLineSer(OxyColor color) {
+            wheelSerListXY = new List<LineSeries>();
+            wheelSerListXZ = new List<LineSeries>();
+            wheelSerListZY = new List<LineSeries>();
+            OxyColor[] cols = new OxyColor[] { OxyColors.Blue,OxyColors.BlueViolet,OxyColors.DarkOrange,OxyColors.Gray,OxyColors.Gold,OxyColors.MediumBlue,OxyColors.MediumTurquoise,OxyColors.OrangeRed };
+            int n = DrawDummy.wheels.Count;
+            for(int i = 0; i < n; i++) {
+                var wheelSerXY = new LineSeries() {
+                    Title = "Wheel № " + i.ToString(),
+                    // StrokeThickness = 2,
+                    Color = cols[i]
+                };
+                wheelSerListXY.Add(wheelSerXY);
+                ModelXY.Series.Add(wheelSerXY);
+                allLineSer.Add(wheelSerXY);
+
+                var wheelSerXZ = new LineSeries() {
+                    Title = "Wheel № " + i.ToString(),
+                    // StrokeThickness = 2,
+                    Color = cols[i]
+                };
+                wheelSerListXZ.Add(wheelSerXZ);
+                ModelXZ.Series.Add(wheelSerXZ);
+                allLineSer.Add(wheelSerXZ);
+
+                var wheelSerZY = new LineSeries() {
+                    Title = "Wheel № " + i.ToString(),
+                    // StrokeThickness = 2,
+                    Color = cols[i]
+                };
+                wheelSerListZY.Add(wheelSerZY);
+                ModelZY.Series.Add(wheelSerZY);
+                allLineSer.Add(wheelSerZY);
+            }
+
+        }
+
+        void CreateDrawDummy() {
+            DrawDummy = MainWindow.GetNewRD();
+            DrawDummy.Rebuild();
             Model1Rx = new VMPropRx<PlotModel,SolPoint>(
                 () => {
                     var Model1 = GetNewModel("params","X","Y");
-                  
+
                     return Model1;
 
                 },
                 (sp,pm) => {
-                    _curr4Draw.SynchMeTo(sp);
+                    DrawDummy.SynchMeTo(sp);
                     Draw(sp.T,pm);
                     return pm;
                 }
@@ -50,8 +98,13 @@ namespace RobotSim {
                     return lst;
                 });
 
-            //=============================================
+        }
+        void CreatePlotModels() {
             ModelXY = new PlotModel() { PlotType = PlotType.Cartesian };
+            ModelXZ = new PlotModel();// { PlotType = PlotType.Cartesian };
+            ModelZY = new PlotModel();// { PlotType = PlotType.Cartesian };
+        }
+        void CreateAxis() {
             var axisX_XY = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
                 MaximumPadding = 0,
@@ -70,8 +123,6 @@ namespace RobotSim {
             };
             ModelXY.Axes.Add(axisX_XY);
             ModelXY.Axes.Add(axisY_XY);
-
-            ModelXZ = new PlotModel();// { PlotType = PlotType.Cartesian };
             var axisX_XZ = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
                 MaximumPadding = 0,
@@ -88,13 +139,13 @@ namespace RobotSim {
                 MinimumPadding = 0,
                 MinorGridlineStyle = LineStyle.Dot,
                 Position = AxisPosition.Left//,
-               // Title = "Z"
+                                            // Title = "Z"
             };
             ModelXZ.Axes.Add(axisX_XZ);
             ModelXZ.Axes.Add(axisZ_XZ);
 
 
-            ModelZY = new PlotModel();// { PlotType = PlotType.Cartesian };
+
             var axisY_ZY = new LinearAxis() {
                 MajorGridlineStyle = LineStyle.Solid,
                 MaximumPadding = 0,
@@ -174,54 +225,55 @@ namespace RobotSim {
                 isInternalChangeZ = false;
             };
 
+        }
+        void CreateBodyLineSer(OxyColor color) {
             bSerXY = new LineSeries() {
                 Title = "Body",
                 // StrokeThickness = 2,
-                Color = OxyColors.Green
+                Color = color
             };
             ModelXY.Series.Add(bSerXY);
             bSerXZ = new LineSeries() {
                 Title = "Body",
                 //LabelFormatString = "{2}",
                 // StrokeThickness = 2,
-                Color = OxyColors.Green
+                Color = color
             };
             ModelXZ.Series.Add(bSerXZ);
             bSerZY = new LineSeries() {
                 Title = "Body",
                 // StrokeThickness = 2,
-                Color = OxyColors.Green
+                Color = color
             };
             ModelZY.Series.Add(bSerZY);
-
+            allLineSer.Add(bSerXY);
+            allLineSer.Add(bSerXZ);
+            allLineSer.Add(bSerZY);
+        }
+        void CreateTrackLineSer(OxyColor color) {
             t1SerXY = new LineSeries() {
                 Title = "Track1",
                 // StrokeThickness = 2,
-                Color = OxyColors.CadetBlue
+                Color = color
             };
             ModelXY.Series.Add(t1SerXY);
             t1SerXZ = new LineSeries() {
                 Title = "Track1",
                 // StrokeThickness = 2,
-                Color = OxyColors.CadetBlue
+                Color = color
             };
             ModelXZ.Series.Add(t1SerXZ);
             t1SerZY = new LineSeries() {
                 Title = "Track1",
                 // StrokeThickness = 2,
-                Color = OxyColors.CadetBlue
+                Color = color
             };
             ModelZY.Series.Add(t1SerZY);
 
-            allLineSer.Add(bSerXY);
-            allLineSer.Add(bSerXZ);
-            allLineSer.Add(bSerZY);
             allLineSer.Add(t1SerXY);
             allLineSer.Add(t1SerXZ);
             allLineSer.Add(t1SerZY);
         }
-
-
 
         public void Draw(double t,PlotModel pm) {
             foreach(var ls in allLineSer) {
@@ -232,13 +284,15 @@ namespace RobotSim {
             ModelXZ.Annotations.Clear();
             ModelZY.Annotations.Clear();
 
-            _curr4Draw.SynchMe(t);
+            DrawDummy.SynchMe(t);
 
 
             DrawBody();
             DrawBodyForces();
 
-            //DrawTrack1();
+            DrawTrack1();
+
+            DrawWheels();
 
             ModelXY.InvalidatePlot(true);
             ModelXZ.InvalidatePlot(true);
@@ -246,8 +300,47 @@ namespace RobotSim {
             //Thread.Sleep(1000);
         }
 
+        private void DrawWheels() {
+            for(int i = 0; i < DrawDummy.wheels.Count; i++) {
+                DrawOneWheel(DrawDummy.wheels[i],i);
+            }
+            //foreach(var w in DrawDummy.wheels) {
+            //    DrawOneWheel(w);
+            //}
+        }
+
+        private void DrawOneWheel(RbWheel w, int ind) {
+            foreach(var z in w.Zubya) {
+                DrawOneZub(w,z, ind);
+            }
+        }
+
+        private void DrawOneZub(RbWheel w,Vector3D z, int ind) {
+            var xAxisNorm = Vector3D.XAxis;
+            var yAxisNorm = Vector3D.YAxis;
+            var z0 = w.Vec3D;
+            var z1 = w.WorldTransform * z;
+
+            wheelSerListXY[ind].Points.Add(new DataPoint(double.NaN,double.NaN));                  
+            wheelSerListXY[ind].Points.Add(new DataPoint(z0 * xAxisNorm,z0 * yAxisNorm));
+            wheelSerListXY[ind].Points.Add(new DataPoint(z1 * xAxisNorm,z1 * yAxisNorm));
+
+
+            xAxisNorm = Vector3D.XAxis;
+            yAxisNorm = Vector3D.ZAxis;
+            wheelSerListXZ[ind].Points.Add(new DataPoint(double.NaN,double.NaN));
+            wheelSerListXZ[ind].Points.Add(new DataPoint(z0 * xAxisNorm,z0 * yAxisNorm));
+            wheelSerListXZ[ind].Points.Add(new DataPoint(z1 * xAxisNorm,z1 * yAxisNorm));
+
+            xAxisNorm = Vector3D.ZAxis;
+            yAxisNorm = Vector3D.YAxis;
+            wheelSerListZY[ind].Points.Add(new DataPoint(double.NaN,double.NaN));
+            wheelSerListZY[ind].Points.Add(new DataPoint(z0 * xAxisNorm,z0 * yAxisNorm));
+            wheelSerListZY[ind].Points.Add(new DataPoint(z1 * xAxisNorm,z1 * yAxisNorm));
+        }
+
         private void DrawTrack1() {
-            foreach(var track in _curr4Draw.tDummy.Tracks) {
+            foreach(var track in DrawDummy.Tracks) {
                 DrawOneTrack(track);
             }
         }
@@ -279,28 +372,40 @@ namespace RobotSim {
         }
 
         private void DrawBodyForces() {
-            foreach(var force in _curr4Draw.Body.Forces) {
-                DrawForce(force, _curr4Draw.Body, Vector3D.XAxis, Vector3D.YAxis,ModelXY, OxyColors.Red);
-                DrawForce(force,_curr4Draw.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Red);
-                DrawForce(force,_curr4Draw.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Red);
+            foreach(var force in DrawDummy.Body.Forces) {
+                DrawForce(force, DrawDummy.Body, Vector3D.XAxis, Vector3D.YAxis,ModelXY, OxyColors.Red);
+                DrawForce(force,DrawDummy.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Red);
+                DrawForce(force,DrawDummy.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Red);
             }
 
-            foreach(var moment in _curr4Draw.Body.Moments) {
-                DrawForce(moment,_curr4Draw.Body,Vector3D.XAxis,Vector3D.YAxis,ModelXY,OxyColors.Blue);
-                DrawForce(moment,_curr4Draw.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Blue);
-                DrawForce(moment,_curr4Draw.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Blue);
+            foreach(var moment in DrawDummy.Body.Moments) {
+                DrawForce(moment,DrawDummy.Body,Vector3D.XAxis,Vector3D.YAxis,ModelXY,OxyColors.Blue);
+                DrawForce(moment,DrawDummy.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Blue);
+                DrawForce(moment,DrawDummy.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Blue);
+            }
+
+            foreach(var force in DrawDummy.Body.ForcesNegative) {
+                DrawForce(force,DrawDummy.Body,Vector3D.XAxis,Vector3D.YAxis,ModelXY,OxyColors.Red,-1);
+                DrawForce(force,DrawDummy.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Red,-1);
+                DrawForce(force,DrawDummy.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Red,-1);
+            }
+
+            foreach(var moment in DrawDummy.Body.MomentsNegative) {
+                DrawForce(moment,DrawDummy.Body,Vector3D.XAxis,Vector3D.YAxis,ModelXY,OxyColors.Blue,-1);
+                DrawForce(moment,DrawDummy.Body,Vector3D.XAxis,Vector3D.ZAxis,ModelXZ,OxyColors.Blue,-1);
+                DrawForce(moment,DrawDummy.Body,Vector3D.ZAxis,Vector3D.YAxis,ModelZY,OxyColors.Blue,-1);
             }
         }
 
 
 
-        private void DrawForce(Force force, IOrient3D toBody,Vector3D xAxisNorm,Vector3D yAxisNorm, PlotModel m, OxyColor color) {          
+        private void DrawForce(Force force, IOrient3D toBody,Vector3D xAxisNorm,Vector3D yAxisNorm, PlotModel m, OxyColor color, int neg = 1) {          
             double x1 = force.AppPoint == null
                 ? toBody.Vec3D * xAxisNorm
-                : force.AppPoint.Vec3D_World * xAxisNorm;
+                : force.AppPoint.Vec3D_World * xAxisNorm * neg;
             double y1 = force.AppPoint == null
                 ? toBody.Vec3D * yAxisNorm
-                : force.AppPoint.Vec3D_World * yAxisNorm;
+                : force.AppPoint.Vec3D_World * yAxisNorm * neg;
 
             double x2 = force.Vec3D_Dir_World * xAxisNorm * ForceMashtab + x1;
             double y2 = force.Vec3D_Dir_World * yAxisNorm * ForceMashtab + y1;
@@ -323,20 +428,20 @@ namespace RobotSim {
             var xAxisNorm = Vector3D.XAxis;
             var yAxisNorm = Vector3D.YAxis;
             bSerXY.Points.Add(new DataPoint(double.NaN,double.NaN));
-            bSerXY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
-            bSerXY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
+            bSerXY.Points.Add(new DataPoint(DrawDummy.GetUgol(i0) * xAxisNorm,DrawDummy.GetUgol(i0) * yAxisNorm));
+            bSerXY.Points.Add(new DataPoint(DrawDummy.GetUgol(i1) * xAxisNorm,DrawDummy.GetUgol(i1) * yAxisNorm));
 
             xAxisNorm = Vector3D.XAxis;
             yAxisNorm = Vector3D.ZAxis;
             bSerXZ.Points.Add(new DataPoint(double.NaN,double.NaN));
-            bSerXZ.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
-            bSerXZ.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
+            bSerXZ.Points.Add(new DataPoint(DrawDummy.GetUgol(i0) * xAxisNorm,DrawDummy.GetUgol(i0) * yAxisNorm));
+            bSerXZ.Points.Add(new DataPoint(DrawDummy.GetUgol(i1) * xAxisNorm,DrawDummy.GetUgol(i1) * yAxisNorm));
 
             xAxisNorm = Vector3D.ZAxis;
             yAxisNorm = Vector3D.YAxis;
             bSerZY.Points.Add(new DataPoint(double.NaN,double.NaN));
-            bSerZY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i0) * xAxisNorm,_curr4Draw.GetUgol(i0) * yAxisNorm));
-            bSerZY.Points.Add(new DataPoint(_curr4Draw.GetUgol(i1) * xAxisNorm,_curr4Draw.GetUgol(i1) * yAxisNorm));
+            bSerZY.Points.Add(new DataPoint(DrawDummy.GetUgol(i0) * xAxisNorm,DrawDummy.GetUgol(i0) * yAxisNorm));
+            bSerZY.Points.Add(new DataPoint(DrawDummy.GetUgol(i1) * xAxisNorm,DrawDummy.GetUgol(i1) * yAxisNorm));
         }
         void DrawBody() {
             DrawLineBody(0,1);
