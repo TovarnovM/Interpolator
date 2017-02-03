@@ -218,11 +218,17 @@ namespace SimpleIntegrator {
             return m;
         }
 
-        public static Force GetForce(Vector3D force, IOrient3D skDir, Vector3D appPoint, IOrient3D skAppPoint) {
+        public static Force GetForce(double val, Vector3D direction, IOrient3D skDir, Vector3D appPoint, IOrient3D skAppPoint) {
+            var dir = new RelativePoint(direction,skDir,"direction");
+            var appP = new RelativePoint(appPoint,skAppPoint,"appPoint");
+            return new Force(val,dir,appP) { Name = "force"};
+        }
+
+        public static Force GetForce(Vector3D force,IOrient3D skDir,Vector3D appPoint,IOrient3D skAppPoint) {
             var val = force.GetLength();
             var dir = new RelativePoint(force,skDir,"direction");
             var appP = new RelativePoint(appPoint,skAppPoint,"appPoint");
-            return new Force(val,dir,appP) { Name = "force"};
+            return new Force(val,dir,appP) { Name = "force" };
         }
 
     }

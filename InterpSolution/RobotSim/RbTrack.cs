@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace RobotSim {
     public class RbTrack: MaterialObjectNewton {
         public double W, L, H;
-        public Vector3D[] ConnP = new Vector3D[4];
+        public Vector3D[] ConnP = new Vector3D[6];
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3D GetConnPVelWorld(int index) {
              return WorldTransformRot * (Omega.Vec3D & ConnP[index])+ Vel.Vec3D;        
@@ -93,16 +93,32 @@ namespace RobotSim {
             res.ConnP[2] = new Vector3D(-0.5 * shagConnL,connH,-0.5 * w);
             res.ConnP[3] = new Vector3D(-0.5 * shagConnL,connH,0.5 * w);
 
+            res.ConnP[4] = new Vector3D(0L,connH*2,-0.333 * w);
+            res.ConnP[5] = new Vector3D(0,connH*2,0.333 * w);
+
             res.Mass.Value = mass;
             res.Mass3D.Ix = mass * (w * w + h * h) / 12d;
             res.Mass3D.Iy = mass * (w * w + l * l) / 12d;
             res.Mass3D.Iz = mass * (l * l + h * h) / 12d;
+
+
+            res.ForceFromWheel4 = Force.GetForce(0d,new Vector3D(1,0,0),null,res.ConnP[4],res);
+            res.ForceFromWheel5 = Force.GetForce(0d,new Vector3D(1,0,0),null,res.ConnP[5],res);
+            res.AddForce(res.ForceFromWheel4);
+            res.AddForce(res.ForceFromWheel5);
             return res;
 
         }
         public static RbTrack GetFlat(double w = 0.02,double l = 0.005,double mass = 0.037) {
             return GetStandart(w,l,0,l,0,mass);
         }
+        #region Силы с колесами
+        public Force ForceFromWheel4, ForceFromWheel5;
+
+
+
+
+        #endregion
 
     }
 

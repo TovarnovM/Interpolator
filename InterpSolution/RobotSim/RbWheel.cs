@@ -21,6 +21,7 @@ namespace RobotSim {
 
         public int n_shag;
         public Vector3D[] Zubya, Zubya_n;
+        public Force[] ForcesFromTracks;
         public double gamma;
 
         public Force MomentX;
@@ -56,6 +57,12 @@ namespace RobotSim {
             for(int i = 0; i < n; i++) {
                 Zubya[i] = new Vector3D(0,R * Math.Cos(gamma * i),R * Math.Sin(gamma * i));
                 Zubya_n[i] = new Vector3D(0,Math.Cos(gamma * i + Math.PI/2),Math.Sin(gamma * i + Math.PI / 2));
+            }
+
+            ForcesFromTracks = new Force[2 * n];
+            for(int i = 0; i < n; i++) {
+                ForcesFromTracks[2 * i] = Force.GetForce(0d,new Vector3D(1,0,0),null,new Vector3D(1,0,0),null);
+                ForcesFromTracks[2 * i+1] = Force.GetForce(0d,new Vector3D(1,0,0),null,new Vector3D(1,0,0),null);
             }
 
             Mass3D.Ix = mass * R * R / 2;
