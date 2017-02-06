@@ -36,7 +36,7 @@ namespace RobotSim {
             double mass,
             double H_wheel, 
             double H_zac,
-            double kR = 1E3, 
+            double kR = 1E7, 
             double muR = 1E2,
             double kH = 1E3,
             double muH = 1E2) :base("Wheel") 
@@ -81,7 +81,7 @@ namespace RobotSim {
             int n = 11;
             double r_real = 0.015;
             double R_ideal = 0.0105 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
-            var mass = 100;//PI * r_real * r_real * 0.021 * 1080;
+            var mass = PI * r_real * r_real * 0.021 * 1080*10;
             var res = new RbWheel(n,R_ideal,R_ideal + 0.002,mass,0.002242,0.009 / 4);
             res.Mass.Value = mass;
             return res;
@@ -142,7 +142,7 @@ namespace RobotSim {
             var localPoint = worldTransform_1 * globalPoint;
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();
-            if(rp > R_max || Abs(localPoint.X) > H_wheel * 0.5)
+            if(rp > R || Abs(localPoint.X) > H_wheel * 0.5)
                 return Vector3D.Zero;
 
             int closestInd = GetClosestInd(localPoint);

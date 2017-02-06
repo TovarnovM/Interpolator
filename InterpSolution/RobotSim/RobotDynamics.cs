@@ -34,7 +34,7 @@ namespace RobotSim {
             Body.Mass.Value = 0.5;
             Body.Name = "Body";
             AddChild(Body);
-            Body.SynchMeBefore += UpdateWheelTrackInteraction;
+            SynchMeBefore += UpdateWheelTrackInteraction;
             //Body.SynchMeBefore += SynchWheelsToBodyPos;
 
             //FloorForce = new ForceCenter(1,new Position3D(0,1,0),null);

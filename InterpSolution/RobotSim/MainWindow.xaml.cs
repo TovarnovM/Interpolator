@@ -62,10 +62,11 @@ namespace RobotSim {
             //    new Vector3D(0.1,0,0),null,
             //    new Vector3D(0,0,0),sol.Body);
 
-            //double moment = 0.1;
+            //double moment = 1;
             //foreach(var w in sol.wheels) {
             //    w.MomentX.Value = moment;
             //    moment += moment;
+            //    break;
             //}
 
             //sol.Body.AddForce(f1);

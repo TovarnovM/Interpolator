@@ -98,7 +98,7 @@ namespace RobotSim {
 
         }
 
-        public static void ConnectTracks(RbTrack tr1, RbTrack tr2, int indMe0, int indTo0, int indMe1, int indTo1, double k = 1d, double mu = 10d) {
+        public static void ConnectTracks(RbTrack tr1, RbTrack tr2, int indMe0, int indTo0, int indMe1, int indTo1, double k = 10000d, double mu = 10d) {
             var f0_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe0],tr2.ConnP[indTo0],k,mu);
             var f1_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe1],tr2.ConnP[indTo1],k,mu);
             tr1.AddForce(f0_1);
