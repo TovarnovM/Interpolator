@@ -155,7 +155,7 @@ namespace RobotSim {
 
         #region Насаживаем Колеса
         public double L_osi = 0.02;
-        public void ConnectWheelToBody(RbWheel wheel, double k = 10000, double mu= 100) {
+        public void ConnectWheelToBody(RbWheel wheel, double k = 100000, double mu= 100) {
             var p0_wheel_loc = new Vector3D(0,0,0);
             var p1_wheel_loc = p0_wheel_loc + Vector3D.XAxis * L_osi;
             var p1_body_loc = wheel.p0_body_loc + wheel.n0_body_loc * L_osi;
