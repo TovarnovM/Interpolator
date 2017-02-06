@@ -51,6 +51,12 @@ namespace SimpleIntegrator {
         public MaterialPointNewton(string name = DEFNAME) : this(0d,0d,0d,name) { }
 
         public virtual void NewtonLaw(double t) {
+            var fsummWorld = ForceWorldSumm(t);
+            UpdateAcc(fsummWorld);
+            
+        }
+
+        public Vector3D ForceWorldSumm(double t) {
             Vector3D fsumm = Vector3D.Zero;
             foreach(var force in Forces) {
                 fsumm += force.Vec3D_Dir_World;
@@ -58,7 +64,11 @@ namespace SimpleIntegrator {
             foreach(var force in ForcesNegative) {
                 fsumm -= force.Vec3D_Dir_World;
             }
-            Acc.Vec3D = fsumm / Mass.Value;
+            return fsumm;
+        }
+
+        public void UpdateAcc(Vector3D forceWorldSumm) {
+            Acc.Vec3D = forceWorldSumm / Mass.Value;
         }
 
         public virtual void AddForce(Force force) {
@@ -121,7 +131,13 @@ namespace SimpleIntegrator {
         public MaterialObjectNewton(string name = DEFNAME) : this(0d,0d,0d,name) { }
 
         public override void NewtonLaw(double t) {
-            base.NewtonLaw(t);
+            var fsummWorld = ForceWorldSumm(t);
+            UpdateAcc(fsummWorld);
+            var momSumLocal = WorldTransformRot_1 * GetMomentsWorldSum(t);
+            UpdatedQdt(momSumLocal);
+        }
+
+        public Vector3D GetMomentsWorldSum(double t) {
             var momSum = Vector3D.Zero;
             foreach(var mom in Moments) {
                 momSum += mom.Vec3D_Dir_World;
@@ -135,11 +151,12 @@ namespace SimpleIntegrator {
             foreach(var force in ForcesNegative) {
                 momSum += force.GetMoment_World(Vec3D);
             }
-
-            momSum = WorldTransformRot_1 * momSum;
+            return momSum;
+        }
+        public void UpdatedQdt(Vector3D momSumLocal) {
             var om = Omega.Vec3D;
-            Eps.Vec3D = Mass3D.TensorInverse* (momSum - Vector3D.CrossProduct(om,Mass3D.Tensor * om));
-            dQWdt =-0.5 * (om.X * Qx + om.Y * Qy + om.Z * Qz);
+            Eps.Vec3D = Mass3D.TensorInverse * (momSumLocal - Vector3D.CrossProduct(om,Mass3D.Tensor * om));
+            dQWdt = -0.5 * (om.X * Qx + om.Y * Qy + om.Z * Qz);
             dQXdt = 0.5 * (om.X * Qw - om.Y * Qz + om.Z * Qy);
             dQYdt = 0.5 * (om.Y * Qw - om.Z * Qx + om.X * Qz);
             dQZdt = 0.5 * (om.Z * Qw - om.X * Qy + om.Y * Qx);

@@ -205,25 +205,25 @@ namespace RobotSim {
                 isInternalChangeY = false;
             };
 
-            bool isInternalChangeZ = false;
-            axisZ_ZY.AxisChanged += (s,e) => {
-                if(isInternalChangeZ) {
-                    return;
-                }
-                isInternalChangeZ = true;
-                axisZ_XZ.Zoom(axisZ_ZY.ActualMinimum,axisZ_ZY.ActualMaximum);
-                this.ModelXZ.InvalidatePlot(false);
-                isInternalChangeZ = false;
-            };
-            axisZ_XZ.AxisChanged += (s,e) => {
-                if(isInternalChangeZ) {
-                    return;
-                }
-                isInternalChangeZ = true;
-                axisZ_ZY.Zoom(axisZ_XZ.ActualMinimum,axisZ_XZ.ActualMaximum);
-                this.ModelZY.InvalidatePlot(false);
-                isInternalChangeZ = false;
-            };
+            //bool isInternalChangeZ = false;
+            //axisZ_ZY.AxisChanged += (s,e) => {
+            //    if(isInternalChangeZ) {
+            //        return;
+            //    }
+            //    isInternalChangeZ = true;
+            //    axisZ_XZ.Zoom(axisZ_ZY.ActualMinimum,axisZ_ZY.ActualMaximum);
+            //    this.ModelXZ.InvalidatePlot(false);
+            //    isInternalChangeZ = false;
+            //};
+            //axisZ_XZ.AxisChanged += (s,e) => {
+            //    if(isInternalChangeZ) {
+            //        return;
+            //    }
+            //    isInternalChangeZ = true;
+            //    axisZ_ZY.Zoom(axisZ_XZ.ActualMinimum,axisZ_XZ.ActualMaximum);
+            //    this.ModelZY.InvalidatePlot(false);
+            //    isInternalChangeZ = false;
+            //};
 
         }
         void CreateBodyLineSer(OxyColor color) {

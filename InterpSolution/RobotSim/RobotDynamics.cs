@@ -12,13 +12,14 @@ namespace RobotSim {
     public class RobotDynamics: ScnObjDummy {
 
         public MaterialObjectNewton Body { get; set; } = new MaterialObjectNewton();
-        public double l, h, w;
+        public double _l, _h, _w;
         public Vector3D CenterPosOtnCM;
         public List<RbWheel> wheels = new List<RbWheel>(4);
 
         public TracksDummy tDummy { get; set; } = new TracksDummy(0);
-        public List<RbTrack> Tracks1 { get; set; } = new List<RbTrack>();
-        public List<RbTrack> Tracks2 { get; set; } = new List<RbTrack>();
+        public List<RbTrack> Tracks1  = new List<RbTrack>();
+        public List<RbTrack> Tracks2  = new List<RbTrack>();
+        public List<RbTrack> TracksAll = new List<RbTrack>();
         public RbSurfFloor floor;
 
 
@@ -26,36 +27,58 @@ namespace RobotSim {
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
         const string DEFNAME = "Enviroment";
         public RobotDynamics(string name = DEFNAME) :base(name) {
-            l = 0.2; //x
-            h = 0.05;//y
-            w = 0.1;//z
+            _l = 0.2; //x
+            _h = 0.05;//y
+            _w = 0.1;//z
             CenterPosOtnCM = new Vector3D(0,0,0);
             Body.Mass.Value = 0.5;
             Body.Name = "Body";
             AddChild(Body);
+            Body.SynchMeBefore += UpdateWheelTrackInteraction;
             //Body.SynchMeBefore += SynchWheelsToBodyPos;
 
             //FloorForce = new ForceCenter(1,new Position3D(0,1,0),null);
             //Body.AddForce(FloorForce);
             SynchMassGeometry();
 
-            
 
-            //double moment = 0.1;
-            //foreach(var w in wheels) {
-            //    Body.AddChild(w);
-            //    w.Mx = moment;
-            //    moment += moment;
-            //}
 
-            
+
+
+
         }
 
 
         public void SynchMassGeometry() {
-            Body.Mass3D.Iz = Body.Mass.Value * (h * h + l * l) / 12d;
-            Body.Mass3D.Iy = Body.Mass.Value * (w * w + l * l) / 12d;
-            Body.Mass3D.Ix = Body.Mass.Value * (h * h + w * w) / 12d;
+            Body.Mass3D.Iz = Body.Mass.Value * (_h * _h + _l * _l) / 12d;
+            Body.Mass3D.Iy = Body.Mass.Value * (_w * _w + _l * _l) / 12d;
+            Body.Mass3D.Ix = Body.Mass.Value * (_h * _h + _w * _w) / 12d;
+        }
+
+        public void UpdateWheelTrackInteraction(double t) {
+            foreach(var w in wheels) {
+                foreach(var fn in w.ForcesFromTracksNegative) {
+                    w.ForcesNegative.Remove(fn);
+                }
+                w.ForcesFromTracksNegative.Clear();
+                w.SynchQandM();
+            }
+            foreach(var tr in TracksAll) {
+                tr.ForceFromWheel4.Value = 0d;
+                tr.ForceFromWheel5.Value = 0d;
+                tr.SynchQandM();
+            }
+
+            foreach(var tr in TracksAll) {
+                tr.UpdateForcesInteracktWheels(t);
+            }
+
+            foreach(var w in wheels) {
+                foreach(var f_neg in w.ForcesFromTracksNegative) {
+                    int num = w.ForcesNegative.Count;
+                    w.ForcesNegative.Add(f_neg);
+                }
+            }
         }
 
         public void CreateWheels() {
@@ -67,16 +90,16 @@ namespace RobotSim {
             }
             var trackw05 = 0.01;
             wheels[0].n0_body_loc = Vector3D.ZAxis;
-            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * h / 4 + wheels[0].n0_body_loc * trackw05;
+            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * _h / 4 + wheels[0].n0_body_loc * trackw05;
             
             wheels[1].n0_body_loc = Vector3D.ZAxis;
-            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * h / 4 + wheels[1].n0_body_loc* trackw05;
+            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * _h / 4 + wheels[1].n0_body_loc* trackw05;
             
             wheels[2].n0_body_loc = -Vector3D.ZAxis;
-            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * h / 4 + wheels[2].n0_body_loc * trackw05;
+            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * _h / 4 + wheels[2].n0_body_loc * trackw05;
 
             wheels[3].n0_body_loc = -Vector3D.ZAxis;
-            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * h / 4 + wheels[3].n0_body_loc * trackw05;
+            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * _h / 4 + wheels[3].n0_body_loc * trackw05;
 
 
             foreach(var w in wheels) {
@@ -102,38 +125,37 @@ namespace RobotSim {
         public Vector3D GetUgolLocal(int ugolInd) {
             switch(ugolInd) {
                 case 0: {
-                    return (new Vector3D(-l / 2,-h / 2,w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(-_l / 2,-_h / 2,_w / 2) + CenterPosOtnCM);
                 }
                 case 1: {
-                    return (new Vector3D(l / 2,-h / 2,w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(_l / 2,-_h / 2,_w / 2) + CenterPosOtnCM);
                 }
                 case 2: {
-                    return (new Vector3D(l / 2,-h / 2,-w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(_l / 2,-_h / 2,-_w / 2) + CenterPosOtnCM);
                 }
                 case 3: {
-                    return (new Vector3D(-l / 2,-h / 2,-w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(-_l / 2,-_h / 2,-_w / 2) + CenterPosOtnCM);
                 }
                 case 4: {
-                    return (new Vector3D(-l / 2,h / 2,w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(-_l / 2,_h / 2,_w / 2) + CenterPosOtnCM);
                 }
                 case 5: {
-                    return (new Vector3D(l / 2,h / 2,w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(_l / 2,_h / 2,_w / 2) + CenterPosOtnCM);
                 }
                 case 6: {
-                    return (new Vector3D(l / 2,h / 2,-w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(_l / 2,_h / 2,-_w / 2) + CenterPosOtnCM);
                 }
                 case 7: {
-                    return (new Vector3D(-l / 2,h / 2,-w / 2) + CenterPosOtnCM);
+                    return (new Vector3D(-_l / 2,_h / 2,-_w / 2) + CenterPosOtnCM);
                 }
                 default:
                 return CenterPosOtnCM;
-
             }
         }
 
         #region Насаживаем Колеса
         public double L_osi = 0.02;
-        public void ConnectWheelToBody(RbWheel wheel, double k = 100, double mu= 100) {
+        public void ConnectWheelToBody(RbWheel wheel, double k = 10000, double mu= 100) {
             var p0_wheel_loc = new Vector3D(0,0,0);
             var p1_wheel_loc = p0_wheel_loc + Vector3D.XAxis * L_osi;
             var p1_body_loc = wheel.p0_body_loc + wheel.n0_body_loc * L_osi;
@@ -180,18 +202,28 @@ namespace RobotSim {
                 new Vector3D(0,1,0),w2.Vec3D + Body.WorldTransformRot * Vector3D.YAxis,
                 new Vector3D(0,0,0),new Vector3D(1,0,0));
             int n = w1.n_shag / 2;
+            w1.SynchQandM();
+            w2.SynchQandM();
+
+
             return (w1.WorldTransform * w1.Zubya[0] - w2.WorldTransform * w2.Zubya[n]).GetLength();
         }
 
         public void CreateTracks() {
             Tracks1 = GetTracks(wheels[0],wheels[1]);
             foreach(var t in Tracks1) {
-                AddChild(t);
+                t.WheelsInteractsWithMe.Add(wheels[0]);
+                t.WheelsInteractsWithMe.Add(wheels[1]);
+                Body.AddChild(t);
             }
-            Tracks2 = GetTracks(wheels[2],wheels[3]);
-            foreach(var t in Tracks2) {
-                AddChild(t);
-            }
+            //Tracks2 = GetTracks(wheels[2],wheels[3]);
+            //foreach(var t in Tracks2) {
+
+            //    t.WheelsInteractsWithMe.Add(wheels[2]);
+            //    t.WheelsInteractsWithMe.Add(wheels[3]);
+            //    Body.AddChild(t);
+            //}
+            TracksAll = Tracks1.Concat(Tracks2).ToList();
         }
 
         public void CreateTrackDummy(int n = 11) {

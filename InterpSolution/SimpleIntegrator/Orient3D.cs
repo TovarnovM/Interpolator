@@ -142,7 +142,9 @@ namespace SimpleIntegrator {
                 return worldTransform;
             }
         }
-
+        /// <summary>
+        /// матрица перехода из МИРОВОЙ СК в локальную СК
+        /// </summary>
         public Matrix4D WorldTransform_1 {
             get {
                 return worldTransform_1;

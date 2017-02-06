@@ -31,6 +31,7 @@
                     <Slider x:Name="slider" VerticalAlignment="Top" Grid.Row="2" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.ColumnSpan="2" />
                     <Button x:Name="button_Save" Content="Save" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Save_Click_1"/>
                     <Button x:Name="button_Copy1" Content="Load" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="300,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click_1" Grid.ColumnSpan="2"/>
+                    <Button x:Name="button_Copy" Content="4 tests" Grid.Row="2" HorizontalAlignment="Left" Width="78" Height="21" VerticalAlignment="Bottom" Grid.Column="1" Margin="145,0,0,1" Click="button_Copy_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

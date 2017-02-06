@@ -37,10 +37,10 @@ namespace RobotSim {
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
 
-            sol.Body.Vec3D = new Vector3D(11,11,-2);
-            sol.Body.SynchQandM();
-            sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
-            sol.Body.SynchQandM();
+            //sol.Body.Vec3D = new Vector3D(11,11,-2);
+            //sol.Body.SynchQandM();
+            //sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
+            //sol.Body.SynchQandM();
 
             sol.CreateWheels();
             sol.SynchWheelsToBodyPos();
@@ -61,6 +61,12 @@ namespace RobotSim {
             //var f2 = Force.GetForce(
             //    new Vector3D(0.1,0,0),null,
             //    new Vector3D(0,0,0),sol.Body);
+
+            //double moment = 0.1;
+            //foreach(var w in sol.wheels) {
+            //    w.MomentX.Value = moment;
+            //    moment += moment;
+            //}
 
             //sol.Body.AddForce(f1);
             //sol.Body.AddForce(f2);
@@ -110,15 +116,15 @@ namespace RobotSim {
             var dt = 0.00001;
 
 
-            //var s = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).SolveFromToStep(0,1,0.01);
+            //var s = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).SolveFromTo(0,0.01);
             //foreach(var ss in s) {
             //    int f = 11;
-               
+
             //}
 
 
 
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -219,5 +225,20 @@ double omega = 2 * 3.14159 / T;
                 return answ;
             });
          }
+
+        private void button_Copy_Click(object sender,RoutedEventArgs e) {
+            var prT = GetNewRD();
+            v0 = prT.Rebuild(prT.TimeSynch);
+            var names = prT.GetDiffPrms().Select(dp => dp.FullName).ToList();
+            var dt = 0.0001;
+
+
+            var s = Ode.RK45(prT.TimeSynch,v0,prT.f,dt).SolveFromTo(0,0.01);
+            foreach(var ss in s) {
+                int f = 11;
+
+            }
+
+        }
     }
 }

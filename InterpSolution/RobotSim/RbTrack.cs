@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 namespace RobotSim {
     public class RbTrack: MaterialObjectNewton {
         public double W, L, H;
-        public Vector3D[] ConnP = new Vector3D[6];
+        public Vector3D[] ConnP = new Vector3D[7];
+        public List<RbWheel> WheelsInteractsWithMe = new List<RbWheel>();
+        public Force ForceFromWheel4, ForceFromWheel5 ,ForceFromWheel6;
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3D GetConnPVelWorld(int index) {
              return WorldTransformRot * (Omega.Vec3D & ConnP[index])+ Vel.Vec3D;        
@@ -69,19 +71,46 @@ namespace RobotSim {
             //SynchQandM();
         }
 
-        public static void ConnectTracks(RbTrack tr1, RbTrack tr2, int indMe0, int indTo0, int indMe1, int indTo1) {
-            var f0_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe0],tr2.ConnP[indTo0]);
-            var f1_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe1],tr2.ConnP[indTo1]);
+        public void UpdateForcesInteracktWheels(double t) {
+            foreach(var w in WheelsInteractsWithMe) {
+                InteractWithWheel(w,ForceFromWheel4);
+                InteractWithWheel(w,ForceFromWheel5);
+                InteractWithWheel(w,ForceFromWheel6,false);
+            }
+        }
+
+        void InteractWithWheel(RbWheel w, Force forceFromWheelField, bool RH = true) {
+            var trP = forceFromWheelField.AppPoint.Vec3D_World;
+            if(w.HasInteraction(trP)) {
+                Vector3D f;
+                if(RH) {
+                    f = w.WorldTransformRot * w.GetLocalR_wheelForce(trP);
+                    
+                } else {
+                    f = w.WorldTransformRot * w.GetLocalKTauForce(trP);
+                    f += w.WorldTransformRot * w.GetLocalH_wheelForce(trP);
+                }
+
+                forceFromWheelField.Value = f.GetLength();
+                forceFromWheelField.Direction.Vec3D = f;
+                w.ForcesFromTracksNegative.Add(forceFromWheelField);
+            }
+
+        }
+
+        public static void ConnectTracks(RbTrack tr1, RbTrack tr2, int indMe0, int indTo0, int indMe1, int indTo1, double k = 1d, double mu = 10d) {
+            var f0_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe0],tr2.ConnP[indTo0],k,mu);
+            var f1_1 = new ForceBetween2Points(tr1,tr2,tr1.ConnP[indMe1],tr2.ConnP[indTo1],k,mu);
             tr1.AddForce(f0_1);
             tr1.AddForce(f1_1);
 
-            var f0_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo0],tr1.ConnP[indMe0]);
-            var f1_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo1],tr1.ConnP[indMe1]);
+            var f0_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo0],tr1.ConnP[indMe0],k,mu);
+            var f1_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo1],tr1.ConnP[indMe1],k,mu);
             tr2.AddForce(f0_2);
             tr2.AddForce(f1_2);
         }
 
-        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00125, double mass = 0.037) {
+        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00d, double mass = 0.037) {
             var res = new RbTrack() {
                 W = w,
                 L = l,
@@ -95,6 +124,7 @@ namespace RobotSim {
 
             res.ConnP[4] = new Vector3D(0L,connH*2,-0.333 * w);
             res.ConnP[5] = new Vector3D(0,connH*2,0.333 * w);
+            res.ConnP[6] = new Vector3D(0,connH * 2,0);
 
             res.Mass.Value = mass;
             res.Mass3D.Ix = mass * (w * w + h * h) / 12d;
@@ -104,8 +134,10 @@ namespace RobotSim {
 
             res.ForceFromWheel4 = Force.GetForce(0d,new Vector3D(1,0,0),null,res.ConnP[4],res);
             res.ForceFromWheel5 = Force.GetForce(0d,new Vector3D(1,0,0),null,res.ConnP[5],res);
+            res.ForceFromWheel6 = Force.GetForce(0d,new Vector3D(1,0,0),null,res.ConnP[6],res);
             res.AddForce(res.ForceFromWheel4);
             res.AddForce(res.ForceFromWheel5);
+            res.AddForce(res.ForceFromWheel6);
             return res;
 
         }
@@ -113,7 +145,7 @@ namespace RobotSim {
             return GetStandart(w,l,0,l,0,mass);
         }
         #region Силы с колесами
-        public Force ForceFromWheel4, ForceFromWheel5;
+        
 
 
 
@@ -128,13 +160,13 @@ namespace RobotSim {
     public class ForceBetween2Points : Force {
         public IMaterialObject sk0, sk1;
         public IPosition3D p0_loc, p1_loc;
-        public double k = 10000, mu = 100, x0 = 0;
+        public double k = 100, mu = 100, x0 = 0;
         public ForceBetween2Points(
             IMaterialObject sk0,
             IMaterialObject sk1,
             Vector3D p0_loc,
             Vector3D p1_loc,
-            double k = 10000d,
+            double k = 1000d,
             double mu = 100d,
             double x0 = 0d) : this(sk0,sk1,new Position3D(p0_loc), new Position3D(p1_loc),k,mu,x0) {
 
@@ -144,7 +176,7 @@ namespace RobotSim {
             IMaterialObject sk1, 
             IPosition3D p0_loc, 
             IPosition3D p1_loc, 
-            double k = 10000d, 
+            double k = 1000d, 
             double mu = 100d, 
             double x0 = 0d) : base(0,new RelativePoint(1,0,0),null) {
 
