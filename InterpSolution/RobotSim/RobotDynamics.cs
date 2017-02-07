@@ -14,13 +14,13 @@ namespace RobotSim {
         public MaterialObjectNewton Body { get; set; } = new MaterialObjectNewton();
         public double _l, _h, _w;
         public Vector3D CenterPosOtnCM;
-        public List<RbWheel> wheels = new List<RbWheel>(4);
+        public List<RbWheel> wheels = new List<RbWheel>(6);
 
         public TracksDummy tDummy { get; set; } = new TracksDummy(0);
         public List<RbTrack> Tracks1  = new List<RbTrack>();
         public List<RbTrack> Tracks2  = new List<RbTrack>();
         public List<RbTrack> TracksAll = new List<RbTrack>();
-        public RbSurfFloor floor;
+        public List<IRbSurf> surfs = new List<IRbSurf>();
 
 
 
@@ -55,6 +55,17 @@ namespace RobotSim {
             Body.Mass3D.Ix = Body.Mass.Value * (_h * _h + _w * _w) / 12d;
         }
 
+        public void AddSurf(IRbSurf surf, bool connectTracks = true) {
+            surfs.Add(surf);
+            if(connectTracks) {
+                foreach(var tr in TracksAll) {
+                    tr.AddSurf(surf);
+                }
+            }
+            
+
+        }
+
         public void UpdateWheelTrackInteraction(double t) {
             foreach(var w in wheels) {
                 foreach(var fn in w.ForcesFromTracksNegative) {
@@ -82,7 +93,7 @@ namespace RobotSim {
         }
 
         public void CreateWheels() {
-            for(int i = 0; i < 4; i++) {
+            for(int i = 0; i < 6; i++) {
                 var wheel = RbWheel.GetStandart();
                 wheel.Name = "wheel" + i.ToString();
                 wheels.Add(wheel);
@@ -101,10 +112,19 @@ namespace RobotSim {
             wheels[3].n0_body_loc = -Vector3D.ZAxis;
             wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * _h / 4 + wheels[3].n0_body_loc * trackw05;
 
-
-            foreach(var w in wheels) {
+            wheels[4].n0_body_loc = Vector3D.ZAxis;
+            wheels[4].p0_body_loc = 0.5*(GetUgolLocal(0)+ GetUgolLocal(1)) + Vector3D.YAxis * _h / 4 + wheels[0].n0_body_loc * trackw05;
+            wheels[5].n0_body_loc = -Vector3D.ZAxis;
+            wheels[5].p0_body_loc = 0.5 * (GetUgolLocal(2) + GetUgolLocal(3)) + Vector3D.YAxis * _h / 4 + wheels[3].n0_body_loc * trackw05;
+            for(int i = 0; i < 4; i++) {
+                var w = wheels[i];
                 ConnectWheelToBody(w);
             }
+            for(int i = 4; i < 6; i++) {
+                var w = wheels[i];
+                ConnectWheelToBody(w,10000,100);
+            }
+
             var m = 0;
             //foreach(var w in wheels) {
             //    w.MomentX.Value = (m++) * 0.01;
@@ -155,7 +175,7 @@ namespace RobotSim {
 
         #region Насаживаем Колеса
         public double L_osi = 0.02;
-        public void ConnectWheelToBody(RbWheel wheel, double k = 100000, double mu= 100) {
+        public void ConnectWheelToBody(RbWheel wheel, double k = 100000, double mu= 1000) {
             var p0_wheel_loc = new Vector3D(0,0,0);
             var p1_wheel_loc = p0_wheel_loc + Vector3D.XAxis * L_osi;
             var p1_body_loc = wheel.p0_body_loc + wheel.n0_body_loc * L_osi;
@@ -214,15 +234,17 @@ namespace RobotSim {
             foreach(var t in Tracks1) {
                 t.WheelsInteractsWithMe.Add(wheels[0]);
                 t.WheelsInteractsWithMe.Add(wheels[1]);
+                t.WheelsInteractsWithMe.Add(wheels[4]);
                 Body.AddChild(t);
             }
-            //Tracks2 = GetTracks(wheels[2],wheels[3]);
-            //foreach(var t in Tracks2) {
+            Tracks2 = GetTracks(wheels[2],wheels[3]);
+            foreach(var t in Tracks2) {
 
-            //    t.WheelsInteractsWithMe.Add(wheels[2]);
-            //    t.WheelsInteractsWithMe.Add(wheels[3]);
-            //    Body.AddChild(t);
-            //}
+                t.WheelsInteractsWithMe.Add(wheels[2]);
+                t.WheelsInteractsWithMe.Add(wheels[3]);
+                t.WheelsInteractsWithMe.Add(wheels[5]);
+                Body.AddChild(t);
+            }
             TracksAll = Tracks1.Concat(Tracks2).ToList();
         }
 
@@ -252,15 +274,24 @@ namespace RobotSim {
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(1,0,0),w.WorldTransform * (w.Zubya[i] + w.Zubya_n[i]),new Vector3D(0,0,0),new Vector3D(0,0,1));
                 lst0.Add(t0);
-                if(i == 0)
-                    b0 = t0;
+                //if(b0==null)
+                //    b0 = t0;
 
             }
+            b0 = lst0
+                .MinBy(yt => 
+                    yt.ConnP.Select(p => (Body.WorldTransform_1 * (yt.WorldTransform * p)).Y).Min()
+                );
 
             u0 = lst0
-                .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
-                .MaxBy(yt => yt.y3)
-                .tr;
+                .MaxBy(yt => 
+                    yt.ConnP.Select(p => (Body.WorldTransform_1 * (yt.WorldTransform * p)).Y).Max()
+                );
+
+            //u0 = lst0
+            //    .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
+            //    .MaxBy(yt => yt.y3)
+            //    .tr;
          
             var lst1 = new List<RbTrack>();
             w = w2;
@@ -276,14 +307,24 @@ namespace RobotSim {
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(1,0,0),w.WorldTransform * (w.Zubya[i] + w.Zubya_n[i]),new Vector3D(0,0,0),new Vector3D(0,0,1));
                 lst1.Add(t0);
-                if(i == 0)
-                    u1 = t0;
+                //if(u1==null)
+                //    u1 = t0;
             }
 
-            b1 = lst1
-                .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
-                .MinBy(yt => yt.y3)
-                .tr;
+            b1= lst1
+    .MinBy(yt =>
+        yt.ConnP.Select(p => (Body.WorldTransform_1 * (yt.WorldTransform * p)).Y).Min()
+    );
+
+            u1 = lst1
+                .MaxBy(yt =>
+                    yt.ConnP.Select(p => (Body.WorldTransform_1 * (yt.WorldTransform * p)).Y).Max()
+                );
+
+            //b1 = lst1
+            //    .Select(tr => new { y3 = (Body.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
+            //    .MinBy(yt => yt.y3)
+            //    .tr;
 
             lst0.AddRange(GetTrackBetween2Tracks(b0,b1));
             lst0.AddRange(GetTrackBetween2Tracks(u1,u0));
@@ -355,6 +396,20 @@ namespace RobotSim {
         }
         #endregion
 
+        public void AddGForcesToAll() {
+            AddGForcesToAll(new Vector3D(0,-1,0));
+        }
+        public void AddGForcesToAll(Vector3D dir, double g = 9.8) {
+            var allMP = Children
+                .Flatten(ch => ch.Children)
+                .Where(ch => ch is IMaterialPoint)
+                .Cast<IMaterialPoint>()
+                .ToList();
+            foreach(var mp in allMP) {
+                mp.AddGForce(dir, g);
+            }
+
+        }
     }
 
 

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,7 @@ namespace SimpleIntegrator {
         void AddForceNegative(Force force);
         Vector3D GetImpulse();
         double GetEnergy();
+        void AddGForce(Vector3D dir,double g = 9.8);
 
     }
     /// <summary>
@@ -62,7 +64,7 @@ namespace SimpleIntegrator {
                 fsumm += force.Vec3D_Dir_World;
             }
             foreach(var force in ForcesNegative) {
-                fsumm -= force.Vec3D_Dir_World;
+                fsumm -= force.Vec3D_Dir_World * force.ValueMultyplyer4Negative;
             }
             return fsumm;
         }
@@ -90,6 +92,27 @@ namespace SimpleIntegrator {
             if(force.Owner == null)
                 AddChild(force);
             ForcesNegative.Add(force);
+        }
+
+        public void AddGForce(Vector3D dir, double g = 9.8) {
+            var f = new ForceG(this,dir,g);
+            AddForce(f);
+        }
+        public void AddGForce() {
+            AddGForce(new Vector3D(0,-1,0));
+        }
+    }
+
+    public class ForceG : Force {
+        IMaterialPoint who;
+        public double g;
+        public ForceG(IMaterialPoint who, Vector3D dir, double g =9.8) : base(who.Mass.Value*g,new RelativePoint(dir),null) {
+            this.who = who;
+            this.g = g;
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public void SynchAction(double t) {
+            Value = who.Mass.Value * g;
         }
     }
 
@@ -143,13 +166,13 @@ namespace SimpleIntegrator {
                 momSum += mom.Vec3D_Dir_World;
             }
             foreach(var mom in MomentsNegative) {
-                momSum -= mom.Vec3D_Dir_World;
+                momSum -= mom.Vec3D_Dir_World * mom.ValueMultyplyer4Negative;
             }
             foreach(var force in Forces) {
                 momSum += force.GetMoment_World(Vec3D);
             }
             foreach(var force in ForcesNegative) {
-                momSum += force.GetMoment_World(Vec3D);
+                momSum -= force.GetMoment_World(Vec3D) * force.ValueMultyplyer4Negative;
             }
             return momSum;
         }
@@ -191,6 +214,10 @@ namespace SimpleIntegrator {
 
         public Vector3D GetVelWorld(Vector3D pointLocal) {
             return WorldTransformRot * (Omega.Vec3D & pointLocal) + Vel.Vec3D;
+        }
+
+        public Vector3D GetVelLocal(Vector3D pointLocal) {
+            return (Omega.Vec3D & pointLocal);
         }
 
         public void AddMomentNegative(Force moment) {

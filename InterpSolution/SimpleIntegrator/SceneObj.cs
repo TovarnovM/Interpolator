@@ -207,11 +207,11 @@ namespace SimpleIntegrator {
             IScnObj hasWThisName = null;
             int ind = 0;
             do {
-                hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
-                newChild.Name =
-                    hasWThisName != null ?
-                    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
-                    newChild.Name;
+                //hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
+                //newChild.Name =
+                //    hasWThisName != null ?
+                //    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
+                //    newChild.Name;
 
             } while(hasWThisName != null);
 
@@ -436,11 +436,20 @@ namespace SimpleIntegrator {
         }
 
         #endregion
-
-
     }
 
     public static class DummyIOHelper {
+        public static IEnumerable<T> Flatten<T>(
+        this IEnumerable<T> source,
+        Func<T,IEnumerable<T>> childrenSelector) {
+            foreach(var item in source) {
+                yield return item;
+                foreach(var child in childrenSelector(item).Flatten(childrenSelector)) {
+                    yield return child;
+                }
+            }
+        }
+
 
         public static void Serialize(this ScnObjDummy dummy,TextWriter writer) {
             var dict = dummy.SaveToDict();

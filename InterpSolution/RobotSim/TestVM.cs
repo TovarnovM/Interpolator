@@ -43,14 +43,14 @@ namespace RobotSim {
             
             Vec3D = v0;
 
-            var fg = Force.GetForceCentered(Mass.Value * 9.8,new Vector3D(0,-1,0));
-            AddForce(fg);
+            //var fg = Force.GetForceCentered(Mass.Value * 9.8,new Vector3D(0,-1,0));
+            //AddForce(fg);
 
-            var p0 = new Vector3D(0,10,0);
+            var p0 = new Vector3D(0,0,0);
             L = (v0 - p0).GetLength();
             var fn = Force.GetForceCentered(new Vector3D(1,1,1));
             fn.SynchMeBefore += t => {
-                var ff = Phys3D.GetKMuForce(Vec3D,Vel.Vec3D,p0,Vector3D.Zero,10000,10000,L);
+                var ff = Phys3D.GetKMuForce_Step(Vec3D,Vel.Vec3D,p0,Vector3D.Zero,1000,100,0.5);
                 fn.Value = ff.GetLength();
                 fn.Direction.Vec3D = ff.Norm;
             };

@@ -15,7 +15,7 @@ namespace RobotSim {
         public double H_wheel;
         public double kR;
         public double muR;
-        public double H_zac;
+        public double H_zac, H_zac2;
         public double kH;
         public double muH;
 
@@ -36,14 +36,15 @@ namespace RobotSim {
             double mass,
             double H_wheel, 
             double H_zac,
-            double kR = 1E4, 
+            double kR = 1E5, 
             double muR = 1E2,
-            double kH = 1E3,
+            double kH = 1E5,
             double muH = 1E2) :base("Wheel") 
             
         {
             n_shag = n;
             this.H_zac = H_zac;
+            this.H_zac2 = H_zac * 0.2;
             this.H_wheel = H_wheel;
             this.R_max = R_max;
             this.R = R;
@@ -78,14 +79,14 @@ namespace RobotSim {
         }
 
         public static RbWheel GetStandart(Vector3D localPos) {
-            int n = 11;
+            int n = 17;
             double r_real = 0.015;
-            double R_ideal = 0.0105 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
-            var mass = PI * r_real * r_real * 0.021 * 1080*10;
+            double R_ideal = 0.0095 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
+            var mass = PI * r_real * r_real * 0.021 * 1080*50;
             var res = new RbWheel(
                 n:n,
                 R:R_ideal,
-                R_max: R_ideal + 0.002,
+                R_max: R_ideal + 0.0005,
                 mass: mass,
                 H_wheel: 0.03,
                 H_zac:0.009 / 4);
@@ -127,14 +128,18 @@ namespace RobotSim {
         /// <param name="globalPoint"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetLocalR_wheelForce(Vector3D globalPoint) {
+        public Vector3D GetLocalR_wheelForce(Vector3D globalPoint, Vector3D globalVel) {
             var localPoint = worldTransform_1 * globalPoint;
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();
+            if(rp > R)
+                return Vector3D.Zero;
 
-            return rp > R
-                ? Vector3D.Zero
-                : (R - rp) * kR * rlocalVec.Norm;
+            var localVel = WorldTransformRot_1 * globalVel;
+            var myLocalPos = rlocalVec.Norm * R;
+            var myLocalVel = Vector3D.Zero;
+            return Phys3D.GetKMuForce(rlocalVec,localVel,myLocalPos,myLocalVel,kR,muR,0);
+            return  (R - rp) * kR * rlocalVec.Norm;
 
         }
 
@@ -144,8 +149,9 @@ namespace RobotSim {
         /// <param name="globalPoint"></param>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetLocalKTauForce(Vector3D globalPoint) {
+        public Vector3D GetLocalKTauForce(Vector3D globalPoint, Vector3D globalVel) {
             var localPoint = worldTransform_1 * globalPoint;
+            
             var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
             var rp = rlocalVec.GetLength();
             if(rp > R || Abs(localPoint.X) > H_wheel * 0.5)
@@ -153,14 +159,49 @@ namespace RobotSim {
 
             int closestInd = GetClosestInd(localPoint);
             var angle0 = gamma * closestInd;//Betta % (2 * PI) + gamma * closestInd;
+            
 
             var n0 = new Vector3D(0,Cos(angle0+0.5*PI),Sin(angle0 + 0.5 * PI));
             var dh = n0 * rlocalVec;
 
-            if(Abs(dh) > H_zac)
+            if(Abs(dh) > H_zac || Abs(dh) < H_zac2)
                 return Vector3D.Zero;
 
-            return (-kH * dh * n0);
+            var localVel = worldTransform_1 * globalVel;
+            var myVelLocal = GetVelLocal(Zubya[closestInd]);
+            return Phys3D.GetKMuForce(rlocalVec,localVel,Zubya[closestInd],myVelLocal,kH,muH,H_zac2);
+           // return -kH * Sign(dh)*Abs(dh-H_zac2) * n0;
+        }
+
+        /// <summary>
+        /// Вычисляется глобальная сила, действующая в тангенциальном направлении (только в окрестностях "зубцов")
+        /// </summary>
+        /// <param name="globalPoint"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public Vector3D GetLocalKTauForce_Experimental(Vector3D globalPoint,Vector3D globalVel) {
+            var localPoint = worldTransform_1 * globalPoint;
+
+            var rlocalVec = new Vector3D(0,localPoint.Y,localPoint.Z);
+            var rp = rlocalVec.GetLength();
+            if(rp > R_max || Abs(localPoint.X) > H_wheel * 0.5)
+                return Vector3D.Zero;
+
+            int closestInd = GetClosestInd(localPoint);
+            var angle0 = gamma * closestInd;//Betta % (2 * PI) + gamma * closestInd;
+
+
+
+            var n0 = new Vector3D(0,Cos(angle0 + 0.5 * PI),Sin(angle0 + 0.5 * PI));
+            var dh = n0 * rlocalVec;
+
+
+            var localVel = WorldTransformRot_1 * globalVel;
+            var myLocalPos = Zubya[closestInd].Norm * rp;
+            var myVelLocal = GetVelLocal(myLocalPos);
+            double mn = rp > R ? (R_max - rp)/(R_max - R) : 1d;
+            return Phys3D.GetKMuForce(localPoint,localVel,myLocalPos,myVelLocal,kH,muH,0)*mn;
+            // return -kH * Sign(dh)*Abs(dh-H_zac2) * n0;
         }
 
         /// <summary>

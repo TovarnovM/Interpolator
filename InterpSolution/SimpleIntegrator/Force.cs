@@ -147,6 +147,7 @@ namespace SimpleIntegrator {
     }
 
     public class Force : ScnObjDummy {
+        public double ValueMultyplyer4Negative = 1d;
         public double Value { get; set; }
         public IScnPrm pValue { get; set; } = null;
         public RelativePoint Direction { get; set; } = null;

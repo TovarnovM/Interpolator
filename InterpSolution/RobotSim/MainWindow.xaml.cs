@@ -36,15 +36,17 @@ namespace RobotSim {
 
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
+            //sol.Body.Mass.Value = 100;
+            //sol.SynchMassGeometry();
 
-            //sol.Body.Vec3D = new Vector3D(11,11,-2);
-            //sol.Body.SynchQandM();
-            //sol.Body.RotateOXtoVec(new Vector3D(1,1,1));
-            //sol.Body.SynchQandM();
+           sol.Body.Vec3D = new Vector3D(0,0.1,0);
+            sol.Body.SynchQandM();
+            sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-5,5));
+            sol.Body.SynchQandM();
 
             sol.CreateWheels();
             sol.SynchWheelsToBodyPos();
-            sol.floor = new RbSurfFloor(100,100,new Vector3D(1,0,1));
+            
 
             //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
             //sol.Body.AddMoment(moment);
@@ -53,6 +55,8 @@ namespace RobotSim {
             //sol.SynchWheelsToBodyPos();
 
             sol.CreateTracks();
+            sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
+            sol.AddGForcesToAll();
             //sol.CreateTrackDummy(50);
             //var f1 = Force.GetForce(
             //    new Vector3D(-0.1,0,0),null,
@@ -62,12 +66,22 @@ namespace RobotSim {
             //    new Vector3D(0.1,0,0),null,
             //    new Vector3D(0,0,0),sol.Body);
 
-            //double moment = 1;
+            //double moment = 10;
             //foreach(var w in sol.wheels) {
             //    w.MomentX.Value = moment;
+            //    w.MomentX.SynchMeAfter += _ => {
+            //        w.MomentX.Value = Math.Abs(w.Omega.X) > 4 ? 0d : moment;
+            //    };
             //    moment += moment;
+            //    sol.Body.AddMoment(w.MomentX);
             //    break;
             //}
+
+            //var gTrForce = Force.GetForceCentered(9.8 * sol.TracksAll[0].Mass.Value,new Vector3D(0,-1,0));
+            //foreach(var tr in sol.TracksAll) {
+            //    tr.AddForce(gTrForce);
+            //}
+
 
             //sol.Body.AddForce(f1);
             //sol.Body.AddForce(f2);
@@ -116,16 +130,7 @@ namespace RobotSim {
             var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
             var dt = 0.00001;
 
-
-            //var s = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).SolveFromTo(0,0.01);
-            //foreach(var ss in s) {
-            //    int f = 11;
-
-            //}
-
-
-
-            var sol = Ode.RK45(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -195,7 +200,7 @@ namespace RobotSim {
         private async void button1_Click(object sender,RoutedEventArgs e) {
             var m = new Majatnik();
             var v0 = m.Rebuild();
-            double dt = 0.1, t0 = 0, t1 = 100;
+            double dt = 0.01, t0 = 0, t1 = 30;
             double T = 2 * 3.14159 * Math.Sqrt(m.L / 9.8);
 double omega = 2 * 3.14159 / T;
             double A = m.X;
