@@ -1,4 +1,5 @@
 ﻿using Sharp3D.Math.Core;
+using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -91,6 +92,26 @@ namespace RobotSim {
             var res = dy * k + (WorldVel * n0 < 0 ? mu * WorldVel * n0 : 0);
             return -n0 * res;
 
+        }
+    }
+
+
+    public class GroundForce : Force {
+        IRbSurf surf;
+        MaterialObjectNewton who;
+        public GroundForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
+            this.surf = surf;
+            this.who = who;
+            Direction.Vec3D = surf.N0;
+            SynchMeBefore += SynchAction;
+
+
+        }
+        public void SynchAction(double t) {
+            var f = surf.GetNForce(AppPoint.Vec3D_World,who.GetVelWorld(AppPoint.Vec3D));
+
+            Value = f.GetLength();
+            Direction.Vec3D = f.Norm;
         }
     }
 }

@@ -145,45 +145,88 @@ namespace RobotSim {
             return GetStandart(w,l,0,l,0,mass);
         }
         #region ЗЕМЛЯ
-        public List<IRbSurf> SurfList = new List<IRbSurf>();
-        public void AddSurf(IRbSurf surf) {
-            SurfList.Add(surf);
+        public class SurfFrictInfo {
+            public IRbSurf surf;
+            public double k_tr;
+            public List<GroundForce> gForces;
+            public SurfFrictInfo(IRbSurf surf,double k_tr) {
+                this.surf = surf;
+                this.k_tr = k_tr;
+                gForces = new List<GroundForce>();
+            }
+        }
+
+        public List<SurfFrictInfo> SurfList = new List<SurfFrictInfo>();
+        public void AddSurf(IRbSurf surf, double k_tr = 1.5) {
+            var surfInfo = new SurfFrictInfo(surf,k_tr);
+            SurfList.Add(surfInfo);
             var surfFList = new List<Force>();
             for(int i = 0; i < 4; i++) {
                 var force = new GroundForce(this,ConnP[i],surf);
+                surfInfo.gForces.Add(force);
                 AddForce(force);
             }
             
 
         }
 
-        
+        public override void NewtonLaw(double t) {
+            var fsumWorld = ForceWorldSumm(t);
+            foreach(var si in SurfList) {
+                ApplyFrictForces(ref fsumWorld,si);
+            }        
+            var momSumWorld = GetMomentsWorldSum(t);
+
+            
+            var momSumLocal = WorldTransformRot_1 * GetMomentsWorldSum(t);
+
+            UpdateAcc(fsumWorld);
+            UpdatedQdt(momSumLocal);
+        }
 
 
+        void ApplyFrictForces(ref Vector3D fsumWorld,SurfFrictInfo surfInfo) {
+            double Nforce = 0d;
+            foreach(var gf in surfInfo.gForces) {
+                Nforce += gf.Value;
+            }
+            if(Nforce < 1E-12)
+                return;
+            
+
+
+            var n0 = surfInfo.surf.N0.Norm;
+            var tauSummForce = fsumWorld - (fsumWorld * n0) * n0;
+            var frictTauForceMax = Nforce * surfInfo.k_tr;
+            if(frictTauForceMax >= tauSummForce.GetLength()) {
+                fsumWorld = (fsumWorld * n0) * n0;
+                return;
+            } else {
+                fsumWorld = fsumWorld - tauSummForce.Norm * frictTauForceMax;
+                return;
+            }
+
+
+            //var n0SumMoment = (momSumWorld * n0) * n0;
+            //var frictN0Moment = -n0SumMoment / n;
+            //foreach(var gf in nonZeroGforces) {
+            //    var appPDirWorld = gf.AppPoint.Vec3D_Dir_World;
+            //    var appPTauDirWorld = appPDirWorld - (appPDirWorld * n0) * n0;
+            //    var frictMomTauForce = frictN0Moment & appPTauDirWorld;
+
+            //    var frictFullForce = frictTauForce + frictMomTauForce;
+            //    var maxFrictForceValue = gf.Value * surfInfo.k_tr;
+            //    if(maxFrictForceValue > frictFullForce.GetLength())
+            //}
+
+        }
 
 
         #endregion
 
     }
 
-    public class GroundForce : Force {
-        IRbSurf surf;
-        MaterialObjectNewton who;
-        public GroundForce(MaterialObjectNewton who, Vector3D localP, IRbSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
-            this.surf = surf;
-            this.who = who;
-            Direction.Vec3D = surf.N0;
-            SynchMeBefore += SynchAction;
 
-
-        }
-        public void SynchAction(double t) {
-            var f = surf.GetNForce(AppPoint.Vec3D_World,who.GetVelWorld(AppPoint.Vec3D));
-
-            Value = f.GetLength();
-            Direction.Vec3D = f.Norm;
-        }
-    }
 
     /// <summary>
     /// Сила между двумя объектами.... сила приложена к 0 точке

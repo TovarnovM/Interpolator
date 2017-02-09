@@ -39,9 +39,9 @@ namespace RobotSim {
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
 
-           sol.Body.Vec3D = new Vector3D(0,0.1,0);
+           sol.Body.Vec3D = new Vector3D(0,0.05,0);
             sol.Body.SynchQandM();
-            sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-5,5));
+            sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-1,5));
             sol.Body.SynchQandM();
 
             sol.CreateWheels();
@@ -66,16 +66,25 @@ namespace RobotSim {
             //    new Vector3D(0.1,0,0),null,
             //    new Vector3D(0,0,0),sol.Body);
 
-            //double moment = 10;
-            //foreach(var w in sol.wheels) {
-            //    w.MomentX.Value = moment;
-            //    w.MomentX.SynchMeAfter += _ => {
-            //        w.MomentX.Value = Math.Abs(w.Omega.X) > 4 ? 0d : moment;
-            //    };
-            //    moment += moment;
-            //    sol.Body.AddMoment(w.MomentX);
-            //    break;
-            //}
+            double moment = 100;
+
+            var w0 = sol.wheels[0];
+            w0.MomentX.Value = moment;
+            w0.MomentX.SynchMeAfter += _ => {
+                w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
+            };
+            
+
+            var w3 = sol.wheels[3];
+            w3.MomentX.Value = -moment;
+            w3.MomentX.SynchMeAfter += _ => {
+                w3.MomentX.Value = w3.Omega.X < 6 ? 0d : -moment;
+            };
+            //sol.Body.AddMoment(w.MomentX);
+            // break;
+
+
+
 
             //var gTrForce = Force.GetForceCentered(9.8 * sol.TracksAll[0].Mass.Value,new Vector3D(0,-1,0));
             //foreach(var tr in sol.TracksAll) {
