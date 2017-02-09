@@ -192,12 +192,16 @@ namespace RobotSim {
             }
             if(Nforce < 1E-12)
                 return;
-            
-
-
             var n0 = surfInfo.surf.N0.Norm;
+            var tauVel = Vel.Vec3D - (Vel.Vec3D * n0) * n0;           
+
             var tauSummForce = fsumWorld - (fsumWorld * n0) * n0;
             var frictTauForceMax = Nforce * surfInfo.k_tr;
+            if(tauVel.GetLengthSquared() > 1E-7) {
+                fsumWorld = fsumWorld - tauVel.Norm * frictTauForceMax;
+                return;
+            }
+
             if(frictTauForceMax >= tauSummForce.GetLength()) {
                 fsumWorld = (fsumWorld * n0) * n0;
                 return;

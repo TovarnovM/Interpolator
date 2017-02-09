@@ -122,7 +122,7 @@ namespace RobotSim {
             }
             for(int i = 4; i < 6; i++) {
                 var w = wheels[i];
-                ConnectWheelToBody(w,10000,100);
+                ConnectWheelToBody(w,100000,100);
             }
 
             var m = 0;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RobotSim"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="435.445" Width="596.983">
+        Title="MainWindow" Height="481.281" Width="856.722">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
@@ -29,9 +29,10 @@
                     <oxy:PlotView Model="{Binding ModelXZ}" Grid.Row="1" Grid.Column="0"/>
                     <Button x:Name="button" Content="Click Me" Grid.Row="2" HorizontalAlignment="Left" Width="145" Height="21" VerticalAlignment="Bottom" Click="button_Click_1"/>
                     <Slider x:Name="slider" VerticalAlignment="Top" Grid.Row="2" Height="24" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.ColumnSpan="2" />
-                    <Button x:Name="button_Save" Content="Save" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Save_Click_1"/>
-                    <Button x:Name="button_Copy1" Content="Load" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="300,0,0,0" HorizontalAlignment="Left" Width="145" Click="button_Copy1_Click_1" Grid.ColumnSpan="2"/>
-                    <Button x:Name="button_Copy" Content="4 tests" Grid.Row="2" HorizontalAlignment="Left" Width="78" Height="21" VerticalAlignment="Bottom" Grid.Column="1" Margin="145,0,0,1" Click="button_Copy_Click"/>
+                    <Button x:Name="button_Save" Content="Save" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="150,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Click_1"/>
+                    <Button x:Name="button_Copy1" Content="Load" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="212,0,0,0" HorizontalAlignment="Left" Width="49" Click="button_Copy1_Click_1"/>
+                    <Button x:Name="button_Copy" Content="4 tests" Grid.Row="2" HorizontalAlignment="Left" Width="78" Height="21" VerticalAlignment="Bottom" Grid.Column="1" Margin="244,0,0,0" Click="button_Copy_Click"/>
+                    <Button x:Name="button_Save_Copy" Content="Save All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="286,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

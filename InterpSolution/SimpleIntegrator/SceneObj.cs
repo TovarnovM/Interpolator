@@ -207,11 +207,12 @@ namespace SimpleIntegrator {
             IScnObj hasWThisName = null;
             int ind = 0;
             do {
-                //hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
-                //newChild.Name =
-                //    hasWThisName != null ?
-                //    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
-                //    newChild.Name;
+                hasWThisName = null;
+                hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
+                newChild.Name =
+                    hasWThisName != null ?
+                    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
+                    newChild.Name;
 
             } while(hasWThisName != null);
 
@@ -469,6 +470,25 @@ namespace SimpleIntegrator {
             }
             XmlSerializer serializer = new XmlSerializer(typeof(List<DictEntry>));
             serializer.Serialize(writer,entries);
+
+
+        }
+
+        public static void SerializeMany(TextWriter writer,IEnumerable<IDictionary<string,double>> dictionaryEnum) {
+            foreach(var dict in dictionaryEnum) {
+                Serialize(writer,dict);
+            }
+            //var entriesList = new List<List<DictEntry>>(dictionaryList.Count);
+            //for(int i = 0; i < dictionaryList.Count; i++) {
+            //    List<DictEntry> entries = new List<DictEntry>(dictionaryList[i].Count);
+            //    foreach(var key in dictionaryList[i].Keys) {
+            //        entries.Add(new DictEntry(key,dictionaryList[i][key]));
+            //    }
+            //    entriesList.Add(entries);
+            //}
+
+            //XmlSerializer serializer = new XmlSerializer(typeof(List<List<DictEntry>>));
+            //serializer.Serialize(writer,entriesList);
 
 
         }

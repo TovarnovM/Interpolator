@@ -20,6 +20,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
+using static SimpleIntegrator.DummyIOHelper;
 
 namespace RobotSim {
     /// <summary>
@@ -76,9 +78,9 @@ namespace RobotSim {
             
 
             var w3 = sol.wheels[3];
-            w3.MomentX.Value = -moment;
+            w3.MomentX.Value = moment;
             w3.MomentX.SynchMeAfter += _ => {
-                w3.MomentX.Value = w3.Omega.X < 6 ? 0d : -moment;
+                w3.MomentX.Value = w3.Omega.X > 6 ? 0d : moment;
             };
             //sol.Body.AddMoment(w.MomentX);
             // break;
@@ -161,7 +163,7 @@ namespace RobotSim {
         private void button_Save_Click_1(object sender,RoutedEventArgs e) {
             controller.Pause();
             button.Content = "Paused";
-            var unit4save = new RobotDynamics();
+            var unit4save = GetNewRD();
             unit4save.Rebuild();
 
             int newVal = (int)slider.Value;
@@ -185,7 +187,7 @@ namespace RobotSim {
         private void button_Copy1_Click_1(object sender,RoutedEventArgs e) {
             controller.Pause();
             button.Content = "Paused";
-            var unit4load = new RobotDynamics();
+            var unit4load = GetNewRD();
             unit4load.Rebuild();
             var sd = new OpenFileDialog() {
                 Filter = "XML Files|*.xml",
@@ -255,5 +257,30 @@ double omega = 2 * 3.14159 / T;
             }
 
         }
+
+        private void button_Save_Copy_Click(object sender,RoutedEventArgs e) {
+            controller.Pause();
+            button.Content = "Paused";
+            var unit4save = GetNewRD();
+            unit4save.Rebuild();
+            
+            var sd = new SaveFileDialog() {
+                Filter = "XML Files|*.xml",
+                FileName = "sph1D"
+            };
+            if(sd.ShowDialog() == true) {
+                var lst = new List<IDictionary<string,double>>();
+                foreach(var sp in vm.SolPointList.Value) {
+                    unit4save.SynchMeTo(sp);
+                    var dict = unit4save.SaveToDict();
+                    lst.Add(dict);
+                }
+                var sw = new StreamWriter(sd.FileName);
+                SerializeMany(sw,lst);
+                sw.Close();
+            }
+        }
+
+
     }
 }
