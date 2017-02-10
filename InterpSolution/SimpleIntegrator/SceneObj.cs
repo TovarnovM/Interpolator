@@ -34,7 +34,7 @@ namespace SimpleIntegrator {
         Action<double> SynchMeForNext { get; set; }
         Action RebuildStructureAction { get; set; }
         void SetParam(string name,object value);
-
+        void SynchMeTo(SolPoint sp);
 
         List<ILaw> Laws { get; }
         void AddLaw(ILaw newLaw);

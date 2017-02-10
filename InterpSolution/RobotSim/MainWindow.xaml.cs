@@ -244,7 +244,7 @@ double omega = 2 * 3.14159 / T;
          }
 
         private void button_Copy_Click(object sender,RoutedEventArgs e) {
-            var prT = GetNewRD();
+            RobotDynamics prT = GetNewRD();
             v0 = prT.Rebuild(prT.TimeSynch);
             var names = prT.GetDiffPrms().Select(dp => dp.FullName).ToList();
             var dt = 0.0001;
