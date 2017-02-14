@@ -157,7 +157,7 @@ namespace RobotSim {
         }
 
         public List<SurfFrictInfo> SurfList = new List<SurfFrictInfo>();
-        public void AddSurf(IRbSurf surf, double k_tr = 1.5) {
+        public void AddSurf(IRbSurf surf, double k_tr = 1.0) {
             var surfInfo = new SurfFrictInfo(surf,k_tr);
             SurfList.Add(surfInfo);
             var surfFList = new List<Force>();

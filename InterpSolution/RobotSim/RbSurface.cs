@@ -14,6 +14,7 @@ namespace RobotSim {
         Vector3D N0 { get; }
         Vector3D GetNForce(Vector3D WorldPos,Vector3D WorldVel);
         bool HasTouch(Vector3D WorldPos);
+        double GetDistance(Vector3D posWorld);
     }
 
     public class RbSurfFloor : IRbSurf {
@@ -68,6 +69,10 @@ namespace RobotSim {
         public virtual bool HasTouch(Vector3D WorldPos) {
             return WorldPos.Y <= p0.Y;
         }
+
+        public virtual double GetDistance(Vector3D posWorld) {
+            return posWorld.Y - p0.Y;
+        }
     }
 
     public class RbSurfAngleFloor : RbSurfFloor {
@@ -93,6 +98,11 @@ namespace RobotSim {
             return -n0 * res;
 
         }
+        public override double GetDistance(Vector3D posWorld) {
+            return ((posWorld - p0) * n0);
+
+
+        }
     }
 
 
@@ -112,6 +122,23 @@ namespace RobotSim {
 
             Value = f.GetLength();
             Direction.Vec3D = f.Norm;
+        }
+    }
+
+    public class MagneticForce : Force {
+        IRbSurf surf;
+        MaterialObjectNewton who;
+        Func<double,double> f_ot_dist;
+        public MagneticForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf, Func<double,double> f_ot_dist) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
+            this.surf = surf;
+            this.who = who;
+            this.f_ot_dist = f_ot_dist;
+            Direction.Vec3D = -surf.N0;
+            SynchMeBefore += SynchAction;
+        }
+        public void SynchAction(double t) {
+            Value = f_ot_dist(surf.GetDistance(AppPoint.Vec3D_World));
+            Direction.Vec3D = -surf.N0;
         }
     }
 }

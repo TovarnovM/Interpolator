@@ -33,6 +33,7 @@
                     <Button x:Name="button_Copy1" Content="Load" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="212,0,0,0" HorizontalAlignment="Left" Width="49" Click="button_Copy1_Click_1"/>
                     <Button x:Name="button_Copy" Content="4 tests" Grid.Row="2" HorizontalAlignment="Left" Width="78" Height="21" VerticalAlignment="Bottom" Grid.Column="1" Margin="244,0,0,0" Click="button_Copy_Click"/>
                     <Button x:Name="button_Save_Copy" Content="Save All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="286,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy_Click"/>
+                    <Button x:Name="button_Save_Copy1" Content="Load All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="348,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy1_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

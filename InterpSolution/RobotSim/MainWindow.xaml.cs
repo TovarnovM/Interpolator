@@ -58,6 +58,7 @@ namespace RobotSim {
 
             sol.CreateTracks();
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
+            sol.AddSurf(new RbSurfAngleFloor(10000,100,new Vector3D(-0.15,0,0), new Vector3D(1,1,0)));
             sol.AddGForcesToAll();
             //sol.CreateTrackDummy(50);
             //var f1 = Force.GetForce(
@@ -78,9 +79,9 @@ namespace RobotSim {
             
 
             var w3 = sol.wheels[3];
-            w3.MomentX.Value = moment;
+            w3.MomentX.Value = -moment;
             w3.MomentX.SynchMeAfter += _ => {
-                w3.MomentX.Value = w3.Omega.X > 6 ? 0d : moment;
+                w3.MomentX.Value = w3.Omega.X < -6 ? 0d : -moment;
             };
             //sol.Body.AddMoment(w.MomentX);
             // break;
@@ -141,7 +142,7 @@ namespace RobotSim {
             var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
             var dt = 0.00001;
 
-            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -266,21 +267,40 @@ double omega = 2 * 3.14159 / T;
             
             var sd = new SaveFileDialog() {
                 Filter = "XML Files|*.xml",
-                FileName = "sph1D"
+                FileName = "manySP"
             };
             if(sd.ShowDialog() == true) {
-                var lst = new List<IDictionary<string,double>>();
-                foreach(var sp in vm.SolPointList.Value) {
-                    unit4save.SynchMeTo(sp);
-                    var dict = unit4save.SaveToDict();
-                    lst.Add(dict);
-                }
                 var sw = new StreamWriter(sd.FileName);
-                SerializeMany(sw,lst);
+                SerializeManySP(sw,vm.SolPointList.Value);
                 sw.Close();
             }
         }
 
+        private void button_Save_Copy1_Click(object sender,RoutedEventArgs e) {
+            controller.Pause();
+            button.Content = "Paused";
+            var unit4load = GetNewRD();
+            unit4load.Rebuild();
+            var sd = new OpenFileDialog() {
+                Filter = "XML Files|*.xml",
+                FileName = "sph1D"
+            };
+            if(sd.ShowDialog() == true) {
+                var sr = new StreamReader(sd.FileName);
+                controller.Cancel();
+                vm.SolPointList.Value.Clear();
+                DeserializeManySP(sr,vm.SolPointList.Value);
+                sr.Close();
 
+                unit4load.SynchMeTo(vm.SolPointList.Value.Last());
+                
+                
+                
+                initObs(unit4load);
+
+
+
+            }
+        }
     }
 }

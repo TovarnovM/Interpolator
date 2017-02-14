@@ -474,23 +474,13 @@ namespace SimpleIntegrator {
 
         }
 
-        public static void SerializeMany(TextWriter writer,IEnumerable<IDictionary<string,double>> dictionaryEnum) {
-            foreach(var dict in dictionaryEnum) {
-                Serialize(writer,dict);
+        public static void SerializeManySP(TextWriter writer,IEnumerable<SolPoint> spEnum) {
+            var lst = new List<SolPointSerializable>();
+            foreach(var sp in spEnum) {
+                lst.Add(new SolPointSerializable(sp));
             }
-            //var entriesList = new List<List<DictEntry>>(dictionaryList.Count);
-            //for(int i = 0; i < dictionaryList.Count; i++) {
-            //    List<DictEntry> entries = new List<DictEntry>(dictionaryList[i].Count);
-            //    foreach(var key in dictionaryList[i].Keys) {
-            //        entries.Add(new DictEntry(key,dictionaryList[i][key]));
-            //    }
-            //    entriesList.Add(entries);
-            //}
-
-            //XmlSerializer serializer = new XmlSerializer(typeof(List<List<DictEntry>>));
-            //serializer.Serialize(writer,entriesList);
-
-
+            XmlSerializer serializer = new XmlSerializer(typeof(List<SolPointSerializable>));
+            serializer.Serialize(writer,lst);
         }
 
         public static void Deserialize(TextReader reader,IDictionary dictionary) {
@@ -502,6 +492,34 @@ namespace SimpleIntegrator {
             }
         }
 
+        public static void DeserializeManySP(TextReader reader,IList<SolPoint> spList) {
+            
+            XmlSerializer serializer = new XmlSerializer(typeof(List<SolPointSerializable>));
+            List<SolPointSerializable> list = (List<SolPointSerializable>)serializer.Deserialize(reader);
+            foreach(var sps in list.OrderBy(v => v.t)) {
+                spList.Add(sps.GetSP());
+            }
+        }
+
+        [XmlRoot("spSer")]
+        public class SolPointSerializable {
+            [XmlArray("items")]
+            [XmlArrayItem("x")]
+            public double[] x;
+            [XmlAttribute]
+            public double t;
+            public SolPointSerializable() {
+
+            }
+            public SolPointSerializable(SolPoint sp) {
+                x = sp.X;
+                t = sp.T;
+            }
+            public SolPoint GetSP() {
+                var vec = new Vector(x);
+                return new SolPoint(t,vec);
+            }
+        }
 
         public class DictEntry {
             [XmlAttribute]
