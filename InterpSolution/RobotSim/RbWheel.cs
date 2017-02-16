@@ -222,9 +222,20 @@ namespace RobotSim {
             return answ;
         }
 
-        //public Vector3D GetWorldPos(int spikeIndex) {
+        public void AddMomentFunct(Func<double,double> mom_func, double maxOmegaX) {
+            MomentX.SynchMeAfter += t => {
+                var mom = mom_func(t);
+                MomentX.Value = Sign(mom) == Sign(Omega.X) && Abs(Omega.X) < maxOmegaX ? mom : 0d;
+            };
+        }
 
-        //}
+        public void AddMomentFunct(double mom_const,double maxOmegaX) {
+            MomentX.SynchMeAfter += t => {
+                var mom = mom_const;
+                MomentX.Value = Sign(mom) == Sign(Omega.X) && Abs(Omega.X) < maxOmegaX ? mom : 0d;
+            };
+        }
 
     }
+
 }

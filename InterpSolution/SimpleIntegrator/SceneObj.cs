@@ -207,12 +207,12 @@ namespace SimpleIntegrator {
             IScnObj hasWThisName = null;
             int ind = 0;
             do {
-                hasWThisName = null;
-                hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
-                newChild.Name =
-                    hasWThisName != null ?
-                    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
-                    newChild.Name;
+                //hasWThisName = null;
+                //hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
+                //newChild.Name =
+                //    hasWThisName != null ?
+                //    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
+                //    newChild.Name;
 
             } while(hasWThisName != null);
 

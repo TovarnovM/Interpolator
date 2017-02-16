@@ -41,14 +41,14 @@ namespace RobotSim {
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
 
-           sol.Body.Vec3D = new Vector3D(0,0.05,0);
+           sol.Body.Vec3D = new Vector3D(0.10,0.055,0);
             sol.Body.SynchQandM();
             sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-1,5));
             sol.Body.SynchQandM();
 
-            sol.CreateWheels();
-            sol.SynchWheelsToBodyPos();
-            
+            //sol.CreateWheelsSample();
+            //sol.SynchWheelsToBodyPos();
+
 
             //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
             //sol.Body.AddMoment(moment);
@@ -56,7 +56,9 @@ namespace RobotSim {
 
             //sol.SynchWheelsToBodyPos();
 
-            sol.CreateTracks();
+            //sol.CreateTracks();
+            sol.Create4GUS();
+
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
             sol.AddSurf(new RbSurfAngleFloor(10000,100,new Vector3D(-0.15,0,0), new Vector3D(1,1,0)));
             sol.AddGForcesToAll();
@@ -69,20 +71,20 @@ namespace RobotSim {
             //    new Vector3D(0.1,0,0),null,
             //    new Vector3D(0,0,0),sol.Body);
 
-            double moment = 100;
+            //double moment = 100;
 
-            var w0 = sol.wheels[0];
-            w0.MomentX.Value = moment;
-            w0.MomentX.SynchMeAfter += _ => {
-                w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
-            };
+            //var w0 = sol.wheels[0];
+            //w0.MomentX.Value = moment;
+            //w0.MomentX.SynchMeAfter += _ => {
+            //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
+            //};
             
 
-            var w3 = sol.wheels[3];
-            w3.MomentX.Value = -moment;
-            w3.MomentX.SynchMeAfter += _ => {
-                w3.MomentX.Value = w3.Omega.X < -6 ? 0d : -moment;
-            };
+            //var w3 = sol.wheels[3];
+            //w3.MomentX.Value = -moment;
+            //w3.MomentX.SynchMeAfter += _ => {
+            //    w3.MomentX.Value = w3.Omega.X < -6 ? 0d : -moment;
+            //};
             //sol.Body.AddMoment(w.MomentX);
             // break;
 

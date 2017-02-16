@@ -106,39 +106,5 @@ namespace RobotSim {
     }
 
 
-    public class GroundForce : Force {
-        IRbSurf surf;
-        MaterialObjectNewton who;
-        public GroundForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
-            this.surf = surf;
-            this.who = who;
-            Direction.Vec3D = surf.N0;
-            SynchMeBefore += SynchAction;
 
-
-        }
-        public void SynchAction(double t) {
-            var f = surf.GetNForce(AppPoint.Vec3D_World,who.GetVelWorld(AppPoint.Vec3D));
-
-            Value = f.GetLength();
-            Direction.Vec3D = f.Norm;
-        }
-    }
-
-    public class MagneticForce : Force {
-        IRbSurf surf;
-        MaterialObjectNewton who;
-        Func<double,double> f_ot_dist;
-        public MagneticForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf, Func<double,double> f_ot_dist) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
-            this.surf = surf;
-            this.who = who;
-            this.f_ot_dist = f_ot_dist;
-            Direction.Vec3D = -surf.N0;
-            SynchMeBefore += SynchAction;
-        }
-        public void SynchAction(double t) {
-            Value = f_ot_dist(surf.GetDistance(AppPoint.Vec3D_World));
-            Direction.Vec3D = -surf.N0;
-        }
-    }
 }

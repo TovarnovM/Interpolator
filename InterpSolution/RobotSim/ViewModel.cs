@@ -310,16 +310,20 @@ namespace RobotSim {
         }
 
         private void DrawOneWheel(RbWheel w, int ind) {
-            foreach(var z in w.Zubya) {
-                DrawOneZub(w,z, ind);
+            for(int i = 0; i < w.Zubya.Length; i++) {
+                var z = w.Zubya[i];
+                DrawOneZub(w,z, ind, i==0 ? 1d : 0.3);
             }
         }
 
-        private void DrawOneZub(RbWheel w,Vector3D z, int ind) {
+        private void DrawOneZub(RbWheel w,Vector3D z, int ind, double k = 1d) {
             var xAxisNorm = Vector3D.XAxis;
             var yAxisNorm = Vector3D.YAxis;
             var z0 = w.Vec3D;
             var z1 = w.WorldTransform * z;
+
+            
+            z0 += (z1 - z0) * (1 - k);
 
             wheelSerListXY[ind].Points.Add(new DataPoint(double.NaN,double.NaN));                  
             wheelSerListXY[ind].Points.Add(new DataPoint(z0 * xAxisNorm,z0 * yAxisNorm));
@@ -340,12 +344,15 @@ namespace RobotSim {
         }
 
         private void DrawTrack1() {
-            foreach(var track in DrawDummy.Tracks1) {
+            foreach(var track in DrawDummy.TracksAll) {
                 DrawOneTrack(track);
             }
-            foreach(var track in DrawDummy.Tracks2) {
-                DrawOneTrack(track);
-            }
+            //foreach(var track in DrawDummy.Tracks1) {
+            //    DrawOneTrack(track);
+            //}
+            //foreach(var track in DrawDummy.Tracks2) {
+            //    DrawOneTrack(track);
+            //}
             //foreach(var track in DrawDummy.tDummy.Tracks) {
             //    DrawOneTrack(track);
             //}
