@@ -27,8 +27,9 @@ namespace RobotSim {
 
         public Force MomentX;
         public Vector3D 
-            p0_body_loc = new Vector3D(0,0,0), 
-            n0_body_loc = new Vector3D(1,0,0);
+            p0_body_loc = new Vector3D(0,0,0), // положение центра колеса в СК тела, к которому оно прикреплено
+            n0_body_loc = new Vector3D(1,0,0), // направление оси вращения колеса (ось ОХ) в СК тела, к которому оно прикреплено
+            betta0r_body_loc = new Vector3D(0,1,0); // направление линии, определяющей нулевой угол поворота колеса в СК тела, к которому оно прикреплено
         public RbWheel(
             int n, 
             double R, 
@@ -274,6 +275,22 @@ namespace RobotSim {
         }
 
 
+        #endregion
+
+        #region TestConnect(hard)
+        public MaterialObjectNewton BodyMaster = null;
+        public double Betta { get; set; } = 0d;
+        public IScnPrm pBetta { get; set; } 
+
+        public void SynchWheelAndBody() {
+            var sk_glob = BodyMaster.WorldTransform * p0_body_loc;
+            Vec3D = sk_glob;
+            var p0_plus_n0 = sk_glob + (BodyMaster.WorldTransformRot*n0_body_loc).Norm;
+            SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis,p0_plus_n0,new Vector3D(0,0,0));
+
+            //развернуть согласно Бэтте
+            var 
+        }
         #endregion
 
     }

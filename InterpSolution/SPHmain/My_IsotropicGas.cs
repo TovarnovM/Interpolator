@@ -614,6 +614,10 @@ namespace SPH_2D
         public void SynchMe(double t) {
             throw new NotImplementedException();
         }
+
+        public void SynchMeTo(SolPoint sp) {
+            throw new NotImplementedException();
+        }
     }
 
     public class My_IsotropicGasMiracleDummy: IMy_IsotropicGas {

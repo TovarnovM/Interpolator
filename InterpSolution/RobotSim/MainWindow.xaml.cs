@@ -38,7 +38,7 @@ namespace RobotSim {
         public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
             solution.Body.SynchQandM();
             solution.wheels.ForEach(w => w.SynchQandM());
-            solution.BlockedWheels = true;
+            //solution.BlockedWheels = true;
         }
 
         public static RobotDynamics GetNewRD() {
