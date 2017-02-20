@@ -35,16 +35,21 @@ namespace RobotSim {
         public ViewModel vm { get; set; }
         TestVM tstVm { get; set; }
 
+        public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
+            solution.Body.SynchQandM();
+            solution.wheels.ForEach(w => w.SynchQandM());
+            solution.BlockedWheels = true;
+        }
 
         public static RobotDynamics GetNewRD() {
             var sol = new RobotDynamics();
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
 
-           sol.Body.Vec3D = new Vector3D(0.10,0.055,0);
+            sol.Body.Vec3D = new Vector3D(0.10,0.055,0);
             sol.Body.SynchQandM();
-            sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-1,5));
-            sol.Body.SynchQandM();
+            //sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-1,5));
+            //sol.Body.SynchQandM();
 
             //sol.CreateWheelsSample();
             //sol.SynchWheelsToBodyPos();
@@ -58,10 +63,14 @@ namespace RobotSim {
 
             //sol.CreateTracks();
             sol.Create4GUS();
+            //sol.Body.AddForce(Force.GetForceCentered(10,new Vector3D(1,0,0)));
 
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
-            sol.AddSurf(new RbSurfAngleFloor(10000,100,new Vector3D(-0.15,0,0), new Vector3D(1,1,0)));
+            //sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
+            sol.AddSurf_magnetic_standart(new RbSurfAngleFloor(10000,100,new Vector3D(-0.15,0,0), new Vector3D(1,0,0)),2);
             sol.AddGForcesToAll();
+
+            CommandsDependsOnCurrPOs(sol);
             //sol.CreateTrackDummy(50);
             //var f1 = Force.GetForce(
             //    new Vector3D(-0.1,0,0),null,
@@ -78,7 +87,7 @@ namespace RobotSim {
             //w0.MomentX.SynchMeAfter += _ => {
             //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
             //};
-            
+
 
             //var w3 = sol.wheels[3];
             //w3.MomentX.Value = -moment;
@@ -295,9 +304,9 @@ double omega = 2 * 3.14159 / T;
                 sr.Close();
 
                 unit4load.SynchMeTo(vm.SolPointList.Value.Last());
-                
-                
-                
+
+
+                CommandsDependsOnCurrPOs(unit4load);
                 initObs(unit4load);
 
 

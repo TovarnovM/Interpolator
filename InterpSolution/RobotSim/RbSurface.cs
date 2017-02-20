@@ -42,16 +42,18 @@ namespace RobotSim {
 
         public Vector3D N0 {
             get {
-                return Vector3D.YAxis;
+                return n0;
             }
         }
 
         public Vector3D p0;
+        public Vector3D n0;
 
         public RbSurfFloor(double k,double mu,Vector3D p0) {
             this.p0 = p0;
             this.k = k;
             this.mu = mu;
+            n0 = Vector3D.YAxis;
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Vector3D GetNForce(Vector3D WorldPos,Vector3D WorldVel) {
@@ -76,12 +78,7 @@ namespace RobotSim {
     }
 
     public class RbSurfAngleFloor : RbSurfFloor {
-        Vector3D n0;
-        public new Vector3D N0 {
-            get {
-                return n0;
-            }
-        }
+        
         public RbSurfAngleFloor(double k,double mu,Vector3D p0,Vector3D n0) : base(k,mu,p0) {
             this.n0 = n0.Norm;
         }

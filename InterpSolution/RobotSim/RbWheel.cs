@@ -82,7 +82,7 @@ namespace RobotSim {
             int n = 17;
             double r_real = 0.015;
             double R_ideal = 0.0095 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
-            var mass = PI * r_real * r_real * 0.021 * 1080*50;
+            var mass = PI * r_real * r_real * 0.021 * 1080*20;
             var res = new RbWheel(
                 n:n,
                 R:R_ideal,
@@ -235,6 +235,46 @@ namespace RobotSim {
                 MomentX.Value = Sign(mom) == Sign(Omega.X) && Abs(Omega.X) < maxOmegaX ? mom : 0d;
             };
         }
+
+        #region Blocked
+        private bool blocked = false;
+        public ForceBetween2Points f_wb,f_wbMirror;
+        public void ConnectBlockToBody(MaterialObjectNewton body, double k = 10000, double mu = 100) {
+            var z0 = Zubya[0]*10;
+            var z0uBody = body.WorldTransform_1 * (WorldTransform * z0);
+            f_wb = new ForceBetween2Points(this,body,z0,z0uBody,k,mu,0);
+            var Mirrz0uBody = body.WorldTransform_1 * (WorldTransform * (-z0));
+            f_wbMirror = new ForceBetween2Points(this,body,-z0,Mirrz0uBody,k,mu,0);
+            f_wb.Zeros = true;
+            f_wbMirror.Zeros = true;
+            AddForce(f_wb);
+            body.AddForceNegative(f_wb);
+            AddForce(f_wbMirror);
+            body.AddForceNegative(f_wbMirror);
+
+        }
+
+        public bool Blocked {
+            get { return blocked; }
+            set {              
+                if(f_wb == null)
+                    return;
+                blocked = value;
+                f_wb.Zeros = !blocked;
+                f_wbMirror.Zeros = !blocked;
+                //if(!blocked && value) {                   
+                var z0 = Zubya[0]*10;
+                f_wb.p1_loc.Vec3D = f_wb.sk1.WorldTransform_1 * (WorldTransform * z0);
+                var Mirrz0 = -z0;
+                f_wbMirror.p1_loc.Vec3D = f_wbMirror.sk1.WorldTransform_1 * (WorldTransform * Mirrz0);
+                //}
+                
+
+            }
+        }
+
+
+        #endregion
 
     }
 

@@ -24,6 +24,7 @@ namespace RobotSim {
     public class ForceBetween2Points : Force {
         public IMaterialObject sk0, sk1;
         public IPosition3D p0_loc, p1_loc;
+        public bool Zeros = false;
         public double k = 100, mu = 100, x0 = 0, k2 = 1000, mu2 = 100, x02 = -1d;
         public ForceBetween2Points(
             IMaterialObject sk0,
@@ -65,6 +66,10 @@ namespace RobotSim {
         }
 
         void synchMeBeforeAct(double t) {
+            Value = 0d;
+            if(Zeros) {
+                return;
+            }
             var p0loc = p0_loc.Vec3D;
             var p1loc = p1_loc.Vec3D;
 

@@ -51,15 +51,29 @@ namespace RobotSim {
             Body.Mass3D.Ix = Body.Mass.Value * (_h * _h + _w * _w) / 12d;
         }
 
-        public void AddSurf(IRbSurf surf, bool connectTracks = true) {
+        public void AddSurf(IRbSurf surf, double k_tr =1, bool connectTracks = true) {
             surfs.Add(surf);
             if(connectTracks) {
                 foreach(var tr in TracksAll) {
-                    tr.AddSurf(surf);
+                    tr.AddSurf(surf,k_tr);
                 }
             }
             
 
+        }
+
+        public void AddSurf_magnetic(IRbSurf surf, double k_tr, Func<double,double> magneticFunct) {
+            AddSurf(surf,k_tr,true);
+            foreach(var tr in TracksAll) {
+                tr.AddForce(new MagneticForce(tr,new Vector3D(0,0,0),surf,magneticFunct));
+            }
+        }
+
+        public void AddSurf_magnetic_standart(IRbSurf surf,double k_tr) {
+            AddSurf_magnetic(surf,k_tr,magneticForceTest);
+        }
+        double magneticForceTest(double h) {
+            return h > 0.015 ? 0d : 1.7;
         }
 
         public void UpdateWheelTrackInteraction(double t) {
@@ -132,7 +146,7 @@ namespace RobotSim {
             return wheel1;
         }
 
-        public void Create4GUS(double moment = 100d, double maxOmega = 6d) {
+        public void Create4GUS(double moment = 1d, double maxOmega = 6d) {
             var trackw05 = 0.01;
             var w0 = CreateWheelPairWithTracks(
                 Body,
@@ -162,6 +176,8 @@ namespace RobotSim {
             w1.AddMomentFunct(moment,maxOmega);
             w2.AddMomentFunct(-moment,maxOmega);
             w3.AddMomentFunct(-moment,maxOmega);
+
+            blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
             //w0.MomentX.Value = moment;
             //w0.MomentX.SynchMeAfter += _ => {
             //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
@@ -247,6 +263,22 @@ namespace RobotSim {
         }
 
         #region Насаживаем Колеса
+        private bool blockedWheels;
+        public List<RbWheel> blockableWheels = new List<RbWheel>();
+
+        public bool BlockedWheels {
+            get { return blockedWheels; }
+            set { blockedWheels = value;
+
+                foreach(var bw in blockableWheels) {
+                    bw.SynchQandM();
+                    Body.SynchQandM();
+                    bw.Blocked = value;
+                }
+            }
+        }
+
+
         public double L_osi = 0.02;
         public void ConnectWheelToBody(MaterialObjectNewton connectBody, RbWheel wheel, double k = 100000, double mu= 1000) {
             var p0_wheel_loc = new Vector3D(0,0,0);
@@ -269,6 +301,7 @@ namespace RobotSim {
             connectBody.AddForce(f1_toBody);
 
             connectBody.AddMomentNegative(wheel.MomentX);
+            wheel.ConnectBlockToBody(connectBody,k,mu);
         }
 
         public void SynchWheelPos(MaterialObjectNewton connectBody, RbWheel wheel) {
