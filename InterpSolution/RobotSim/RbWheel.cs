@@ -289,6 +289,7 @@ namespace RobotSim {
             SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis,p0_plus_n0,new Vector3D(0,0,0));
 
             //развернуть согласно Бэтте
+
             
         }
         #endregion

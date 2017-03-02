@@ -134,6 +134,7 @@ namespace RobotSim {
             ConnectWheelToBody(connectBody,wheel2,wheelBody_k,wheelBody_mu);
 
             var Tracks1 = GetTracks(wheel1,wheel2,connectBody);
+
             foreach(var t in Tracks1) {
                 t.WheelsInteractsWithMe.Add(wheel1);
                 t.WheelsInteractsWithMe.Add(wheel2);
@@ -163,13 +164,13 @@ namespace RobotSim {
             var w3 = CreateWheelPairWithTracks(
                 Body,
                 GetUgolLocal(3) - Vector3D.XAxis * 0.0484 + Vector3D.YAxis * _h / 4 - Vector3D.ZAxis * trackw05,
-                -Vector3D.ZAxis,
+                Vector3D.ZAxis,
                 -Vector3D.XAxis * 0.07);
 
             var w2 = CreateWheelPairWithTracks(
                 Body,
                 GetUgolLocal(2) + Vector3D.YAxis * _h / 4 - Vector3D.ZAxis * trackw05,
-                -Vector3D.ZAxis,
+                Vector3D.ZAxis,
                 Vector3D.XAxis * 0.07);
 
             w0.AddMomentFunct(moment,maxOmega);

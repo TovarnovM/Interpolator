@@ -46,10 +46,10 @@ namespace RobotSim {
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
 
-            sol.Body.Vec3D = new Vector3D(0.10,0.055,0);
+            sol.Body.Vec3D = new Vector3D(1.10,1.055,1);
             sol.Body.SynchQandM();
-            //sol.Body.RotateOXtoVec(sol.Body.WorldTransform * new Vector3D(10,-1,5));
-            //sol.Body.SynchQandM();
+            sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,10,-10));
+            sol.Body.SynchQandM();
 
             //sol.CreateWheelsSample();
             //sol.SynchWheelsToBodyPos();
