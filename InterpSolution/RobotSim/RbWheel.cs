@@ -285,12 +285,17 @@ namespace RobotSim {
         public void SynchWheelAndBody() {
             var sk_glob = BodyMaster.WorldTransform * p0_body_loc;
             Vec3D = sk_glob;
+            SynchQandM();
             var p0_plus_n0 = sk_glob + (BodyMaster.WorldTransformRot*n0_body_loc).Norm;
             SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis,p0_plus_n0,new Vector3D(0,0,0));
 
             //развернуть согласно Бэтте
 
-            
+            var p0_plus_betta0r = sk_glob + (BodyMaster.WorldTransformRot * betta0r_body_loc);
+           // SetPosition_LocalPoint_LocalFixed(Vector3D.YAxis)
+
+
+
         }
         #endregion
 
