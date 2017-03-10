@@ -148,12 +148,14 @@ namespace SimpleIntegrator {
             AddDiffPropToParam(pQx,pdQXdt);
             AddDiffPropToParam(pQy,pdQYdt);
             AddDiffPropToParam(pQz,pdQZdt);
+
+            SynchMeAfter = NewtonLaw3D;
         }
 
         public MaterialObjectNewton(Vector3D posVec,string name = DEFNAME) : this(posVec.X,posVec.Y,posVec.Z,name) { }
         public MaterialObjectNewton(string name = DEFNAME) : this(0d,0d,0d,name) { }
 
-        public override void NewtonLaw(double t) {
+        public void NewtonLaw3D(double t) {
             var fsummWorld = ForceWorldSumm(t);
             UpdateAcc(fsummWorld);
             var momSumLocal = WorldTransformRot_1 * GetMomentsWorldSum(t);

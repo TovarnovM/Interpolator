@@ -68,7 +68,7 @@ namespace RobotSim {
             //    ForcesFromTracksNegative[2 * i+1] = Force.GetForce(0d,new Vector3D(1,0,0),null,new Vector3D(1,0,0),null);
             //}
 
-            Mass3D.Ix = mass * R * R / 2;
+            Mass3D.Ix = 100*mass * R * R / 2;
             Mass3D.Iy = mass * (3*R * R + H_wheel* H_wheel) / 12;
             Mass3D.Iz = Mass3D.Iy;
 
@@ -279,10 +279,34 @@ namespace RobotSim {
 
         #region TestConnect(hard)
         public MaterialObjectNewton BodyMaster = null;
+        public Force forceToBody, momentToBody;
         public double Betta { get; set; } = 0d;
-        public IScnPrm pBetta { get; set; } 
+        public IScnPrm pBetta { get; set; }
+        public double dBetta { get; set; } = 0d;
+        public IScnPrm pdBetta { get; set; }
 
-        public void SynchWheelAndBody() {
+        public double BettaOtn {
+            get {
+                var b = Betta % (2 * PI);
+                b += b < 0d ? (2 * PI) : 0d;
+                return b;
+            }
+        }
+
+        public double GetBettaFact() {
+            var betta0r = WorldTransformRot_1 * (BodyMaster.WorldTransformRot * betta0r_body_loc);
+            return Acos(Vector3D.YAxis * betta0r.Norm);
+        }
+
+        public void InitBettaFact() {
+            if(BodyMaster != null)
+                Betta = GetBettaFact();
+
+        }
+
+        public void SynchMeToBodyAndBetta(double t = 0d) {
+            if(BodyMaster == null)
+                return;
             var sk_glob = BodyMaster.WorldTransform * p0_body_loc;
             Vec3D = sk_glob;
             SynchQandM();
@@ -292,10 +316,77 @@ namespace RobotSim {
             //развернуть согласно Бэтте
 
             var p0_plus_betta0r = sk_glob + (BodyMaster.WorldTransformRot * betta0r_body_loc);
-           // SetPosition_LocalPoint_LocalFixed(Vector3D.YAxis)
+            SetPosition_LocalPoint_LocalFixed(Vector3D.YAxis,p0_plus_betta0r,-Vector3D.XAxis,Vector3D.XAxis);
+            var xaxis_world = WorldTransformRot * Vector3D.XAxis;
+            var quat = QuaternionD.FromAxisAngle(xaxis_world,BettaOtn);
+            q = quat * q;
+            SynchQandM();
+        }
 
+        public void NewtonLaw3D4Wheel(double t) {
+            //var fsummWorld = ForceWorldSumm(t);
+            //forceToBody.Vec3D_Dir_World = fsummWorld;
+            var momSum = Vector3D.Zero;
+            foreach(var mom in Moments) {
+                momSum += mom.Vec3D_Dir_World;
+            }
+            foreach(var mom in MomentsNegative) {
+                momSum -= mom.Vec3D_Dir_World * mom.ValueMultyplyer4Negative;
+            }
+            var xaxisWorld = WorldTransformRot * Vector3D.XAxis;
 
+            var momToBodyVector = momSum - (momSum * xaxisWorld) * xaxisWorld.Norm;
+            //momentToBody.Vec3D_Dir_World = momToBodyVector;
 
+            foreach(var force in Forces) {
+                momSum += force.GetMoment_World(Vec3D);
+            }
+            foreach(var force in ForcesNegative) {
+                momSum -= force.GetMoment_World(Vec3D) * force.ValueMultyplyer4Negative;
+            }
+
+            var momSumLocal = WorldTransformRot_1 * momSum;
+            dBetta = (momSumLocal * Vector3D.XAxis) / Mass3D.Ix;
+        }
+
+        public void ConnectMeToBody(MaterialObjectNewton connectBody,double L_osi, double k = 100000,double mu = 1000) {
+            var wheel = this;
+            var p0_wheel_loc = new Vector3D(0,0,0);
+            var p1_wheel_loc = p0_wheel_loc + Vector3D.XAxis * L_osi;
+            var p1_body_loc = p0_body_loc + wheel.n0_body_loc * L_osi;
+
+            //wheel.SetPosition(wheel.WorldTransform * p0_wheel_loc,connectBody.WorldTransform * wheel.p0_body_loc);
+            wheel.Vec3D = connectBody.WorldTransform * wheel.p0_body_loc;
+            wheel.SynchQandM();
+            wheel.SetPosition(wheel.WorldTransform * p1_wheel_loc,connectBody.WorldTransform * (wheel.p0_body_loc + wheel.n0_body_loc * L_osi),wheel.WorldTransform * p0_wheel_loc);
+
+            var f0_toWheel = new ForceBetween2Points(wheel,connectBody,p0_wheel_loc,wheel.p0_body_loc,k,mu);
+            var f1_toWheel = new ForceBetween2Points(wheel,connectBody,p1_wheel_loc,p1_body_loc,k,mu);
+            wheel.AddForce(f0_toWheel);
+            wheel.AddForce(f1_toWheel);
+
+            var f0_toBody = new ForceBetween2Points(connectBody,wheel,wheel.p0_body_loc,p0_wheel_loc,k,mu);
+            var f1_toBody = new ForceBetween2Points(connectBody,wheel,p1_body_loc,p1_wheel_loc,k,mu);
+            connectBody.AddForce(f0_toBody);
+            connectBody.AddForce(f1_toBody);
+
+            connectBody.AddMomentNegative(wheel.MomentX);
+            wheel.ConnectBlockToBody(connectBody,k,mu);
+        }
+
+        public void ConnectMeToBody_newVariant(MaterialObjectNewton connectBody,double k = 100000,double mu = 1000) {
+            SynchMeBefore = SynchMeToBodyAndBetta;
+            SynchMeAfter = NewtonLaw3D4Wheel;
+            AddDiffPropToParam(pBetta,pdBetta);
+            BodyMaster = connectBody;
+            forceToBody = Force.GetForce(Vector3D.Zero,null,p0_body_loc,connectBody);
+            connectBody.AddForce(forceToBody);
+            momentToBody = Force.GetMoment(0d,Vector3D.XAxis);
+            connectBody.AddMoment(momentToBody);
+
+            SynchMeToBodyAndBetta();
+            connectBody.AddMomentNegative(MomentX);
+            ConnectBlockToBody(connectBody,k,mu);
         }
         #endregion
 

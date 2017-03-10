@@ -109,7 +109,9 @@ namespace SimpleIntegrator {
         public IScnPrm pQx { get; set; }
         public IScnPrm pQy { get; set; }
         public IScnPrm pQz { get; set; }
-
+        /// <summary>
+        /// матрица вращения из Локальнойй СК в МИРОВУЮ СК
+        /// </summary>
         public Matrix3D WorldTransformRot {
             get {
                 return worldTransform.Rot;

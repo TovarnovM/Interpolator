@@ -45,12 +45,18 @@ namespace RobotSim {
             var sol = new RobotDynamics();
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
-
-            sol.Body.Vec3D = new Vector3D(1.10,1.055,1);
+            //sol.CreateWheelsSample(false);
+            sol.Body.Vec3D = new Vector3D(0.3,0.1,0);
             sol.Body.SynchQandM();
-            sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,10,-10));
-            sol.Body.SynchQandM();
+            //sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,10,-10));
+            //sol.Body.SynchQandM();
 
+            //double betta = -4d;
+            //foreach(var w in sol.wheels) {
+            //    w.Betta = betta;
+            //    betta += Math.PI * 0.2;
+            //    w.SynchMeToBodyAndBetta();
+            //}
             //sol.CreateWheelsSample();
             //sol.SynchWheelsToBodyPos();
 
@@ -64,6 +70,9 @@ namespace RobotSim {
             //sol.CreateTracks();
             sol.Create4GUS();
             //sol.Body.AddForce(Force.GetForceCentered(10,new Vector3D(1,0,0)));
+            
+            
+
 
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
             //sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);

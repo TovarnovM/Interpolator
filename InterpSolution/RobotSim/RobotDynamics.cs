@@ -130,6 +130,9 @@ namespace RobotSim {
             wheel2.n0_body_loc = localN0;
             wheel2.p0_body_loc = locPosW1 + otnApproxPosw2;// - localN0.Norm*(otnApproxPosw2*localN0.Norm);
 
+
+            //wheel1.ConnectMeToBody_newVariant(connectBody);
+            //wheel2.ConnectMeToBody_newVariant(connectBody);
             ConnectWheelToBody(connectBody,wheel1,wheelBody_k,wheelBody_mu);
             ConnectWheelToBody(connectBody,wheel2,wheelBody_k,wheelBody_mu);
 
@@ -187,12 +190,13 @@ namespace RobotSim {
 
 
 
-        public void CreateWheelsSample() {
+        public void CreateWheelsSample(bool connectIt = true) {
             for(int i = 0; i < 6; i++) {
                 var wheel = RbWheel.GetStandart();
                 wheel.Name = "wheel" + (n_wheels++).ToString();
                 wheels.Add(wheel);
                 Body.AddChild(wheel);
+                wheel.BodyMaster = Body;
             }
             var trackw05 = 0.01;
             wheels[0].n0_body_loc = Vector3D.ZAxis;
@@ -211,14 +215,18 @@ namespace RobotSim {
             wheels[4].p0_body_loc = 0.5*(GetUgolLocal(0)+ GetUgolLocal(1)) + Vector3D.YAxis * _h / 4 + wheels[0].n0_body_loc * trackw05;
             wheels[5].n0_body_loc = -Vector3D.ZAxis;
             wheels[5].p0_body_loc = 0.5 * (GetUgolLocal(2) + GetUgolLocal(3)) + Vector3D.YAxis * _h / 4 + wheels[3].n0_body_loc * trackw05;
-            for(int i = 0; i < 4; i++) {
-                var w = wheels[i];
-                ConnectWheelToBody(Body,w);
+            if(connectIt) {
+
+                for(int i = 0; i < 4; i++) {
+                    var w = wheels[i];
+                    ConnectWheelToBody(Body,w);
+                }
+                for(int i = 4; i < 6; i++) {
+                    var w = wheels[i];
+                    ConnectWheelToBody(Body,w,100000,100);
+                }
             }
-            for(int i = 4; i < 6; i++) {
-                var w = wheels[i];
-                ConnectWheelToBody(Body,w,100000,100);
-            }
+
 
         }
 
@@ -282,27 +290,7 @@ namespace RobotSim {
 
         public double L_osi = 0.02;
         public void ConnectWheelToBody(MaterialObjectNewton connectBody, RbWheel wheel, double k = 100000, double mu= 1000) {
-            var p0_wheel_loc = new Vector3D(0,0,0);
-            var p1_wheel_loc = p0_wheel_loc + Vector3D.XAxis * L_osi;
-            var p1_body_loc = wheel.p0_body_loc + wheel.n0_body_loc * L_osi;
-
-            //wheel.SetPosition(wheel.WorldTransform * p0_wheel_loc,connectBody.WorldTransform * wheel.p0_body_loc);
-            wheel.Vec3D = connectBody.WorldTransform * wheel.p0_body_loc;
-            wheel.SynchQandM();
-            wheel.SetPosition(wheel.WorldTransform * p1_wheel_loc,connectBody.WorldTransform * (wheel.p0_body_loc + wheel.n0_body_loc * L_osi),wheel.WorldTransform * p0_wheel_loc);
-
-            var f0_toWheel = new ForceBetween2Points(wheel,connectBody,p0_wheel_loc,wheel.p0_body_loc,k,mu);
-            var f1_toWheel = new ForceBetween2Points(wheel,connectBody,p1_wheel_loc,p1_body_loc,k,mu);
-            wheel.AddForce(f0_toWheel);
-            wheel.AddForce(f1_toWheel);
-
-            var f0_toBody = new ForceBetween2Points(connectBody,wheel,wheel.p0_body_loc,p0_wheel_loc,k,mu);
-            var f1_toBody = new ForceBetween2Points(connectBody,wheel,p1_body_loc,p1_wheel_loc,k,mu);
-            connectBody.AddForce(f0_toBody);
-            connectBody.AddForce(f1_toBody);
-
-            connectBody.AddMomentNegative(wheel.MomentX);
-            wheel.ConnectBlockToBody(connectBody,k,mu);
+            wheel.ConnectMeToBody(connectBody,L_osi,k,mu);
         }
 
         public void SynchWheelPos(MaterialObjectNewton connectBody, RbWheel wheel) {
@@ -332,6 +320,8 @@ namespace RobotSim {
             w1.SynchQandM();
             w2.SynchQandM();
 
+            w1.InitBettaFact();
+            w2.InitBettaFact();
 
             return (w1.WorldTransform * w1.Zubya[0] - w2.WorldTransform * w2.Zubya[n]).GetLength();
         }
