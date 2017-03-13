@@ -68,16 +68,20 @@ namespace RobotSim {
             //sol.SynchWheelsToBodyPos();
 
             //sol.CreateTracks();
-            sol.Create4GUS();
+            sol.Create4GUS(10,10);
             //sol.Body.AddForce(Force.GetForceCentered(10,new Vector3D(1,0,0)));
-            
-            
+            //sol.Body.Omega.X = 0.2;
+            //sol.Body.Omega.Y = 0.4;
+            //sol.Body.Omega.Z = 0.6;
+
 
 
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
             //sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
-            sol.AddSurf_magnetic_standart(new RbSurfAngleFloor(10000,100,new Vector3D(-0.15,0,0), new Vector3D(1,0,0)),2);
+            sol.AddSurf_magnetic_standart(new RbSurfAngleFloor(10000,100,new Vector3D(0,0,0), new Vector3D(1,1,0)),2);
             sol.AddGForcesToAll();
+            //sol.wheels[1].AddForce(
+            //    Force.GetForce(new Vector3D(-5,0,0),null,new Vector3D(0,0,0),sol.wheels[1]));
 
             CommandsDependsOnCurrPOs(sol);
             //sol.CreateTrackDummy(50);

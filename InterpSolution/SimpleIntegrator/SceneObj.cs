@@ -204,20 +204,37 @@ namespace SimpleIntegrator {
         }
 
         public void AddChild(IScnObj newChild) {
-            IScnObj hasWThisName = null;
-            int ind = 0;
-            do {
-                //hasWThisName = null;
-                //hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
-                //newChild.Name =
-                //    hasWThisName != null ?
-                //    Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
-                //    newChild.Name;
+            //IScnObj hasWThisName = null;
+            //int ind = 0;
+            //do {
 
-            } while(hasWThisName != null);
+            //    hasWThisName = null;
+            //    hasWThisName = Children.FirstOrDefault(ch => ch.Name == newChild.Name);
+            //    newChild.Name =
+            //        hasWThisName != null ?
+            //        Regex.Replace(hasWThisName.Name,@"\d+$","") + (++ind).ToString() :
+            //        newChild.Name;
 
+            //} while(hasWThisName != null);
+
+            newChild.Name = GetNewUniqueName(newChild.Name,Children.Select(c => c.Name));
             Children.Add(newChild);
             newChild.Owner = this;
+        }
+
+        public static string GetNewUniqueName(string currName, IEnumerable<string> existingNames) {
+            if(existingNames.Any(n => n == currName)) {
+                var clearName = Regex.Replace(currName,@"[\d-]",string.Empty);
+                var regex = new Regex($@"^{clearName}\d+");
+                var maxNumb = existingNames
+                    .Select(n => regex.Match(n).Value)
+                    .Select(n => n != "" ? Regex.Match(n,@"\d+").Value : "0" )
+                    .Select(n => Convert.ToInt32(n))
+                    .Max();
+
+                currName = clearName + (++maxNumb).ToString();
+            }
+            return currName;
         }
 
         public void AddChildUnsafe(IScnObj newChild) {

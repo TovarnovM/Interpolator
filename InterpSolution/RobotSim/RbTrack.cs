@@ -138,6 +138,9 @@ namespace RobotSim {
             res.AddForce(res.ForceFromWheel4);
             res.AddForce(res.ForceFromWheel5);
             res.AddForce(res.ForceFromWheel6);
+
+            res.SynchMeAfter = res.NewtonLawWithFrict;
+
             return res;
 
         }
@@ -170,7 +173,7 @@ namespace RobotSim {
 
         }
 
-        public override void NewtonLaw(double t) {
+        public void NewtonLawWithFrict(double t) {
             var fsumWorld = ForceWorldSumm(t);
             foreach(var si in SurfList) {
                 ApplyFrictForces(ref fsumWorld,si);

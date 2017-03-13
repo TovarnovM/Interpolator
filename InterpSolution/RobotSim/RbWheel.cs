@@ -68,7 +68,7 @@ namespace RobotSim {
             //    ForcesFromTracksNegative[2 * i+1] = Force.GetForce(0d,new Vector3D(1,0,0),null,new Vector3D(1,0,0),null);
             //}
 
-            Mass3D.Ix = 100*mass * R * R / 2;
+            Mass3D.Ix = 10*mass * R * R / 2;
             Mass3D.Iy = mass * (3*R * R + H_wheel* H_wheel) / 12;
             Mass3D.Iz = Mass3D.Iy;
 
@@ -233,7 +233,13 @@ namespace RobotSim {
         public void AddMomentFunct(double mom_const,double maxOmegaX) {
             MomentX.SynchMeAfter += t => {
                 var mom = mom_const;
-                MomentX.Value = Sign(mom) == Sign(Omega.X) && Abs(Omega.X) < maxOmegaX ? mom : 0d;
+                MomentX.Value = mom;
+                if(Sign(mom) != Sign(Omega.X))
+                    MomentX.Value = mom;
+                else if(Abs(Omega.X) < maxOmegaX)
+                    MomentX.Value = mom;
+                else
+                    MomentX.Value = 0d;
             };
         }
 
@@ -284,6 +290,8 @@ namespace RobotSim {
         public IScnPrm pBetta { get; set; }
         public double dBetta { get; set; } = 0d;
         public IScnPrm pdBetta { get; set; }
+        public double ddBetta { get; set; } = 0d;
+        public IScnPrm pddBetta { get; set; }
 
         public double BettaOtn {
             get {
@@ -324,8 +332,8 @@ namespace RobotSim {
         }
 
         public void NewtonLaw3D4Wheel(double t) {
-            //var fsummWorld = ForceWorldSumm(t);
-            //forceToBody.Vec3D_Dir_World = fsummWorld;
+            var fsummWorld = ForceWorldSumm(t);
+            forceToBody.Vec3D_Dir_World = fsummWorld;
             var momSum = Vector3D.Zero;
             foreach(var mom in Moments) {
                 momSum += mom.Vec3D_Dir_World;
@@ -336,7 +344,7 @@ namespace RobotSim {
             var xaxisWorld = WorldTransformRot * Vector3D.XAxis;
 
             var momToBodyVector = momSum - (momSum * xaxisWorld) * xaxisWorld.Norm;
-            //momentToBody.Vec3D_Dir_World = momToBodyVector;
+            momentToBody.Vec3D_Dir_World = momToBodyVector;
 
             foreach(var force in Forces) {
                 momSum += force.GetMoment_World(Vec3D);
@@ -346,7 +354,8 @@ namespace RobotSim {
             }
 
             var momSumLocal = WorldTransformRot_1 * momSum;
-            dBetta = (momSumLocal * Vector3D.XAxis) / Mass3D.Ix;
+            ddBetta = (momSumLocal * Vector3D.XAxis) / Mass3D.Ix;
+            Omega.X = dBetta;
         }
 
         public void ConnectMeToBody(MaterialObjectNewton connectBody,double L_osi, double k = 100000,double mu = 1000) {
@@ -375,9 +384,28 @@ namespace RobotSim {
         }
 
         public void ConnectMeToBody_newVariant(MaterialObjectNewton connectBody,double k = 100000,double mu = 1000) {
+            pX.MyDiff = null;
+            pY.MyDiff = null;
+            pZ.MyDiff = null;
+            Vel.pX.MyDiff = null;
+            Vel.pY.MyDiff = null;
+            Vel.pZ.MyDiff = null;
+            pQw.MyDiff = null;
+            pQx.MyDiff = null;
+            pQy.MyDiff = null;
+            pQz.MyDiff = null;
+            pdQWdt.MyDiff = null;
+            pdQXdt.MyDiff = null;
+            pdQYdt.MyDiff = null;
+            pdQZdt.MyDiff = null;
+            Omega.pX.MyDiff = null;
+            Omega.pY.MyDiff = null;
+            Omega.pZ.MyDiff = null;
+
             SynchMeBefore = SynchMeToBodyAndBetta;
             SynchMeAfter = NewtonLaw3D4Wheel;
             AddDiffPropToParam(pBetta,pdBetta);
+            AddDiffPropToParam(pdBetta,pddBetta);
             BodyMaster = connectBody;
             forceToBody = Force.GetForce(Vector3D.Zero,null,p0_body_loc,connectBody);
             connectBody.AddForce(forceToBody);

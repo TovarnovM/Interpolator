@@ -131,10 +131,10 @@ namespace RobotSim {
             wheel2.p0_body_loc = locPosW1 + otnApproxPosw2;// - localN0.Norm*(otnApproxPosw2*localN0.Norm);
 
 
-            //wheel1.ConnectMeToBody_newVariant(connectBody);
-            //wheel2.ConnectMeToBody_newVariant(connectBody);
-            ConnectWheelToBody(connectBody,wheel1,wheelBody_k,wheelBody_mu);
-            ConnectWheelToBody(connectBody,wheel2,wheelBody_k,wheelBody_mu);
+            wheel1.ConnectMeToBody_newVariant(connectBody);
+            wheel2.ConnectMeToBody_newVariant(connectBody);
+            //ConnectWheelToBody(connectBody,wheel1,wheelBody_k,wheelBody_mu);
+            //ConnectWheelToBody(connectBody,wheel2,wheelBody_k,wheelBody_mu);
 
             var Tracks1 = GetTracks(wheel1,wheel2,connectBody);
 
@@ -150,7 +150,7 @@ namespace RobotSim {
             return wheel1;
         }
 
-        public void Create4GUS(double moment = 1d, double maxOmega = 6d) {
+        public void Create4GUS(double moment = 10d, double maxOmega = 6d) {
             var trackw05 = 0.01;
             var w0 = CreateWheelPairWithTracks(
                 Body,
@@ -178,10 +178,12 @@ namespace RobotSim {
 
             w0.AddMomentFunct(moment,maxOmega);
             w1.AddMomentFunct(moment,maxOmega);
-            w2.AddMomentFunct(-moment,maxOmega);
-            w3.AddMomentFunct(-moment,maxOmega);
+            w2.AddMomentFunct(moment,maxOmega);
+            w3.AddMomentFunct(moment,maxOmega);
 
-            blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
+
+
+            //blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
             //w0.MomentX.Value = moment;
             //w0.MomentX.SynchMeAfter += _ => {
             //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;

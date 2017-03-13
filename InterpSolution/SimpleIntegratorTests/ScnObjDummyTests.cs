@@ -79,5 +79,26 @@ namespace SimpleIntegrator.Tests {
 
         }
 
+        [TestMethod()]
+        public void GetNewUniqueNameTest1() {
+            string[] names = { "33","name","name2","name33", "notname33" };
+            var currName = "name2";
+            var answ = ScnObjDummy.GetNewUniqueName(currName,names.AsEnumerable());
+            Assert.AreEqual("name34",answ);
+        }
+
+        [TestMethod()]
+        public void GetNewUniqueNameTest2() {
+            var pat = "pat";
+            int n = 1000;
+            var lst = new List<string>(n);
+            for(int i = 0; i < n; i++) {
+                lst.Add(ScnObjDummy.GetNewUniqueName(pat,lst));
+            }
+
+            for(int i = 1; i < n; i++) {
+                Assert.AreEqual(pat + i.ToString(),lst[i]);
+            }
+        }
     }
 }
