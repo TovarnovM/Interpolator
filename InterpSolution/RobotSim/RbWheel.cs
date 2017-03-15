@@ -325,10 +325,11 @@ namespace RobotSim {
 
             var p0_plus_betta0r = sk_glob + (BodyMaster.WorldTransformRot * betta0r_body_loc);
             SetPosition_LocalPoint_LocalFixed(Vector3D.YAxis,p0_plus_betta0r,-Vector3D.XAxis,Vector3D.XAxis);
-            var xaxis_world = WorldTransformRot * Vector3D.XAxis;
-            var quat = QuaternionD.FromAxisAngle(xaxis_world,BettaOtn);
-            q = quat * q;
-            SynchQandM();
+            SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.YAxis,Vector3D.YAxis * Cos(Betta) + Vector3D.ZAxis * Sin(Betta),-Vector3D.XAxis,Vector3D.XAxis);
+            //var xaxis_world = WorldTransformRot * Vector3D.XAxis;
+            //var quat = QuaternionD.FromAxisAngle(xaxis_world,Betta);
+            //q = quat * q;
+            //SynchQandM();
         }
 
         public void NewtonLaw3D4Wheel(double t) {

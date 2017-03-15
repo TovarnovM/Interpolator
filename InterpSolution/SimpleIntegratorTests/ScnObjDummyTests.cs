@@ -72,6 +72,7 @@ namespace SimpleIntegrator.Tests {
             foreach(var elem0 in dict) {
                 Assert.IsTrue(dictLoaded.ContainsKey(elem0.Key));
                 Assert.AreEqual(elem0.Value,dictLoaded[elem0.Key]);
+
             }
 
 

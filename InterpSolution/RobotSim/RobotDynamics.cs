@@ -136,6 +136,8 @@ namespace RobotSim {
             //ConnectWheelToBody(connectBody,wheel1,wheelBody_k,wheelBody_mu);
             //ConnectWheelToBody(connectBody,wheel2,wheelBody_k,wheelBody_mu);
 
+            //RotateWheels(wheel1,wheel2,connectBody);
+
             var Tracks1 = GetTracks(wheel1,wheel2,connectBody);
 
             foreach(var t in Tracks1) {
@@ -310,20 +312,22 @@ namespace RobotSim {
 
         #region насаживаем трэки
         double RotateWheels(RbWheel w1, RbWheel w2, IOrient3D connectBody) {
-            var r21 = w2.Vec3D - w1.Vec3D;
-            var r21n = r21.Norm;
-            w1.SetPosition_LocalPoint_LocalFixed(
-                new Vector3D(0,1,0),w1.Vec3D - connectBody.WorldTransformRot * Vector3D.YAxis,
-                new Vector3D(0,0,0),new Vector3D(1,0,0));
-            w2.SetPosition_LocalPoint_LocalFixed(
-                new Vector3D(0,1,0),w2.Vec3D + connectBody.WorldTransformRot * Vector3D.YAxis,
-                new Vector3D(0,0,0),new Vector3D(1,0,0));
+            w1.Betta = 0;
+            w2.Betta = Math.PI;
+            w1.SynchMeToBodyAndBetta();
+            w2.SynchMeToBodyAndBetta();
+            //w1.SetPosition_LocalPoint_LocalFixed(
+            //    new Vector3D(0,1,0),w1.Vec3D - connectBody.WorldTransformRot * Vector3D.YAxis,
+            //    new Vector3D(0,0,0),new Vector3D(1,0,0));
+            //w2.SetPosition_LocalPoint_LocalFixed(
+            //    new Vector3D(0,1,0),w2.Vec3D + connectBody.WorldTransformRot * Vector3D.YAxis,
+            //    new Vector3D(0,0,0),new Vector3D(1,0,0));
             int n = w1.n_shag / 2;
-            w1.SynchQandM();
-            w2.SynchQandM();
+            //w1.SynchQandM();
+            //w2.SynchQandM();
 
-            w1.InitBettaFact();
-            w2.InitBettaFact();
+            //w1.InitBettaFact();
+            //w2.InitBettaFact();
 
             return (w1.WorldTransform * w1.Zubya[0] - w2.WorldTransform * w2.Zubya[n]).GetLength();
         }
@@ -354,19 +358,20 @@ namespace RobotSim {
         }
 
         List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody) {
-            var wl= w1.X < w2.X ? w1 : w2;
+            var l21 = RotateWheels(w1,w2,connectBody);
+            var wl = w1.X < w2.X ? w1 : w2;
             var wr = w1.X >= w2.X ? w1 : w2;
 
-            if(w1.XAxis * (connectBody.WorldTransformRot * Vector3D.ZAxis) < 0) {
-                var wtemp = wl;
-                wl = wr;
-                wr = wtemp;
-            }
+            //if(w1.XAxis * (connectBody.WorldTransformRot * Vector3D.ZAxis) < 0) {
+            //    var wtemp = wl;
+            //    wl = wr;
+            //    wr = wtemp;
+            //}
 
             w1 = wl;
             w2 = wr;
 
-            var l21 = RotateWheels(w1,w2,connectBody);
+
             var lst0 = new List<RbTrack>();
             var r21 = w2.Vec3D - w1.Vec3D;
             var r21norm = r21.Norm;
@@ -380,7 +385,7 @@ namespace RobotSim {
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
                 var t0 = RbTrack.GetStandart();
-                t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
+                //t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
@@ -413,7 +418,7 @@ namespace RobotSim {
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
                 var t0 = RbTrack.GetStandart();
-                t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
+                //t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
@@ -451,8 +456,8 @@ namespace RobotSim {
 
 
 
-            return ConnectTrackLoop(lst0);
-            //return lst0;
+            //return ConnectTrackLoop(lst0);
+            return lst0;
 
 
             //var shag = (t0.ConnP[3] - t0.ConnP[1]).GetLength();

@@ -48,8 +48,8 @@ namespace RobotSim {
             //sol.CreateWheelsSample(false);
             sol.Body.Vec3D = new Vector3D(0.3,0.1,0);
             sol.Body.SynchQandM();
-            //sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,10,-10));
-            //sol.Body.SynchQandM();
+            sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,-1,-4));
+            sol.Body.SynchQandM();
 
             //double betta = -4d;
             //foreach(var w in sol.wheels) {
@@ -79,6 +79,7 @@ namespace RobotSim {
             sol.AddSurf(new RbSurfFloor(10000,100,new Vector3D(1,0,1)));
             //sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
             sol.AddSurf_magnetic_standart(new RbSurfAngleFloor(10000,100,new Vector3D(0,0,0), new Vector3D(1,1,0)),2);
+            sol.AddSurf_magnetic_standart(new RbSurfAngleFloor(10000,100,new Vector3D(-0.3,0,0),new Vector3D(1,0,0)),2);
             sol.AddGForcesToAll();
             //sol.wheels[1].AddForce(
             //    Force.GetForce(new Vector3D(-5,0,0),null,new Vector3D(0,0,0),sol.wheels[1]));
