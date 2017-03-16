@@ -14,7 +14,7 @@ namespace RobotSim.Tests {
 
         [TestMethod()]
         public void GetNForceTest1() {
-            var surf = new RbSurfAngleFloor(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
 
             var localPos = new Vector3D(11,19,33);
             var localVel = new Vector3D(10,10,110);
@@ -25,7 +25,7 @@ namespace RobotSim.Tests {
 
         [TestMethod()]
         public void GetNForceTest2() {
-            var surf = new RbSurfAngleFloor(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
 
             var localPos = new Vector3D(9,19,33);
             var localVel = new Vector3D(0,0,0);
@@ -35,7 +35,7 @@ namespace RobotSim.Tests {
         }
         [TestMethod()]
         public void GetNForceTest3() {
-            var surf = new RbSurfAngleFloor(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
 
             var localPos = new Vector3D(9,19,33);
             var localVel = new Vector3D(888,0,0);
@@ -45,7 +45,7 @@ namespace RobotSim.Tests {
         }
         [TestMethod()]
         public void GetNForceTest4() {
-            var surf = new RbSurfAngleFloor(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,33),new Vector3D(10,0,0));
 
             var localPos = new Vector3D(9,19,33);
             var localVel = new Vector3D(-888,0,0);

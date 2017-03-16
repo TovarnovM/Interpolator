@@ -129,7 +129,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Forces.cs" />
-    <Compile Include="RbSurface.cs" />
+    <Compile Include="FlatSurf.cs" />
     <Compile Include="RbTrack.cs" />
     <Compile Include="RbWheel.cs" />
     <Compile Include="Robot.cs" />

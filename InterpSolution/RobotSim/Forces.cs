@@ -129,9 +129,9 @@ namespace RobotSim {
         }
     }
     public class GroundForce : Force {
-        IRbSurf surf;
+        FlatSurf surf;
         MaterialObjectNewton who;
-        public GroundForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
+        public GroundForce(MaterialObjectNewton who,Vector3D localP,FlatSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
             this.surf = surf;
             this.who = who;
             Direction.Vec3D = surf.N0;
@@ -148,10 +148,10 @@ namespace RobotSim {
     }
 
     public class MagneticForce : Force {
-        IRbSurf surf;
+        FlatSurf surf;
         MaterialObjectNewton who;
         Func<double,double> f_ot_dist;
-        public MagneticForce(MaterialObjectNewton who,Vector3D localP,IRbSurf surf,Func<double,double> f_ot_dist) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
+        public MagneticForce(MaterialObjectNewton who,Vector3D localP,FlatSurf surf,Func<double,double> f_ot_dist) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
             this.surf = surf;
             this.who = who;
             this.f_ot_dist = f_ot_dist;

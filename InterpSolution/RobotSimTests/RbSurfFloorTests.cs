@@ -13,7 +13,7 @@ namespace RobotSim.Tests {
 
         [TestMethod()]
         public void GetNForceTest1() {
-            var surf = new RbSurfFloor(77,44,new Vector3D(10,20,30));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,30));
 
             var localPos = new Vector3D(-10,19,33);
             var localVel = new Vector3D(0,0,0);
@@ -23,7 +23,7 @@ namespace RobotSim.Tests {
         }
         [TestMethod()]
         public void GetNForceTest2() {
-            var surf = new RbSurfFloor(77,44,new Vector3D(10,20,30));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,30));
 
             var localPos = new Vector3D(-10,21,33);
             var localVel = new Vector3D(0,0,0);
@@ -33,7 +33,7 @@ namespace RobotSim.Tests {
         }
         [TestMethod()]
         public void GetNForceTest3() {
-            var surf = new RbSurfFloor(77,44,new Vector3D(10,20,30));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,30));
 
             var localPos = new Vector3D(-10,19,33);
             var localVel = new Vector3D(0,1000,0);
@@ -43,7 +43,7 @@ namespace RobotSim.Tests {
         }
         [TestMethod()]
         public void GetNForceTest4() {
-            var surf = new RbSurfFloor(77,44,new Vector3D(10,20,30));
+            var surf = new FlatSurf(77,44,new Vector3D(10,20,30));
 
             var localPos = new Vector3D(-10,19,33);
             var localVel = new Vector3D(0,-1000,0);

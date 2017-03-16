@@ -20,7 +20,7 @@ namespace RobotSim {
         //public List<RbTrack> Tracks1  = new List<RbTrack>();
         //public List<RbTrack> Tracks2  = new List<RbTrack>();
         public List<RbTrack> TracksAll = new List<RbTrack>();
-        public List<IRbSurf> surfs = new List<IRbSurf>();
+        public List<FlatSurf> surfs = new List<FlatSurf>();
 
 
 
@@ -51,7 +51,7 @@ namespace RobotSim {
             Body.Mass3D.Ix = Body.Mass.Value * (_h * _h + _w * _w) / 12d;
         }
 
-        public void AddSurf(IRbSurf surf, double k_tr =1, bool connectTracks = true) {
+        public void AddSurf(FlatSurf surf, double k_tr =1, bool connectTracks = true) {
             surfs.Add(surf);
             if(connectTracks) {
                 foreach(var tr in TracksAll) {
@@ -62,14 +62,14 @@ namespace RobotSim {
 
         }
 
-        public void AddSurf_magnetic(IRbSurf surf, double k_tr, Func<double,double> magneticFunct) {
+        public void AddSurf_magnetic(FlatSurf surf, double k_tr, Func<double,double> magneticFunct) {
             AddSurf(surf,k_tr,true);
             foreach(var tr in TracksAll) {
                 tr.AddForce(new MagneticForce(tr,new Vector3D(0,0,0),surf,magneticFunct));
             }
         }
 
-        public void AddSurf_magnetic_standart(IRbSurf surf,double k_tr) {
+        public void AddSurf_magnetic_standart(FlatSurf surf,double k_tr) {
             AddSurf_magnetic(surf,k_tr,magneticForceTest);
         }
         double magneticForceTest(double h) {
@@ -313,7 +313,7 @@ namespace RobotSim {
         #region насаживаем трэки
         double RotateWheels(RbWheel w1, RbWheel w2, IOrient3D connectBody) {
             w1.Betta = 0;
-            w2.Betta = Math.PI;
+            w2.Betta = Math.PI *0.999;
             w1.SynchMeToBodyAndBetta();
             w2.SynchMeToBodyAndBetta();
             //w1.SetPosition_LocalPoint_LocalFixed(
@@ -359,14 +359,15 @@ namespace RobotSim {
 
         List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody) {
             var l21 = RotateWheels(w1,w2,connectBody);
-            var wl = w1.X < w2.X ? w1 : w2;
-            var wr = w1.X >= w2.X ? w1 : w2;
 
-            //if(w1.XAxis * (connectBody.WorldTransformRot * Vector3D.ZAxis) < 0) {
-            //    var wtemp = wl;
-            //    wl = wr;
-            //    wr = wtemp;
-            //}
+            var wl = w1.p0_body_loc.X < w2.p0_body_loc.X ? w1 : w2;
+            var wr = w1.p0_body_loc.X >= w2.p0_body_loc.X ? w1 : w2;
+
+            if(w1.XAxis * (connectBody.WorldTransformRot * Vector3D.ZAxis) < 0) {
+                var wtemp = wl;
+                wl = wr;
+                wr = wtemp;
+            }
 
             w1 = wl;
             w2 = wr;
@@ -405,11 +406,6 @@ namespace RobotSim {
                     yt.ConnP.Select(p => (connectBody.WorldTransform_1 * (yt.WorldTransform * p)).Y).Max()
                 );
 
-            //u0 = lst0
-            //    .Select(tr => new { y3 = (connectBody.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
-            //    .MaxBy(yt => yt.y3)
-            //    .tr;
-
             var lst1 = new List<RbTrack>();
             w = w2;
             for(int i = 0; i < n_z; i++) {
@@ -424,24 +420,18 @@ namespace RobotSim {
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(0,0,1),w.WorldTransform * (w.Zubya[i] + new Vector3D(1,0,0)),new Vector3D(0,0,0));
                 t0.SetPosition_LocalPoint_LocalFixed(new Vector3D(1,0,0),w.WorldTransform * (w.Zubya[i] + w.Zubya_n[i]),new Vector3D(0,0,0),new Vector3D(0,0,1));
                 lst1.Add(t0);
-                //if(u1==null)
-                //    u1 = t0;
             }
 
-            b1= lst1
-    .MinBy(yt =>
-        yt.ConnP.Select(p => (connectBody.WorldTransform_1 * (yt.WorldTransform * p)).Y).Min()
-    );
+            b1 = lst1
+                .MinBy(yt =>
+                    yt.ConnP.Select(p => (connectBody.WorldTransform_1 * (yt.WorldTransform * p)).Y).Min()
+                );
 
             u1 = lst1
                 .MaxBy(yt =>
                     yt.ConnP.Select(p => (connectBody.WorldTransform_1 * (yt.WorldTransform * p)).Y).Max()
                 );
 
-            //b1 = lst1
-            //    .Select(tr => new { y3 = (connectBody.WorldTransform_1 * tr.GetConnPWorld(3)).Y,tr })
-            //    .MinBy(yt => yt.y3)
-            //    .tr;
 
             lst0.AddRange(GetTrackBetween2Tracks(b0,b1));
             lst0.AddRange(GetTrackBetween2Tracks(u1,u0));
@@ -449,15 +439,10 @@ namespace RobotSim {
 
             lst0.AddRange(lst1);
 
-            //foreach(var t in lst0) {
-            //    t.SetPosition_LocalPoint_LocalMoveToIt(new Vector3D(1,0,0),new Vector3D(1.01,0,0));
-            //    t.SetPosition_LocalPoint_LocalMoveToIt(new Vector3D(0,1,0),new Vector3D(0,1.01,0));
-            //}
 
 
-
-            //return ConnectTrackLoop(lst0);
-            return lst0;
+            return ConnectTrackLoop(lst0);
+            //return lst0;
 
 
             //var shag = (t0.ConnP[3] - t0.ConnP[1]).GetLength();

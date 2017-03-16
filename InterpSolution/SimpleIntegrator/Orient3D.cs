@@ -274,7 +274,7 @@ namespace SimpleIntegrator {
                 var vec1 = moveToItWorld - fixedPoint0;
                 var vec1n = vec1 - (vec1 * os0) * os0;
 
-                RotateVecToVec(vec0n,vec1n);
+                RotateVecToVec(vec0n.Norm,vec1n.Norm);
                 Vec3D += fixedPoint0 - WorldTransform * fixedPoint0Local;
             }
 

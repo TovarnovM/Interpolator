@@ -87,6 +87,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="FlatSurfTests.cs" />
+    <Compile Include="Line3DTests.cs" />
     <Compile Include="Phys3DHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RbSurfAngleFloorTests.cs" />

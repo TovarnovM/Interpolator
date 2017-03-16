@@ -11,7 +11,7 @@ using SimpleIntegrator;
 
 namespace RobotSim {
     public class ViewModel {
-        private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY; 
+        private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY, hSerXY, hSerXZ, hSerZY; 
         List<LineSeries> wheelSerListXY, wheelSerListXZ, wheelSerListZY;
         List<LineSeries> allLineSer = new List<LineSeries>();
         //private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
@@ -35,6 +35,49 @@ namespace RobotSim {
             CreateBodyLineSer(OxyColors.Green);
             CreateTrackLineSer(OxyColors.CadetBlue);
             CreateWheelLineSer(OxyColors.Blue);
+            CreateHeightLineSer(OxyColors.Red);
+        }
+
+        void SettingH(LineSeries ls,OxyColor color) {
+            ls.Color = color;
+            ls.LineStyle = LineStyle.Dash;
+            ls.MarkerFill = color;
+            ls.MarkerSize = 3;
+            ls.MarkerStroke = OxyColors.White;
+            ls.MarkerStrokeThickness = 1.5;
+            ls.MarkerType = MarkerType.Circle;
+            ls.StrokeThickness = 1.5;
+           
+        }
+
+        private void CreateHeightLineSer(OxyColor color) {
+
+
+            hSerXY = new LineSeries() {
+                Title = "h",
+                // StrokeThickness = 2,
+                Color = color
+            };
+            SettingH(hSerXY,color);
+            ModelXY.Series.Add(hSerXY);
+            hSerXZ = new LineSeries() {
+                Title = "h",
+                //LabelFormatString = "{2}",
+                // StrokeThickness = 2,
+                Color = color
+            };
+            SettingH(hSerXZ,color);
+            ModelXZ.Series.Add(hSerXZ);
+            hSerZY = new LineSeries() {
+                Title = "h",
+                // StrokeThickness = 2,
+                Color = color
+            };
+            SettingH(hSerZY,color);
+            ModelZY.Series.Add(hSerZY);
+            allLineSer.Add(hSerXY);
+            allLineSer.Add(hSerXZ);
+            allLineSer.Add(hSerZY);
         }
 
         void CreateWheelLineSer(OxyColor color) {
@@ -47,7 +90,7 @@ namespace RobotSim {
                 var wheelSerXY = new LineSeries() {
                     Title = "Wheel № " + i.ToString(),
                     // StrokeThickness = 2,
-                    Color = cols[i]
+                    Color = cols[i]                
                 };
                 wheelSerListXY.Add(wheelSerXY);
                 ModelXY.Series.Add(wheelSerXY);
@@ -287,17 +330,52 @@ namespace RobotSim {
             DrawDummy.SynchMe(t);
 
 
-           DrawBody();
-           // DrawBodyForces();
+            DrawBody();
+            // DrawBodyForces();
 
             DrawTrack1();
 
             DrawWheels();
 
+            DrawHs();
+
             ModelXY.InvalidatePlot(true);
             ModelXZ.InvalidatePlot(true);
             ModelZY.InvalidatePlot(true);
             //Thread.Sleep(1000);
+        }
+
+        private void DrawHs() {
+            var l = FlatSurf.GetH(
+                DrawDummy.Body.Vec3D,
+              //  -Vector3D.YAxis,
+                DrawDummy.surfs
+                );
+            DrawOneLineH(l);
+            foreach(var w in DrawDummy.wheels) {
+                l = FlatSurf.GetH(w.Vec3D,DrawDummy.surfs);
+                DrawOneLineH(l);
+            }
+        }
+
+        void DrawOneLineH(Line3D l) {
+            var xAxisNorm = Vector3D.XAxis;
+            var yAxisNorm = Vector3D.YAxis;
+            hSerXY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            hSerXY.Points.Add(new DataPoint(l.p0 * xAxisNorm,l.p0 * yAxisNorm));
+            hSerXY.Points.Add(new DataPoint(l.p1 * xAxisNorm,l.p1 * yAxisNorm));
+
+            xAxisNorm = Vector3D.XAxis;
+            yAxisNorm = Vector3D.ZAxis;
+            hSerXZ.Points.Add(new DataPoint(double.NaN,double.NaN));
+            hSerXZ.Points.Add(new DataPoint(l.p0 * xAxisNorm,l.p0 * yAxisNorm));
+            hSerXZ.Points.Add(new DataPoint(l.p1 * xAxisNorm,l.p1 * yAxisNorm));
+
+            xAxisNorm = Vector3D.ZAxis;
+            yAxisNorm = Vector3D.YAxis;
+            hSerZY.Points.Add(new DataPoint(double.NaN,double.NaN));
+            hSerZY.Points.Add(new DataPoint(l.p0 * xAxisNorm,l.p0 * yAxisNorm));
+            hSerZY.Points.Add(new DataPoint(l.p1 * xAxisNorm,l.p1 * yAxisNorm));
         }
 
         private void DrawWheels() {

@@ -149,10 +149,10 @@ namespace RobotSim {
         }
         #region ЗЕМЛЯ
         public class SurfFrictInfo {
-            public IRbSurf surf;
+            public FlatSurf surf;
             public double k_tr;
             public List<GroundForce> gForces;
-            public SurfFrictInfo(IRbSurf surf,double k_tr) {
+            public SurfFrictInfo(FlatSurf surf,double k_tr) {
                 this.surf = surf;
                 this.k_tr = k_tr;
                 gForces = new List<GroundForce>();
@@ -160,7 +160,7 @@ namespace RobotSim {
         }
 
         public List<SurfFrictInfo> SurfList = new List<SurfFrictInfo>();
-        public void AddSurf(IRbSurf surf, double k_tr = 1.0) {
+        public void AddSurf(FlatSurf surf, double k_tr = 1.0) {
             var surfInfo = new SurfFrictInfo(surf,k_tr);
             SurfList.Add(surfInfo);
             var surfFList = new List<Force>();
