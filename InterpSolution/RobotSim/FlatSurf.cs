@@ -69,7 +69,7 @@ namespace RobotSim {
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public Vector3D GetIntersect(Line3D line) {
-            var u = line.p1 - line.p0;
+            var u = line.u;
             var dot = n0 * u;
             if (Math.Abs(dot) > 1E-8) {
                 var w = line.p0 - p0;

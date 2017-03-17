@@ -22,7 +22,8 @@ namespace RobotSim {
         public List<RbTrack> TracksAll = new List<RbTrack>();
         public List<FlatSurf> surfs = new List<FlatSurf>();
 
-
+        public TrackParams trOpts;
+        public int wheelZubN = 10;
 
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
         const string DEFNAME = "Enviroment";
@@ -30,6 +31,11 @@ namespace RobotSim {
             _l = l; //x
             _h = h;//y
             _w = w;//z
+
+            trOpts = TrackParams.GetStandart();
+            trOpts.shagConnL = 0.012;
+            //trOpts.connH = 0.002;
+
             CenterPosOtnCM = centerOtnCM;
             Body.Mass.Value = mass;
             Body.Name = "Body";
@@ -114,12 +120,15 @@ namespace RobotSim {
         /// <param name="otnApproxPosw2">относительная позиция w2 относительно w1</param>
         /// <returns>ссылку на wheel1</returns>
         public RbWheel CreateWheelPairWithTracks(MaterialObjectNewton connectBody, Vector3D locPosW1, Vector3D localN0, Vector3D otnApproxPosw2) {
-            var wheel1 = RbWheel.GetStandart();
+            
+            
+            var tTest = RbTrack.GetStandart(shagConnL: trOpts.shagConnL);
+            var wheel1 = RbWheel.GetStandart(trOpts.shagConnL,wheelZubN);
             wheel1.Name = "wheel" + (n_wheels++).ToString();
             wheels.Add(wheel1);
             connectBody.AddChild(wheel1);
 
-            var wheel2 = RbWheel.GetStandart();
+            var wheel2 = RbWheel.GetStandart(trOpts.shagConnL,wheelZubN);
             wheel2.Name = "wheel" + (n_wheels++).ToString();
             wheels.Add(wheel2);
             connectBody.AddChild(wheel2);
@@ -138,7 +147,7 @@ namespace RobotSim {
 
             //RotateWheels(wheel1,wheel2,connectBody);
 
-            var Tracks1 = GetTracks(wheel1,wheel2,connectBody);
+            var Tracks1 = GetTracks(wheel1,wheel2,connectBody,trOpts);
 
             foreach(var t in Tracks1) {
                 t.WheelsInteractsWithMe.Add(wheel1);
@@ -332,8 +341,8 @@ namespace RobotSim {
             return (w1.WorldTransform * w1.Zubya[0] - w2.WorldTransform * w2.Zubya[n]).GetLength();
         }
 
-        public void CreateTracks() {
-            var Tracks1 = GetTracks(wheels[0],wheels[1],Body);
+        public void CreateTracks(TrackParams trOpt) {
+            var Tracks1 = GetTracks(wheels[0],wheels[1],Body,trOpt);
             foreach(var t in Tracks1) {
                 t.WheelsInteractsWithMe.Add(wheels[0]);
                 t.WheelsInteractsWithMe.Add(wheels[1]);
@@ -341,7 +350,7 @@ namespace RobotSim {
                 Body.AddChild(t);
             }
             TracksAll.AddRange(Tracks1);
-            var Tracks2 = GetTracks(wheels[2],wheels[3],Body);
+            var Tracks2 = GetTracks(wheels[2],wheels[3],Body,trOpt);
             foreach(var t in Tracks2) {
 
                 t.WheelsInteractsWithMe.Add(wheels[2]);
@@ -357,7 +366,7 @@ namespace RobotSim {
             AddChild(tDummy);
         }
 
-        List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody) {
+        List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody, TrackParams trOpt) {
             var l21 = RotateWheels(w1,w2,connectBody);
 
             var wl = w1.p0_body_loc.X < w2.p0_body_loc.X ? w1 : w2;
@@ -385,7 +394,7 @@ namespace RobotSim {
                 if(v_dir * r21norm > 0)
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
-                var t0 = RbTrack.GetStandart();
+                var t0 = RbTrack.GetStandart(trOpt);
                 //t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
@@ -413,7 +422,7 @@ namespace RobotSim {
                 if(v_dir * r21norm < 0)
                     continue;
                 var v1 = w.WorldTransform * w.Zubya[i];
-                var t0 = RbTrack.GetStandart();
+                var t0 = RbTrack.GetStandart(trOpt);
                 //t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,33,-11));
                 t0.Vec3D = v1;
                 t0.SynchQandM();
@@ -433,8 +442,8 @@ namespace RobotSim {
                 );
 
 
-            lst0.AddRange(GetTrackBetween2Tracks(b0,b1));
-            lst0.AddRange(GetTrackBetween2Tracks(u1,u0));
+            lst0.AddRange(GetTrackBetween2Tracks(b0,b1, trOpt));
+            lst0.AddRange(GetTrackBetween2Tracks(u1,u0,trOpt));
 
 
             lst0.AddRange(lst1);
@@ -467,7 +476,7 @@ namespace RobotSim {
             return lst1;
         }
 
-        List<RbTrack> GetTrackBetween2Tracks(RbTrack b0, RbTrack b1) {
+        List<RbTrack> GetTrackBetween2Tracks(RbTrack b0, RbTrack b1,TrackParams trOpt) {
             var r_b0_1 = b0.GetConnPWorld(1);
             var r_b1b0_31 = b1.GetConnPWorld(3) - r_b0_1;
             var r_b1b0_31_norm = r_b1b0_31.Norm;
@@ -486,7 +495,7 @@ namespace RobotSim {
 
             var lst0 = new List<RbTrack>();
             for(int i = 0; i < n; i++) {
-                var t0 = RbTrack.GetStandart();
+                var t0 = RbTrack.GetStandart(trOpt);
                 t0.SetPosition_LocalPoint(new Vector3D(1,1,1),new Vector3D(22,9933,-11));
                 t0.SetPosition_LocalPoint(t0.ConnP[3],r0_1 + r_b1b0_20_norm * ((dl + l0) * i));
                 t0.SetPosition_LocalPoint_LocalFixed(t0.ConnP[2],r0_0 + r_b1b0_20_norm * ((dl + l0) * i),t0.ConnP[3]);

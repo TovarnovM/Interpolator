@@ -68,22 +68,22 @@ namespace RobotSim {
             //    ForcesFromTracksNegative[2 * i+1] = Force.GetForce(0d,new Vector3D(1,0,0),null,new Vector3D(1,0,0),null);
             //}
 
-            Mass3D.Ix = 10*mass * R * R / 2;
+            Mass3D.Ix = 20*mass * R * R / 2;
             Mass3D.Iy = mass * (3*R * R + H_wheel* H_wheel) / 12;
             Mass3D.Iz = Mass3D.Iy;
 
             MomentX = Force.GetMoment(0,new Vector3D(1,0,0),this);
             AddMoment(MomentX);
         }
-        public static RbWheel GetStandart() {
-            return GetStandart(Vector3D.Zero);
+        public static RbWheel GetStandart(double shagConnL = 0.009,int n = 17) {
+            return GetStandart(Vector3D.Zero,shagConnL,n);
         }
 
-        public static RbWheel GetStandart(Vector3D localPos) {
-            int n = 17;
+        public static RbWheel GetStandart(Vector3D localPos,double shagConnL = 0.009, int n = 17) {
             double r_real = 0.015;
-            double R_ideal = 0.0095 / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
-            var mass = PI * r_real * r_real * 0.021 * 1080*20;
+           
+            double R_ideal = (shagConnL*1.05) / (2 * Sin(PI / n));//0.009 / (2 * Sin(PI / n));
+            var mass = PI * r_real * r_real * 0.021 * 1080;
             var res = new RbWheel(
                 n:n,
                 R:R_ideal,

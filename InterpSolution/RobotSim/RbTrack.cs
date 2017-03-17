@@ -9,6 +9,25 @@ using System.Threading.Tasks;
 using static System.Math;
 
 namespace RobotSim {
+    public class TrackParams {
+        public double w, l, h, shagConnL, connH, mass;
+        protected TrackParams() {
+
+        }
+        public static TrackParams GetStandart() {
+            var t = new TrackParams() {
+                w = 0.02,
+                l = 0.005,
+                h = 0.005,
+                shagConnL = 0.009,
+                connH = 0.00d,
+                mass = 0.037
+            };
+            return t;
+        }
+        
+    }
+
     public class RbTrack: MaterialObjectNewton {
         public double W, L, H;
         public Vector3D[] ConnP = new Vector3D[7];
@@ -108,6 +127,10 @@ namespace RobotSim {
             var f1_2 = new ForceBetween2Points(tr2,tr1,tr2.ConnP[indTo1],tr1.ConnP[indMe1],k,mu,0,k2,mu2,x02);
             tr2.AddForce(f0_2);
             tr2.AddForce(f1_2);
+        }
+
+        public static RbTrack GetStandart(TrackParams options) {
+            return GetStandart(options.w,options.l,options.h,options.shagConnL,options.connH,options.mass);
         }
 
         public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00d, double mass = 0.037) {

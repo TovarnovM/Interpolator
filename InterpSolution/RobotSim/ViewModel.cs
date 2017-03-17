@@ -346,14 +346,14 @@ namespace RobotSim {
         }
 
         private void DrawHs() {
-            var l = FlatSurf.GetH(
-                DrawDummy.Body.Vec3D,
-              //  -Vector3D.YAxis,
-                DrawDummy.surfs
-                );
-            DrawOneLineH(l);
+            //var l = FlatSurf.GetH(
+            //    DrawDummy.Body.Vec3D,
+            //  //  -Vector3D.YAxis,
+            //    DrawDummy.surfs
+            //    );
+            //DrawOneLineH(l);
             foreach(var w in DrawDummy.wheels) {
-                l = FlatSurf.GetH(w.Vec3D,DrawDummy.surfs);
+                var l = FlatSurf.GetH(w.Vec3D,DrawDummy.surfs);
                 DrawOneLineH(l);
             }
         }
