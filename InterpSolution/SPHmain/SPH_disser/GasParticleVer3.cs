@@ -34,6 +34,17 @@ namespace SPH_2D {
     }
 
     public class GasParticleVer3: Particle2DBase, IGasParticleVer3 {
+        (int,int) tstf()
+        {
+            var t = new Tuple<int,int>(1,1);
+            return (1, 1);
+        }
+        public void tstf2()
+        {
+            var a = tstf();
+            
+        }
+
         public bool isboundary { get; } = false;
         public List<BorderSegment> Boundaries { get; private set; }
         public double h;
