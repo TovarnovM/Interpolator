@@ -23,7 +23,7 @@ namespace RobotSim {
         public List<FlatSurf> surfs = new List<FlatSurf>();
 
         public TrackParams trOpts;
-        public int wheelZubN = 10;
+        public int wheelZubN = 9;
 
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
         const string DEFNAME = "Enviroment";
