@@ -246,7 +246,7 @@ namespace RobotSim {
         #region Blocked
         private bool blocked = false;
         public ForceBetween2Points f_wb,f_wbMirror;
-        public void ConnectBlockToBody(MaterialObjectNewton body, double k = 10000, double mu = 100) {
+        public void ConnectBlockToBody(MaterialObjectNewton body, double k = 100000, double mu = 10000) {
             var z0 = Zubya[0]*10;
             var z0uBody = body.WorldTransform_1 * (WorldTransform * z0);
             f_wb = new ForceBetween2Points(this,body,z0,z0uBody,k,mu,0);
@@ -361,8 +361,10 @@ namespace RobotSim {
             }
 
             var momSumLocal = WorldTransformRot_1 * momSum;
-            ddBetta = (momSumLocal * Vector3D.XAxis) / Mass3D.Ix;
-            Omega.X = dBetta;
+
+                ddBetta = (momSumLocal * Vector3D.XAxis) / Mass3D.Ix;
+                Omega.X = dBetta;
+
         }
 
         public void ConnectMeToBody(MaterialObjectNewton connectBody,double L_osi, double k = 100000,double mu = 1000) {
@@ -411,8 +413,8 @@ namespace RobotSim {
 
             SynchMeBefore = SynchMeToBodyAndBetta;
             SynchMeAfter = NewtonLaw3D4Wheel;
-            AddDiffPropToParam(pBetta,pdBetta);
-            AddDiffPropToParam(pdBetta,pddBetta);
+            //AddDiffPropToParam(pBetta,pdBetta);
+            //AddDiffPropToParam(pdBetta,pddBetta);
             BodyMaster = connectBody;
             forceToBody = Force.GetForce(Vector3D.Zero,null,p0_body_loc,connectBody);
             connectBody.AddForce(forceToBody);

@@ -23,7 +23,7 @@ namespace RobotSim {
         public List<FlatSurf> surfs = new List<FlatSurf>();
 
         public TrackParams trOpts;
-        public int wheelZubN = 9;
+        public int wheelZubN = 10;
 
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
         const string DEFNAME = "Enviroment";
@@ -79,7 +79,7 @@ namespace RobotSim {
             AddSurf_magnetic(surf,k_tr,magneticForceTest);
         }
         double magneticForceTest(double h) {
-            return h > 0.015 ? 0d : 1.7;
+            return h > 0.005 ? 0d : 1.7;
         }
 
         public void UpdateWheelTrackInteraction(double t) {
@@ -161,7 +161,7 @@ namespace RobotSim {
             return wheel1;
         }
 
-        public void Create4GUS(double moment = 10d, double maxOmega = 6d) {
+        public void Create4GUS(double moment = 10d, double maxOmega = 6d, bool blockWheels = false) {
             var trackw05 = 0.01;
             var w0 = CreateWheelPairWithTracks(
                 Body,

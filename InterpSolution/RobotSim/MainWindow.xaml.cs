@@ -21,7 +21,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Xml.Serialization;
+using MoreLinq;
 using static SimpleIntegrator.DummyIOHelper;
+
 
 namespace RobotSim {
     /// <summary>
@@ -38,7 +40,7 @@ namespace RobotSim {
         public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
             solution.Body.SynchQandM();
             solution.wheels.ForEach(w => w.SynchQandM());
-            //solution.BlockedWheels = true;
+            solution.BlockedWheels = true;
         }
 
         public static RobotDynamics GetNewRD() {
@@ -46,87 +48,29 @@ namespace RobotSim {
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
             //sol.CreateWheelsSample(false);
-            sol.Body.Vec3D = new Vector3D(0.3,0.1,0);
+            sol.Body.Vec3D = new Vector3D(0.3,0.5,0);
             sol.Body.SynchQandM();
-            sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,-1,4));
+            //sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,-1,4));
+            sol.Body.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis,-Vector3D.YAxis,-Vector3D.ZAxis,Vector3D.ZAxis);
             sol.Body.SynchQandM();
 
-            //double betta = -4d;
-            //foreach(var w in sol.wheels) {
-            //    w.Betta = betta;
-            //    betta += Math.PI * 0.2;
-            //    w.SynchMeToBodyAndBetta();
-            //}
-            //sol.CreateWheelsSample();
-            //sol.SynchWheelsToBodyPos();
+            sol.Create4GUS(0,10);
 
+            var mostLeftPoint = sol.TracksAll
+                .SelectMany(tr => tr.ConnP.Select(cp => tr.WorldTransform * cp))
+                .MinBy(p => p.X);
 
-            //var moment = Force.GetMoment(0.05,new Vector3D(0,1,0));
-            //sol.Body.AddMoment(moment);
+            sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(mostLeftPoint.X,0,0), new Vector3D(1,0,0)),0.5);
 
-
-            //sol.SynchWheelsToBodyPos();
-
-            //sol.CreateTracks();
-            sol.Create4GUS(10,10);
-            //sol.Body.AddForce(Force.GetForceCentered(10,new Vector3D(1,0,0)));
-            //sol.Body.Omega.X = 0.2;
-            //sol.Body.Omega.Y = 0.4;
-            //sol.Body.Omega.Z = 0.6;
-
-
-
-            sol.AddSurf(new FlatSurf(10000,100,new Vector3D(1,0,1)));
-            //sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
-            sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(0,0,0), new Vector3D(1,1,0)),2);
-            sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(-0.3,0,0),new Vector3D(1,0,0)),2);
+            //sol.AddSurf(new FlatSurf(10000,100,new Vector3D(1,0,1)));
+            ////sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
+            //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(0,0,0), new Vector3D(1,1,0)),2);
+            //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(-0.3,0,0),new Vector3D(1,0,0)),2);
             sol.AddGForcesToAll();
             //sol.wheels[1].AddForce(
             //    Force.GetForce(new Vector3D(-5,0,0),null,new Vector3D(0,0,0),sol.wheels[1]));
 
             CommandsDependsOnCurrPOs(sol);
-            //sol.CreateTrackDummy(50);
-            //var f1 = Force.GetForce(
-            //    new Vector3D(-0.1,0,0),null,
-            //    sol.GetUgolLocal(6),sol.Body);
-
-            //var f2 = Force.GetForce(
-            //    new Vector3D(0.1,0,0),null,
-            //    new Vector3D(0,0,0),sol.Body);
-
-            //double moment = 100;
-
-            //var w0 = sol.wheels[0];
-            //w0.MomentX.Value = moment;
-            //w0.MomentX.SynchMeAfter += _ => {
-            //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;
-            //};
-
-
-            //var w3 = sol.wheels[3];
-            //w3.MomentX.Value = -moment;
-            //w3.MomentX.SynchMeAfter += _ => {
-            //    w3.MomentX.Value = w3.Omega.X < -6 ? 0d : -moment;
-            //};
-            //sol.Body.AddMoment(w.MomentX);
-            // break;
-
-
-
-
-            //var gTrForce = Force.GetForceCentered(9.8 * sol.TracksAll[0].Mass.Value,new Vector3D(0,-1,0));
-            //foreach(var tr in sol.TracksAll) {
-            //    tr.AddForce(gTrForce);
-            //}
-
-
-            //sol.Body.AddForce(f1);
-            //sol.Body.AddForce(f2);
-
-            //sol.SynchWheelsToBodyPos();
-            //var w0 = sol.wheels[0];
-            //w0.SetPosition_LocalPoint(new Vector3D(-w0.H_wheel,0,0),new Vector3D(1,1,1));
-            //w0.SetPosition_LocalPoint_LocalFixed(new Vector3D(w0.H_wheel,0,0),new Vector3D(1,1,3),new Vector3D(-w0.H_wheel,0,0));
             return sol;
         }
 
