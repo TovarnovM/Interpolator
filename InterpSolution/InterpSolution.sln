@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpApp", "InterpApp\InterpApp.csproj", "{5C93BCEB-59BC-4510-823E-8860581B1332}"
 EndProject
@@ -60,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleEnumGeneticWPF", "DoubleEnumGeneticWPF\DoubleEnumGeneticWPF.csproj", "{E607A83D-BA49-40C6-BACA-A0973517D93B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DoubleEnumGeneticTests", "DoubleEnumGeneticTests\DoubleEnumGeneticTests.csproj", "{754D644C-4821-4E36-B681-A1DC651A77D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiCalibr", "BiCalibr\BiCalibr.csproj", "{EA669D15-49B9-46F2-93BC-940006ABA084}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -421,6 +423,18 @@ Global
 		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x64.Build.0 = Release|Any CPU
 		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x86.ActiveCfg = Release|Any CPU
 		{754D644C-4821-4E36-B681-A1DC651A77D0}.Release|x86.Build.0 = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|x64.Build.0 = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Debug|x86.Build.0 = Debug|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|x64.ActiveCfg = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|x64.Build.0 = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|x86.ActiveCfg = Release|Any CPU
+		{EA669D15-49B9-46F2-93BC-940006ABA084}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,0 +1,19 @@
+﻿<Window x:Class="BiCalibr.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BiCalibr"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="159*"/>
+            <ColumnDefinition Width="358*"/>
+        </Grid.ColumnDefinitions>
+        <Button Content="Search *.uhs" Margin="0,0,6.667,28" Click="Button_Click" Height="26" VerticalAlignment="Bottom"/>
+        <Button Name="bttnInitDir" Content="Button" Margin="0,0,6.667,0" Height="28" VerticalAlignment="Bottom" Click="bttnInitDir_Click"/>
+        <ListBox Name="lb1" Margin="0,0,6.667,54" SelectionChanged="lb1_SelectionChanged"/>
+
+    </Grid>
+</Window>
