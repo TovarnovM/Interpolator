@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BiCalibr"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="318.001" Width="453">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="159*"/>
@@ -13,7 +13,26 @@
         </Grid.ColumnDefinitions>
         <Button Content="Search *.uhs" Margin="0,0,6.667,28" Click="Button_Click" Height="26" VerticalAlignment="Bottom"/>
         <Button Name="bttnInitDir" Content="Button" Margin="0,0,6.667,0" Height="28" VerticalAlignment="Bottom" Click="bttnInitDir_Click"/>
-        <ListBox Name="lb1" Margin="0,0,6.667,54" SelectionChanged="lb1_SelectionChanged"/>
+        <ListBox Name="lb1" Margin="0,0,6.667,54" SelectionChanged="lb1_SelectionChanged" SelectionMode="Extended"/>
+        <TabControl Grid.Column="1">
+            <TabItem Header="TabItem">
+                <Grid>
+                    <DataGrid Name="dg2" Margin="0,0,0,29" IsReadOnly="True" SelectionChanged="dg2_SelectionChanged"/>
+                    <Button Name="btnAnalys" Content="Start Analysis" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="302" Height="29" Click="Button_Click_1"/>
+
+                </Grid>
+
+
+            </TabItem>
+            <TabItem Name="tabItemDataGrid" Header="TabItem">
+                <Grid Background="#FFE5E5E5">
+                    <DataGrid x:Name="dg" ItemsSource="{Binding}" IsReadOnly="True"/>
+                </Grid>
+            </TabItem>
+
+
+
+        </TabControl>
 
     </Grid>
 </Window>
