@@ -112,7 +112,7 @@ namespace DoubleEnumGenetic.DetermOptimization.Tests {
             opt.Start();
             var bs = opt.BestChromosome as ChromosomeD;
             double x = bs["x"], y = bs["y"];
-            Assert.AreEqual(f.maximum,bs.Fitness.Value,sm.eps*10);
+            Assert.AreEqual(f.maximum,bs.Fitness.Value,sm.eps*1000);
 
         }
     }

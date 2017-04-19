@@ -6,16 +6,9 @@ using System.Threading.Tasks;
 
 namespace EqOptimizer.Equations {
     public class Line_1order_eq : EquationBase {
-        public Line_1order_eq(int varsCount) : base(varsCount,varsCount + 1) {
-            var sb = new StringBuilder();
-            for (int i = 0; i < varNames.Count; i++) {
-                sb.Append($"{parNames[i]}*{varNames[i]} + ");
-            }
-            sb.Append(parNames.Last());
-            ps = sb.ToString();
+        public Line_1order_eq(int varsCount, bool fillParVarsPs = true) : base(varsCount,varsCount + 1,fillParVarsPs) {
+
         }
-        string ps;
-        public override string PatternStr => ps;
 
         //public override string EqStr {
         //    get {
@@ -34,11 +27,29 @@ namespace EqOptimizer.Equations {
                 throw new ArgumentOutOfRangeException();
             double answ = 0d;
             for (int i = 0; i < vars.Length; i++) {
-                answ += pars[i] * vars[i];
+                answ += Pars[i] * vars[i];
             }
-            answ += pars.Last();
+            answ += Pars.Last();
             return answ;
 
+        }
+
+        public override EquationBase Clone() {
+            var c = new Line_1order_eq(VarsCount,false);
+            c.ps = ps;
+            c.VarNames.AddRange(VarNames);
+            c.ParNames.AddRange(ParNames);
+            c.Pars.AddRange(Pars);
+            return c;
+        }
+
+        public override string CreatePatternStr() {
+            var sb = new StringBuilder();
+            for (int i = 0; i < VarNames.Count; i++) {
+                sb.Append($"{ParNames[i]}*{VarNames[i]} + ");
+            }
+            sb.Append(ParNames.Last());
+            return sb.ToString();
         }
     }
 }

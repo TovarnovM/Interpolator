@@ -15,15 +15,28 @@ namespace DoubleEnumGenetic.DetermOptimization {
             }
         }
 
-        public IList<ChromosomeD> currentPoints4Jacob { get; private set; }
+        public IList<ChromosomeD> currentPoints { get; private set; }
         public double lambda = 0.3, eps = 0.0001;
 
         public override void EndCurrentStep() {
-            var jac = GetJacobian(currentPoints4Jacob);
-            var center = currentPoints4Jacob.First(p => p.DopInfo == null);
+
+
+
+            var jac = GetJacobian(currentPoints);
+            var center = currentPoints.First(p => p.DopInfo == null);
+            //if(center.Fitness <= BestSolution.Fitness) {
+            //    var minShag = shagDict.Min(t => t.Value);
+            //    foreach (var sh in shagDict) {
+            //        shagDict[sh.Key] = minShag / 3;
+            //    }
+            //}
             var nextCenter = center.CloneWithoutFitness();
             foreach(var j in jac) {
-                nextCenter[j.Key] += lambda * j.Value;
+                var step = lambda * j.Value;
+                var maxStep = shagDict[j.Key] * (ShagNumber / 100);
+                if (step > maxStep)
+                    step = maxStep;
+                nextCenter[j.Key] += step;
             }
             Solutions.Add(nextCenter);
             _bs = center;
@@ -50,8 +63,8 @@ namespace DoubleEnumGenetic.DetermOptimization {
 
         public override IList<ChromosomeD> WhatCalculateNext() {
             var center = Solutions.Last();
-            currentPoints4Jacob = GetPoints4Jacobian(center);
-            return currentPoints4Jacob;
+            currentPoints = GetPoints4Jacobian(center);
+            return currentPoints;
         }
     }
 

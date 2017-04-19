@@ -12,7 +12,7 @@
             <ColumnDefinition Width="358*"/>
         </Grid.ColumnDefinitions>
         <Button Content="Search *.uhs" Margin="0,0,6.667,28" Click="Button_Click" Height="26" VerticalAlignment="Bottom"/>
-        <Button Name="bttnInitDir" Content="Button" Margin="0,0,6.667,0" Height="28" VerticalAlignment="Bottom" Click="bttnInitDir_Click"/>
+        <Button Name="bttnInitDir" Content="Button" Margin="0,0,6.667,0" Height="28" VerticalAlignment="Bottom" Click="BttnInitDir_Click"/>
         <ListBox Name="lb1" Margin="0,0,6.667,54" SelectionChanged="lb1_SelectionChanged" SelectionMode="Extended"/>
         <TabControl Grid.Column="1">
             <TabItem Header="TabItem">

@@ -44,19 +44,16 @@ namespace Interpolator
             */
 
             var interp2D = new Interp2D();
-            for (int i = 1; i < 5; i++)
-            {
-                var interpol = new InterpXY();
-                
-                interpol.Add(-1.2*i, 1);
-                interpol.Add(-4.2, 2 * i);
-                interpol.Add(2 * i, 3);
-                interpol.Add(4, 4 * i);
-                interpol.Add(-10 * i, 5);
-                interpol.Add(11, 6 * i);
-                interpol.Add(7 * i, 7);
-                interp2D.AddElement((double)i, interpol);
-            }
+            var i1 = new InterpXY();
+            i1.Add(1,1);
+            i1.Add(2,2);
+            interp2D.AddElement(77,i1);
+            var i2 = new InterpXY();
+            i2.Add(10,10);
+            i2.Add(20,20);
+            interp2D.AddElement(0,i2);
+            interp2D.GetV(1.5,77);
+
 
             var clone = interp2D.Clone();
 

@@ -17,10 +17,10 @@ namespace DoubleEnumGenetic.DetermOptimization {
         public event EventHandler BestChromosomeChanged;
 
 
-        int _shagNumber = 1000;
+        ulong _shagNumber = 1000;
         public IList<GeneDoubleRange> geneInfo;
-        public IDictionary<string,double> shagDict;
-        public int ShagNumber {
+        public Dictionary<string,double> shagDict;
+        public ulong ShagNumber {
             get {
                 return _shagNumber;
             }

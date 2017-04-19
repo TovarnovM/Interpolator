@@ -21,11 +21,14 @@ namespace DoubleEnumGenetic.DetermOptimization {
         private GeneticAlgorithmState m_state;
         #endregion  
 
-        public Optimizator(ChromosomeD startPoint, IFitness Fitness, ISearchMethod searchMethod) {
+        public Optimizator(ChromosomeD startPoint, IFitness Fitness, ISearchMethod searchMethod, bool multiThread = true) {
             this.SearchMethod = searchMethod;
             this.Fitness = Fitness;
             this.StartPoint = startPoint;
-            TaskExecutor = new SmartThreadPoolTaskExecutor();
+            if (multiThread)
+                TaskExecutor = new SmartThreadPoolTaskExecutor();
+            else
+                TaskExecutor = new LinearTaskExecutor();
 
         }
 

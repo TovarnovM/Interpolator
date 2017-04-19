@@ -125,6 +125,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ReinsertionD_ParetoCritRank.cs" />
+    <Compile Include="Reinsertion_Elite.cs" />
     <Compile Include="SelectionD_ParetoCritRank.cs" />
   </ItemGroup>
   <ItemGroup>

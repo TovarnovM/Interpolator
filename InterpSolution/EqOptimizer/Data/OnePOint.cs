@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace EqOptimizer.Data {
     public struct OnePoint {
-        double[] vars;
-        double answer;
+        public double[] vars;
+        public double answer;
         public OnePoint(params double[] vars_and_answer) {
             vars = new double[vars_and_answer.Length - 1];
             Array.Copy(vars_and_answer,vars,vars.Length);

@@ -11,7 +11,7 @@ namespace DoubleEnumGenetic.DetermOptimization {
 
         public override void EndCurrentStep() {
             
-            var jac = GetJacobian(currentPoints4Jacob);
+            var jac = GetJacobian(currentPoints);
             if(Vt.Count != jac.Count) {
                 Vt.Clear();
                 foreach(var item in jac) {
@@ -22,10 +22,14 @@ namespace DoubleEnumGenetic.DetermOptimization {
                     Vt[item.Key] = Vt[item.Key] * etta + item.Value * lambda;
                 }
             }
-            var center = currentPoints4Jacob.First(p => p.DopInfo == null);
+            var center = currentPoints.First(p => p.DopInfo == null);
             var nextCenter = center.CloneWithoutFitness();
             foreach(var j in Vt) {
-                nextCenter[j.Key] += lambda * j.Value;
+                var maxStep = shagDict[j.Key] * (ShagNumber / 100);
+                var step = lambda * j.Value;
+                if (step > maxStep)
+                    step = maxStep;
+                nextCenter[j.Key] += step;
             }
             Solutions.Add(nextCenter);
             if(_bs == null)

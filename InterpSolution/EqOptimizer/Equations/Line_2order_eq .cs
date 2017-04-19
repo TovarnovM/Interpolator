@@ -6,26 +6,9 @@ using System.Threading.Tasks;
 
 namespace EqOptimizer.Equations {
     public class Line_2order_eq : EquationBase {
-        public Line_2order_eq(int varsCount) : base(varsCount,2*varsCount + (varsCount* varsCount - varsCount) /2 +1) {
-            var sb = new StringBuilder();
-            for (int i = 0; i < varNames.Count; i++) {
-                sb.Append($"{parNames[i]}*{varNames[i]}^2 + ");
-            }
-            int ind = varNames.Count;
-            for (int i = 0; i < varNames.Count; i++) {
-                for (int j = i+1; j < varNames.Count; j++) {
-                    sb.Append($"{parNames[ind++]}*{varNames[i]}*{varNames[j]} + ");
-                }
-                
-            }
-            for (int i = 0; i < varNames.Count; i++) {
-                sb.Append($"{parNames[ind++]}*{varNames[i]} + ");
-            }
-            sb.Append(parNames[ind]);
-            ps = sb.ToString();
+        public Line_2order_eq(int varsCount,bool fillData = true) : base(varsCount,2*varsCount + (varsCount* varsCount - varsCount) /2 +1,fillData) {
+
         }
-        string ps;
-        public override string PatternStr => ps;
 
         //public override string EqStr {
         //    get {
@@ -55,21 +38,49 @@ namespace EqOptimizer.Equations {
             if (vars.Length != VarsCount)
                 throw new ArgumentOutOfRangeException();
             double answ = 0d;
-            for (int i = 0; i < varNames.Count; i++) {
-                answ += pars[i] * vars[i] * vars[i];
+            for (int i = 0; i < VarNames.Count; i++) {
+                answ += Pars[i] * vars[i] * vars[i];
             }
-            int ind = varNames.Count;
-            for (int i = 0; i < varNames.Count; i++) {
-                for (int j = i + 1; j < varNames.Count; j++) {
-                    answ += pars[ind++] * vars[i] * vars[j];
+            int ind = VarNames.Count;
+            for (int i = 0; i < VarNames.Count; i++) {
+                for (int j = i + 1; j < VarNames.Count; j++) {
+                    answ += Pars[ind++] * vars[i] * vars[j];
                 }
 
             }
-            for (int i = 0; i < varNames.Count; i++) {
-                answ += pars[ind++] * vars[i];
+            for (int i = 0; i < VarNames.Count; i++) {
+                answ += Pars[ind++] * vars[i];
             }
-            answ += pars[ind];
+            answ += Pars[ind];
             return answ;
+        }
+
+        public override string CreatePatternStr() {
+            var sb = new StringBuilder();
+            for (int i = 0; i < VarNames.Count; i++) {
+                sb.Append($"{ParNames[i]}*{VarNames[i]}^2 + ");
+            }
+            int ind = VarNames.Count;
+            for (int i = 0; i < VarNames.Count; i++) {
+                for (int j = i + 1; j < VarNames.Count; j++) {
+                    sb.Append($"{ParNames[ind++]}*{VarNames[i]}*{VarNames[j]} + ");
+                }
+
+            }
+            for (int i = 0; i < VarNames.Count; i++) {
+                sb.Append($"{ParNames[ind++]}*{VarNames[i]} + ");
+            }
+            sb.Append(ParNames[ind]);
+            return sb.ToString();
+        }
+
+        public override EquationBase Clone() {
+            var c = new Line_2order_eq(VarsCount,false);
+            c.ps = ps;
+            c.VarNames.AddRange(VarNames);
+            c.ParNames.AddRange(ParNames);
+            c.Pars.AddRange(Pars);
+            return c;
         }
     }
 }
