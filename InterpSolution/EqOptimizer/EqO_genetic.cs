@@ -51,22 +51,24 @@ namespace EqOptimizer {
             }
             int popsize = 400;// Equation.ParsCount*Equation.ParsCount;
             ga = new GeneticAlgorithm(new Population(popsize,popsize+10,GetNewChromo()),this,new TournamentSelection(),new CrossoverD(),new MutationD());
-            ga.MutationProbability = 0.2f;
-            ga.CrossoverProbability = 0.7f;
-            var term = new FitnessStagnationTermination(300);
-            var term2 = new FitnessThresholdTermination(-Data.MaxDiffY/4);
+            ga.MutationProbability = 0.4f;
+            ga.CrossoverProbability = 0.9f;
 
-            ga.Termination = new AndTermination(term,term2);
+            var term = new FitnessStagnationTermination(100);
+            //var term2 = new FitnessThresholdTermination(-Data.MaxDiffY/4);
 
-            ga.Reinsertion = new Reinsertion_Elite(10);
-            ga.TaskExecutor = new SmartThreadPoolTaskExecutor();
+            //ga.Termination = new AndTermination(term,term2);
+            ga.Termination = term;
+
+            ga.Reinsertion = new Reinsertion_Elite(3);
+           // ga.TaskExecutor = new SmartThreadPoolTaskExecutor();
         }
 
         public override (EquationBase eq, double crit) PerformOptimization() {
             ga.Start();
             var be = ConvertFrom(ga.BestChromosome);
 
-            //var maxp = be.Pars.Average(p => Math.Abs(p));
+            var maxp = be.Pars.Average(p => Math.Abs(p));
 
             //double range = 0.2;
             //foreach (var gi_ in GInfo) {
@@ -76,12 +78,12 @@ namespace EqOptimizer {
             //    gi.Left = be[gi.Name] - range * maxp;
             //    gi.Right = be[gi.Name] + range * maxp;
             //}
-            //var sm = new DownHill();
-            //sm.ShagNumber = 3000;
-            //var opt = new Optimizator(ga.BestChromosome as ChromosomeD,this,sm);
-            //opt.Start();
+            var sm = new DownHill();
+            sm.ShagNumber = 3000;
+            var opt = new Optimizator(ga.BestChromosome as ChromosomeD, this, sm,false);
+            opt.Start();
+            be = ConvertFrom(opt.BestChromosome);
 
-            
             return (be, Crit.GetCriteria(be,Data));
         }
     }

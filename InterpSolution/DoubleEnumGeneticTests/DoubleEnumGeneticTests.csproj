@@ -79,6 +79,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DetermOptimization\RandomSearchTest.cs" />
     <Compile Include="DetermOptimization\DownHillTests.cs" />
     <Compile Include="MarkovNameGeneratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

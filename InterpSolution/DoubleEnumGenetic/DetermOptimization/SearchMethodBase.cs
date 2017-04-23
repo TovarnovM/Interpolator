@@ -113,8 +113,15 @@ namespace DoubleEnumGenetic.DetermOptimization {
             UpdateShag();
             Solutions = new List<ChromosomeD>();
             Solutions.Add(startPoint);
+
+            prepFunc();
+
             return WhatCalculateNext();
         }
+
+        protected virtual void prepFunc() {
+        }
+
         void UpdateShag() {
             if(geneInfo == null)
                 return;
@@ -122,6 +129,33 @@ namespace DoubleEnumGenetic.DetermOptimization {
                 shagDict[igene.Name] = (igene.Right - igene.Left) / ShagNumber;
             }
         }
+
+        public double minShag = 1E-5, decRate = 0.3d;
+        public bool DecreaseShag() {
+            return DecreaseShag(minShag);
+        }
+
+        public bool DecreaseShag(double minShag) {
+            bool someDec = false;
+            if (geneInfo == null)
+                return someDec;
+            foreach (var igene in geneInfo) {
+                double currshag = shagDict[igene.Name];
+                if (currshag <= minShag)
+                    continue;
+                currshag *= decRate;
+                if (currshag < minShag) {
+                    currshag = minShag;
+                } else {
+                    someDec = true;
+                }
+                shagDict[igene.Name] = currshag;
+            }
+            return someDec;
+        }
+
+        public bool MinShagAlready => !shagDict.Any(se => se.Value > minShag);
+
 
 
 

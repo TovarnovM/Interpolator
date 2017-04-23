@@ -112,6 +112,7 @@
     <Compile Include="DetermOptimization\ISearchMethod.cs" />
     <Compile Include="DetermOptimization\Nesterov.cs" />
     <Compile Include="DetermOptimization\Optimizator.cs" />
+    <Compile Include="DetermOptimization\RandomSearch.cs" />
     <Compile Include="DetermOptimization\SearchMethodBase.cs" />
     <Compile Include="GeneDoubleRange.cs" />
     <Compile Include="GeneEnumString.cs" />
