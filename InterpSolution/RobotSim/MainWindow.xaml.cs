@@ -40,7 +40,7 @@ namespace RobotSim {
         public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
             solution.Body.SynchQandM();
             solution.wheels.ForEach(w => w.SynchQandM());
-            solution.BlockedWheels = true;
+            solution.BlockedWheels = false;
         }
 
         public static RobotDynamics GetNewRD() {
@@ -48,22 +48,22 @@ namespace RobotSim {
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
             //sol.CreateWheelsSample(false);
-            sol.Body.Vec3D = new Vector3D(0.3,0.5,0);
+            sol.Body.Vec3D = new Vector3D(0.3,0.1,0);
             sol.Body.SynchQandM();
-            //sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,-1,4));
-            sol.Body.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis,-Vector3D.YAxis,-Vector3D.ZAxis,Vector3D.ZAxis);
-            sol.Body.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis,Vector3D.XAxis + Vector3D.ZAxis,-Vector3D.YAxis,Vector3D.YAxis);
+            sol.Body.RotateOXtoVec(sol.Body.WorldTransformRot * new Vector3D(10,-1,4));
+            //sol.Body.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis,-Vector3D.YAxis,-Vector3D.ZAxis,Vector3D.ZAxis);
+            //sol.Body.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis,Vector3D.XAxis + Vector3D.ZAxis,-Vector3D.YAxis,Vector3D.YAxis);
             sol.Body.SynchQandM();
 
-            sol.Create4GUS(0,10);
+            sol.Create4GUS(2,5);
 
             var mostLeftPoint = sol.TracksAll
                 .SelectMany(tr => tr.ConnP.Select(cp => tr.WorldTransform * cp))
                 .MinBy(p => p.X);
 
-            sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(mostLeftPoint.X,0,0), new Vector3D(1,0,0)),0.9);
+            //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(mostLeftPoint.X,0,0), new Vector3D(1,0,0)),0.9);
 
-            //sol.AddSurf(new FlatSurf(10000,100,new Vector3D(1,0,1)));
+            sol.AddSurf(new FlatSurf(10000,100,new Vector3D(1,0,1)));
             ////sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
             //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(0,0,0), new Vector3D(1,1,0)),2);
             //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(-0.3,0,0),new Vector3D(1,0,0)),2);

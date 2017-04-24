@@ -130,7 +130,7 @@ namespace DoubleEnumGenetic.DetermOptimization {
             }
         }
 
-        public double minShag = 1E-5, decRate = 0.3d;
+        public double minShag = 1E-7, decRate = 0.3d;
         public bool DecreaseShag() {
             return DecreaseShag(minShag);
         }

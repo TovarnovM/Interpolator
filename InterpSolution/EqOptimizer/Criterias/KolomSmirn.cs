@@ -13,7 +13,7 @@ namespace EqOptimizer.Criterias {
             for (int i = 0; i < data.Count; i++) {
                 var answer = equation.GetSolution(data[i].vars);
                 var delta = answer - data[i].answer;
-                var delta2 = delta*delta;
+                var delta2 = Math.Abs(delta);
                 if (delta2 > maxError)
                     maxError = delta2;
             }

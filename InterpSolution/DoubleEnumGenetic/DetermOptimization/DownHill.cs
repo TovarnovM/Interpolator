@@ -22,7 +22,7 @@ namespace DoubleEnumGenetic.DetermOptimization {
         }
 
         public IList<ChromosomeD> currentPoints { get; private set; }
-        public double lambda = 0.3, eps = 0.0001;
+        public double lambda = 0.3, eps = 0.00001;
         bool _hasReached = false;
 
         public override void EndCurrentStep() {

@@ -102,5 +102,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EqOptimizer\EqOptimizer.csproj">
+      <Project>{998ca17d-d33d-457b-886a-625c7e183168}</Project>
+      <Name>EqOptimizer</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -413,8 +413,8 @@ namespace RobotSim {
 
             SynchMeBefore = SynchMeToBodyAndBetta;
             SynchMeAfter = NewtonLaw3D4Wheel;
-            //AddDiffPropToParam(pBetta,pdBetta);
-            //AddDiffPropToParam(pdBetta,pddBetta);
+            AddDiffPropToParam(pBetta,pdBetta);
+            AddDiffPropToParam(pdBetta,pddBetta);
             BodyMaster = connectBody;
             forceToBody = Force.GetForce(Vector3D.Zero,null,p0_body_loc,connectBody);
             connectBody.AddForce(forceToBody);

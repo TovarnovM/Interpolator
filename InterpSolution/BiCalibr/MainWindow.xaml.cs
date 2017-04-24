@@ -16,6 +16,10 @@ using System.IO;
 using System.Windows.Forms;
 using System.Globalization;
 using MoreLinq;
+using EqOptimizer.Data;
+using EqOptimizer.Equations;
+using EqOptimizer;
+using EqOptimizer.Criterias;
 
 namespace BiCalibr {
     /// <summary>
@@ -241,6 +245,35 @@ namespace BiCalibr {
         private void dg2_SelectionChanged(object sender,SelectionChangedEventArgs e) {
             StatInfo info =(StatInfo)dg2.SelectedItem;
 
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e) {
+            regressButton.IsEnabled = false;
+
+            var lst = dg2.ItemsSource as List<StatInfo>;
+            var dataVel = lst
+                .Select(si => new OnePoint(si.Vel0, si.Mass_podd, si.Mass_porsh, si.P_max))
+                .Aggregate(
+                    new MultyData(),
+                    (md, op) => {
+                        md.Add(op);
+                        return md;
+                    });
+            var eq = new Line_2order_eq(3);
+            //eq.FillPars(new double[] { 0, 0, 0, 0, 0, 0, 1, 1, 1, 100 });
+            var crit = new MNK();
+            var opt = new EqO_genetic(eq, dataVel, crit, -1000000, 1000000);// { minShag = 1e-12};//{ minShag = 1e-11, epsFitn = 1e-11, Multithread = false, lambda = 0.01 };
+            
+            var sol = await opt.PerformOptimizationAsync();
+            
+            tb1.Text += $"Genetic: {sol.eq.EqStr}\n Crit = {sol.crit}\n MaxDiff = {new KolomSmirn().GetMaxError(sol.eq, dataVel)}\n MaxDiff0 = {new KolomSmirn().GetMaxError(eq, dataVel)}\n";
+
+            //var opt2 = new EqO_downhill(sol.eq, dataVel, crit, -10, 10);
+            //opt2.Multithread = false;
+            //sol = await opt2.PerformOptimizationAsync();
+            //tb1.Text += $"Hill: {sol.eq.EqStr}\n   Crit = {sol.crit}\n MaxDiff = {new KolomSmirn().GetMaxError(sol.eq, dataVel)}\n";
+
+            regressButton.IsEnabled = true;
         }
     }
 }

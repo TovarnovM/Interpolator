@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BiCalibr"
         mc:Ignorable="d"
-        Title="MainWindow" Height="318.001" Width="453">
+        Title="MainWindow" Height="426.668" Width="461.667">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="159*"/>
@@ -17,9 +17,10 @@
         <TabControl Grid.Column="1">
             <TabItem Header="TabItem">
                 <Grid>
-                    <DataGrid Name="dg2" Margin="0,0,0,29" IsReadOnly="True" SelectionChanged="dg2_SelectionChanged"/>
-                    <Button Name="btnAnalys" Content="Start Analysis" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="302" Height="29" Click="Button_Click_1"/>
-
+                    <DataGrid Name="dg2" IsReadOnly="True" SelectionChanged="dg2_SelectionChanged" Height="256" VerticalAlignment="Top"/>
+                    <Button Name="btnAnalys" Content="Start Analysis" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="143" Height="29" Click="Button_Click_1"/>
+                    <TextBox Name="tb1" Margin="0,257,0,29" TextWrapping="Wrap" Text=""/>
+                    <Button Name="regressButton" Content="Regress" Margin="143,0,0,0" Height="29" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="107" Click="Button_Click_2"/>
                 </Grid>
 
 
@@ -29,6 +30,7 @@
                     <DataGrid x:Name="dg" ItemsSource="{Binding}" IsReadOnly="True"/>
                 </Grid>
             </TabItem>
+
 
 
 

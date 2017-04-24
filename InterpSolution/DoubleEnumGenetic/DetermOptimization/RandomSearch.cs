@@ -45,7 +45,7 @@ namespace DoubleEnumGenetic.DetermOptimization
                     }
                 } else {
                     currCenter = minusArrow;
-                    Solutions.Add(currCenter);
+                    //Solutions.Add(currCenter);
                     retryCountCurr = 0;
                     return;
                 }
@@ -54,12 +54,12 @@ namespace DoubleEnumGenetic.DetermOptimization
                     DecreaseShag();
                     retryCountCurr = 0;
                     currCenter = plusArrow.Fitness > minusArrow.Fitness ? plusArrow : minusArrow;
-                    Solutions.Add(currCenter);
+                    //Solutions.Add(currCenter);
                     return;
                 } else {
                     currCenter = plusArrow;
                     retryCountCurr = 0;
-                    Solutions.Add(currCenter);
+                    //Solutions.Add(currCenter);
                     return;
                 }
             }
