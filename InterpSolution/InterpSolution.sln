@@ -69,6 +69,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EqOptimizerTests", "EqOptim
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotIM", "RobotIM\RobotIM.csproj", "{4868F138-439F-4DDF-BAE5-B74E1087E870}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotIMTests", "RobotIMTests\RobotIMTests.csproj", "{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -477,6 +479,18 @@ Global
 		{4868F138-439F-4DDF-BAE5-B74E1087E870}.Release|x64.Build.0 = Release|Any CPU
 		{4868F138-439F-4DDF-BAE5-B74E1087E870}.Release|x86.ActiveCfg = Release|Any CPU
 		{4868F138-439F-4DDF-BAE5-B74E1087E870}.Release|x86.Build.0 = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|x64.Build.0 = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Debug|x86.Build.0 = Debug|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|x64.ActiveCfg = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|x64.Build.0 = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBEF9DC0-39CB-4047-A300-F96D4AB4232E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -423,6 +423,13 @@ namespace Interpolator {
             }
             return result;
         }
+        public double GetDistanceTo(Vector point) {
+            if (pointsList.Count == 0)
+                return -1;
+            var nearestP = NearestToPoint(point);
+            return (point - nearestP).Length;
+        }
+
         public static Vector MinimumDistanceVector(Vector v,Vector w,Vector p) {
             // Return minimum distance vector between line segment vw and point p
             // i.e. |w-v|^2 -  avoid a sqrt
