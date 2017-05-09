@@ -1,12 +1,12 @@
 ﻿using Interpolator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RobotIM.Scene;
+using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
 namespace RobotIM.Scene.Tests {
     [TestClass()]
@@ -14,7 +14,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void SynchCellSizeNsWithGabTest() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
             Assert.AreEqual(40, r.nw);
@@ -24,7 +24,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetGridCoordsTest1() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -37,7 +37,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetGridCoordsTest2() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -50,7 +50,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetGridCoordsTest3() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -63,7 +63,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetGridCoordsTest4() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -76,7 +76,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetGridCoordsTest5() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -89,7 +89,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetAllCellCentersTest() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 50));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 50));
             r.cellsize = 0.5;
             r.SynchCellSizeNsWithGab();
 
@@ -100,7 +100,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void GetBoolGridTest() {
             var r = new Room();
-            r.gabarit = (new Vector(10, 20), new Vector(30, 40));
+            r.gabarit = (new Vector2D(10, 20), new Vector2D(30, 40));
             r.cellsize = 1;
             r.SynchCellSizeNsWithGab();
             var wall = new LevelLine();
@@ -117,7 +117,7 @@ namespace RobotIM.Scene.Tests {
         [TestMethod()]
         public void FindPathTest() {
             var r = new Room();
-            r.gabarit = (new Vector(0, 0), new Vector(20, 20));
+            r.gabarit = (new Vector2D(0, 0), new Vector2D(20, 20));
             r.cellsize = 1;
 
             var wall = new LevelLine();
@@ -140,7 +140,7 @@ namespace RobotIM.Scene.Tests {
             r.walls.Add(wall);
 
             r.CreateScene();
-            var path = r.FindPath(new Vector(2, 2), new Vector(18, 18));
+            var path = r.FindPath(new Vector2D(2, 2), new Vector2D(18, 18));
 
         }
     }

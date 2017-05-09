@@ -6,31 +6,31 @@ using System.Threading.Tasks;
 using EpPathFinding.cs;
 using Interpolator;
 using MoreLinq;
-using System.Windows;
 using static System.Math;
+using Sharp3D.Math.Core;
 
 namespace RobotIM.Scene {
     public class Room {
         public List<LevelLine> walls = new List<LevelLine>();
-        StaticGrid searchGrid;
+        public  StaticGrid searchGrid;
         JumpPointParam jumpParam;
         public double cellsize = 0.1;
-        public (Vector p1, Vector p2) gabarit;
+        public (Vector2D p1, Vector2D p2) gabarit;
         public int nw, nh;
 
-        (Vector p1, Vector p2) GetGabarit() {
+        (Vector2D p1, Vector2D p2) GetGabarit() {
             var left =      walls.SelectMany(ll => ll.pointsList).Min(p => p.X);
             var right =     walls.SelectMany(ll => ll.pointsList).Max(p => p.X);
             var top =       walls.SelectMany(ll => ll.pointsList).Max(p => p.Y);
             var bottom =    walls.SelectMany(ll => ll.pointsList).Min(p => p.Y);
-            return (new Vector(left, bottom), new Vector(right, top));
+            return (new Vector2D(left, bottom), new Vector2D(right, top));
         }
 
-        GridPos GetGridCoordsGP(Vector p) {
+        GridPos GetGridCoordsGP(Vector2D p) {
             var t = GetGridCoords(p);
             return new GridPos(t.ix, t.iy);
         }
-        (int ix, int iy) GetGridCoords(Vector p) {
+        (int ix, int iy) GetGridCoords(Vector2D p) {
             return GetGridCoords(p.X, p.Y);
         }
         public (int ix, int iy) GetGridCoords(double x, double y) {
@@ -44,20 +44,20 @@ namespace RobotIM.Scene {
                 (int)Floor(y_otn / cellsize);
             return (ix, iy);
         }
-        public Vector GetCellCenter(int ix, int iy) {
+        public Vector2D GetCellCenter(int ix, int iy) {
             var x = gabarit.p1.X + 0.5 * cellsize + ix * cellsize;
             var y = gabarit.p1.Y + 0.5 * cellsize + iy * cellsize;
-            return new Vector(x, y);
+            return new Vector2D(x, y);
         }
-        public IEnumerable<(Vector center, int ix, int iy)> GetAllCellCenters() {
+        public IEnumerable<(Vector2D center, int ix, int iy)> GetAllCellCenters() {
             for (int i = 0; i < nw; i++) {
                 for (int j = 0; j < nh; j++) {
                     yield return (GetCellCenter(i, j), i, j);     
                 }
             }
         }
-        public IEnumerable<(Vector p1,Vector p2, int ix, int iy)> GetAllCellRects() {
-            var half = new Vector(cellsize / 2, cellsize / 2);
+        public IEnumerable<(Vector2D p1, Vector2D p2, int ix, int iy)> GetAllCellRects() {
+            var half = new Vector2D(cellsize / 2, cellsize / 2);
             for (int i = 0; i < nw; i++) {
                 for (int j = 0; j < nh; j++) {
                     var center = GetCellCenter(i, j);
@@ -85,10 +85,10 @@ namespace RobotIM.Scene {
             }
 
             foreach (var cell in GetAllCellRects()) {
-                var p1 = cell.p1;
-                var p2 = cell.p1 + new Vector(cell.p2.X - cell.p1.X, 0);
-                var p3 = cell.p2;
-                var p4 = p1 + new Vector(0,cell.p2.Y - cell.p1.Y);
+                var p1 = new System.Windows.Vector(cell.p1.X, cell.p1.Y);
+                var p2 = p1 + new System.Windows.Vector(cell.p2.X - cell.p1.X, 0);
+                var p3 = new System.Windows.Vector(cell.p2.X, cell.p2.Y);
+                var p4 = p1 + new System.Windows.Vector(0,cell.p2.Y - cell.p1.Y);
 
                 foreach (var wall in walls) {
                     bool cross = wall.IsCrossMe(p1, p2) ||
@@ -110,12 +110,12 @@ namespace RobotIM.Scene {
             jumpParam = new JumpPointParam(searchGrid, true, false, false);
         }
 
-        public List<Vector> FindPath(Vector from_pos, Vector to_pos) {
+        public List<Vector2D> FindPath(Vector2D from_pos, Vector2D to_pos) {
             var fr = GetGridCoordsGP(from_pos);
             var to = GetGridCoordsGP(to_pos);
             jumpParam.Reset(fr, to);
             var resGP = JumpPointFinder.FindPath(jumpParam);
-            var res = new List<Vector>(resGP.Count+1);
+            var res = new List<Vector2D>(resGP.Count+1);
             for (int i = 0; i < resGP.Count; i++) {
                 res.Add(GetCellCenter(resGP[i].x, resGP[i].y));
             }

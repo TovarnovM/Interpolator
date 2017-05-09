@@ -57,11 +57,16 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Scene\RoomTests.cs" />
+    <Compile Include="Scene\UnitWithVisionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InterpApp\InterpApp.csproj">
       <Project>{5C93BCEB-59BC-4510-823E-8860581B1332}</Project>
       <Name>InterpApp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
+      <Project>{441ff4c9-0f85-4470-a274-41408b420f86}</Project>
+      <Name>Sharp3D.Math</Name>
     </ProjectReference>
     <ProjectReference Include="..\RobotIM\RobotIM.csproj">
       <Project>{4868F138-439F-4DDF-BAE5-B74E1087E870}</Project>
@@ -69,6 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Choose>

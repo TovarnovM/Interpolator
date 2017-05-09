@@ -29,9 +29,10 @@ namespace RobotIM.Core {
             Units.Add(unit);
             unit.Owner = this;
         }
-        public void UpdateAllUnits() {
-            foreach (var unit in Units.Where(u => u.Enabled)) {
-                unit.Update();
+        public void UpdateAllUnits(double toTime) {
+            foreach (var unit in Units) {
+                if(unit.Enabled)
+                    unit.Update(toTime);
             }
         }
         public void EnableAllUnits() {
@@ -40,16 +41,18 @@ namespace RobotIM.Core {
         public IEnumerable<T> GetUnitsSpec<T>(bool enabletMatters = true) {
             return Units.Where(u => (!enabletMatters || u.Enabled) && u is T).Cast<T>();
         }
-        public void Start() {
-            Time = 0d;
-            while (true) {
-                UpdateAllUnits();
-                Result = StopFunc();
-                if (Result > 0) {
-                    break;
-                }
 
-                Time += dT;
+        public bool StepUp() {
+            Time += dT;
+            UpdateAllUnits(Time);
+            Result = StopFunc();
+            return Result <= 0;
+           
+        }
+
+        public void StartLoop() {
+            Time = 0d;
+            while (StepUp()) {
             }
         }
 

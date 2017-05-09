@@ -4,9 +4,25 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotIM"
+        xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        
+        <TabControl x:Name="tabControl" Margin="0,0,0,0" Grid.RowSpan="2">
+
+            <TabItem Header="TabItem">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="335*"/>
+                        <RowDefinition Height="41*"/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="32" Click="button1_Click"/>
+                    <oxy:PlotView x:Name="tstPV" Model="{Binding Model1Rx.Value}" Grid.Row="0" Grid.Column="0"/>
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
     </Grid>
 </Window>
