@@ -219,9 +219,9 @@ namespace DoubleEnumGenetic {
                     int gIndex = crGroup.First().GInfoDouble.IndexOf(gInfo);
                     var max = crGroup.Max(cr => (double)cr.GetGene(gIndex).Value);
                     var min = crGroup.Min(cr => (double)cr.GetGene(gIndex).Value);
-                    return new DRange(gInfo as GeneDoubleRange,max - min);
+                    return new DRange(gInfo as GeneDoubleRange, max - min);
                 }).
-                ToList();
+                ToDictionary(dr => dr.Info.Name, dr => dr);
 
             var rMatr = new MatrixD(crGroup.Count,crGroup.Count);
             for(int i = 0; i < crGroup.Count; i++) {
@@ -233,7 +233,7 @@ namespace DoubleEnumGenetic {
                     foreach(var gInfo in cr.GInfoDouble) {
                         var rr2 = 0d;
                         if(gInfo is GeneDoubleRange) {
-                            var gRange = dRange.First(rn => rn.Info == gInfo);
+                            var gRange = dRange[gInfo.Name];
                             if(gRange.TooSmall)
                                 continue;
                             rr2 = Math.Abs((double)crIn[gInfo.Name] - (double)cr[gInfo.Name]) / gRange.Delta;

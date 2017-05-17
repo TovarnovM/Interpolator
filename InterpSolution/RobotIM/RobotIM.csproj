@@ -89,6 +89,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Scene\Room.cs" />
+    <Compile Include="Scene\SOV.cs" />
     <Compile Include="Scene\UnitWithVision.cs" />
     <Compile Include="Scene\UnitXY.cs" />
     <Compile Include="Scene\WayPoints.cs" />

@@ -122,5 +122,15 @@ namespace RobotIM.Scene {
             res.Add(to_pos);
             return res;
         }
+
+        public bool IsCrossWalls(Vector2D a1, Vector2D a2) {
+            System.Windows.Vector b1 = new System.Windows.Vector(a1.X, a1.Y);
+            System.Windows.Vector b2 = new System.Windows.Vector(a2.X, a2.Y);
+            foreach (var wall in walls) {
+                if (wall.IsCrossMe(b1, b2))
+                    return true;
+            }
+            return false;
+        }
     }
 }

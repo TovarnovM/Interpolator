@@ -68,6 +68,8 @@ namespace RobotIM {
             var gab = room.gabarit;
 
             SerCells.IsVisible = drawCells;
+            if (!drawCells)
+                return;
             SerCells.X0 = gab.p1.X;
             SerCells.X1 = gab.p2.X;
             SerCells.Y0 = gab.p1.Y;
