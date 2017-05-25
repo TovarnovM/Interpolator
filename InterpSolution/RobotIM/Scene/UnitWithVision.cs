@@ -18,6 +18,10 @@ namespace RobotIM.Scene {
             viewDir = RotateFromTo(viewDir, VelDir, rotateSpeed, toTime - UnitTime);
         }
 
+        public void Rotate(double t2) {
+            viewDir = RotateFromTo(viewDir, new Vector2D(viewDir  .), rotateSpeed, toTime - UnitTime);
+        }
+
         public static Vector2D RotateFromTo(Vector2D f, Vector2D t, double speed, double dt) {
             var f_l = f.GetLength();
             var t_l = t.GetLength();

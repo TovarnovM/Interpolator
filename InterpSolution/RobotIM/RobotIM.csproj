@@ -49,6 +49,9 @@
     <Reference Include="OxyPlot.Wpf, Version=1.0.0.0, Culture=neutral, PublicKeyToken=75e952ba404cdbb0, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Wpf.1.0.0\lib\net45\OxyPlot.Wpf.dll</HintPath>
     </Reference>
+    <Reference Include="Stateless, Version=3.0.0.0, Culture=neutral, PublicKeyToken=93038f0927583c9a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Stateless.3.1.0\lib\net45\Stateless.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
@@ -90,6 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Scene\Room.cs" />
     <Compile Include="Scene\SOV.cs" />
+    <Compile Include="Scene\Terror.cs" />
     <Compile Include="Scene\UnitWithVision.cs" />
     <Compile Include="Scene\UnitXY.cs" />
     <Compile Include="Scene\WayPoints.cs" />

@@ -17,10 +17,14 @@ namespace RobotIM.Scene {
         }
 
         protected override void PerformUpdate(double toTime) {
-            Move(UnitTime, toTime);
+            Move(toTime);
         }
 
-        void Move(double t1, double t2) {
+        public void Move(double t2) {
+            Move(UnitTime, t2);
+        }
+
+        public void Move(double t1, double t2) {
             if (WayPoints == null) {
                 Pos += VelDir * VelAbs * (t2 - t1);
                 return;
