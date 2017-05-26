@@ -7,37 +7,45 @@ using RobotIM.Core;
 using Stateless;
 
 namespace RobotIM.Scene {
-    class UnitWithStates : UnitWithVision {
-        StateMachine<UnitState, string> _stateM;
-        UnitState _state;
-        public bool SwitchState(string newStateName) {
-            if (newStateName == "")
-                return false;
-            var can = _stateM.CanFire(newStateName);
+    public class UnitWithStates : UnitWithVision {
+        StateMachine<UnitState, UnitTrigger> _stateM;
+        public StateMachine<UnitState, UnitTrigger> SM {
+            get { return _stateM;  }
+        }
+
+        private UnitState _state;
+
+        public UnitState State {
+            get { return _state; }
+            set { _state = value; }
+        }
+
+
+        public bool SwitchState(UnitTrigger trigg) {
+            var can = _stateM.CanFire(trigg);
             if (!can) {
                 return false;
             }
-            _stateM.Fire(newStateName);
+            _stateM.Fire(trigg);
             return true;
         }
         public UnitWithStates(string Name, GameLoop Owner = null) : base(Name, Owner) {
-            _stateM = new StateMachine<UnitState, string>(() => _state, s => _state = s);
+            _stateM = new StateMachine<UnitState, UnitTrigger>(() => _state, s => _state = s);
         }
         protected override void PerformUpdate(double toTime) {
-            _state.WhatToDo(UnitTime, toTime);
-            foreach (var tr in _state.triggerList) {
-                var newStateName = tr();
-                if(newStateName != "" && SwitchState(newStateName)) {
+            _state.WhatToDo(toTime);
+            foreach (var tr in _stateM.PermittedTriggers) {
+                if (tr.Condition() && SwitchState(tr)) {
                     break;
                 }
             }
+            
         }
     }
 
-    class UnitState {
+    public class UnitState {
         public string Name { get; set; }
         public Action<double> WhatToDo;
-        public List<Func<string>> triggerList = new List<Func<string>>(); 
         public UnitWithStates owner;
         public UnitState(UnitWithStates owner, string name) {
             this.owner = owner;
@@ -52,12 +60,24 @@ namespace RobotIM.Scene {
                     us.WhatToDo += owner.Move;
                     break;
                 case "scaning":
-
+                    us.WhatToDo += owner.Rotate;
+                    break;
                 default:
                     throw new ArgumentException("Нэт такого состояния");
             }
             return us;         
         }
+
+        public override int GetHashCode() {
+            return Name.GetHashCode();
+        }
     }
 
+    public class UnitTrigger {
+        public string Name { get; set; }
+        public bool Condition() {
+            return ConditionFunc != null ? ConditionFunc() : false; 
+        }
+        public Func<bool> ConditionFunc;
+    }
 }

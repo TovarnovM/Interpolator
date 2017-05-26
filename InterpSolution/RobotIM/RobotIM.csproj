@@ -93,7 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Scene\Room.cs" />
     <Compile Include="Scene\SOV.cs" />
-    <Compile Include="Scene\Terror.cs" />
+    <Compile Include="Scene\UnitWithStates.cs" />
     <Compile Include="Scene\UnitWithVision.cs" />
     <Compile Include="Scene\UnitXY.cs" />
     <Compile Include="Scene\WayPoints.cs" />
@@ -149,6 +149,10 @@
     <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
       <Project>{441ff4c9-0f85-4470-a274-41408b420f86}</Project>
       <Name>Sharp3D.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyRandom\MyRandom.csproj">
+      <Project>{db584195-10a3-4633-9388-919f7b8fe87a}</Project>
+      <Name>MyRandom</Name>
     </ProjectReference>
     <ProjectReference Include="..\Oslo\Oslo.csproj">
       <Project>{92589c2d-3833-496f-87e8-788fd511b162}</Project>

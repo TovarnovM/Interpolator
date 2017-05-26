@@ -1,4 +1,5 @@
 ﻿using Interpolator;
+using MyRandomGenerator;
 using RobotIM.Core;
 using RobotIM.Scene;
 using Sharp3D.Math.Core;
@@ -65,23 +66,87 @@ namespace RobotIM {
         public GameLoop InitLoop() {
             var l = new GameLoop();
             l.dT = 0.1;
-            var u = new UnitWithVision("unit");
             r = GetRoom();
+            var u = new TerrorTest("u1", r);
             l.AddUnit(u);
-            u.X = 3;
-            u.Y = 3;
-            u.WayPoints = new WayPoints(r.FindPath(u.Pos, new Vector2D(17, 4)));
-            l.EnableAllUnits();
+            //var u = new UnitWithStates("unit");
+            //u.SM.Configure(UnitState.Factory(u,"moving"))
+            //    .InternalTransition()
+
+            //r = GetRoom();
+            //l.AddUnit(u);
+            //u.X = 3;
+            //u.Y = 3;
+            //u.WayPoints = new WayPoints(r.FindPath(u.Pos, new Vector2D(17, 4)));
+            //l.EnableAllUnits();
             return l;
         }
 
+
         private void button1_Click(object sender, RoutedEventArgs e) {
-                for (int i = 0; i < 1; i++) {
+                for (int i = 0; i < 10; i++) {
                     mainLoop.StepUp();
                 }
                 vm.Model1Rx.Update(mainLoop);
             
 
         }
+    }
+
+    class TerrorTest : UnitWithStates {
+        public TerrorTest(string Name, Room r, GameLoop Owner = null) : base(Name, Owner) {
+            _r = r;
+            var ut1 = new UnitTrigger();
+            ut1.ConditionFunc += Ut1Cond;
+
+            var ut2 = new UnitTrigger();
+            ut2.ConditionFunc += SpinProc;
+            X = 1;
+            Y = 1;
+            GetNewDistPos();
+            
+            State = UnitState.Factory(this, "moving");
+            State.WhatToDo += SignToVel;
+            var spinning = UnitState.Factory(this, "scaning");
+            SM.Configure(State)
+               // .InternalTransition(ut1, GetNewDistPos)
+                .OnEntry(()=> {
+                    GetNewDistPos();
+                    VelAbs = _rnd.GetDouble(0.5, 1.5);
+                })
+                .Permit(ut1, spinning);
+            SM.Configure(spinning)
+                .OnEntry(()=> {
+                    spinStartTime = UnitTime;
+                    RotDir = _rnd.GetInt(-2, 2);
+                    rotateSpeed = _rnd.GetDouble(20, 90);
+                    spinDur = _rnd.GetDouble(5, 10);
+                })
+                .Permit(ut2, State);
+        }
+        Room _r;
+        Vector2D _distPoint;
+        MyRandom _rnd = new MyRandom();
+        bool Ut1Cond() {
+            return (Pos - _distPoint).GetLength() < 0.01;
+        }
+
+        void GetNewDistPos() {
+            var p = new Vector2D();
+            do {
+                p.X = _rnd.GetDouble(_r.gabarit.p1.X, _r.gabarit.p2.X);
+
+                p.Y = _rnd.GetDouble(_r.gabarit.p1.Y, _r.gabarit.p2.Y);
+                
+            } while (!_r.WalkableCoord(p));
+            WayPoints = new WayPoints(_r.FindPath(Pos, p));
+            _distPoint = p;
+        }
+
+        double spinStartTime = 0d, spinDur = 5;
+        bool SpinProc() {
+            return UnitTime - spinStartTime > spinDur;
+        }
+
     }
 }

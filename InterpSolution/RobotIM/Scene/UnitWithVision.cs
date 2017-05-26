@@ -15,11 +15,29 @@ namespace RobotIM.Scene {
         }
         protected override void PerformUpdate(double toTime) {
             base.PerformUpdate(toTime);
+            SignToVel(toTime);
+        }
+
+        public void SignToVel(double toTime) {
             viewDir = RotateFromTo(viewDir, VelDir, rotateSpeed, toTime - UnitTime);
         }
 
+        private int _rotDir =1;
+
+        public int RotDir {
+            get { return _rotDir; }
+            set {
+                _rotDir = value;
+                _rotDir = _rotDir >= 0 ? 1 : -1;
+            }
+        }
+
         public void Rotate(double t2) {
-            viewDir = RotateFromTo(viewDir, new Vector2D(viewDir  .), rotateSpeed, toTime - UnitTime);
+            var angle = rotateSpeed * PI / 180 * (t2-UnitTime);
+            var c = Cos(angle);
+            var s = Sin(angle);
+
+            viewDir = new Vector2D(viewDir.X * c - viewDir.Y * s, viewDir.Y * c + viewDir.X * s);
         }
 
         public static Vector2D RotateFromTo(Vector2D f, Vector2D t, double speed, double dt) {

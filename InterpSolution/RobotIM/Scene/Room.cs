@@ -132,5 +132,15 @@ namespace RobotIM.Scene {
             }
             return false;
         }
+
+        public bool WalkableCoord(Vector2D p) {
+            if (p.X < gabarit.p1.X ||
+                p.X > gabarit.p2.X ||
+                p.Y < gabarit.p1.Y ||
+                p.Y > gabarit.p2.Y)
+                return false;
+            var inds = GetGridCoords(p);
+            return searchGrid.IsWalkableAt(inds.ix, inds.iy);
+        }
     }
 }
