@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace RobotIM {
     public class ViewModel {
-        private ScatterSeries P;
+        private ScatterSeries P,pdead;
         LineSeries SerWalls, SerVision;
         HeatMapSeries SerCells;
 
@@ -31,6 +31,15 @@ namespace RobotIM {
                     ColorAxisKey = null
                 };
                 Model1.Series.Add(P);
+
+                pdead = new ScatterSeries() {
+                    Title = "dead",
+                    MarkerType = MarkerType.Diamond,
+                    MarkerSize = 5,
+                    MarkerFill = OxyColors.Gray,
+                    ColorAxisKey = null
+                };
+                Model1.Series.Add(pdead);
 
                 SerWalls = new LineSeries() {
                     Color = OxyColors.DarkBlue,
@@ -89,8 +98,11 @@ namespace RobotIM {
         public void Draw(GameLoop t, PlotModel pm) {
             P.Points.Clear();
             SerVision.Points.Clear();
-            foreach (var p in t.GetUnitsSpec<UnitWithVision>()) {
-                P.Points.Add(new ScatterPoint(p.X, p.Y,value:1));
+            foreach (var p in t.GetUnitsSpec<UnitWithVision>(false)) {
+                var ser = p.Enabled ? P : pdead;
+                ser.Points.Add(new ScatterPoint(p.X, p.Y,value:1));
+                if (!p.Enabled)
+                    continue;
                 SerVision.Points.Add(new DataPoint(Double.NaN, Double.NaN));
                 SerVision.Points.Add(new DataPoint(p.X, p.Y));
                 SerVision.Points.Add(new DataPoint(p.X + p.viewDir.X, p.Y + p.viewDir.Y));

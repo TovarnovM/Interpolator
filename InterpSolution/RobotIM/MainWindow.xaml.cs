@@ -67,8 +67,12 @@ namespace RobotIM {
             var l = new GameLoop();
             l.dT = 0.1;
             r = GetRoom();
-            var u = new TerrorTest("u1", r);
-            l.AddUnit(u);
+            for (int i = 0; i <130; i++) {
+                var u = new TerrorTest($"u{i}", r);
+                l.AddUnit(u);
+            }
+
+
             //var u = new UnitWithStates("unit");
             //u.SM.Configure(UnitState.Factory(u,"moving"))
             //    .InternalTransition()
@@ -82,39 +86,78 @@ namespace RobotIM {
             return l;
         }
 
-
         private void button1_Click(object sender, RoutedEventArgs e) {
-                for (int i = 0; i < 10; i++) {
-                    mainLoop.StepUp();
-                }
-                vm.Model1Rx.Update(mainLoop);
-            
+            if (timer == null) {
+                timer = new System.Timers.Timer(100);
+                timer.Elapsed += (s, ee) => {
+                    for (int i = 0; i < 3; i++) {
+                        mainLoop.StepUp();
+                    }
+                    vm.Model1Rx.Update(mainLoop);
+                };
+                timer.Enabled = true;
+
+            } else {
+                timer.Enabled = !timer.Enabled;
+            }
+
 
         }
+
+        System.Timers.Timer timer = null;
+
+
     }
 
     class TerrorTest : UnitWithStates {
         public TerrorTest(string Name, Room r, GameLoop Owner = null) : base(Name, Owner) {
             _r = r;
-            var ut1 = new UnitTrigger();
-            ut1.ConditionFunc += Ut1Cond;
+            var utComeToTarget = new UnitTrigger();
+            utComeToTarget.ConditionFunc += Ut1Cond;
 
-            var ut2 = new UnitTrigger();
-            ut2.ConditionFunc += SpinProc;
-            X = 1;
-            Y = 1;
-            GetNewDistPos();
-            
+            var utSpinStop = new UnitTrigger();
+            utSpinStop.ConditionFunc += SpinProc;
+
+            var utFindTarg = new UnitTrigger();
+            utFindTarg.ConditionFunc += ScanForTargets;
+
+            var utKillSomeone = new UnitTrigger();
+            utKillSomeone.ConditionFunc += () => _killedSomone;
+
+            var utKilled = new UnitTrigger();
+            utKilled.ConditionFunc += () => {
+                while(MessQueue.Count > 0) {
+                    var m = MessQueue.Dequeue();
+                    if (m.name == "BANG")
+                        return true;
+
+                }
+                return false;
+
+            };
+
             State = UnitState.Factory(this, "moving");
             State.WhatToDo += SignToVel;
+
             var spinning = UnitState.Factory(this, "scaning");
+
+            var shootingState = new UnitState(this, "shooting");
+            shootStream = new ActionStream(2, 0.5);
+            shootStream.HitAction += Shoot;
+            shootingState.WhatToDo += tt => shootStream.Hit(tt);
+
+            var deadState = new UnitState(this, "dead");
+
             SM.Configure(State)
                // .InternalTransition(ut1, GetNewDistPos)
                 .OnEntry(()=> {
                     GetNewDistPos();
                     VelAbs = _rnd.GetDouble(0.5, 1.5);
                 })
-                .Permit(ut1, spinning);
+                .Permit(utComeToTarget, spinning)
+                .Permit(utFindTarg, shootingState)
+                .Permit(utKilled, deadState);
+
             SM.Configure(spinning)
                 .OnEntry(()=> {
                     spinStartTime = UnitTime;
@@ -122,7 +165,27 @@ namespace RobotIM {
                     rotateSpeed = _rnd.GetDouble(20, 90);
                     spinDur = _rnd.GetDouble(5, 10);
                 })
-                .Permit(ut2, State);
+                .Permit(utSpinStop, State)
+                .Permit(utFindTarg, shootingState)
+                .Permit(utKilled, deadState);
+
+            SM.Configure(shootingState)
+                .OnEntry(() => {
+                    _killedSomone = false;
+                    
+                    shootStream.Reset(UnitTime);
+                })
+                .Permit(utKillSomeone, State)
+                .Permit(utKilled, deadState);
+
+            SM.Configure(deadState)
+                .OnEntry(() => {
+                    this.Enabled = false;
+                  //  MessageBox.Show("Bang(");
+                });
+
+            Pos = r.GetWalkableCoord();
+            GetNewDistPos();
         }
         Room _r;
         Vector2D _distPoint;
@@ -146,6 +209,35 @@ namespace RobotIM {
         double spinStartTime = 0d, spinDur = 5;
         bool SpinProc() {
             return UnitTime - spinStartTime > spinDur;
+        }
+
+        UnitXY _myTarget;
+        bool _killedSomone = false;
+        bool ScanForTargets() {
+            foreach (var pt in Owner.GetUnitsSpec<UnitXY>()) {
+                if (Object.ReferenceEquals(pt, this))
+                    continue;
+                if (SeeYou(pt.Pos, _r)) {
+                    _myTarget = pt;
+                 //   MessageBox.Show("ss");
+                    break;
+                }
+            }
+            return _myTarget != null;
+        }
+
+        ActionStream shootStream;
+        void Shoot(double t) {
+            if (_myTarget == null)
+                return;
+            var dist = (_myTarget.Pos - Pos).GetLength();
+            double dist0 = 20, prob0 = 0.5;
+            var prob = 1 - (1 - prob0) * dist / dist0;
+            if(_rnd.GetDouble() < prob) {
+                _myTarget.SendMessageToMe(new UnitMessage() { name = "BANG", content = this });
+                _killedSomone = true;
+                _myTarget = null;
+            }
         }
 
     }

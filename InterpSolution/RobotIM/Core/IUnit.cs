@@ -11,6 +11,12 @@ namespace RobotIM.Core {
         string Name { get; set; }
         void Update(double toTime);
         bool Enabled { get; set; }
+        void SendMessageToMe(UnitMessage message);
+    }
+
+    public struct UnitMessage {
+        public string name;
+        public object content;
     }
 
     public abstract class UnitBase : IUnit {
@@ -26,6 +32,11 @@ namespace RobotIM.Core {
         public GameLoop Owner { get; set; }
         public string Name { get; set; }
         public bool Enabled { get; set; }
+        public Queue<UnitMessage> MessQueue = new Queue<UnitMessage>();
+
+        public void SendMessageToMe(UnitMessage message) {
+            MessQueue.Enqueue(message);
+        }
 
         public void Update(double toTime) {
             PerformUpdate(toTime);

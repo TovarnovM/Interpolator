@@ -11,7 +11,19 @@ namespace RobotIM.Scene {
     public class UnitWithVision : UnitXY {
         public Vector2D viewDir = new Vector2D(1,0);
         public double rotateSpeed = 90; //градусов в секунду
+        public double visionDist = 20;
+        private double _visionAngle, _visionAngle05Cos;
+
+        public double VisionAngle {
+            get { return _visionAngle; }
+            set {
+                _visionAngle = value;
+                _visionAngle05Cos = Cos(value * 0.5 * PI / 180);
+            }
+        }
+
         public UnitWithVision(string Name, GameLoop Owner = null) : base(Name, Owner) {
+            VisionAngle = 10;
         }
         protected override void PerformUpdate(double toTime) {
             base.PerformUpdate(toTime);
@@ -33,11 +45,17 @@ namespace RobotIM.Scene {
         }
 
         public void Rotate(double t2) {
-            var angle = rotateSpeed * PI / 180 * (t2-UnitTime);
+            var angle = _rotDir*rotateSpeed * PI / 180 * (t2-UnitTime);
             var c = Cos(angle);
             var s = Sin(angle);
 
             viewDir = new Vector2D(viewDir.X * c - viewDir.Y * s, viewDir.Y * c + viewDir.X * s);
+        }
+
+        public bool SeeYou(Vector2D p, Room r) {
+            return !((p - Pos).GetLength() > visionDist
+                || (p - Pos).Norm * viewDir.Norm < _visionAngle05Cos
+                || r.IsCrossWalls(Pos, p));
         }
 
         public static Vector2D RotateFromTo(Vector2D f, Vector2D t, double speed, double dt) {

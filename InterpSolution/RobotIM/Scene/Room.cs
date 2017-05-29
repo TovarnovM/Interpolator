@@ -8,10 +8,12 @@ using Interpolator;
 using MoreLinq;
 using static System.Math;
 using Sharp3D.Math.Core;
+using MyRandomGenerator;
 
 namespace RobotIM.Scene {
     public class Room {
         public List<LevelLine> walls = new List<LevelLine>();
+        MyRandom _rnd = new MyRandom();
         public  StaticGrid searchGrid;
         JumpPointParam jumpParam;
         public double cellsize = 0.1;
@@ -141,6 +143,19 @@ namespace RobotIM.Scene {
                 return false;
             var inds = GetGridCoords(p);
             return searchGrid.IsWalkableAt(inds.ix, inds.iy);
+        }
+
+        public Vector2D GetWalkableCoord() {
+            return GetWalkableCoord(gabarit.p1, gabarit.p2);
+        }
+
+        public Vector2D GetWalkableCoord(Vector2D p1, Vector2D p2) {
+            for (int i = 0; i < 100; i++) {
+                var p = new Vector2D(_rnd.GetDouble(p1.X, p2.X), _rnd.GetDouble(p1.Y, p2.Y));
+                if (WalkableCoord(p))
+                    return p;
+            }
+            throw new ArgumentException("Baad Cords Rectangle");
         }
     }
 }

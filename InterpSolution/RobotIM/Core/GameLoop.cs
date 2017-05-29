@@ -13,6 +13,7 @@ namespace RobotIM.Core {
         public double Time { get; set; }
         public double dT { get; set; } = 0.01;
         public Func<int> StopFunc { get; set; }
+        public Action StepUpAction = null;
         public static int TIME_LIMIT_RESULT = 77;
         public double MaxTime { get; set; } = 100d;
         public int Result { get; set; } = 0;
@@ -45,6 +46,7 @@ namespace RobotIM.Core {
         public bool StepUp() {
             Time += dT;
             UpdateAllUnits(Time);
+            StepUpAction?.Invoke();
             Result = StopFunc();
             return Result <= 0;
            
@@ -54,7 +56,7 @@ namespace RobotIM.Core {
             Time = 0d;
             while (StepUp()) {
             }
-        }
+        } 
 
         public static void SaveToXmlFile<T>(T saveMe, string filePath) {
             try {
