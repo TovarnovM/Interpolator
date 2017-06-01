@@ -67,7 +67,7 @@ namespace RobotIM {
             var l = new GameLoop();
             l.dT = 0.1;
             r = GetRoom();
-            for (int i = 0; i <130; i++) {
+            for (int i = 0; i <1300; i++) {
                 var u = new TerrorTest($"u{i}", r);
                 l.AddUnit(u);
             }
@@ -83,12 +83,29 @@ namespace RobotIM {
             //u.Y = 3;
             //u.WayPoints = new WayPoints(r.FindPath(u.Pos, new Vector2D(17, 4)));
             //l.EnableAllUnits();
+
+            var tsm = new Stateless.StateMachine<string, string>("2");
+            tsm.Configure("1")
+                .SubstateOf("2")
+                .OnEntry(()=>tsm.Fire("1end"))
+                .Permit("1end", "end");
+            tsm.Configure("2")
+                .SubstateOf("3")
+                .Permit("2end", "end")
+                .Permit("21","1");
+            tsm.Configure("3")
+                .Permit("3end", "end")
+                .Permit("ss","1");
+
+            var gg = tsm.PermittedTriggers.ToList();
+            tsm.Fire("21");
+
             return l;
         }
 
         private void button1_Click(object sender, RoutedEventArgs e) {
             if (timer == null) {
-                timer = new System.Timers.Timer(100);
+                timer = new System.Timers.Timer(50);
                 timer.Elapsed += (s, ee) => {
                     for (int i = 0; i < 3; i++) {
                         mainLoop.StepUp();
@@ -147,45 +164,55 @@ namespace RobotIM {
             shootingState.WhatToDo += tt => shootStream.Hit(tt);
 
             var deadState = new UnitState(this, "dead");
-
+            var liveState = new UnitState(this, "live");
             SM.Configure(State)
-               // .InternalTransition(ut1, GetNewDistPos)
-                .OnEntry(()=> {
+                // .InternalTransition(ut1, GetNewDistPos)
+                .OnEntry(() => {
                     GetNewDistPos();
                     VelAbs = _rnd.GetDouble(0.5, 1.5);
                 })
+                .SubstateOf(liveState)
                 .Permit(utComeToTarget, spinning)
-                .Permit(utFindTarg, shootingState)
-                .Permit(utKilled, deadState);
+                .Permit(utFindTarg, shootingState);
 
             SM.Configure(spinning)
-                .OnEntry(()=> {
+                .OnEntry(() => {
                     spinStartTime = UnitTime;
                     RotDir = _rnd.GetInt(-2, 2);
                     rotateSpeed = _rnd.GetDouble(20, 90);
                     spinDur = _rnd.GetDouble(5, 10);
                 })
+                .SubstateOf(liveState)
                 .Permit(utSpinStop, State)
-                .Permit(utFindTarg, shootingState)
-                .Permit(utKilled, deadState);
+                .Permit(utFindTarg, shootingState);
 
             SM.Configure(shootingState)
                 .OnEntry(() => {
                     _killedSomone = false;
-                    
+
                     shootStream.Reset(UnitTime);
                 })
-                .Permit(utKillSomeone, State)
+                .SubstateOf(liveState)
+                .Permit(utKillSomeone, State);
+
+            SM.Configure(liveState)
                 .Permit(utKilled, deadState);
 
             SM.Configure(deadState)
                 .OnEntry(() => {
                     this.Enabled = false;
-                  //  MessageBox.Show("Bang(");
+                    //  MessageBox.Show("Bang(");
                 });
 
             Pos = r.GetWalkableCoord();
             GetNewDistPos();
+            do {
+                viewDir.X = _rnd.GetDouble(-1, 1);
+                viewDir.Y = _rnd.GetDouble(-1, 1);
+                viewDir.Normalize();
+            } while (viewDir.GetLength() < 0.999999);
+
+
         }
         Room _r;
         Vector2D _distPoint;
@@ -214,8 +241,10 @@ namespace RobotIM {
         UnitXY _myTarget;
         bool _killedSomone = false;
         bool ScanForTargets() {
-            foreach (var pt in Owner.GetUnitsSpec<UnitXY>()) {
+            foreach (var pt in Owner.GetUnitsSpec<UnitXY>(false)) {
                 if (Object.ReferenceEquals(pt, this))
+                    continue;
+                if (!pt.Enabled)
                     continue;
                 if (SeeYou(pt.Pos, _r)) {
                     _myTarget = pt;

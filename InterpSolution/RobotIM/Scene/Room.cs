@@ -122,7 +122,34 @@ namespace RobotIM.Scene {
                 res.Add(GetCellCenter(resGP[i].x, resGP[i].y));
             }
             res.Add(to_pos);
+            TrimPath(res);
             return res;
+        }
+
+        public void TrimPath(List<Vector2D> path) {
+            int i = 0;
+            while( i < path.Count-3 ) {
+                path[i + 1] = GetTrimed(path[i], path[i + 1], path[i + 2]);
+                if (Vector2D.ApproxEqual(path[i + 1], path[i + 2])) {
+                    path.RemoveAt(i + 1);
+                } else
+                    i++;
+            }
+        }
+
+        Vector2D GetTrimed(Vector2D p0, Vector2D p1, Vector2D p2, int nShag = 7) {
+            if (!IsCrossWalls(p0, p2))
+                return p2;
+            for (int i = 0; i < nShag; i++) {
+                var p15 = 0.5 * (p1 + p2);
+                if (IsCrossWalls(p0, p15))
+                    p2 = p15;
+                else
+                    p1 = p15;
+            }
+            return p1;
+
+
         }
 
         public bool IsCrossWalls(Vector2D a1, Vector2D a2) {

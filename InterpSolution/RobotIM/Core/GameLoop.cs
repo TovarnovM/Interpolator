@@ -25,11 +25,43 @@ namespace RobotIM.Core {
         public int StopFuncStandart() {
             return Time >= MaxTime ? TIME_LIMIT_RESULT : 0;
         }
+        #region UnitReflections
+        Dictionary<Type, List<object>> _dictUnitRelatives = new Dictionary<Type, List<object>>();
+        public static IEnumerable<Type> GetParentTypes(Type type) {
+            // is there any base type?
+            if ((type == null) || (type.BaseType == null)) {
+                yield break;
+            }
+
+            // return all implemented or inherited interfaces
+            foreach (var i in type.GetInterfaces()) {
+                yield return i;
+            }
+
+            // return all inherited types
+            var currentBaseType = type.BaseType;
+            while (currentBaseType != null) {
+                yield return currentBaseType;
+                currentBaseType = currentBaseType.BaseType;
+            }
+        }
+        void AddToDictUnitRel(IUnit unit) {
+            foreach (var t in GetParentTypes(unit.GetType())) {
+                if (!_dictUnitRelatives.ContainsKey(t)) {
+                    _dictUnitRelatives.Add(t, new List<object>());
+                }
+                _dictUnitRelatives[t].Add(unit);
+            }
+        }
+        #endregion
+
 
         public void AddUnit(IUnit unit) {
             Units.Add(unit);
             unit.Owner = this;
+            AddToDictUnitRel(unit);
         }
+
         public void UpdateAllUnits(double toTime) {
             foreach (var unit in Units) {
                 if(unit.Enabled)
@@ -39,8 +71,19 @@ namespace RobotIM.Core {
         public void EnableAllUnits() {
             Units.ForEach(u => u.Enabled = true);
         }
-        public IEnumerable<T> GetUnitsSpec<T>(bool enabletMatters = true) {
-            return Units.Where(u => (!enabletMatters || u.Enabled) && u is T).Cast<T>();
+        public IEnumerable<T> GetUnitsSpec<T>(bool enabletMatters = false) {
+            var t = typeof(T);
+            if (!_dictUnitRelatives.ContainsKey(t))
+                return Enumerable.Empty<T>();
+            if(!enabletMatters)
+                return _dictUnitRelatives[t].Cast<T>();
+            var l = new List<T>(Units.Count);
+            foreach (var u in Units) {
+                if (!u.Enabled)
+                    continue;
+                l.Add((T)u);
+            }
+            return l;
         }
 
         public bool StepUp() {
