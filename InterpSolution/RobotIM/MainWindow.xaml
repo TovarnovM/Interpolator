@@ -18,9 +18,10 @@
                     </Grid.RowDefinitions>
                     <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="32" Click="button1_Click"/>
                     <oxy:PlotView x:Name="tstPV" Model="{Binding Model1Rx.Value}" Grid.Row="0" Grid.Column="0"/>
-
+                    <Button Content="Button" Width="75" Margin="164,0,272,0" Grid.Row="1" Click="Button_Click"/>
                 </Grid>
             </TabItem>
+
         </TabControl>
 
 

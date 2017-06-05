@@ -7,6 +7,7 @@ using RobotIM.Core;
 using Stateless;
 
 namespace RobotIM.Scene {
+    [Serializable]
     public class UnitWithStates : UnitWithVision {
         StateMachine<UnitState, UnitTrigger> _stateM;
         public StateMachine<UnitState, UnitTrigger> SM {
@@ -24,9 +25,12 @@ namespace RobotIM.Scene {
         public bool SwitchState(UnitTrigger trigg) {
             var can = _stateM.CanFire(trigg);
             if (!can) {
+                Owner.Logger.AddLine(this, $"failed trying to switch state to trigger [{trigg.Name}]");
                 return false;
             }
+            var prevStateName = _state.Name;
             _stateM.Fire(trigg);
+            Owner.Logger.AddLine(this, $"switched state form [{prevStateName}] to [{_state.Name}] by trigger [{trigg.Name}]");
             return true;
         }
         public UnitWithStates(string Name, GameLoop Owner = null) : base(Name, Owner) {
@@ -42,7 +46,7 @@ namespace RobotIM.Scene {
             
         }
     }
-
+    [Serializable]
     public class UnitState {
         public string Name { get; set; }
         public Action<double> WhatToDo;
@@ -72,8 +76,11 @@ namespace RobotIM.Scene {
             return Name.GetHashCode();
         }
     }
-
+    [Serializable]
     public class UnitTrigger {
+        public UnitTrigger(string Name = "") {
+            this.Name = Name;
+        }
         public string Name { get; set; }
         public bool Condition() {
             return ConditionFunc != null ? ConditionFunc() : false; 

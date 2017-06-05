@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace RobotIM.Core {
+    [Serializable]
     public class GameLoop {
         public List<IUnit> Units { get; private set; } = new List<IUnit>();
         public Dictionary<string, object> Stats { get; set; } = new Dictionary<string, object>();
@@ -17,6 +18,7 @@ namespace RobotIM.Core {
         public static int TIME_LIMIT_RESULT = 77;
         public double MaxTime { get; set; } = 100d;
         public int Result { get; set; } = 0;
+        public ILogger Logger = new LoggerDummy();
 
         public GameLoop() {
             StopFunc += StopFuncStandart;
@@ -119,6 +121,29 @@ namespace RobotIM.Core {
                 return result;
             } catch (Exception) { }
             return default(T);
+        }
+    }
+
+    public interface ILogger {
+        void AddLine(IUnit who, string what);
+        string Text { get; }
+    }
+
+    public class LoggerDummy : ILogger {
+        StringBuilder _sb = new StringBuilder();
+        public void Reset() {
+            _sb.Clear();
+        }
+        public bool Enabled = true;
+        public string Text {
+            get {
+                return _sb.ToString();
+            }
+        }
+
+        public void AddLine(IUnit who, string what) {
+            if(Enabled)
+                _sb.AppendLine($"t={who.UnitTime,-10:0.000}name={who.Name,-15}message={what}");
         }
     }
 }

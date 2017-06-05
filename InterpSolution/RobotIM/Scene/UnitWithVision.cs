@@ -8,6 +8,7 @@ using Sharp3D.Math.Core;
 using static System.Math;
 
 namespace RobotIM.Scene {
+    [Serializable]
     public class UnitWithVision : UnitXY {
         public Vector2D viewDir = new Vector2D(1,0);
         public double rotateSpeed = 90; //градусов в секунду

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RobotIM.Core {
+    [Serializable]
     public class ActionStream {
         public Action<double> HitAction = null;
         public double t0 = 0 ,timeToNextHit,minimumDelta = 0.001;

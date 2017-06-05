@@ -11,6 +11,7 @@ using Sharp3D.Math.Core;
 using MyRandomGenerator;
 
 namespace RobotIM.Scene {
+    [Serializable]
     public class Room {
         public List<LevelLine> walls = new List<LevelLine>();
         MyRandom _rnd = new MyRandom();
@@ -122,19 +123,21 @@ namespace RobotIM.Scene {
                 res.Add(GetCellCenter(resGP[i].x, resGP[i].y));
             }
             res.Add(to_pos);
-            TrimPath(res);
+            res = TrimPath(res);
             return res;
         }
 
-        public void TrimPath(List<Vector2D> path) {
+        public List<Vector2D> TrimPath(List<Vector2D> path) {
+            var answ = new List<Vector2D>(path);
             int i = 0;
-            while( i < path.Count-3 ) {
-                path[i + 1] = GetTrimed(path[i], path[i + 1], path[i + 2]);
-                if (Vector2D.ApproxEqual(path[i + 1], path[i + 2])) {
-                    path.RemoveAt(i + 1);
+            while( i < answ.Count-3 ) {
+                answ[i + 1] = GetTrimed(answ[i], answ[i + 1], answ[i + 2]);
+                if (Vector2D.ApproxEqual(answ[i + 1], answ[i + 2])) {
+                    answ.RemoveAt(i + 1);
                 } else
                     i++;
             }
+            return answ;
         }
 
         Vector2D GetTrimed(Vector2D p0, Vector2D p1, Vector2D p2, int nShag = 7) {
@@ -183,6 +186,17 @@ namespace RobotIM.Scene {
                     return p;
             }
             throw new ArgumentException("Baad Cords Rectangle");
+        }
+
+        public double GetDistanceBetween(Vector2D f, Vector2D t, bool precise = true) {
+            var l = FindPath(f, t);
+            if (precise)
+                l = TrimPath(l);
+            double dist = 0d;
+            for (int i = 1; i < l.Count; i++) {
+                dist += (l[i - 1] - l[i]).GetLength();
+            }
+            return dist;
         }
     }
 }

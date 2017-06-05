@@ -5,7 +5,9 @@ using RobotIM.Scene;
 using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -65,10 +67,10 @@ namespace RobotIM {
 
         public GameLoop InitLoop() {
             var l = new GameLoop();
-            l.dT = 0.1;
+            l.dT = 0.01;
             r = GetRoom();
-            for (int i = 0; i <1300; i++) {
-                var u = new TerrorTest($"u{i}", r);
+            for (int i = 0; i <130; i++) {
+                var u = new TerrorTest($"unit{i}", r);
                 l.AddUnit(u);
             }
 
@@ -107,7 +109,7 @@ namespace RobotIM {
             if (timer == null) {
                 timer = new System.Timers.Timer(50);
                 timer.Elapsed += (s, ee) => {
-                    for (int i = 0; i < 3; i++) {
+                    for (int i = 0; i < 30; i++) {
                         mainLoop.StepUp();
                     }
                     vm.Model1Rx.Update(mainLoop);
@@ -123,25 +125,31 @@ namespace RobotIM {
 
         System.Timers.Timer timer = null;
 
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            //var bf = new BinaryFormatter();
+            using (var fs = new StreamWriter(@"C:\Users\User\Desktop\log.txt")) {
+                fs.Write(mainLoop.Logger.Text);
 
+            }
+        }
     }
-
+    [Serializable]
     class TerrorTest : UnitWithStates {
         public TerrorTest(string Name, Room r, GameLoop Owner = null) : base(Name, Owner) {
             _r = r;
-            var utComeToTarget = new UnitTrigger();
+            var utComeToTarget = new UnitTrigger("ComeToTarget");
             utComeToTarget.ConditionFunc += Ut1Cond;
 
-            var utSpinStop = new UnitTrigger();
+            var utSpinStop = new UnitTrigger("StopSpin");
             utSpinStop.ConditionFunc += SpinProc;
 
-            var utFindTarg = new UnitTrigger();
+            var utFindTarg = new UnitTrigger("FindTarget");
             utFindTarg.ConditionFunc += ScanForTargets;
 
-            var utKillSomeone = new UnitTrigger();
+            var utKillSomeone = new UnitTrigger("KillSomeOne");
             utKillSomeone.ConditionFunc += () => _killedSomone;
 
-            var utKilled = new UnitTrigger();
+            var utKilled = new UnitTrigger("Killed");
             utKilled.ConditionFunc += () => {
                 while(MessQueue.Count > 0) {
                     var m = MessQueue.Dequeue();
@@ -263,7 +271,7 @@ namespace RobotIM {
             double dist0 = 20, prob0 = 0.5;
             var prob = 1 - (1 - prob0) * dist / dist0;
             if(_rnd.GetDouble() < prob) {
-                _myTarget.SendMessageToMe(new UnitMessage() { name = "BANG", content = this });
+                _myTarget.SendMessageToMe(new UnitMessage() { name = "BANG", from = this });
                 _killedSomone = true;
                 _myTarget = null;
             }

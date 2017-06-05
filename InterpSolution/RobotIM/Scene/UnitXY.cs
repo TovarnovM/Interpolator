@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RobotIM.Scene {
+    [Serializable]
     public class UnitXY : UnitBase {
         public double X { get => Pos.X; set => Pos.X = value; }
         public double Y { get => Pos.Y; set => Pos.Y = value; }

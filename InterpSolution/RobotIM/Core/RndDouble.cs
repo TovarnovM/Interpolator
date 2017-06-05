@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RobotIM.Core {
+    [Serializable]
     public abstract class RndDouble {
         protected MyRandom _rnd = new MyRandom();
         public RndDouble(double MO, double SKO) {
@@ -24,7 +25,7 @@ namespace RobotIM.Core {
         }
         public abstract double ResetFunc();
     }
-
+    [Serializable]
     public class NormDouble : RndDouble {
         public NormDouble(double MO, double SKO) : base(MO, SKO) {
         }
@@ -33,7 +34,7 @@ namespace RobotIM.Core {
             return _rnd.GetNorm(MO, SKO);
         }
     }
-
+    [Serializable]
     public class UintDouble : RndDouble {
         public double X1 { get; protected set; }
         public double X2 { get; protected set; }

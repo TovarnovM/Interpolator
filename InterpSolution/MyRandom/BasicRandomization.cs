@@ -6,6 +6,7 @@ namespace MyRandomGenerator
     /// <summary>
     /// An IRandomization implementation using System.Random has pseudo-number generator.
     /// </summary>
+    [Serializable]
     public class MyRandom : RandomizationBase
     {
         #region Fields   

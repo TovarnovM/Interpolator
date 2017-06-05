@@ -6,6 +6,7 @@ namespace MyRandomGenerator
     /// <summary>
     /// Base class for randomization.
     /// </summary>
+    [Serializable]
     public abstract class RandomizationBase : IRandomization
     {
         #region Methods

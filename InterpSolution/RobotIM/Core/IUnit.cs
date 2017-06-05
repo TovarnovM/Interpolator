@@ -15,10 +15,11 @@ namespace RobotIM.Core {
     }
 
     public struct UnitMessage {
+        public IUnit from;
         public string name;
         public object content;
     }
-
+    [Serializable]
     public abstract class UnitBase : IUnit {
         public UnitBase(string Name, GameLoop Owner = null) {
             this.Name = Name;
@@ -36,6 +37,7 @@ namespace RobotIM.Core {
 
         public void SendMessageToMe(UnitMessage message) {
             MessQueue.Enqueue(message);
+            Owner?.Logger?.AddLine(this, $"Getts message messName={message.name} from={message.from.Name}");
         }
 
         public void Update(double toTime) {
