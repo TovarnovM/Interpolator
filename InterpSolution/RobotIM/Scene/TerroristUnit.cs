@@ -25,12 +25,84 @@ namespace RobotIM.Scene {
                 .OrderBy(fld => int.Parse(Regex.Match(fld.Name, @"\d+").Value))
                 .Select(fld => (UnitTrigger)fld.GetValue(this))
                 .ToList();
+
+            SM.Configure(_1Alive)
+                .Permit(_20Immobilize, _2Immobilized)
+                .Permit(_9SeeYou, _8SeeSomething)
+                .Permit(_19Attacked, _11MakeDecision);
+
+            SM.Configure(_3NormalBehavor3)
+                .SubstateOf(_1Alive)
+                .Permit(_3HearNoise, _7MoveToNoisePoint);
+
+            SM.Configure(_4Patrool)
+                .SubstateOf(_3NormalBehavor3)
+                .Permit(_1ReachDist, _5LookAround);
+
+            SM.Configure(_5LookAround)
+                .SubstateOf(_3NormalBehavor3)
+                .Permit(_2TimeUp, _4Patrool);
+
+            SM.Configure(_6SuspiciousBehavor)
+                .SubstateOf(_1Alive);
+
+            SM.Configure(_7MoveToNoisePoint)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_6Come, _13SearchAround);
+
+            SM.Configure(_8SeeSomething)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_10LostTarget, _9MakeDecision)
+                .Permit(_11RecognizeTimeUp, _10MakeDecision);
+
+            SM.Configure(_9MakeDecision)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_13trig, _0RunToAlarm)
+                .Permit(_0trig, _14MoveToLastSpot);
+
+            SM.Configure(_10MakeDecision)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_16trig, _0RunToAlarm)
+                .Permit(_21trig, _16Attacking)
+                .Permit(_8Curios, _15MoveToCurios);
+
+            SM.Configure(_11MakeDecision)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_14trig, _0RunToAlarm)
+                .Permit(_15trig, _16Attacking);
+
+            SM.Configure(_12MakeDecision)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_17trig, _0RunToAlarm)
+                .Permit(_18trig, _5LookAround);
+
+            SM.Configure(_13SearchAround)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_7TimeUp, _12MakeDecision);
+
+            SM.Configure(_14MoveToLastSpot)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_4HearNoise, _7MoveToNoisePoint)
+                .Permit(_5Come, _13SearchAround);
+
+            SM.Configure(_15MoveToCurios)
+                .SubstateOf(_6SuspiciousBehavor)
+                .Permit(_12Recognized, _10MakeDecision);
+
+            SM.Configure(_16Attacking)
+                .SubstateOf(_17Battle);
+
+            SM.Configure(_0RunToAlarm)
+                .SubstateOf(_17Battle);
+
+            SM.Configure(_17Battle)
+                .SubstateOf(_1Alive);
         }
 
         #region states
         List<UnitState> StateList;
         UnitState _1Alive            = new UnitState(null, nameof(_1Alive));
-        UnitState _2Immobilize       = new UnitState(null, nameof(_2Immobilize));
+        UnitState _2Immobilized      = new UnitState(null, nameof(_2Immobilized));
         UnitState _3NormalBehavor3   = new UnitState(null, nameof(_3NormalBehavor3));
         UnitState _4Patrool          = new UnitState(null, nameof(_4Patrool));
         UnitState _5LookAround       = new UnitState(null, nameof(_5LookAround));
@@ -46,6 +118,7 @@ namespace RobotIM.Scene {
         UnitState _14MoveToLastSpot  = new UnitState(null, nameof(_14MoveToLastSpot));
         UnitState _15MoveToCurios    = new UnitState(null, nameof(_15MoveToCurios));
         UnitState _16Attacking       = new UnitState(null, nameof(_16Attacking));
+        UnitState _17Battle          = new UnitState(null, nameof(_17Battle));
         UnitState _0RunToAlarm       = new UnitState(null, nameof(_0RunToAlarm));
         #endregion
 
@@ -70,7 +143,8 @@ namespace RobotIM.Scene {
         UnitTrigger _17trig = new UnitTrigger(nameof(_17trig));
         UnitTrigger _18trig = new UnitTrigger(nameof(_18trig));
         UnitTrigger _19Attacked = new UnitTrigger(nameof(_19Attacked));
-        UnitTrigger _20Immobilized = new UnitTrigger(nameof(_20Immobilized));
+        UnitTrigger _20Immobilize = new UnitTrigger(nameof(_20Immobilize));
+        UnitTrigger _21trig = new UnitTrigger(nameof(_21trig));
         UnitTrigger _0trig = new UnitTrigger(nameof(_0trig));
         #endregion
 

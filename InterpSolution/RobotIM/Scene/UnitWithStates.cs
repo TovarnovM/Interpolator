@@ -9,7 +9,7 @@ using Stateless;
 namespace RobotIM.Scene {
     [Serializable]
     public class UnitWithStates : UnitWithVision {
-        StateMachine<UnitState, UnitTrigger> _stateM;
+        protected StateMachine<UnitState, UnitTrigger> _stateM;
         public StateMachine<UnitState, UnitTrigger> SM {
             get { return _stateM;  }
         }
