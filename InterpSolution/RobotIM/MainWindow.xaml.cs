@@ -102,6 +102,9 @@ namespace RobotIM {
             var gg = tsm.PermittedTriggers.ToList();
             tsm.Fire("21");
 
+
+            var tstterror = new TerroristUnit("eee");
+
             return l;
         }
 

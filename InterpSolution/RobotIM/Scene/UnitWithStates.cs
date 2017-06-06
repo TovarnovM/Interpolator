@@ -55,7 +55,6 @@ namespace RobotIM.Scene {
             this.owner = owner;
             Name = name;
         }
-
         public static UnitState Factory(UnitWithStates owner, string name) {
             var us = new UnitState(owner, name);
             us.Name = name;
