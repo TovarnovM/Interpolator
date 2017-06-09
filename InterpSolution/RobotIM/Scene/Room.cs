@@ -113,7 +113,7 @@ namespace RobotIM.Scene {
             jumpParam = new JumpPointParam(searchGrid, true, false, false);
         }
 
-        public List<Vector2D> FindPath(Vector2D from_pos, Vector2D to_pos) {
+        public List<Vector2D> FindPath(Vector2D from_pos, Vector2D to_pos, bool trimPath = true) {
             var fr = GetGridCoordsGP(from_pos);
             var to = GetGridCoordsGP(to_pos);
             jumpParam.Reset(fr, to);
@@ -123,7 +123,8 @@ namespace RobotIM.Scene {
                 res.Add(GetCellCenter(resGP[i].x, resGP[i].y));
             }
             res.Add(to_pos);
-            res = TrimPath(res);
+            if(trimPath)
+                res = TrimPath(res);
             return res;
         }
 
@@ -197,6 +198,29 @@ namespace RobotIM.Scene {
                 dist += (l[i - 1] - l[i]).GetLength();
             }
             return dist;
+        }
+
+        public List<INoisePoint> staticNoisesList = new List<INoisePoint>();
+        public double[,] staticNoiseMap;
+        public void InitNoiseMap() {
+            staticNoiseMap = new double[searchGrid.width, searchGrid.height];
+            for (int i = 0; i < searchGrid.width; i++) {
+                for (int j = 0; j < searchGrid.height; j++) {
+                    var p = GetCellCenter(i, j);
+                    var noise = 0d;
+                    foreach (var np in staticNoisesList) {
+                        var n = np.GetDBTo(p, this, true);
+                        if (Abs(n - np.noiseDB) < 0.01 && (np.GetPos() - p).GetLength() > 1+cellsize)
+                            n = 0d;
+                        noise += n;
+                    }
+                    staticNoiseMap[i, j] = noise;
+                }
+            }
+        }
+        public double GetStaticNoiseAt(Vector2D hearP) {
+            var c = GetGridCoords(hearP);
+            return staticNoiseMap[c.ix, c.iy];
         }
     }
 }

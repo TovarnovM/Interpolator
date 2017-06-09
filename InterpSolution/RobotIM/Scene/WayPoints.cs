@@ -9,6 +9,7 @@ namespace RobotIM.Scene {
     public interface IWayPoints {
         Vector2D Current { get; }
         bool MoveNext();
+        Vector2D Last { get; }
     }
     public class WayPoints : IWayPoints{
         public enum RepeatMode  { noRepeat, repeat, upDown };
@@ -16,6 +17,8 @@ namespace RobotIM.Scene {
 
         int currentInd = 0, incr = 1;
         public Vector2D Current => points[currentInd];
+
+        public Vector2D Last => points[points.Count-1];
 
         public bool MoveNext() {
             if(points.Count == 1) {

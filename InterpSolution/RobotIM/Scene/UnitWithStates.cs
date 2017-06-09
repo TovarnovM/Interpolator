@@ -5,11 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using RobotIM.Core;
 using Stateless;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace RobotIM.Scene {
     [Serializable]
     public class UnitWithStates : UnitWithVision {
         protected StateMachine<UnitState, UnitTrigger> _stateM;
+        public List<UnitState> StateList;
+        public List<UnitTrigger> TriggerList = new List<UnitTrigger>(30);
         public StateMachine<UnitState, UnitTrigger> SM {
             get { return _stateM;  }
         }
@@ -37,7 +41,7 @@ namespace RobotIM.Scene {
             _stateM = new StateMachine<UnitState, UnitTrigger>(() => _state, s => _state = s);
         }
         protected override void PerformUpdate(double toTime) {
-            _state.WhatToDo(toTime);
+            _state.WhatToDo?.Invoke(toTime);
             foreach (var tr in _stateM.PermittedTriggers) {
                 if (tr.Condition() && SwitchState(tr)) {
                     break;
@@ -45,6 +49,102 @@ namespace RobotIM.Scene {
             }
             
         }
+
+        /// <summary>
+        /// Автоматически связываются состояния и методы 
+        /// 
+        /// имя Поля состояния - UnitState StateName
+        /// имя метода WhatToDo - void StateName_WTD(double t2)
+        /// имя метода OnEntry - void StateName_OnEntry()
+        /// 
+        /// имя поля триггера - UnitTrigger TriggName
+        /// имя его функции - bool TriggName_ConditionFunc()
+        /// </summary>
+        public void InitMe() {
+            try {
+                var states = this.GetType()
+                    .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                    .Where(fld => fld.FieldType == typeof(UnitState))
+                    .OrderBy(fld => {
+                        var match = Regex.Match(fld.Name, @"\d+");
+                        return match.Success ? int.Parse(match.Value) : 0;                      
+                        })
+                    .ToList();
+
+                StateList = states
+                    .Select(fld => (UnitState)fld.GetValue(this))
+                    .ToList();
+                StateList.ForEach(us => us.owner = this);
+
+                var bindingList = states
+                    .Select(fld => {
+                        var onEntrymethodName = fld.Name + "_OnEntry";
+                        var onEntryI = this.GetType()
+                            .GetMethod(onEntrymethodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        var onEntryAct = onEntryI != null ?
+                            (Action)Delegate.CreateDelegate(typeof(Action), this, onEntryI) :
+                            null;
+
+                        var WTDmethodName = fld.Name + "_WTD";
+                        var WTDI = this.GetType()
+                            .GetMethod(WTDmethodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        var WTDAct = WTDI != null ?
+                            (Action<double>)Delegate.CreateDelegate(typeof(Action<double>), this, WTDI) :
+                            null;
+                        //    ?.CreateDelegate(typeof(Action<double>), this);
+                        return (state: (UnitState)fld.GetValue(this), onEntry: onEntryAct, WTD: WTDAct);
+                    })
+                    .ToList();
+
+                foreach (var bt in bindingList) {
+                    if (bt.onEntry != null) {
+                        SM.Configure(bt.state)
+                            .OnEntry(bt.onEntry);
+                    }
+                    if (bt.WTD != null) {
+                        bt.state.WhatToDo += bt.WTD;
+                    }
+                }
+
+
+
+                //TriggerList 
+                var triggs = this.GetType()
+                    .GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public)
+                    .Where(fld => fld.FieldType == typeof(UnitTrigger))
+                    .OrderBy(fld => {
+                        var match = Regex.Match(fld.Name, @"\d+");
+                        return match.Success ? int.Parse(match.Value) : 0;
+                    })
+                    .ToList();
+
+                TriggerList = triggs
+                    .Select(fld => (UnitTrigger)fld.GetValue(this))
+                    .ToList();
+
+                var triggBindingList = triggs
+                    .Select(ti => {
+                        var condName = ti.Name + "_ConditionFunc";
+                        var condFInfo = this.GetType()
+                            .GetMethod(condName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                        var condFun = condFInfo != null ?
+                            (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>), this, condFInfo) :
+                            null;
+                        return (trigg: (UnitTrigger)ti.GetValue(this), condF: condFun);
+                    })
+                    .ToList();
+
+                foreach (var tt in triggBindingList) {
+                    if(tt.condF != null) {
+                        tt.trigg.ConditionFunc += tt.condF;
+                    }
+                }
+            } catch (Exception e) {
+
+                throw e;
+            }
+        }
+
     }
     [Serializable]
     public class UnitState {

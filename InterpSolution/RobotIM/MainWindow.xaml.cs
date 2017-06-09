@@ -34,13 +34,13 @@ namespace RobotIM {
             DataContext = vm;
             InitializeComponent();
             mainLoop = InitLoop();
-            vm.DrawRoom(r);
+            vm.DrawRoom(r,false);
         }
 
         public Room GetRoom() {
             var r = new Room();
             r.gabarit = (new Vector2D(0, 0), new Vector2D(20, 20));
-            r.cellsize = 0.3;
+            r.cellsize = 0.43;
 
             var wall = new LevelLine();
             wall.AddPoint(0, 0);
@@ -69,10 +69,10 @@ namespace RobotIM {
             var l = new GameLoop();
             l.dT = 0.01;
             r = GetRoom();
-            for (int i = 0; i <130; i++) {
-                var u = new TerrorTest($"unit{i}", r);
-                l.AddUnit(u);
-            }
+            //for (int i = 0; i <130; i++) {
+            //    var u = new TerrorTest($"unit{i}", r);
+            //    l.AddUnit(u);
+            //}
 
 
             //var u = new UnitWithStates("unit");
@@ -103,8 +103,23 @@ namespace RobotIM {
             tsm.Fire("21");
 
 
-            var tstterror = new TerroristUnit("eee");
+            var tstterror = new TerroristUnit("eee",r);
+            l.AddUnit(tstterror);
+            var immr = new IMMR("robot", r);
+            l.AddUnit(immr);
+            immr.Pos = r.GetWalkableCoord();
+            tstterror.UnitNoises.Add(immr);
 
+            staticnoises = new List<INoisePoint>();
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 2), 30));
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(18,18), 30));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 18), 30));
+            r.staticNoisesList = staticnoises;
+            r.InitNoiseMap();
+            tstterror.BackgroundNoise = staticnoises;
+
+            
             return l;
         }
 
@@ -112,7 +127,7 @@ namespace RobotIM {
             if (timer == null) {
                 timer = new System.Timers.Timer(50);
                 timer.Elapsed += (s, ee) => {
-                    for (int i = 0; i < 30; i++) {
+                    for (int i = 0; i < 300; i++) {
                         mainLoop.StepUp();
                     }
                     vm.Model1Rx.Update(mainLoop);
@@ -127,6 +142,7 @@ namespace RobotIM {
         }
 
         System.Timers.Timer timer = null;
+        private List<INoisePoint> staticnoises;
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             //var bf = new BinaryFormatter();
@@ -138,10 +154,10 @@ namespace RobotIM {
     }
     [Serializable]
     class TerrorTest : UnitWithStates {
+        UnitTrigger utComeToTarget = new UnitTrigger("ComeToTarget");
+
         public TerrorTest(string Name, Room r, GameLoop Owner = null) : base(Name, Owner) {
             _r = r;
-            var utComeToTarget = new UnitTrigger("ComeToTarget");
-            utComeToTarget.ConditionFunc += Ut1Cond;
 
             var utSpinStop = new UnitTrigger("StopSpin");
             utSpinStop.ConditionFunc += SpinProc;
@@ -176,6 +192,9 @@ namespace RobotIM {
 
             var deadState = new UnitState(this, "dead");
             var liveState = new UnitState(this, "live");
+
+            InitMe();
+
             SM.Configure(State)
                 // .InternalTransition(ut1, GetNewDistPos)
                 .OnEntry(() => {
@@ -223,12 +242,12 @@ namespace RobotIM {
                 viewDir.Normalize();
             } while (viewDir.GetLength() < 0.999999);
 
-
+            
         }
         Room _r;
         Vector2D _distPoint;
         MyRandom _rnd = new MyRandom();
-        bool Ut1Cond() {
+        bool utComeToTarget_ConditionFunc() {
             return (Pos - _distPoint).GetLength() < 0.01;
         }
 

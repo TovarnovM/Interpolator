@@ -15,6 +15,7 @@ namespace RobotIM {
         private ScatterSeries P,pdead;
         LineSeries SerWalls, SerVision;
         HeatMapSeries SerCells;
+        private LinearColorAxis linearColorAxis1;
 
         public VMPropRx<PlotModel, GameLoop> Model1Rx { get; private set; }
 
@@ -79,6 +80,9 @@ namespace RobotIM {
             SerCells.IsVisible = drawCells;
             if (!drawCells)
                 return;
+            if (room.staticNoisesList.Count != 0) {
+                linearColorAxis1.AbsoluteMaximum = room.staticNoiseMap.Max2D();
+            }
             SerCells.X0 = gab.p1.X;
             SerCells.X1 = gab.p2.X;
             SerCells.Y0 = gab.p1.Y;
@@ -87,7 +91,12 @@ namespace RobotIM {
             SerCells.Data = new Double[room.searchGrid.width, room.searchGrid.height];
             for (int i = 0; i < room.searchGrid.width; i++) {
                 for (int j = 0; j < room.searchGrid.height; j++) {
-                    SerCells.Data[i, j] = room.searchGrid.IsWalkableAt(i, j) ? 1d : 0d;
+                    if(room.staticNoisesList.Count == 0)
+                        SerCells.Data[i, j] = room.searchGrid.IsWalkableAt(i, j) ? 1d : 0d;
+                    else {
+                        var noise = room.staticNoiseMap[i, j];
+                        SerCells.Data[i, j] = noise; // room.searchGrid.IsWalkableAt(i, j) ? noise : 0d;
+                    }
                 }
             }
 
@@ -130,9 +139,9 @@ namespace RobotIM {
             linearAxis2.Title = yname;
             m.Axes.Add(linearAxis2);
 
-            var linearColorAxis1 = new LinearColorAxis();
+            linearColorAxis1 = new LinearColorAxis();
             linearColorAxis1.Position = AxisPosition.Right;
-            linearColorAxis1.Palette = OxyPalettes.Gray(10);
+            linearColorAxis1.Palette = OxyPalettes.Jet(100);
             linearColorAxis1.AbsoluteMaximum = 1;
             linearColorAxis1.AbsoluteMinimum = 0;
 

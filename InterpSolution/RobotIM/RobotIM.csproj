@@ -93,6 +93,7 @@
     </ApplicationDefinition>
     <Compile Include="Core\ActionStream.cs" />
     <Compile Include="Core\RndDouble.cs" />
+    <Compile Include="Scene\IMMR.cs" />
     <Compile Include="Scene\Room.cs" />
     <Compile Include="Scene\SOV.cs" />
     <Compile Include="Scene\TerroristUnit.cs" />
