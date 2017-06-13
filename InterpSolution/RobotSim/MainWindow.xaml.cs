@@ -126,6 +126,7 @@ namespace RobotSim {
             sol.ObserveOnDispatcher().Subscribe(sp => {
                 vm.SolPointList.Update(sp);
                 slider.Maximum = (double)(vm.SolPointList.Value.Count > 0 ? vm.SolPointList.Value.Count : 0);
+                slider2.Maximum = slider.Maximum;
             });
             sol.Connect();
         }
@@ -283,8 +284,9 @@ double omega = 2 * 3.14159 / T;
 
         void saveGif(string fp) {
             GifBitmapEncoder gEnc = new GifBitmapEncoder();
-            
-            foreach (var bmpImage in GetFrames()) {
+            int fi = (int)slider2.Value;
+            int ti = (int)slider.Value;
+            foreach (var bmpImage in GetFrames(fi, ti)) {
                 //var bmp = bmpImage.GetHbitmap();
                 //var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                 //    bmp,
@@ -299,8 +301,8 @@ double omega = 2 * 3.14159 / T;
             }
         }
 
-        IEnumerable<BitmapSource> GetFrames() {
-            for (int i = 1; i <= slider.Maximum; i++) {
+        IEnumerable<BitmapSource> GetFrames(int fromInd, int toInd) {
+            for (int i = fromInd; i <= toInd; i++) {
                 slider.Value = i;
                // DoEvents();
                 var pngExporter = new PngExporter();
@@ -314,16 +316,35 @@ double omega = 2 * 3.14159 / T;
         }
 
         private void button_Save_CGif_Click(object sender, RoutedEventArgs e) {
-            controller.Pause();
-            button.Content = "Paused";
+            try {
+                controller.Pause();
+                button.Content = "Paused";
+                button_Save_CGif.IsEnabled = false;
 
-            var sd = new SaveFileDialog() {
-                Filter = "GIF Files|*.gif",
-                FileName = "XY"
-            };
-            if (sd.ShowDialog() == true) {
-                saveGif(sd.FileName);
+                var sd = new SaveFileDialog() {
+                    Filter = "GIF Files|*.gif",
+                    FileName = "XY"
+                };
+                if (sd.ShowDialog() == true) {
+                    saveGif(sd.FileName);
+                }
+            } finally {
+                button_Save_CGif.IsEnabled = true;
             }
+
+        }
+
+        private async void button_Save_CGif_Copy_Click(object sender, RoutedEventArgs e) {
+            try {
+                button_Save_CGif_Copy.IsEnabled = false;
+                var ex = new Experiments_Wall();
+                //ex.Start();
+                await ex.StartAsync();
+                MessageBox.Show("good");
+            } finally {
+                button_Save_CGif_Copy.IsEnabled = true;
+            }
+
         }
     }
 }

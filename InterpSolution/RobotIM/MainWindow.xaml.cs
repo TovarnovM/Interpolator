@@ -40,7 +40,7 @@ namespace RobotIM {
         public Room GetRoom() {
             var rr = new Room();
 
-            rr.walls = RoomGenerator.GetWalls(30, 40, 10, 10);
+            rr.walls = RoomGenerator.GetWalls(30, 40, 7, 7);
             rr.cellsize = 0.4;
             rr.CreateScene();
             return rr;
@@ -169,6 +169,10 @@ namespace RobotIM {
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
             vm.DrawRoom(r, false);
+        }
+
+        private async void Button_Click_2(object sender, RoutedEventArgs e) {
+         
         }
     }
     [Serializable]

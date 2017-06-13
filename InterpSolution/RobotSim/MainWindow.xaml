@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RobotSim"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="481.281" Width="856.722">
+        Title="MainWindow" Height="533.781" Width="856.722">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
@@ -35,6 +35,23 @@
                     <Button x:Name="button_Save_Copy" Content="Save All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="286,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy_Click"/>
                     <Button x:Name="button_Save_Copy1" Content="Load All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="348,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy1_Click" />
                     <Button x:Name="button_Save_CGif" Content="Save Gif" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="436,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_CGif_Click"/>
+                    <Button x:Name="button_Save_CGif_Copy" Content="Exper Tst" Grid.Row="2" Height="21" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="57" Grid.Column="1" Click="button_Save_CGif_Copy_Click"/>
+                    <Slider x:Name="slider2" VerticalAlignment="Top" Grid.Row="2" Height="20" SmallChange="1" IsSnapToTickEnabled="True" TickPlacement="BottomRight" Grid.ColumnSpan="2" Margin="0,19,0,0" />
+                </Grid>
+            </TabItem>
+            <TabItem Header="Ex">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="665*"/>
+                        <ColumnDefinition Width="178*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="335*"/>
+                        <RowDefinition Height="41*"/>
+                    </Grid.RowDefinitions>
+                    <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41"/>
+                    <oxy:PlotView x:Name="ExPM" Model="{Binding ModelTest}" Grid.Row="0" Grid.Column="0"/>
+
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
@@ -43,7 +60,7 @@
                         <RowDefinition Height="335*"/>
                         <RowDefinition Height="41*"/>
                     </Grid.RowDefinitions>
-                    <Button x:Name="button1" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41" Click="button1_Click"/>
+                    <Button x:Name="button_loadEx" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41" Click="button1_Click"/>
                     <oxy:PlotView x:Name="tstPV" Model="{Binding ModelTest}" Grid.Row="0" Grid.Column="0"/>
 
                 </Grid>

@@ -8,7 +8,7 @@ using static System.Math;
 
 namespace RobotIM.Scene {
     public static class RoomGenerator {
-        public static double DiffPerc = 0.0;
+        public static double DiffPerc = 0.15;
         
         static MyRandomGenerator.MyRandom _rnd = new MyRandomGenerator.MyRandom();
         static List<(int x, int y)> GetUniqueVectors(int w, int h, int n) {
