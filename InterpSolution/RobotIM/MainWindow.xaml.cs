@@ -38,36 +38,42 @@ namespace RobotIM {
         }
 
         public Room GetRoom() {
-            var r = new Room();
-            r.gabarit = (new Vector2D(0, 0), new Vector2D(20, 20));
-            r.cellsize = 0.43;
+            var rr = new Room();
 
+            rr.walls = RoomGenerator.GetWalls(30, 40, 10, 10);
+            rr.cellsize = 0.4;
+            rr.CreateScene();
+            return rr;
+
+            
+            //r.gabarit = (new Vector2D(0, 0), new Vector2D(20, 20));
+            
             var wall = new LevelLine();
             wall.AddPoint(0, 0);
             wall.AddPoint(0, 20);
             wall.AddPoint(20, 20);
             wall.AddPoint(20, 0);
             wall.AddPoint(0, 0);
-            r.walls.Add(wall);
+            rr.walls.Add(wall);
 
             wall = new LevelLine();
             wall.AddPoint(10, 0);
             wall.AddPoint(10, 15);
             wall.AddPoint(4, 15);
-            r.walls.Add(wall);
+            rr.walls.Add(wall);
 
             wall = new LevelLine();
             wall.AddPoint(0, 10);
             wall.AddPoint(6, 10);
-            r.walls.Add(wall);
+            rr.walls.Add(wall);
 
-            r.CreateScene();
-            return r;
+            rr.CreateScene();
+            return rr;
         }
 
         public GameLoop InitLoop() {
             var l = new GameLoop();
-            l.dT = 0.01;
+            l.dT = 0.02;
             r = GetRoom();
             //for (int i = 0; i <130; i++) {
             //    var u = new TerrorTest($"unit{i}", r);
@@ -110,24 +116,24 @@ namespace RobotIM {
             immr.Pos = r.GetWalkableCoord();
             tstterror.UnitNoises.Add(immr);
 
-            staticnoises = new List<INoisePoint>();
-            staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 2), 30));
-            staticnoises.Add(new StaticNoisePoint(new Vector2D(18,18), 30));
+            //staticnoises = new List<INoisePoint>();
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 2), 10));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 18), 30));
             //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 18), 30));
-            r.staticNoisesList = staticnoises;
-            r.InitNoiseMap();
-            tstterror.BackgroundNoise = staticnoises;
+            //r.staticNoisesList = staticnoises;
+            //r.InitNoiseMap();
+            //tstterror.BackgroundNoise = staticnoises;
 
-            
+
             return l;
         }
 
         private void button1_Click(object sender, RoutedEventArgs e) {
             if (timer == null) {
-                timer = new System.Timers.Timer(50);
+                timer = new System.Timers.Timer(100);
                 timer.Elapsed += (s, ee) => {
-                    for (int i = 0; i < 300; i++) {
+                    for (int i = 0; i < 30; i++) {
                         mainLoop.StepUp();
                     }
                     vm.Model1Rx.Update(mainLoop);
@@ -150,6 +156,19 @@ namespace RobotIM {
                 fs.Write(mainLoop.Logger.Text);
 
             }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            mainLoop = InitLoop();
+            vm.DrawRoom(r, true);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e) {
+            vm.DrawRoom(r, true);
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
+            vm.DrawRoom(r, false);
         }
     }
     [Serializable]

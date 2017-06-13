@@ -24,7 +24,7 @@
                         <RowDefinition Height="156*"/>
                         <RowDefinition Height="49*"/>
                     </Grid.RowDefinitions>
-                    <oxy:PlotView Model="{Binding ModelXY}" Grid.Row="0" Grid.Column="0"/>
+                    <oxy:PlotView Name="plot1" Model="{Binding ModelXY}" Grid.Row="0" Grid.Column="0"/>
                     <oxy:PlotView Model="{Binding ModelZY}" Grid.Row="0" Grid.Column="1"/>
                     <oxy:PlotView Model="{Binding ModelXZ}" Grid.Row="1" Grid.Column="0"/>
                     <Button x:Name="button" Content="Click Me" Grid.Row="2" HorizontalAlignment="Left" Width="145" Height="21" VerticalAlignment="Bottom" Click="button_Click_1"/>
@@ -34,6 +34,7 @@
                     <Button x:Name="button_Copy" Content="4 tests" Grid.Row="2" HorizontalAlignment="Left" Width="78" Height="21" VerticalAlignment="Bottom" Grid.Column="1" Margin="244,0,0,0" Click="button_Copy_Click"/>
                     <Button x:Name="button_Save_Copy" Content="Save All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="286,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy_Click"/>
                     <Button x:Name="button_Save_Copy1" Content="Load All" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="348,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_Copy1_Click" />
+                    <Button x:Name="button_Save_CGif" Content="Save Gif" Grid.Row="2" Height="21" VerticalAlignment="Bottom" Margin="436,0,0,0" HorizontalAlignment="Left" Width="57" Click="button_Save_CGif_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

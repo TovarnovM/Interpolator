@@ -23,7 +23,10 @@ using System.Windows.Shapes;
 using System.Xml.Serialization;
 using MoreLinq;
 using static SimpleIntegrator.DummyIOHelper;
-
+using System.Drawing;
+using OxyPlot;
+using OxyPlot.Wpf;
+using System.Windows.Threading;
 
 namespace RobotSim {
     /// <summary>
@@ -44,6 +47,11 @@ namespace RobotSim {
         }
 
         public static RobotDynamics GetNewRD() {
+            var ex = new Experiments_Wall();
+            ex.Angle = 0;
+            return ex.GetRD();
+
+
             var sol = new RobotDynamics();
             //sol.Body.Mass.Value = 100;
             //sol.SynchMassGeometry();
@@ -270,6 +278,51 @@ double omega = 2 * 3.14159 / T;
 
 
 
+            }
+        }
+
+        void saveGif(string fp) {
+            GifBitmapEncoder gEnc = new GifBitmapEncoder();
+            
+            foreach (var bmpImage in GetFrames()) {
+                //var bmp = bmpImage.GetHbitmap();
+                //var src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+                //    bmp,
+                //    IntPtr.Zero,
+                //    Int32Rect.Empty,
+                //    BitmapSizeOptions.FromEmptyOptions());
+                gEnc.Frames.Add(BitmapFrame.Create(bmpImage));
+                //DeleteObject(bmp); // recommended, handle memory leak
+            }
+            using (FileStream fs = new FileStream(fp, FileMode.Create)) {
+                gEnc.Save(fs);
+            }
+        }
+
+        IEnumerable<BitmapSource> GetFrames() {
+            for (int i = 1; i <= slider.Maximum; i++) {
+                slider.Value = i;
+               // DoEvents();
+                var pngExporter = new PngExporter();
+                yield return pngExporter.ExportToBitmap(vm.ModelXY);
+                
+            }
+        }
+        public static void DoEvents() {
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                                  new Action(delegate { }));
+        }
+
+        private void button_Save_CGif_Click(object sender, RoutedEventArgs e) {
+            controller.Pause();
+            button.Content = "Paused";
+
+            var sd = new SaveFileDialog() {
+                Filter = "GIF Files|*.gif",
+                FileName = "XY"
+            };
+            if (sd.ShowDialog() == true) {
+                saveGif(sd.FileName);
             }
         }
     }

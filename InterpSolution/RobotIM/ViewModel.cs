@@ -78,8 +78,11 @@ namespace RobotIM {
             var gab = room.gabarit;
 
             SerCells.IsVisible = drawCells;
-            if (!drawCells)
+            if (!drawCells) {
+                Model1Rx.Value.InvalidatePlot(true);
                 return;
+            }
+                
             if (room.staticNoisesList.Count != 0) {
                 linearColorAxis1.AbsoluteMaximum = room.staticNoiseMap.Max2D();
             }

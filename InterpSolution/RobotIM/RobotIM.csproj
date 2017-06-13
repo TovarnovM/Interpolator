@@ -95,6 +95,7 @@
     <Compile Include="Core\RndDouble.cs" />
     <Compile Include="Scene\IMMR.cs" />
     <Compile Include="Scene\Room.cs" />
+    <Compile Include="Scene\RoomGenerator.cs" />
     <Compile Include="Scene\SOV.cs" />
     <Compile Include="Scene\TerroristUnit.cs" />
     <Compile Include="Scene\UnitWithStates.cs" />

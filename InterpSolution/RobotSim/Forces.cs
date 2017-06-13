@@ -131,16 +131,17 @@ namespace RobotSim {
     public class GroundForce : Force {
         FlatSurf surf;
         MaterialObjectNewton who;
-        public GroundForce(MaterialObjectNewton who,Vector3D localP,FlatSurf surf) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
+        public int logId = -1;
+        public GroundForce(MaterialObjectNewton who,Vector3D localP,FlatSurf surf, int logId = -1) : base(0,new RelativePoint(Vector3D.YAxis),new RelativePoint(localP,who)) {
             this.surf = surf;
             this.who = who;
             Direction.Vec3D = surf.N0;
             SynchMeBefore += SynchAction;
-
+            this.logId = logId;
 
         }
         public void SynchAction(double t) {
-            var f = surf.GetNForce(AppPoint.Vec3D_World,who.GetVelWorld(AppPoint.Vec3D));
+            var f = surf.GetNForce(AppPoint.Vec3D_World,who.GetVelWorld(AppPoint.Vec3D), logId);
 
             Value = f.GetLength();
             Direction.Vec3D = f.Norm;

@@ -16,7 +16,7 @@ namespace RobotSim {
         }
         public static TrackParams GetStandart() {
             var t = new TrackParams() {
-                w = 0.02,
+                w = 0.025,
                 l = 0.005,
                 h = 0.005,
                 shagConnL = 0.009,
@@ -29,6 +29,7 @@ namespace RobotSim {
     }
 
     public class RbTrack: MaterialObjectNewton {
+        public int logId = -1;
         public double W, L, H;
         public Vector3D[] ConnP = new Vector3D[7];
         public List<RbWheel> WheelsInteractsWithMe = new List<RbWheel>();
@@ -129,11 +130,11 @@ namespace RobotSim {
             tr2.AddForce(f1_2);
         }
 
-        public static RbTrack GetStandart(TrackParams options) {
-            return GetStandart(options.w,options.l,options.h,options.shagConnL,options.connH,options.mass);
+        public static RbTrack GetStandart(TrackParams options, int logId = -1) {
+            return GetStandart(options.w,options.l,options.h,options.shagConnL,options.connH,options.mass, logId);
         }
 
-        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00d, double mass = 0.037) {
+        public static RbTrack GetStandart(double w = 0.02, double l = 0.005,double h = 0.005, double shagConnL = 0.009,double connH = 0.00d, double mass = 0.037, int logId = -1) {
             var res = new RbTrack() {
                 W = w,
                 L = l,
@@ -164,6 +165,7 @@ namespace RobotSim {
 
             res.SynchMeAfter = res.NewtonLawWithFrict;
 
+            res.logId = logId;
             return res;
 
         }
@@ -188,7 +190,7 @@ namespace RobotSim {
             SurfList.Add(surfInfo);
             var surfFList = new List<Force>();
             for(int i = 0; i < 4; i++) {
-                var force = new GroundForce(this,ConnP[i],surf);
+                var force = new GroundForce(this,ConnP[i],surf, logId);
                 surfInfo.gForces.Add(force);
                 AddForce(force);
             }

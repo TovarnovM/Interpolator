@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Math;
 
 namespace RobotSim {
     //public interface IRbSurf {
@@ -51,12 +52,16 @@ namespace RobotSim {
             this.mu = mu;
             this.n0 = n0.Norm;
         }
+        public List<(int id, Vector3D p, double value)> LogFromStep = new List<(int id, Vector3D p, double value)>();
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public Vector3D GetNForce(Vector3D WorldPos,Vector3D WorldVel) {
+        public Vector3D GetNForce(Vector3D WorldPos,Vector3D WorldVel, int logId = -1) {
             if(!HasTouch(WorldPos))
                 return Vector3D.Zero;
             var dy = (WorldPos - p0) * n0;
             var res = dy * k + (WorldVel * n0 < 0 ? mu * WorldVel * n0 : 0);
+            var l  = GetNormal(WorldPos);
+            if(logId != -1)
+                LogFromStep.Add((logId,l.p1, Abs(res)));
             return -n0 * res;
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

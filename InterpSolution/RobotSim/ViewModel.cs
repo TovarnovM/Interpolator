@@ -14,6 +14,8 @@ namespace RobotSim {
         private LineSeries bSerXY, bSerXZ, bSerZY, t1SerXY, t1SerXZ, t1SerZY, hSerXY, hSerXZ, hSerZY; 
         List<LineSeries> wheelSerListXY, wheelSerListXZ, wheelSerListZY;
         List<LineSeries> allLineSer = new List<LineSeries>();
+        ScatterSeries massCentersXY, massCentersXZ, massCentersZY;
+        List<ScatterSeries> allScattSer = new List<ScatterSeries>();
         //private List<ArrowAnnotation> fAnnotXY, fAnnotXZ, fAnnotZY;
 
         public PlotModel ModelXY { get; set; }
@@ -292,6 +294,31 @@ namespace RobotSim {
             allLineSer.Add(bSerXY);
             allLineSer.Add(bSerXZ);
             allLineSer.Add(bSerZY);
+
+            massCentersXY = new ScatterSeries() {
+                Title = "MassCenter",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = color
+            };
+            ModelXY.Series.Add(massCentersXY);
+            massCentersXZ = new ScatterSeries() {
+                Title = "MassCenter",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = color
+            };
+            ModelXZ.Series.Add(massCentersXZ);
+            massCentersZY = new ScatterSeries() {
+                Title = "MassCenter",
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 2,
+                MarkerFill = color
+            };
+            ModelZY.Series.Add(massCentersZY);
+            allScattSer.Add(massCentersXY);
+            allScattSer.Add(massCentersXZ);
+            allScattSer.Add(massCentersZY);
         }
         void CreateTrackLineSer(OxyColor color) {
             t1SerXY = new LineSeries() {
@@ -322,10 +349,16 @@ namespace RobotSim {
             foreach(var ls in allLineSer) {
                 ls.Points.Clear();
             }
-
+            foreach (var ss in allScattSer) {
+                ss.Points.Clear();
+            }
             ModelXY.Annotations.Clear();
             ModelXZ.Annotations.Clear();
             ModelZY.Annotations.Clear();
+
+            ModelXY.Title = $"t = {t} s";
+            ModelXZ.Title = $"t = {t} s";
+            ModelZY.Title = $"t = {t} s";
 
             DrawDummy.SynchMe(t);
 
@@ -535,6 +568,7 @@ namespace RobotSim {
             bSerZY.Points.Add(new DataPoint(DrawDummy.GetUgol(i1) * xAxisNorm,DrawDummy.GetUgol(i1) * yAxisNorm));
         }
         void DrawBody() {
+            
             DrawLineBody(0,1);
             DrawLineBody(1,2);
             DrawLineBody(2,3);
@@ -547,6 +581,19 @@ namespace RobotSim {
             DrawLineBody(1,5);
             DrawLineBody(2,6);
             DrawLineBody(3,7);
+
+            var vec = DrawDummy.Body.Vec3D;
+            var xAxisNorm = Vector3D.XAxis;
+            var yAxisNorm = Vector3D.YAxis;
+            massCentersXY.Points.Add(new ScatterPoint(vec * xAxisNorm, vec * yAxisNorm));
+
+            xAxisNorm = Vector3D.XAxis;
+            yAxisNorm = Vector3D.ZAxis;
+            massCentersXZ.Points.Add(new ScatterPoint(vec * xAxisNorm, vec * yAxisNorm));
+
+            xAxisNorm = Vector3D.ZAxis;
+            yAxisNorm = Vector3D.YAxis;
+            massCentersZY.Points.Add(new ScatterPoint(vec * xAxisNorm, vec * yAxisNorm));
         }
 
         public static PlotModel GetNewModel(string title = "",string xname = "",string yname = "") {

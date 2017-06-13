@@ -25,6 +25,8 @@ namespace RobotSim {
         public TrackParams trOpts;
         public int wheelZubN = 13;
 
+
+
         //public List<RobotWheel> Wheels { get; set; } = new List<RobotWheel>();
         const string DEFNAME = "Enviroment";
         public RobotDynamics(double mass, double l, double h, double w, Vector3D centerOtnCM, string name = DEFNAME):base(name) {
@@ -33,7 +35,7 @@ namespace RobotSim {
             _w = w;//z
 
             trOpts = TrackParams.GetStandart();
-            trOpts.shagConnL = 0.012;
+            //trOpts.shagConnL = 0.012;
             //trOpts.connH = 0.002;
 
             CenterPosOtnCM = centerOtnCM;
@@ -83,7 +85,12 @@ namespace RobotSim {
         }
 
         public void UpdateWheelTrackInteraction(double t) {
+            foreach (var srf in surfs) {
+                srf.LogFromStep.Clear();
+            }
+
             foreach(var w in wheels) {
+                w.UpdateP0(t);
                 foreach(var fn in w.ForcesFromTracksNegative) {
                     w.ForcesNegative.Remove(fn);
                 }
@@ -108,7 +115,6 @@ namespace RobotSim {
             }
         }
 
-
         int n_wheels = 0, n_tracks = 0;
         public double wheelBody_k = 100000, wheelBody_mu = 100;
         /// <summary>
@@ -119,7 +125,7 @@ namespace RobotSim {
         /// <param name="localN0">ось OX у w1</param>
         /// <param name="otnApproxPosw2">относительная позиция w2 относительно w1</param>
         /// <returns>ссылку на wheel1</returns>
-        public RbWheel CreateWheelPairWithTracks(MaterialObjectNewton connectBody, Vector3D locPosW1, Vector3D localN0, Vector3D otnApproxPosw2) {
+        public (RbWheel w1, RbWheel w2)  CreateWheelPairWithTracks(MaterialObjectNewton connectBody, Vector3D locPosW1, Vector3D localN0, Vector3D otnApproxPosw2, int logId = -1) {
             
             
             var tTest = RbTrack.GetStandart(shagConnL: trOpts.shagConnL);
@@ -135,10 +141,11 @@ namespace RobotSim {
 
             wheel1.n0_body_loc = localN0;
             wheel1.p0_body_loc = locPosW1;
+            wheel1.p00_body_loc = wheel1.p0_body_loc;
 
             wheel2.n0_body_loc = localN0;
             wheel2.p0_body_loc = locPosW1 + otnApproxPosw2;// - localN0.Norm*(otnApproxPosw2*localN0.Norm);
-
+            wheel2.p00_body_loc = wheel2.p0_body_loc;
 
             wheel1.ConnectMeToBody_newVariant(connectBody);
             wheel2.ConnectMeToBody_newVariant(connectBody);
@@ -147,7 +154,7 @@ namespace RobotSim {
 
             //RotateWheels(wheel1,wheel2,connectBody);
 
-            var Tracks1 = GetTracks(wheel1,wheel2,connectBody,trOpts);
+            var Tracks1 = GetTracks(wheel1,wheel2,connectBody,trOpts, logId);
 
             foreach(var t in Tracks1) {
                 t.WheelsInteractsWithMe.Add(wheel1);
@@ -158,42 +165,63 @@ namespace RobotSim {
             TracksAll.AddRange(Tracks1);
 
 
-            return wheel1;
+            return (wheel1, wheel2);
         }
 
         public void Create4GUS(double moment = 10d, double maxOmega = 6d, bool blockWheels = false) {
-            var trackw05 = 0.01;
-            var w0 = CreateWheelPairWithTracks(
+            var trackw05 = trOpts.w/2;
+            var (w0,w01) = CreateWheelPairWithTracks(
                 Body,
-                GetUgolLocal(0) - Vector3D.XAxis*0.0484 + Vector3D.YAxis * _h / 4 + Vector3D.ZAxis * trackw05,
+                GetUgolLocal(0) + Vector3D.YAxis * _h / 2 + Vector3D.ZAxis * trackw05,
                 Vector3D.ZAxis,
-                -Vector3D.XAxis * 0.07);
+                -Vector3D.XAxis * 0.073, 
+                0);
 
-            var w1 = CreateWheelPairWithTracks(
+            var (w1,w11) = CreateWheelPairWithTracks(
                 Body,
-                GetUgolLocal(1) + Vector3D.YAxis * _h / 4 + Vector3D.ZAxis * trackw05,
+                GetUgolLocal(1) + Vector3D.YAxis * _h / 2 + Vector3D.ZAxis * trackw05,
                 Vector3D.ZAxis,
-                Vector3D.XAxis * 0.07);
+                Vector3D.XAxis * 0.073,
+                1);
 
-            var w3 = CreateWheelPairWithTracks(
+            var (w3,w31) = CreateWheelPairWithTracks(
                 Body,
-                GetUgolLocal(3) - Vector3D.XAxis * 0.0484 + Vector3D.YAxis * _h / 4 - Vector3D.ZAxis * trackw05,
+                GetUgolLocal(3) + Vector3D.YAxis * _h / 2 - Vector3D.ZAxis * trackw05,
                 Vector3D.ZAxis,
-                -Vector3D.XAxis * 0.07);
+                -Vector3D.XAxis * 0.073,
+                3);
 
-            var w2 = CreateWheelPairWithTracks(
+            var (w2,w21) = CreateWheelPairWithTracks(
                 Body,
-                GetUgolLocal(2) + Vector3D.YAxis * _h / 4 - Vector3D.ZAxis * trackw05,
+                GetUgolLocal(2) + Vector3D.YAxis * _h / 2 - Vector3D.ZAxis * trackw05,
                 Vector3D.ZAxis,
-                Vector3D.XAxis * 0.07);
+                Vector3D.XAxis * 0.073,
+                2);
 
             w0.AddMomentFunct(moment,maxOmega);
             w1.AddMomentFunct(moment,maxOmega);
             w2.AddMomentFunct(moment,maxOmega);
             w3.AddMomentFunct(moment,maxOmega);
 
+            w0.p00_body_loc_center = w0.p00_body_loc + Vector3D.XAxis * 0.048 + Vector3D.YAxis * 0.0125;
+            w0.pawAngleFunc = pawAngleFunc0;
+            w01.p00_body_loc_center = w0.p00_body_loc_center;
+            w01.pawAngleFunc = pawAngleFunc0;
 
+            w3.p00_body_loc_center = w3.p00_body_loc + Vector3D.XAxis * 0.048 + Vector3D.YAxis * 0.0125;
+            w3.pawAngleFunc = pawAngleFunc3;
+            w31.p00_body_loc_center = w3.p00_body_loc_center;
+            w31.pawAngleFunc = pawAngleFunc3;
 
+            w1.p00_body_loc_center = w1.p00_body_loc;
+            w1.pawAngleFunc = pawAngleFunc1;
+            w11.p00_body_loc_center = w1.p00_body_loc_center;
+            w11.pawAngleFunc = pawAngleFunc1;
+
+            w2.p00_body_loc_center = w2.p00_body_loc;
+            w2.pawAngleFunc = pawAngleFunc2;
+            w21.p00_body_loc_center = w2.p00_body_loc_center;
+            w21.pawAngleFunc = pawAngleFunc2;
             //blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
             //w0.MomentX.Value = moment;
             //w0.MomentX.SynchMeAfter += _ => {
@@ -201,7 +229,7 @@ namespace RobotSim {
             //};
         }
 
-
+        public Func<double, double> pawAngleFunc0, pawAngleFunc1, pawAngleFunc2, pawAngleFunc3;
 
         public void CreateWheelsSample(bool connectIt = true) {
             for(int i = 0; i < 6; i++) {
@@ -213,16 +241,16 @@ namespace RobotSim {
             }
             var trackw05 = 0.01;
             wheels[0].n0_body_loc = Vector3D.ZAxis;
-            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * _h / 4 + wheels[0].n0_body_loc * trackw05;
+            wheels[0].p0_body_loc = GetUgolLocal(0) + Vector3D.YAxis * _h / 2 + wheels[0].n0_body_loc * trackw05;
             
             wheels[1].n0_body_loc = Vector3D.ZAxis;
-            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * _h / 4 + wheels[1].n0_body_loc* trackw05;
+            wheels[1].p0_body_loc = GetUgolLocal(1) + Vector3D.YAxis * _h / 2 + wheels[1].n0_body_loc* trackw05;
             
             wheels[2].n0_body_loc = -Vector3D.ZAxis;
-            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * _h / 4 + wheels[2].n0_body_loc * trackw05;
+            wheels[2].p0_body_loc = GetUgolLocal(2) + Vector3D.YAxis * _h / 2 + wheels[2].n0_body_loc * trackw05;
 
             wheels[3].n0_body_loc = -Vector3D.ZAxis;
-            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * _h / 4 + wheels[3].n0_body_loc * trackw05;
+            wheels[3].p0_body_loc = GetUgolLocal(3) + Vector3D.YAxis * _h / 2 + wheels[3].n0_body_loc * trackw05;
 
             wheels[4].n0_body_loc = Vector3D.ZAxis;
             wheels[4].p0_body_loc = 0.5*(GetUgolLocal(0)+ GetUgolLocal(1)) + Vector3D.YAxis * _h / 4 + wheels[0].n0_body_loc * trackw05;
@@ -366,7 +394,7 @@ namespace RobotSim {
             AddChild(tDummy);
         }
 
-        List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody, TrackParams trOpt) {
+        List<RbTrack> GetTracks(RbWheel w1,RbWheel w2, IOrient3D connectBody, TrackParams trOpt, int logId = -1) {
             var l21 = RotateWheels(w1,w2,connectBody);
 
             var wl = w1.p0_body_loc.X < w2.p0_body_loc.X ? w1 : w2;
@@ -448,7 +476,9 @@ namespace RobotSim {
 
             lst0.AddRange(lst1);
 
-
+            foreach (var tr in lst0) {
+                tr.logId = logId;
+            }
 
             return ConnectTrackLoop(lst0);
             //return lst0;
@@ -510,7 +540,7 @@ namespace RobotSim {
         public void AddGForcesToAll() {
             AddGForcesToAll(new Vector3D(0,-1,0));
         }
-        public void AddGForcesToAll(Vector3D dir, double g = 9.8) {
+        public void AddGForcesToAll(Vector3D dir, double g = 9.81) {
             var allMP = Children
                 .Flatten(ch => ch.Children)
                 .Where(ch => ch is IMaterialPoint)
@@ -518,8 +548,7 @@ namespace RobotSim {
                 .ToList();
             foreach(var mp in allMP) {
                 mp.AddGForce(dir, g);
-            }
-
+            }            
         }
     }
 

@@ -28,6 +28,8 @@ namespace RobotSim {
         public Force MomentX;
         public Vector3D 
             p0_body_loc = new Vector3D(0,0,0), // положение центра колеса в СК тела, к которому оно прикреплено
+            p00_body_loc = new Vector3D(0, 0, 0),
+            p00_body_loc_center = new Vector3D(0, 0, 0),
             n0_body_loc = new Vector3D(1,0,0), // направление оси вращения колеса (ось ОХ) в СК тела, к которому оно прикреплено
             betta0r_body_loc = new Vector3D(0,1,0); // направление линии, определяющей нулевой угол поворота колеса в СК тела, к которому оно прикреплено
         public RbWheel(
@@ -95,6 +97,18 @@ namespace RobotSim {
             return res;
         }
 
+        /// <summary>
+        /// градусы
+        /// </summary>
+        public Func<double, double> pawAngleFunc;
+        public void UpdateP0(double t) {
+            if (pawAngleFunc == null)
+                return;
+            var angle = pawAngleFunc(t)*PI/180;
+            var q = QuaternionD.FromAxisAngle(n0_body_loc, angle);
+            p0_body_loc = p00_body_loc_center + q * (p00_body_loc - p00_body_loc_center);
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool HasInteraction(Vector3D globalPoint) {
             var localPoint = worldTransform_1 * globalPoint;
@@ -104,7 +118,7 @@ namespace RobotSim {
                 return false;
             return true;
         }
-
+        
         /// <summary>
         /// Вычисляется глобальная сила, действующая в радиальном направлении и направлении оси Х
         /// </summary>

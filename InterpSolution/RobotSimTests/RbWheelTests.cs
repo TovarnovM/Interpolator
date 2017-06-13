@@ -71,16 +71,26 @@ namespace RobotSim.Tests {
                 kH: 66,
                 muH: 66);
 
-            wheel.SetPosition(new Vector3D(0,1,0),new Vector3D(0,1,1),new Vector3D(0,0,0), new Vector3D(1,0,0));
-            
+            wheel.SetPosition(new Vector3D(0, 1, 0), new Vector3D(0, 1, 1), new Vector3D(0, 0, 0), new Vector3D(1, 0, 0));
 
-            Assert.AreEqual(6,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,1,0)));
-            Assert.AreEqual(5,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,1,-1)));
-            Assert.AreEqual(0,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,1,1)));
-            Assert.AreEqual(1,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,0,1)));
-            Assert.AreEqual(3,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,-1,0)));
-            Assert.AreEqual(4,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,-1,-1.01)));
-            Assert.AreEqual(0,wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110,1,0.7)));
+
+            Assert.AreEqual(6, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, 1, 0)));
+            Assert.AreEqual(5, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, 1, -1)));
+            Assert.AreEqual(0, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, 1, 1)));
+            Assert.AreEqual(1, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, 0, 1)));
+            Assert.AreEqual(3, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, -1, 0)));
+            Assert.AreEqual(4, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, -1, -1.01)));
+            Assert.AreEqual(0, wheel.GetClosestInd(wheel.WorldTransform_1 * new Vector3D(110, 1, 0.7)));
+        }
+
+        [TestMethod()]
+        public void UpdateP0Test() {
+            var v = new Vector3D(10, 20, 0);
+            var n0 = new Vector3D(0, 1, 0);
+            var q = QuaternionD.FromAxisAngle(n0, Math.PI / 2);
+
+            var v1 = q * v;
+            var v2 = q * Vector3D.Zero;
         }
 
         //[TestMethod()]
