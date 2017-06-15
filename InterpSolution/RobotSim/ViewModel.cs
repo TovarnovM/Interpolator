@@ -29,8 +29,8 @@ namespace RobotSim {
         RobotDynamics DrawDummy;
 
 
-        public ViewModel() {
-            CreateDrawDummy();
+        public ViewModel(Func<RobotDynamics> getDummyFunc) {
+            CreateDrawDummy(getDummyFunc);
             //=============================================
             CreatePlotModels();
             CreateAxis();
@@ -119,8 +119,8 @@ namespace RobotSim {
 
         }
 
-        void CreateDrawDummy() {
-            DrawDummy = MainWindow.GetNewRD();
+        void CreateDrawDummy(Func<RobotDynamics> getDummyFunc) {
+            DrawDummy = getDummyFunc();
             DrawDummy.Rebuild();
             Model1Rx = new VMPropRx<PlotModel,SolPoint>(
                 () => {

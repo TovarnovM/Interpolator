@@ -135,6 +135,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CheckedListItem.cs" />
     <Compile Include="ExperimentRunner.cs" />
     <Compile Include="Experiments.cs" />
     <Compile Include="Forces.cs" />
@@ -145,6 +146,7 @@
     <Compile Include="RobotDynamics.cs" />
     <Compile Include="TestVM.cs" />
     <Compile Include="ViewModel.cs" />
+    <Compile Include="VM_ExGraph.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -27,6 +27,7 @@ using System.Drawing;
 using OxyPlot;
 using OxyPlot.Wpf;
 using System.Windows.Threading;
+using System.Collections.ObjectModel;
 
 namespace RobotSim {
     /// <summary>
@@ -36,9 +37,14 @@ namespace RobotSim {
         private RobotDynamics pr;
         IEquasionController controller;
         private Microsoft.Research.Oslo.Vector v0;
+        private Experiments_Wall ex;
 
         public ViewModel vm { get; set; }
-        TestVM tstVm { get; set; }
+        public int MyProperty { get; set; }
+        public TestVM TstVm { get; set; }
+        public VM_ExGraph vm_ex { get; set; }
+
+        public ObservableCollection<CheckedListItem<GraffLine>> ExList { get; set; }
 
         public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
             solution.Body.SynchQandM();
@@ -46,9 +52,8 @@ namespace RobotSim {
             solution.BlockedWheels = false;
         }
 
-        public static RobotDynamics GetNewRD() {
-            var ex = new Experiments_Wall();
-            ex.Angle = 0;
+        public RobotDynamics GetNewRD() {
+            
             return ex.GetRD();
 
 
@@ -83,9 +88,14 @@ namespace RobotSim {
             return sol;
         }
 
+
         public MainWindow() {
-            vm = new ViewModel();
-            DataContext = vm;
+            ex = new Experiments_Wall();
+            ex.Prs.Angle = 0;
+
+            vm = new ViewModel(GetNewRD);
+            vm_ex = new VM_ExGraph();
+            DataContext = this;
             InitializeComponent();
 
             var sol = GetNewRD();
@@ -110,8 +120,19 @@ namespace RobotSim {
             trackbarch.Connect();
 
 
-            tstVm = new TestVM();
-            tstPV.DataContext = tstVm;
+            TstVm = new TestVM();
+
+            
+            ExList = new ObservableCollection<CheckedListItem<GraffLine>>();
+            lb1.ItemsSource = ExList;
+            ExList.Add(new CheckedListItem<GraffLine>(new GraffLine() { Name = "ssad1" }));
+            ExList.Add(new CheckedListItem<GraffLine>(new GraffLine() { Name = "ssad12" }));
+            ExList.Add(new CheckedListItem<GraffLine>(new GraffLine() { Name = "3" }));          
+            ExList.Add(new CheckedListItem<GraffLine>(new GraffLine() { Name = "4" }));
+
+            //lb1.ItemsSource = null;
+
+
         }
 
         private void initObs(RobotDynamics calc) {
@@ -211,7 +232,7 @@ double omega = 2 * 3.14159 / T;
             })
             .ToList();
 
-            tstVm.Draw(ts,rightAnsw,answrs);
+            TstVm.Draw(ts,rightAnsw,answrs);
 
 
         }
@@ -337,7 +358,7 @@ double omega = 2 * 3.14159 / T;
         private async void button_Save_CGif_Copy_Click(object sender, RoutedEventArgs e) {
             try {
                 button_Save_CGif_Copy.IsEnabled = false;
-                var ex = new Experiments_Wall();
+                ex = new Experiments_Wall();
                 //ex.Start();
                 await ex.StartAsync();
                 MessageBox.Show("good");
@@ -345,6 +366,18 @@ double omega = 2 * 3.14159 / T;
                 button_Save_CGif_Copy.IsEnabled = true;
             }
 
+        }
+
+        private void button1_Click_1(object sender, RoutedEventArgs e) {
+            ex.LoadResultsFromFile();
+         
+
+            vm_ex.Rebuild(ex);
+            ExList.Clear();
+            foreach (var item in vm_ex.graphs) {
+                ExList.Add(item);
+            }
+            vm_ex.Pm.InvalidatePlot(true);
         }
     }
 }

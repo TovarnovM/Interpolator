@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RobotSim {
-    class TestVM {
+    public class TestVM {
         public PlotModel ModelTest { get; set; }
         LineSeries r, a;
         public TestVM() {
