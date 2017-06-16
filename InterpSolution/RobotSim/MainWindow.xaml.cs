@@ -28,6 +28,8 @@ using OxyPlot;
 using OxyPlot.Wpf;
 using System.Windows.Threading;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
+using System.Windows.Forms;
 
 namespace RobotSim {
     /// <summary>
@@ -172,7 +174,7 @@ namespace RobotSim {
             if(index < 0)
                 return;
             unit4save.SynchMeTo(vm.SolPointList.Value[index]);
-            var sd = new SaveFileDialog() {
+            var sd = new Microsoft.Win32.SaveFileDialog() {
                 Filter = "XML Files|*.xml",
                 FileName = "sph1D"
             };
@@ -190,7 +192,7 @@ namespace RobotSim {
             button.Content = "Paused";
             var unit4load = GetNewRD();
             unit4load.Rebuild();
-            var sd = new OpenFileDialog() {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
                 Filter = "XML Files|*.xml",
                 FileName = "sph1D"
             };
@@ -265,7 +267,7 @@ double omega = 2 * 3.14159 / T;
             var unit4save = GetNewRD();
             unit4save.Rebuild();
             
-            var sd = new SaveFileDialog() {
+            var sd = new Microsoft.Win32.SaveFileDialog() {
                 Filter = "XML Files|*.xml",
                 FileName = "manySP"
             };
@@ -281,7 +283,7 @@ double omega = 2 * 3.14159 / T;
             button.Content = "Paused";
             var unit4load = GetNewRD();
             unit4load.Rebuild();
-            var sd = new OpenFileDialog() {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
                 Filter = "XML Files|*.xml",
                 FileName = "sph1D"
             };
@@ -332,7 +334,7 @@ double omega = 2 * 3.14159 / T;
             }
         }
         public static void DoEvents() {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+            System.Windows.Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
                                                   new Action(delegate { }));
         }
 
@@ -342,7 +344,7 @@ double omega = 2 * 3.14159 / T;
                 button.Content = "Paused";
                 button_Save_CGif.IsEnabled = false;
 
-                var sd = new SaveFileDialog() {
+                var sd = new Microsoft.Win32.SaveFileDialog() {
                     Filter = "GIF Files|*.gif",
                     FileName = "XY"
                 };
@@ -361,7 +363,7 @@ double omega = 2 * 3.14159 / T;
                 ex = new Experiments_Wall();
                 //ex.Start();
                 await ex.StartAsync();
-                MessageBox.Show("good");
+                System.Windows.MessageBox.Show("good");
             } finally {
                 button_Save_CGif_Copy.IsEnabled = true;
             }
@@ -369,15 +371,154 @@ double omega = 2 * 3.14159 / T;
         }
 
         private void button1_Click_1(object sender, RoutedEventArgs e) {
-            ex.LoadResultsFromFile();
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "Res Files|*.txt"
+            };
+            if (sd.ShowDialog() == true) {
+                ex.LoadResultsFromFile(sd.FileName);
+                vm_ex.Rebuild(ex);
+                ExList.Clear();
+                foreach (var item in vm_ex.graphs) {
+                    ExList.Add(item);
+                }
+                vm_ex.Pm.InvalidatePlot(true);
+                button1.Content = sd.FileName;
+            }
+                
          
 
-            vm_ex.Rebuild(ex);
-            ExList.Clear();
-            foreach (var item in vm_ex.graphs) {
-                ExList.Add(item);
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants"
+            };
+            if (sd.ShowDialog() == true) {
+                var pAdam = new Experiments_Wall_params() {
+                    Name = "Ex_res",
+                    pawAngleSpeed = 3,
+                    Mz = 0
+                };
+                int mom_count = 7;
+                double mom0 = 0.2, mom1 = 1.6, mom_shag = (mom1 - mom0) / mom_count;
+                int angle_count = 5;
+                double angle0 = 0, angle1 = 60, angle_shag = (angle1 - angle0) / angle_count;
+                var lst = new List<Experiments_Wall_params>();
+                int id = 1000;
+                for (int i = 0; i < mom_count+1; i++) {
+                    for (int j = 0; j < angle_count+1; j++) {
+                        var p = pAdam.GetCopy();
+                        p.WheelMoment = mom0 + mom_shag * i;
+                        p.Angle = angle0 + angle_shag * j;
+                        p.id = id++;
+                        p.Name = $"{p.Name}_{p.id}_mom{p.WheelMoment:0.###}_angle{p.Angle:0.###}";
+                        lst.Add(p);
+                    }
+                }
+                using (var f = new StreamWriter(sd.FileName)) {
+                    f.WriteLine(JsonConvert.SerializeObject(lst));
+                    f.Close();
+                }
             }
-            vm_ex.Pm.InvalidatePlot(true);
+        }
+        List<Experiments_Wall_params> ExperimentParamList = new List<Experiments_Wall_params>(), exParsGo = new List<Experiments_Wall_params>();
+        string resDirPath = "";
+        int coresCount = 4;
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants"
+            };
+            if (sd.ShowDialog() == true) {
+                using (var f = new StreamReader(sd.FileName)) {
+                    ExperimentParamList = JsonConvert.DeserializeObject<List<Experiments_Wall_params>>(f.ReadToEnd());
+                    dg_ex.ItemsSource = ExperimentParamList;
+                    resDirPath = System.IO.Path.GetDirectoryName(sd.FileName);
+                    btn_resDir.Content = resDirPath;
+                    btn_resDir.ToolTip = "ResDir : " +  btn_resDir.Content;
+                }
+                    
+            }
+        }
+
+        private void btn_resDir_Click(object sender, RoutedEventArgs e) {
+            using (var fbd = new FolderBrowserDialog()) {
+                DialogResult result = fbd.ShowDialog();
+
+                if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(fbd.SelectedPath)) {
+                    btn_resDir.Content = fbd.SelectedPath;
+                    btn_resDir.ToolTip = "ResDir : " + btn_resDir.Content;
+                }
+            }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) {
+            if (dg_ex.SelectedItems.Count == 0) {
+                return;
+            }
+            var itms = dg_ex.SelectedItems.Cast<Experiments_Wall_params>().ToList();
+            exParsGo.AddRange(itms);
+            ExperimentParamList.RemoveAll(itm => itms.Contains(itm));
+            RefreshDG();
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e) {
+            if (dg_ex_go.SelectedItems.Count == 0) {
+                return;
+            }
+            var itms = dg_ex_go.SelectedItems.Cast<Experiments_Wall_params>().ToList();
+            ExperimentParamList.AddRange(itms);
+            exParsGo.RemoveAll(itm => itms.Contains(itm));
+            RefreshDG();
+        }
+
+        
+        private async void Button_Click_5(object sender, RoutedEventArgs e) {
+            try {
+                btn_GO.IsEnabled = false;
+                coresCount = int.Parse(tb_cores.Text);
+                await StartExCalcAsync();
+            } finally {
+                btn_GO.IsEnabled = true;
+            }
+
+        }
+
+        void RefreshDG() {
+            dg_ex.ItemsSource = null;
+            dg_ex.ItemsSource = ExperimentParamList;
+            dg_ex_go.ItemsSource = null;
+            dg_ex_go.ItemsSource = exParsGo;
+        }
+
+        Task StartExCalcAsync() {
+            return Task.Factory.StartNew(StartExCalc);
+        }
+
+        void StartExCalc() {
+            var po = new ParallelOptions() { MaxDegreeOfParallelism = coresCount };
+            Parallel.ForEach(exParsGo, po, StartVar);
+        }
+
+        private void CheckBox_Checked(object sender, RoutedEventArgs e) {
+            if(ExList != null) {
+                foreach (var item in ExList) {
+                    item.IsChecked = !item.IsChecked;
+                }
+            }
+
+        }
+
+        private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
+            CheckBox_Checked(sender, e);
+        }
+
+        void StartVar(Experiments_Wall_params prm) {
+            var ex = new Experiments_Wall();
+            ex.Prs = prm;
+            ex.Start(resDirPath + "\\" + prm.Name + ".txt", resDirPath + "\\" + prm.Name + "_soloints.xml");
         }
     }
 }

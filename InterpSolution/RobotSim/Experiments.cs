@@ -17,7 +17,7 @@ using System.Globalization;
 namespace RobotSim {
     public class Experiments_Wall_params {
         public int id { get; set; } = 0;
-        public string ResultIndex { get; set; }
+        public string ResultIndex { get; set; } = "";
         public string Name { get; set; } = "Experiment1";
         /// <summary>
         /// в градусах
@@ -41,13 +41,19 @@ namespace RobotSim {
         public double h { get; set; } = 0.03;
         public double w { get; set; } = 0.155;
 
-        public double pawAngleSpeed = 20;
+        public double pawAngleSpeed { get; set; } = 0;
+        public double Mz { get; set; } = 5;
+        public double TimeMax { get; set; } = 10;
+        public Experiments_Wall_params GetCopy() {
+            return (Experiments_Wall_params)MemberwiseClone();
+        }
     }
 
     public class Experiments_Wall {
         public Experiments_Wall_params Prs { get; set; } = new Experiments_Wall_params();
         public  RobotDynamics GetRD() {
             var sol = new RobotDynamics(Prs.Mass, Prs.l, Prs.h, Prs.w, Prs.GetCenterBoxOtnCM(), Prs.Name);
+            sol.Body.AddMoment(Force.GetMoment(Prs.Mz, Vector3D.ZAxis, sol.Body));
             //sol.Body.Vec3D = new Vector3D(0.3, 0.1, 0);
             sol.Body.SynchQandM();
             sol.Body.RotateOXtoVec(new Vector3D(1, 0, 0));
@@ -246,46 +252,25 @@ namespace RobotSim {
         const string defexFilePath = @"C:\Users\User\Desktop\ExperLog.txt";
         const string defsolFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml";
         public void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
-            var f = new StreamWriter(exFilePath);
-            var sw = new StreamWriter(solFilePath);
             try {
-                f.WriteLine(JsonConvert.SerializeObject(Prs));
-                var sb = new StringBuilder();
                 var pr = GetRD();
                 var v0 = pr.Rebuild(pr.TimeSynch);
                 PrepDict(pr);
                 var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
                 var dt = 0.00001;
-                f.WriteLine("=============");
-
-                f.Write(sb.ToString());
-                sb.Clear();
-                sb.Append("t, sec;");
-                foreach (var h in Results.Keys) {
-                    sb.Append(h + separator);
-                }
-                sb.Remove(sb.Length - 1, 1);
-                f.WriteLine(sb.ToString());
+                
                 var solutions = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).WithStep(0.001);
                 foreach (var sol in solutions) {
                     FillResults(pr);
                     SolPoints.Add(sol);
 
-                    sb.Clear();
-                    sb.Append($"{sol.T}" + separator);
-                    foreach (var h in Results.Keys) {
-                        sb.Append($"{Results[h].GetV(sol.T)}" + separator);
-                    }
-                    sb.Remove(sb.Length - 1, 1);
-                    f.WriteLine(sb.ToString());
 
                     if (StopFunc(pr) != "") {
                         Prs.ResultIndex = StopFunc(pr);
                         break;
                     }
                 }
-
-
+                SaveResultsToFile(exFilePath, solFilePath);
 
                 //sb.Append("info : {{");
                 //foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this)) {
@@ -294,13 +279,11 @@ namespace RobotSim {
                 //    sb.Append($"\"{name}\":{value},\n");
                 //}
                 //sb.Append("}}\n");     
-            
-            
 
-        } finally {
-                DummyIOHelper.SerializeManySP(sw, SolPoints);
-                f.Close();
-                sw.Close();
+
+
+            } finally {
+
             }
 
         }
@@ -312,8 +295,8 @@ namespace RobotSim {
         }
 
         public string StopFunc(RobotDynamics rd) {
-            if (rd.TimeSynch * Prs.pawAngleSpeed > 90)
-                return "долго считает";
+            if (rd.TimeSynch >Prs.TimeMax)//* Prs.pawAngleSpeed > 90)
+                return "время интегрирования";
             if (rd.Body.Y < -0.5)
                 return "сполз";
             foreach (var w in rd.wheels) {
