@@ -148,6 +148,7 @@
     <Compile Include="TestVM.cs" />
     <Compile Include="ViewModel.cs" />
     <Compile Include="VM_ExGraph.cs" />
+    <Compile Include="VM_results.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

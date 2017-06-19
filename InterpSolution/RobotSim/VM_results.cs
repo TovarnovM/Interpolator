@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace RobotSim {
-    public class VM_ExGraph {
+    public class VM_results {
         public PlotModel Pm { get; set; }
-        public VM_ExGraph() {
+        public VM_results() {
             Pm = ViewModel.GetNewModel("Результаты", "t, сек", "...");
             Pm.PlotType = PlotType.XY;
 
@@ -37,10 +37,6 @@ namespace RobotSim {
                 chLstItem.PropertyChanged += grLine.ChLstItem_PropertyChanged;
                 graphs.Add(chLstItem);
             }
-        }
-
-        public void RebuildAll(List<Experiments_Wall> expList) {
-
         }
     }
 }

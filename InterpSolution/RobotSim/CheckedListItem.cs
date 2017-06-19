@@ -43,8 +43,11 @@ namespace RobotSim {
         public string Name { get; set; }
         public LineSeries LineSer { get; set; }
         public void ChLstItem_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
-            if (e.PropertyName == "IsChecked")
+            if (e.PropertyName == "IsChecked") {
                 LineSer.IsVisible = (sender as CheckedListItem<GraffLine>).IsChecked;
+                LineSer.PlotModel.InvalidatePlot(false);
+            }
+                
         }
     }
 }

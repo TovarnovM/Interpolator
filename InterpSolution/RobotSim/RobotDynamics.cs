@@ -168,7 +168,7 @@ namespace RobotSim {
             return (wheel1, wheel2);
         }
 
-        public void Create4GUS(double moment = 10d, double maxOmega = 6d, bool blockWheels = false) {
+        public void Create4GUS(double moment = 10d, double maxOmega = 6d, bool blockWheels = false, bool maxOmegaIsAPower = true) {
             var trackw05 = trOpts.w/2;
             var (w0,w01) = CreateWheelPairWithTracks(
                 Body,
@@ -197,11 +197,18 @@ namespace RobotSim {
                 Vector3D.ZAxis,
                 Vector3D.XAxis * 0.073,
                 2);
+            if (maxOmegaIsAPower) {
+                w0.AddMomentFunctPower(moment, maxOmega);
+                w1.AddMomentFunctPower(moment, maxOmega);
+                w2.AddMomentFunctPower(moment, maxOmega);
+                w3.AddMomentFunctPower(moment, maxOmega);
+            } else {
+                w0.AddMomentFunct(moment,maxOmega);
+                w1.AddMomentFunct(moment,maxOmega);
+                w2.AddMomentFunct(moment,maxOmega);
+                w3.AddMomentFunct(moment,maxOmega);
+            }
 
-            w0.AddMomentFunct(moment,maxOmega);
-            w1.AddMomentFunct(moment,maxOmega);
-            w2.AddMomentFunct(moment,maxOmega);
-            w3.AddMomentFunct(moment,maxOmega);
 
             w0.p00_body_loc_center = w0.p00_body_loc + Vector3D.XAxis * 0.048 + Vector3D.YAxis * 0.0125;
             w0.pawAngleFunc = pawAngleFunc0;

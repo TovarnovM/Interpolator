@@ -257,6 +257,21 @@ namespace RobotSim {
             };
         }
 
+        public void AddMomentFunctPower(double mom_max, double power) {
+            MomentX.SynchMeAfter += t => {
+                double mom = mom_max;
+                if (Abs(Omega.X) > 0.0001 && (power / Abs(Omega.X)) < mom_max) {
+                    mom = power / Abs(Omega.X);
+                }
+
+                MomentX.Value = mom;
+                //if (Sign(mom) != Sign(Omega.X))
+                //    MomentX.Value = mom;
+                //else
+                //    MomentX.Value = 0d;
+            };
+        }
+
         #region Blocked
         private bool blocked = false;
         public ForceBetween2Points f_wb,f_wbMirror;

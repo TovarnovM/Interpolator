@@ -30,6 +30,7 @@ using System.Windows.Threading;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace RobotSim {
     /// <summary>
@@ -40,11 +41,13 @@ namespace RobotSim {
         IEquasionController controller;
         private Microsoft.Research.Oslo.Vector v0;
         private Experiments_Wall ex;
+        TaskScheduler ts_ui;
 
         public ViewModel vm { get; set; }
         public int MyProperty { get; set; }
         public TestVM TstVm { get; set; }
         public VM_ExGraph vm_ex { get; set; }
+        public VM_results vm_res { get; set; }
 
         public ObservableCollection<CheckedListItem<GraffLine>> ExList { get; set; }
 
@@ -92,15 +95,18 @@ namespace RobotSim {
 
 
         public MainWindow() {
+            ts_ui = TaskScheduler.Current;
             ex = new Experiments_Wall();
             ex.Prs.Angle = 0;
 
             vm = new ViewModel(GetNewRD);
             vm_ex = new VM_ExGraph();
+            vm_res = new VM_results();
             DataContext = this;
             InitializeComponent();
 
             var sol = GetNewRD();
+            
             //sol.Body.AddForce(new Force(0.1,new Position3D(0,1,0),new Position3D(1,1,1),null));
             //sol.Body.AddForce(new Force(0.1,new Position3D(0,-1,0),new Position3D(0,0,0),null));
             //sol.Body.AddForce(new ForceCenter(1,new Position3D(0,-1,0),null));
@@ -518,7 +524,105 @@ double omega = 2 * 3.14159 / T;
         void StartVar(Experiments_Wall_params prm) {
             var ex = new Experiments_Wall();
             ex.Prs = prm;
+            prm.ResultIndex = "Calculating";
+            ////RefreshDG();
+            //var tsk = Task.Factory.StartNew(RefreshDG, CancellationToken.None, TaskCreationOptions.None, ts_ui);
+            //tsk.Wait();
             ex.Start(resDirPath + "\\" + prm.Name + ".txt", resDirPath + "\\" + prm.Name + "_soloints.xml");
         }
+
+        #region Обработка
+        List<Experiments_Wall> ExperList;
+        void LoadExperList(string dir) {
+            DirectoryInfo d = new DirectoryInfo(dir);//Assuming Test is your Folder
+            FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
+            ExperList = new List<Experiments_Wall>(Files.Length);
+            foreach (var f in Files) {
+                var exp = new Experiments_Wall();
+                ExperList.Add(exp);
+            }
+            int ind = 0;
+            Parallel.For(0, Files.Length, i => {
+                ExperList[i].LoadResultsFromFile(Files[i].FullName);
+            });
+        }
+        Task LoadExperListAsync(string dir) {
+            return Task.Factory.StartNew(() => LoadExperList(dir));
+        }
+
+        private void BtnDir2_Click(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "файлы движа Files|*.xml",
+                FileName = "солпоинтс"
+            };
+            if (sd.ShowDialog() == true) {
+                using (var f = new StreamReader(sd.FileName)) {
+                    ex = new Experiments_Wall();
+                    ex.LoadSolPoints(sd.FileName);
+                    ex.FillDictFromSP();
+                    vm_ex.Rebuild(ex);
+                    ExList.Clear();
+                    foreach (var item in vm_ex.graphs) {
+                        ExList.Add(item);
+                    }
+                    vm_ex.Pm.InvalidatePlot(true);
+                    button1.Content = sd.FileName;
+                }
+
+            }
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e) {
+
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants2"
+            };
+            if (sd.ShowDialog() == true) {
+                var pAdam = new Experiments_Wall_params() {
+                    Name = "Ex_res",
+                    pawAngleSpeed = 2,
+                    Mz = 0
+                };
+                int power_count = 7;
+                double pow0 = 2, pow1 = 7, pow1_shag = (pow1 - pow0) / power_count;
+                int mass_count = 7;
+                double mass0 = 2, mass1 = 4, mass_shag = (mass1 - mass0) / mass_count;
+                var lst = new List<Experiments_Wall_params>();
+                int id = 2000;
+                for (int i = 0; i < power_count + 1; i++) {
+                    for (int j = 0; j < mass_count + 1; j++) {
+                        var p = pAdam.GetCopy();
+                        p.OmegaMax = pow0 + pow1_shag * i;
+                        p.Mass = mass0 + mass_shag * j;
+                        p.id = id++;
+                        p.Name = $"{p.Name}_{p.id}_pow{p.OmegaMax:0.###}_mass{p.Mass:0.###}";
+                        lst.Add(p);
+                    }
+                }
+                using (var f = new StreamWriter(sd.FileName)) {
+                    f.WriteLine(JsonConvert.SerializeObject(lst));
+                    f.Close();
+                }
+            }
+            
+        }
+
+        private async void Dir_Click(object sender, RoutedEventArgs e) {
+            try {
+                string dir = @"D:\ROBOT\";
+                BtnDir.IsEnabled = false;
+                await LoadExperListAsync(dir);
+            } finally {
+                BtnDir.IsEnabled = true;
+            }
+
+            
+        }
+        #endregion
+
+
+
+
     }
 }

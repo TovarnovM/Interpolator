@@ -23,8 +23,8 @@ namespace RobotSim {
         /// в градусах
         /// </summary>
         public double Angle { get; set; } = 0;
-        public double WheelMoment { get; set; } = 0.5;
-        public double OmegaMax { get; set; } = 5;
+        public double WheelMoment { get; set; } = 4;
+        public double OmegaMax { get; set; } = 4;
         public double Magnetic_h { get; set; } = 0.07;
         public double Magnetic_Fmax { get; set; } = 1.3;
         public double K_trenya { get; set; } = 0.9;
@@ -41,8 +41,8 @@ namespace RobotSim {
         public double h { get; set; } = 0.03;
         public double w { get; set; } = 0.155;
 
-        public double pawAngleSpeed { get; set; } = 0;
-        public double Mz { get; set; } = 5;
+        public double pawAngleSpeed { get; set; } = 3;
+        public double Mz { get; set; } = 0;
         public double TimeMax { get; set; } = 10;
         public Experiments_Wall_params GetCopy() {
             return (Experiments_Wall_params)MemberwiseClone();
@@ -249,6 +249,21 @@ namespace RobotSim {
             }
         }
 
+        public void FillDictFromSP() {
+            var pr = GetRD();
+            var v0 = pr.Rebuild(pr.TimeSynch);
+            PrepDict(pr);
+            foreach (var sp in SolPoints) {
+                pr.SynchMeTo(sp);
+                FillResults(pr);
+                if (StopFunc(pr) != "") {
+                    Prs.ResultIndex = StopFunc(pr);
+                    break;
+                }
+            }
+
+        }
+
         const string defexFilePath = @"C:\Users\User\Desktop\ExperLog.txt";
         const string defsolFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml";
         public void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
@@ -259,7 +274,7 @@ namespace RobotSim {
                 var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
                 var dt = 0.00001;
                 
-                var solutions = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).WithStep(0.001);
+                var solutions = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).WithStep(0.005);
                 foreach (var sol in solutions) {
                     FillResults(pr);
                     SolPoints.Add(sol);
