@@ -615,7 +615,10 @@ double omega = 2 * 3.14159 / T;
         }
 
         private void Btn_smooth1_Click(object sender, RoutedEventArgs e) {
-            
+            var sm = vm_ex.RemoveSmooth();
+            foreach (var it in sm) {
+                ExList.Remove(it);
+            }
             var smDict = ex.GetSmooth(
                 Experiments_Wall.GetDouble(tb_b.Text, 0.07),
                 Experiments_Wall.GetDouble(tb_f.Text, 0.07));

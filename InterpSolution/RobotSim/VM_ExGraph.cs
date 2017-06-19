@@ -61,5 +61,13 @@ namespace RobotSim {
         public void RebuildAll(List<Experiments_Wall> expList) {
 
         }
+
+        internal List<CheckedListItem<GraffLine>> RemoveSmooth() {
+            var smList = graphs.Where(gl => gl.Item.Name.EndsWith("smooth")).ToList();
+            foreach (var item in smList) {
+                graphs.Remove(item);
+            }
+            return smList;
+        }
     }
 }
