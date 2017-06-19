@@ -510,15 +510,21 @@ double omega = 2 * 3.14159 / T;
 
         private void CheckBox_Checked(object sender, RoutedEventArgs e) {
             if(ExList != null) {
+
                 foreach (var item in ExList) {
-                    item.IsChecked = !item.IsChecked;
+                    item.IsChecked = true;
                 }
             }
 
         }
 
         private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
-            CheckBox_Checked(sender, e);
+            if (ExList != null) {
+
+                foreach (var item in ExList) {
+                    item.IsChecked = false;
+                }
+            }
         }
 
         void StartVar(Experiments_Wall_params prm) {
@@ -606,6 +612,19 @@ double omega = 2 * 3.14159 / T;
                 }
             }
             
+        }
+
+        private void Btn_smooth1_Click(object sender, RoutedEventArgs e) {
+            
+            var smDict = ex.GetSmooth(
+                Experiments_Wall.GetDouble(tb_b.Text, 0.07),
+                Experiments_Wall.GetDouble(tb_f.Text, 0.07));
+            vm_ex.AddSmoothDict(smDict);
+            var nwGraphs = vm_ex.graphs.Except(ExList).ToList();
+            foreach (var item in nwGraphs) {
+                ExList.Add(item);
+            }
+            vm_ex.Pm.InvalidatePlot(true);
         }
 
         private async void Dir_Click(object sender, RoutedEventArgs e) {

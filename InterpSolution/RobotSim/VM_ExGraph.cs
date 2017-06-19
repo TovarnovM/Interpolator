@@ -1,4 +1,5 @@
-﻿using OxyPlot;
+﻿using Interpolator;
+using OxyPlot;
 using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,24 @@ namespace RobotSim {
             Pm.Series.Clear();
             graphs.Clear();
             foreach (var r in res) {
+                var ser = new LineSeries() {
+                    Title = r.Key
+                };
+                foreach (var point in r.Value.Data) {
+                    ser.Points.Add(new DataPoint(point.Key, point.Value.Value));
+                }
+                Pm.Series.Add(ser);
+                var grLine = new GraffLine() {
+                    Name = r.Key,
+                    LineSer = ser
+                };
+                var chLstItem = new CheckedListItem<GraffLine>(grLine, true);
+                chLstItem.PropertyChanged += grLine.ChLstItem_PropertyChanged;
+                graphs.Add(chLstItem);
+            }
+        }
+        public void AddSmoothDict(Dictionary<string,InterpXY> smDict) {
+            foreach (var r in smDict) {
                 var ser = new LineSeries() {
                     Title = r.Key
                 };

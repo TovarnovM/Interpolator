@@ -65,6 +65,9 @@
                     <Button x:Name="BtnDir" Content="LoadAll+обработать" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="189" Height="41" Click="Dir_Click" Margin="381,0,0,0"/>
                     <Button x:Name="BtnDir2" Content="LoadSolPOints" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41"  Margin="614,0,0,0" Grid.ColumnSpan="2" Click="BtnDir2_Click"/>
                     <CheckBox Content="All" Grid.Column="1" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
+                    <Button x:Name="Btn_smooth1" Content="smooth" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="91" Height="41" Margin="213,1,0,0" Click="Btn_smooth1_Click"/>
+                    <TextBox Name="tb_b" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,22,298,10" Grid.Row="1"/>
+                    <TextBox Name="tb_f" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,1,298,31" Grid.Row="1"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Вариатны">

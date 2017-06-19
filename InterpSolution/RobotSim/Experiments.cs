@@ -41,7 +41,7 @@ namespace RobotSim {
         public double h { get; set; } = 0.03;
         public double w { get; set; } = 0.155;
 
-        public double pawAngleSpeed { get; set; } = 3;
+        public double pawAngleSpeed { get; set; } = 2;
         public double Mz { get; set; } = 0;
         public double TimeMax { get; set; } = 10;
         public Experiments_Wall_params GetCopy() {
@@ -333,6 +333,14 @@ namespace RobotSim {
             }
 
             return result;
+        }
+
+        public Dictionary<string, InterpXY> GetSmooth(double dt_param_b, double dt_param_f) {
+            var smoothDict = new Dictionary<string, InterpXY>();
+            foreach (var dictElem in Results) {
+                smoothDict.Add(dictElem.Key + "_smooth", dictElem.Value.GetSmootherByT_uniform(dt_param_b, dt_param_f));
+            }
+            return smoothDict;
         }
     }
 }
