@@ -275,7 +275,7 @@ namespace RobotSim {
         #region Blocked
         private bool blocked = false;
         public ForceBetween2Points f_wb,f_wbMirror;
-        public void ConnectBlockToBody(MaterialObjectNewton body, double k = 100000, double mu = 10000) {
+        public void ConnectBlockToBody(MaterialObjectNewton body, double k = 10000, double mu = 100) {
             var z0 = Zubya[0]*10;
             var z0uBody = body.WorldTransform_1 * (WorldTransform * z0);
             f_wb = new ForceBetween2Points(this,body,z0,z0uBody,k,mu,0);
@@ -421,7 +421,7 @@ namespace RobotSim {
             wheel.ConnectBlockToBody(connectBody,k,mu);
         }
 
-        public void ConnectMeToBody_newVariant(MaterialObjectNewton connectBody,double k = 100000,double mu = 1000) {
+        public void ConnectMeToBody_newVariant(MaterialObjectNewton connectBody,double k = 10000,double mu = 100) {
             pX.MyDiff = null;
             pY.MyDiff = null;
             pZ.MyDiff = null;

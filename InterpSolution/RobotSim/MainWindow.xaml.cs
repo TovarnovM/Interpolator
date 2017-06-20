@@ -31,6 +31,8 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json;
 using System.Windows.Forms;
 using System.Threading;
+using System.Collections.Concurrent;
+using System.Data;
 
 namespace RobotSim {
     /// <summary>
@@ -54,13 +56,14 @@ namespace RobotSim {
         public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
             solution.Body.SynchQandM();
             solution.wheels.ForEach(w => w.SynchQandM());
-            solution.BlockedWheels = false;
+            solution.BlockedWheels = true;
         }
 
         public RobotDynamics GetNewRD() {
             
-            return ex.GetRD();
-
+            var sol1 =  ex.GetRD();
+            //CommandsDependsOnCurrPOs(sol1);
+            return sol1;
 
             var sol = new RobotDynamics();
             //sol.Body.Mass.Value = 100;
@@ -96,7 +99,7 @@ namespace RobotSim {
 
         public MainWindow() {
             ts_ui = TaskScheduler.Current;
-            ex = new Experiments_Wall();
+            ex = new Experiments_Wall_Shoot();
             ex.Prs.Angle = 0;
 
             vm = new ViewModel(GetNewRD);
@@ -149,7 +152,7 @@ namespace RobotSim {
             var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
             var dt = 0.00001;
 
-            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.0001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {
@@ -366,7 +369,7 @@ double omega = 2 * 3.14159 / T;
         private async void button_Save_CGif_Copy_Click(object sender, RoutedEventArgs e) {
             try {
                 button_Save_CGif_Copy.IsEnabled = false;
-                ex = new Experiments_Wall();
+                ex = new Experiments_Wall_Shoot();
                 //ex.Start();
                 await ex.StartAsync();
                 System.Windows.MessageBox.Show("good");
@@ -538,23 +541,64 @@ double omega = 2 * 3.14159 / T;
         }
 
         #region Обработка
-        List<Experiments_Wall> ExperList;
+        ConcurrentStack<(Dictionary<string, double> obrabDict, Experiments_Wall_params prs)> ccStack = new ConcurrentStack<(Dictionary<string, double> obrabDict, Experiments_Wall_params prs)>();
+        void Save_ccStackToCSV(string fileName) {
+            var cc_lst = ccStack.ToList();
+            var zags = cc_lst.First()
+                .prs.GetDict().Keys
+                .Concat(cc_lst.First().obrabDict.Keys)
+                .ToList();
+            using(var sw = new StreamWriter(fileName)) {
+                var sb = new StringBuilder();
+                foreach (var zag in zags) {
+                    sb.Append(zag + ";");
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sw.WriteLine(sb.ToString());
+                foreach (var tup in cc_lst) {
+                    sb.Clear();
+                    var prsDict = tup.prs.GetDict();
+                    foreach (var kv in tup.obrabDict) {
+                        prsDict.Add(kv.Key, $"{kv.Value:0.####}");
+                    }
+                    foreach (var zag in zags) {
+                        sb.Append(prsDict[zag] + ";");
+                    }
+                    sb.Remove(sb.Length - 1, 1);
+                    sw.WriteLine(sb.ToString());
+                }
+                sw.Close();
+            }
+        }
+        double _t_b, _t_f;
         void LoadExperList(string dir) {
             DirectoryInfo d = new DirectoryInfo(dir);//Assuming Test is your Folder
             FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
-            ExperList = new List<Experiments_Wall>(Files.Length);
-            foreach (var f in Files) {
-                var exp = new Experiments_Wall();
-                ExperList.Add(exp);
-            }
-            int ind = 0;
+            int progr_curr = 0, progr_max = Files.Length;
+            object _locker = new object();
+            ccStack.Clear();
             Parallel.For(0, Files.Length, i => {
-                ExperList[i].LoadResultsFromFile(Files[i].FullName);
-            });
+               // for (int i = 0; i < Files.Length; i++) {
+
+                
+                var ex = new Experiments_Wall();
+                ex.LoadResultsFromFile(Files[i].FullName);
+                var dict = ex.GetObrabotkaSmoth(_t_b, _t_f);
+                ccStack.Push((dict, ex.Prs));
+           
+                Dispatcher.Invoke(new Action(()=> {
+                lock (_locker) {
+                    progr_curr++;
+                    BtnDir.Content = $"Reading {progr_curr} / {progr_max}";
+                }
+                }));
+            }
+                );
         }
         Task LoadExperListAsync(string dir) {
             return Task.Factory.StartNew(() => LoadExperList(dir));
         }
+        
 
         private void BtnDir2_Click(object sender, RoutedEventArgs e) {
             var sd = new Microsoft.Win32.OpenFileDialog() {
@@ -613,6 +657,117 @@ double omega = 2 * 3.14159 / T;
             }
             
         }
+        public Dictionary<string,string> ObrabDict { get; set; }
+        private void BtnOpenObr_Click(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "csv Files|*.csv",
+                    FileName = "AllSmoothResults"
+                };
+                if (sd.ShowDialog() == true) {
+
+                    dg_obr.ItemsSource = ReadCSV(sd.FileName).DefaultView;
+                    
+                }
+            } finally {
+
+            }
+        }
+
+        private DataTable ReadCSV(string FileName) {
+
+            DataTable csvDataTable = new DataTable();
+            try {
+                //no try/catch - add these in yourselfs or let exception happen
+                String[] csvData = File.ReadAllLines(FileName);
+
+                //if no data
+                if (csvData.Length == 0) {
+                    return csvDataTable;
+                }
+
+                String[] headings = csvData[0].Split(';').Select(ss => ss.Trim()).ToArray();
+
+                //for each heading
+                for (int i = 0; i < headings.Length; i++) {
+                    ////replace spaces with underscores for column names
+                    headings[i] = headings[i].Replace("/", " ");
+
+                    //add a column for each heading
+                    csvDataTable.Columns.Add(headings[i]);
+
+                }
+
+                //populate the DataTable
+                for (int i = 1; i < csvData.Length; i++) {
+                    //create new rows
+                    DataRow row = csvDataTable.NewRow();
+                    var dt = csvData[i].Split(';').Select(ss => ss.Trim()).ToArray();
+                    for (int j = 0; j < headings.Length; j++) {
+                        //fill them
+                        row[j] = dt[j];
+
+                    }
+
+                    //add rows to over DataTable
+
+                    csvDataTable.Rows.Add(row);
+
+                }
+            } catch (Exception ex) {
+                System.Windows.Forms.MessageBox.Show(ex.Message.ToString());
+            }
+            //return the CSV DataTable
+
+            return csvDataTable;
+
+
+        }
+
+        private void Button_Click_7(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants3"
+            };
+            if (sd.ShowDialog() == true) {
+                var pAdam = new Experiments_WallShoot_params() {
+                    Name = "Ex_res",
+                    pawAngleSpeed = 0,
+                    Mz = 0
+                };
+                int tetta_count = 6;
+                double tetta0 = 0, tetta1 = 180, tetta1_shag = (tetta1 - tetta0) / tetta_count;
+                int alpha_count = 3;
+                double alpha0 = 0, alpha1 = 90, alpha_shag = (alpha1 - alpha0) / alpha_count;
+                int t_imp_count = 5;
+                double t_imp0 = 0.00025, t_imp1 = 0.00055, t_imp_shag = (t_imp1 - t_imp0) / t_imp_count;
+                int imp_count = 5;
+                double imp0 = 1.8, imp1 = 3.8, imp_shag = (imp1 - imp0) / imp_count;
+                var lst = new List<Experiments_WallShoot_params>();
+                int id = 3000;
+                for (int i = 0; i < tetta_count + 1; i++) {
+                    for (int j = 0; j < alpha_count + 1; j++) {
+                        for (int k = 0; k < t_imp_count+1; k++) {
+                            for (int kk = 0; kk < imp_count+1; kk++) {
+                                var p = pAdam.GetCopy1();
+                                p.Tetta = tetta0 + tetta1_shag * i;
+                                p.Alpha = alpha0 + alpha_shag * j;
+                                p.ImpulseT = t_imp0 + t_imp_shag * k;
+                                p.Impulse = imp0 + imp_shag * kk;
+                                p.id = id++;
+                                p.Name = $"{p.Name}_{p.id}_teta{p.Tetta:0.###}_alpha{p.Alpha:0.###}_impT{p.ImpulseT:0.#####}_imp{p.Impulse}";
+                                lst.Add(p);
+                            }
+                        }
+ 
+                    }
+                }
+                using (var f = new StreamWriter(sd.FileName)) {
+                    f.WriteLine(JsonConvert.SerializeObject(lst));
+                    f.Close();
+                }
+            }
+        }
 
         private void Btn_smooth1_Click(object sender, RoutedEventArgs e) {
             var sm = vm_ex.RemoveSmooth();
@@ -632,11 +787,22 @@ double omega = 2 * 3.14159 / T;
 
         private async void Dir_Click(object sender, RoutedEventArgs e) {
             try {
-                string dir = @"D:\ROBOT\";
-                BtnDir.IsEnabled = false;
-                await LoadExperListAsync(dir);
+                var sd = new Microsoft.Win32.SaveFileDialog() {
+                    Filter = "csv Files|*.csv",
+                    FileName = "AllSmoothResults"
+                };
+                if (sd.ShowDialog() == true) {
+                    BtnDir.IsEnabled = false;
+                    string dir = System.IO.Path.GetDirectoryName(sd.FileName)+"\\";
+                    _t_b = Experiments_Wall.GetDouble(tb_b.Text, 0.07);
+                    _t_f = Experiments_Wall.GetDouble(tb_f.Text, 0.07);
+                    await LoadExperListAsync(dir);
+                    BtnDir.Content = "Saving...";
+                    Save_ccStackToCSV(sd.FileName);
+                }
             } finally {
                 BtnDir.IsEnabled = true;
+                BtnDir.Content = "LoadAll+обработать";
             }
 
             

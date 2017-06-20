@@ -229,7 +229,7 @@ namespace RobotSim {
             w2.pawAngleFunc = pawAngleFunc2;
             w21.p00_body_loc_center = w2.p00_body_loc_center;
             w21.pawAngleFunc = pawAngleFunc2;
-            //blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
+            blockableWheels.AddRange(new[] { w0,w1,w2,w3 }.AsEnumerable());
             //w0.MomentX.Value = moment;
             //w0.MomentX.SynchMeAfter += _ => {
             //    w0.MomentX.Value = w0.Omega.X > 6 ? 0d : moment;

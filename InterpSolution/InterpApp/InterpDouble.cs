@@ -1,4 +1,5 @@
-﻿using SerializableGenerics;
+﻿using MoreLinq;
+using SerializableGenerics;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -750,6 +751,55 @@ namespace Interpolator {
                     que_f.Dequeue();
                 }
                 res.Add(data[i].Key, (Que_b_S() + Que_f_S()) / (dt_back + dt_front));               
+            }
+            return res;
+        }
+    }
+    public static class InterpXY_finder {
+        public static double Get_MaxElem_T(this InterpXY who) {
+            return who.Get_MaxElem_T(who.Data.First().Key, who.Data.Last().Key);
+        }
+        public static double Get_MaxElem_T(this InterpXY who, double t0, double t1) {
+            return who.Data
+                .SkipWhile(d => d.Key < t0)
+                .SkipWhile(d => d.Key <= t1)
+                .Max(d => d.Value.Value);
+        }
+        public static double Get_MinElem_T(this InterpXY who) {
+            return who.Get_MinElem_T(who.Data.First().Key, who.Data.Last().Key);
+        }
+        public static double Get_MinElem_T(this InterpXY who, double t0, double t1) {
+            return who.Data
+                .SkipWhile(d => d.Key < t0)
+                .SkipWhile(d => d.Key <= t1)
+                .Min(d => d.Value.Value);
+        }
+        public static double Get_Integral(this InterpXY who) {
+            return who.Get_Integral(who.Data.First().Key, who.Data.Last().Key);
+        }
+        public static double Get_Integral(this InterpXY who, double t0, double t1) {
+            var y0 = who.GetV(t0);
+            var y1 = 0d;
+            double sum = 0d;
+            foreach (var item in who.Data
+                .SkipWhile(d => d.Key < t0)
+                .TakeWhile(d => d.Key <= t1)) {
+
+                y1 = item.Value.Value;
+                sum += (y0 + y1) * (item.Key - t0) * 0.5;
+                y0 = y1;
+                t0 = item.Key;
+            }
+            y1 = who.GetV(t1);
+            sum += (y0 + y1) * (t1 - t0) * 0.5;
+            return sum;
+
+        }
+
+        public static InterpXY GetInterpMultyConst(this InterpXY who, double mnozj) {
+            var res = new InterpXY();
+            foreach (var d in who.Data) {
+                res.Add(d.Key, d.Value.Value * mnozj);
             }
             return res;
         }

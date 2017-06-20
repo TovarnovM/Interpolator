@@ -23,7 +23,7 @@ namespace RobotSim {
         /// в градусах
         /// </summary>
         public double Angle { get; set; } = 0;
-        public double WheelMoment { get; set; } = 4;
+        public double WheelMoment { get; set; } = 0;//4;
         public double OmegaMax { get; set; } = 4;
         public double Magnetic_h { get; set; } = 0.07;
         public double Magnetic_Fmax { get; set; } = 1.3;
@@ -41,17 +41,25 @@ namespace RobotSim {
         public double h { get; set; } = 0.03;
         public double w { get; set; } = 0.155;
 
-        public double pawAngleSpeed { get; set; } = 2;
+        public double pawAngleSpeed { get; set; } = 0;//2;
         public double Mz { get; set; } = 0;
         public double TimeMax { get; set; } = 10;
-        public Experiments_Wall_params GetCopy() {
+        public virtual Experiments_Wall_params GetCopy() {
             return (Experiments_Wall_params)MemberwiseClone();
+        }
+        public Dictionary<string,string> GetDict() {
+            return this.GetType()
+                .GetProperties()
+                .ToDictionary(
+                    p => p.Name,
+                    p => p.GetValue(this).ToString()
+                 );
         }
     }
 
     public class Experiments_Wall {
         public Experiments_Wall_params Prs { get; set; } = new Experiments_Wall_params();
-        public  RobotDynamics GetRD() {
+        public virtual RobotDynamics GetRD() {
             var sol = new RobotDynamics(Prs.Mass, Prs.l, Prs.h, Prs.w, Prs.GetCenterBoxOtnCM(), Prs.Name);
             sol.Body.AddMoment(Force.GetMoment(Prs.Mz, Vector3D.ZAxis, sol.Body));
             //sol.Body.Vec3D = new Vector3D(0.3, 0.1, 0);
@@ -93,24 +101,24 @@ namespace RobotSim {
         double MagForceFunct(double h) {
             return MagneticForce.GetV(h);
         }
-        public static void CommandsDependsOnCurrPOs(RobotDynamics solution) {
+        public void CommandsDependsOnCurrPOs(RobotDynamics solution, bool blockWheels = false) {
             solution.Body.SynchQandM();
             solution.wheels.ForEach(w => w.SynchQandM());
-            solution.BlockedWheels = false;
+            solution.BlockedWheels = blockWheels;
         }
 
-        double PawFunc0(double t) {
+        public double PawFunc0(double t) {
             return t * Prs.pawAngleSpeed;
         }
 
         public Dictionary<string, InterpXY> GetResults() => Results;  
-        Dictionary<string, InterpXY> Results = new Dictionary<string, InterpXY>();
-        List<SolPoint> SolPoints = new List<SolPoint>();
+        protected Dictionary<string, InterpXY> Results = new Dictionary<string, InterpXY>();
+        protected List<SolPoint> SolPoints = new List<SolPoint>();
         private Vector3D surfPoint;
         private FlatSurf surf;
-        List<int> logIds;
+        protected List<int> logIds;
 
-        void PrepDict(RobotDynamics rd) {
+        public virtual void PrepDict(RobotDynamics rd) {
             Results.Clear();
             Results.Add("Скорость Y, м/с", new InterpXY());
             Results.Add("Y, м", new InterpXY());
@@ -128,7 +136,7 @@ namespace RobotSim {
             }
         }
 
-        void FillResults(RobotDynamics rd) {
+        public virtual void FillResults(RobotDynamics rd) {
             Results["Скорость Y, м/с"].Add(rd.TimeSynch, rd.Body.Vel.Y);
             Results["Y, м"].Add(rd.TimeSynch, rd.Body.Vec3D.Y);
             Results["Угол передних лап, гр"].Add(rd.TimeSynch, PawFunc0(rd.TimeSynch));
@@ -139,6 +147,36 @@ namespace RobotSim {
                 FillPawSpot(trid,rd);
             }
 
+        }
+        
+        public virtual Dictionary<string, double> GetObrabotkaSmoth(double dt_b, double dt_f) {
+            var res = new Dictionary<string, double>();
+            var smooth = GetSmooth(dt_b, dt_f,"");
+            double t0 = 0.2;
+            double t1 = smooth["Скорость Y, м/с"].Data
+                .SkipUntil(d => d.Key < t0)
+                .TakeWhile(d => d.Value.Value > 0)
+                .Select(d => d.Key)
+                .LastOrDefault();
+            bool isGood = t1 > t0;
+            double isGoodD = isGood ? 1 : 0;
+            res.Add("Норм вариант?", isGoodD);
+            res.Add("Макс сила на передней лапе, Н", 0d);
+            res.Add("Скорость движения, см/с", 0d);
+            res.Add("Угол передних лап, гр", 0d);
+            res.Add("Суммарная удерживающая сила, Н", 0d);
+            if(t1 > t0) {
+                var intFm = new InterpXY();
+                foreach (var item in smooth["Макс нагрузка лапы 0, Н"].Data) {
+                    intFm.Add(item.Key, Min(item.Value.Value, smooth["Макс нагрузка лапы 3, Н"].GetV(item.Key)));
+                }
+                double tpawmax = intFm.Get_MaxElem_T(t0, t1);
+                res["Макс сила на передней лапе, Н"] = intFm.GetV(tpawmax);
+                res["Скорость движения, см/с"] = smooth["Скорость Y, м/с"].GetV(tpawmax)*100/Cos(Prs.Angle*PI/180);
+                res["Угол передних лап, гр"] = Results["Угол передних лап, гр"].GetV(tpawmax);
+                res["Суммарная удерживающая сила, Н"] = smooth.Where(s => s.Key.StartsWith("Суммарная нагрузка лапы")).Sum(s => s.Value.GetV(tpawmax)) * Prs.K_trenya;
+            }
+            return res;
         }
 
         private void FillPawSpot(int trid, RobotDynamics rd) {
@@ -164,7 +202,7 @@ namespace RobotSim {
             Results[$"Длина пятна лапы {trid}, мм"].Add(rd.TimeSynch, maxLength*1000);
         }
         char separator = ';';
-        void SaveResultsToFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt", string solFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml") {
+        protected void SaveResultsToFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt", string solFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml") {
             using (var f = new StreamWriter(exFilePath)) {
                 f.WriteLine(JsonConvert.SerializeObject(Prs));
                 var sb = new StringBuilder();
@@ -264,20 +302,24 @@ namespace RobotSim {
 
         }
 
-        const string defexFilePath = @"C:\Users\User\Desktop\ExperLog.txt";
-        const string defsolFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml";
-        public void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
+        protected const string defexFilePath = @"C:\Users\User\Desktop\ExperLog.txt";
+        protected const string defsolFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml";
+        protected double _dt_ = 0.00001, _dt_out_ = 0.005, _tstartRecord = -1d;
+        public virtual void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
             try {
                 var pr = GetRD();
                 var v0 = pr.Rebuild(pr.TimeSynch);
                 PrepDict(pr);
                 var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
-                var dt = 0.00001;
+                var dt = _dt_;
                 
-                var solutions = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).WithStep(0.005);
+                var solutions = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).WithStep(_dt_out_);
                 foreach (var sol in solutions) {
-                    FillResults(pr);
-                    SolPoints.Add(sol);
+                    if(sol.T >= _tstartRecord) {
+                        FillResults(pr);
+                        SolPoints.Add(sol);
+                    }
+
 
 
                     if (StopFunc(pr) != "") {
@@ -286,16 +328,6 @@ namespace RobotSim {
                     }
                 }
                 SaveResultsToFile(exFilePath, solFilePath);
-
-                //sb.Append("info : {{");
-                //foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(this)) {
-                //    string name = descriptor.Name;
-                //    object value = descriptor.GetValue(this);
-                //    sb.Append($"\"{name}\":{value},\n");
-                //}
-                //sb.Append("}}\n");     
-
-
 
             } finally {
 
@@ -309,7 +341,7 @@ namespace RobotSim {
             return Task.Factory.StartNew( _ => Start(), TaskCreationOptions.LongRunning);
         }
 
-        public string StopFunc(RobotDynamics rd) {
+        public virtual string StopFunc(RobotDynamics rd) {
             if (rd.TimeSynch >Prs.TimeMax)//* Prs.pawAngleSpeed > 90)
                 return "время интегрирования";
             if (rd.Body.Y < -0.5)
@@ -331,16 +363,18 @@ namespace RobotSim {
                 !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result)) {
                 result = defaultValue;
             }
-
+            
             return result;
         }
 
-        public Dictionary<string, InterpXY> GetSmooth(double dt_param_b, double dt_param_f) {
+        public Dictionary<string, InterpXY> GetSmooth(double dt_param_b, double dt_param_f, string nameDop = "_smooth") {
             var smoothDict = new Dictionary<string, InterpXY>();
             foreach (var dictElem in Results) {
-                smoothDict.Add(dictElem.Key + "_smooth", dictElem.Value.GetSmootherByT_uniform(dt_param_b, dt_param_f));
+                smoothDict.Add(dictElem.Key + nameDop, dictElem.Value.GetSmootherByT_uniform(dt_param_b, dt_param_f).GetSmootherByT_uniform(dt_param_b, dt_param_f));
             }
             return smoothDict;
         }
     }
+
+
 }

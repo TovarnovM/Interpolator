@@ -62,12 +62,11 @@
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <Button x:Name="BtnDir" Content="LoadAll+обработать" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="189" Height="41" Click="Dir_Click" Margin="381,0,0,0"/>
                     <Button x:Name="BtnDir2" Content="LoadSolPOints" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41"  Margin="614,0,0,0" Grid.ColumnSpan="2" Click="BtnDir2_Click"/>
                     <CheckBox Content="All" Grid.Column="1" HorizontalAlignment="Left" Margin="10,8,0,0" VerticalAlignment="Top" IsChecked="True" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                     <Button x:Name="Btn_smooth1" Content="smooth" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="91" Height="41" Margin="213,1,0,0" Click="Btn_smooth1_Click"/>
-                    <TextBox Name="tb_b" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,22,298,10" Grid.Row="1"/>
-                    <TextBox Name="tb_f" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,1,298,31" Grid.Row="1"/>
+                    <TextBox Name="tb_b" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,22,0,10" Grid.Row="1" HorizontalAlignment="Left" Width="59"/>
+                    <TextBox Name="tb_f" Height="20" TextWrapping="Wrap" Text="0.07" Margin="308,1,0,31" Grid.Row="1" HorizontalAlignment="Left" Width="59"/>
                 </Grid>
             </TabItem>
             <TabItem Header="Вариатны">
@@ -79,8 +78,8 @@
                         <RowDefinition Height="72"/>
                     </Grid.RowDefinitions>
                     <DataGrid Name="dg_ex" Margin="0,0,0,5"/>
-                    <Button Content="Сгенерировать файл 1" Margin="655,10,0,0" Grid.Row="3" Click="Button_Click" HorizontalAlignment="Left" Width="169" Height="24" VerticalAlignment="Top"/>
-                    <Button Content="Сгенерировать файл 2" Margin="655,39,0,0" Grid.Row="3"  HorizontalAlignment="Left" Width="169" Height="23" VerticalAlignment="Top" Click="Button_Click_6"/>
+                    <Button Content="Сгенерировать файл 1" Margin="520,12,0,0" Grid.Row="3" Click="Button_Click" HorizontalAlignment="Left" Width="169" Height="24" VerticalAlignment="Top"/>
+                    <Button Content="Сгенерировать файл 2" Margin="520,41,0,0" Grid.Row="3"  HorizontalAlignment="Left" Width="169" Height="23" VerticalAlignment="Top" Click="Button_Click_6"/>
                     <Button Content="открыть файл" Margin="10,10,0,0" Grid.Row="3" Click="Button_Click_2" HorizontalAlignment="Left" Width="175" Height="29" VerticalAlignment="Top"/>
                     <Button Name="btn_resDir" Content="ResultDir" Margin="10,39,0,0" Grid.Row="3"  HorizontalAlignment="Left" Width="175" Height="29" VerticalAlignment="Top" Click="btn_resDir_Click"/>
                     <Button Name="btn_GO" Content="GO!" Margin="259,10,0,0" Grid.Row="3"  HorizontalAlignment="Left" Width="115" Height="58" VerticalAlignment="Top" Click="Button_Click_5"/>
@@ -89,6 +88,7 @@
                     <GridSplitter  Height="15" HorizontalAlignment="Stretch" ResizeDirection="Rows" Grid.Row="1" ResizeBehavior="PreviousAndNext" Margin="306,10,0,10"/>
                     <Button Content="Select \/" Margin="10,0,0,0"  HorizontalAlignment="Left" Width="115" Height="25" VerticalAlignment="Top" Grid.Row="1" Click="Button_Click_4"/>
                     <Button Content="Select /\" Margin="130,0,0,0"  HorizontalAlignment="Left" Width="115" Height="25" VerticalAlignment="Top" Grid.Row="1" Click="Button_Click_3"/>
+                    <Button Content="Сгенерировать файл 3" Margin="694,41,0,0" Grid.Row="3"  HorizontalAlignment="Left" Width="139" Height="23" VerticalAlignment="Top" Click="Button_Click_7"/>
                 </Grid>
             </TabItem>
             <TabItem Header="обработка">
@@ -97,7 +97,14 @@
                         <RowDefinition Height="335*"/>
                         <RowDefinition Height="41*"/>
                     </Grid.RowDefinitions>
-                    <oxy:PlotView x:Name="res_PV" Model="{Binding vm_res.ModelTest}" Grid.Row="0" Grid.Column="0"/>
+                    <DataGrid Name="dg_obr" Margin="0,0,0,4">
+                        <!--<DataGrid.Columns>
+                            <DataGridTextColumn Header="Key" Binding="{Binding Key}" />
+                            <DataGridTextColumn Header="Value" Binding="{Binding Value}" />
+                        </DataGrid.Columns>-->
+                    </DataGrid>
+                    <Button x:Name="BtnDir" Content="LoadAll+обработать" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="189" Height="41" Click="Dir_Click" Margin="10,1,0,0"/>
+                    <Button x:Name="BtnOpenObr" Content="Open" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="189" Height="41" Margin="217,1,0,0" Click="BtnOpenObr_Click"/>
 
                 </Grid>
             </TabItem>
@@ -107,11 +114,13 @@
                         <RowDefinition Height="335*"/>
                         <RowDefinition Height="41*"/>
                     </Grid.RowDefinitions>
+
                     <Button x:Name="button_loadEx" Content="Button" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="41" Click="button1_Click"/>
                     <oxy:PlotView x:Name="tstPV" Model="{Binding tstVm.ModelTest}" Grid.Row="0" Grid.Column="0"/>
 
                 </Grid>
             </TabItem>
+
 
         </TabControl>
 

@@ -139,6 +139,7 @@
     <Compile Include="CheckedListItem.cs" />
     <Compile Include="ExperimentRunner.cs" />
     <Compile Include="Experiments.cs" />
+    <Compile Include="Experiments_Wall_Shoot.cs" />
     <Compile Include="Forces.cs" />
     <Compile Include="FlatSurf.cs" />
     <Compile Include="RbTrack.cs" />

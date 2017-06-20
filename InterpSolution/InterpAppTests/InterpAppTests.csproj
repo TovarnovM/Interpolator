@@ -91,6 +91,7 @@
     <Compile Include="Interp2DTests.cs" />
     <Compile Include="InterpTests.cs" />
     <Compile Include="InterpXYTests.cs" />
+    <Compile Include="InterpXY_finderTests.cs" />
     <Compile Include="InterpXY_smootherTests.cs" />
     <Compile Include="LevelLineTests.cs" />
     <Compile Include="PotentGraff2DTests.cs" />
