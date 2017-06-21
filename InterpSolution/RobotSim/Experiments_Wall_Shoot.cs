@@ -14,6 +14,7 @@ namespace RobotSim {
         public Experiments_WallShoot_params() {
             pawAngleSpeed = 0;
             WheelMoment = 0;
+            TimeMax = 1;
         }
         public Vector3D GetCenterImpulse() {
             return new Vector3D(CenterImpulse_X, CenterImpulse_Y, CenterImpulse_Z);
@@ -21,7 +22,7 @@ namespace RobotSim {
         public double CenterImpulse_X { get; set; } = 0.015;
         public double CenterImpulse_Y { get; set; } = 0.035;
         public double CenterImpulse_Z { get; set; } = 0;
-        public double Tetta { get; set; } = 0d;
+        public double Tetta { get; set; } = 90d;
         public double Alpha { get; set; } = 0;
         public string ImpulseType { get; set; } = "fire";
         public double ImpulseT { get; set; } = 0.00035;
@@ -45,10 +46,7 @@ namespace RobotSim {
             } }
         public Experiments_Wall_Shoot() {
             Prs = new Experiments_WallShoot_params();
-            _dt_ = 0.000001;
-            _dt_out_ = 0.000005;
-           // _tstartRecord = 0.19;
-            Prs.TimeMax = 1.2;
+            
         }
         public override RobotDynamics GetRD() {
             var sol = base.GetRD();
@@ -122,10 +120,10 @@ namespace RobotSim {
             //    OXAxis0 = rd.Body.WorldTransformRot * Vector3D.XAxis;
             //}
             Results["Скорость Y, см/с"].Add(rd.TimeSynch, rd.Body.Vel.Y*100);
-            Results["Положение цм от изн X, мм"].Add(rd.TimeSynch, rd.Body.X - centerMass0.X);
-            Results["Положение цм от изн Y, мм"].Add(rd.TimeSynch, rd.Body.Y - centerMass0.Y);
-            Results["Положение цм от изн Z, мм"].Add(rd.TimeSynch, rd.Body.Z - centerMass0.Z);
-            Results["Положение цм от изн всего, мм"].Add(rd.TimeSynch, (rd.Body.Vec3D - centerMass0).GetLength());
+            Results["Положение цм от изн X, мм"].Add(rd.TimeSynch, (rd.Body.X - centerMass0.X)/100);
+            Results["Положение цм от изн Y, мм"].Add(rd.TimeSynch, (rd.Body.Y - centerMass0.Y)/100);
+            Results["Положение цм от изн Z, мм"].Add(rd.TimeSynch, (rd.Body.Z - centerMass0.Z)/100);
+            Results["Положение цм от изн всего, мм"].Add(rd.TimeSynch, (rd.Body.Vec3D - centerMass0).GetLength()/100);
             Results["Перегрузка цм X, g"].Add(rd.TimeSynch, rd.Body.Acc.X/9.81);
             Results["Перегрузка цм Y, g"].Add(rd.TimeSynch, rd.Body.Acc.Y / 9.81);
             Results["Перегрузка цм Z, g"].Add(rd.TimeSynch, rd.Body.Acc.Z / 9.81);
@@ -144,9 +142,10 @@ namespace RobotSim {
                 var pr = GetRD();
                 var v0 = pr.Rebuild(pr.TimeSynch);
                 var dt = _dt_;
-                var v00 = Ode.MidPoint(pr.TimeSynch, v0, pr.f, 0.00001).SolveTo(PrsShoot.ImpulseT0-100* dt).Last();
+                var v00 = Ode.MidPoint(pr.TimeSynch, v0, pr.f, dt).SolveTo(PrsShoot.ImpulseT0-100* 0.000001).Last();
+
                 PrepDict(pr);
-                var solutions = Ode.RK45(v00.T, v00.X, pr.f, dt).WithStep(_dt_out_);
+                var solutions = Ode.MidPoint(v00.T, v00.X, pr.f, 0.000001).SolveTo(PrsShoot.ImpulseT0+0.03).WithStep(0.00001);
                 foreach (var sol in solutions) {
                         FillResults(pr);
                         SolPoints.Add(sol);
@@ -156,6 +155,20 @@ namespace RobotSim {
                         break;
                     }
                 }
+                if(StopFunc(pr) == "") {
+                    var v000 = SolPoints.Last();
+                    solutions = Ode.MidPoint(v000.T, v000.X, pr.f, dt).WithStep(_dt_out_);
+                    foreach (var sol in solutions) {
+                        FillResults(pr);
+                        SolPoints.Add(sol);
+
+                        if (StopFunc(pr) != "") {
+                            Prs.ResultIndex = StopFunc(pr);
+                            break;
+                        }
+                    }
+                }
+
                 SaveResultsToFile(exFilePath, solFilePath);
 
             } finally {

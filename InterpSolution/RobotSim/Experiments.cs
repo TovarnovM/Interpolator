@@ -41,7 +41,7 @@ namespace RobotSim {
         public double h { get; set; } = 0.03;
         public double w { get; set; } = 0.155;
 
-        public double pawAngleSpeed { get; set; } = 0;//2;
+        public double pawAngleSpeed { get; set; } = 3;
         public double Mz { get; set; } = 0;
         public double TimeMax { get; set; } = 10;
         public virtual Experiments_Wall_params GetCopy() {
@@ -161,7 +161,7 @@ namespace RobotSim {
             bool isGood = t1 > t0;
             double isGoodD = isGood ? 1 : 0;
             res.Add("Норм вариант?", isGoodD);
-            res.Add("Макс сила на передней лапе, Н", 0d);
+            res.Add("Макс сила на переднем модуле, Н", 0d);
             res.Add("Скорость движения, см/с", 0d);
             res.Add("Угол передних лап, гр", 0d);
             res.Add("Суммарная удерживающая сила, Н", 0d);
@@ -171,8 +171,8 @@ namespace RobotSim {
                     intFm.Add(item.Key, Min(item.Value.Value, smooth["Макс нагрузка лапы 3, Н"].GetV(item.Key)));
                 }
                 double tpawmax = intFm.Get_MaxElem_T(t0, t1);
-                res["Макс сила на передней лапе, Н"] = intFm.GetV(tpawmax);
-                res["Скорость движения, см/с"] = smooth["Скорость Y, м/с"].GetV(tpawmax)*100/Cos(Prs.Angle*PI/180);
+                res["Макс сила на переднем модуле, Н"] = intFm.GetV(tpawmax);
+                res["Скорость движения, см/с"] = smooth["Скорость Y, м/с"].GetV(tpawmax)*100;
                 res["Угол передних лап, гр"] = Results["Угол передних лап, гр"].GetV(tpawmax);
                 res["Суммарная удерживающая сила, Н"] = smooth.Where(s => s.Key.StartsWith("Суммарная нагрузка лапы")).Sum(s => s.Value.GetV(tpawmax)) * Prs.K_trenya;
             }
@@ -304,7 +304,7 @@ namespace RobotSim {
 
         protected const string defexFilePath = @"C:\Users\User\Desktop\ExperLog.txt";
         protected const string defsolFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml";
-        protected double _dt_ = 0.00001, _dt_out_ = 0.005, _tstartRecord = -1d;
+        protected double _dt_ = 0.00001, _dt_out_ = 0.001, _tstartRecord = -1d;
         public virtual void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
             try {
                 var pr = GetRD();

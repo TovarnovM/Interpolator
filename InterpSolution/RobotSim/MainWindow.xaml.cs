@@ -432,7 +432,7 @@ double omega = 2 * 3.14159 / T;
                 }
             }
         }
-        List<Experiments_Wall_params> ExperimentParamList = new List<Experiments_Wall_params>(), exParsGo = new List<Experiments_Wall_params>();
+        List<Experiments_WallShoot_params> ExperimentParamList = new List<Experiments_WallShoot_params>(), exParsGo = new List<Experiments_WallShoot_params>();
         string resDirPath = "";
         int coresCount = 4;
         private void Button_Click_2(object sender, RoutedEventArgs e) {
@@ -442,7 +442,7 @@ double omega = 2 * 3.14159 / T;
             };
             if (sd.ShowDialog() == true) {
                 using (var f = new StreamReader(sd.FileName)) {
-                    ExperimentParamList = JsonConvert.DeserializeObject<List<Experiments_Wall_params>>(f.ReadToEnd());
+                    ExperimentParamList = JsonConvert.DeserializeObject<List<Experiments_WallShoot_params>>(f.ReadToEnd());
                     dg_ex.ItemsSource = ExperimentParamList;
                     resDirPath = System.IO.Path.GetDirectoryName(sd.FileName);
                     btn_resDir.Content = resDirPath;
@@ -467,7 +467,7 @@ double omega = 2 * 3.14159 / T;
             if (dg_ex.SelectedItems.Count == 0) {
                 return;
             }
-            var itms = dg_ex.SelectedItems.Cast<Experiments_Wall_params>().ToList();
+            var itms = dg_ex.SelectedItems.Cast<Experiments_WallShoot_params>().ToList();
             exParsGo.AddRange(itms);
             ExperimentParamList.RemoveAll(itm => itms.Contains(itm));
             RefreshDG();
@@ -477,7 +477,7 @@ double omega = 2 * 3.14159 / T;
             if (dg_ex_go.SelectedItems.Count == 0) {
                 return;
             }
-            var itms = dg_ex_go.SelectedItems.Cast<Experiments_Wall_params>().ToList();
+            var itms = dg_ex_go.SelectedItems.Cast<Experiments_WallShoot_params>().ToList();
             ExperimentParamList.AddRange(itms);
             exParsGo.RemoveAll(itm => itms.Contains(itm));
             RefreshDG();
@@ -530,8 +530,8 @@ double omega = 2 * 3.14159 / T;
             }
         }
 
-        void StartVar(Experiments_Wall_params prm) {
-            var ex = new Experiments_Wall();
+        void StartVar(Experiments_WallShoot_params prm) {
+            var ex = new Experiments_Wall_Shoot();
             ex.Prs = prm;
             prm.ResultIndex = "Calculating";
             ////RefreshDG();
@@ -735,13 +735,13 @@ double omega = 2 * 3.14159 / T;
                     pawAngleSpeed = 0,
                     Mz = 0
                 };
-                int tetta_count = 6;
+                int tetta_count = 4;
                 double tetta0 = 0, tetta1 = 180, tetta1_shag = (tetta1 - tetta0) / tetta_count;
-                int alpha_count = 3;
+                int alpha_count = 2;
                 double alpha0 = 0, alpha1 = 90, alpha_shag = (alpha1 - alpha0) / alpha_count;
-                int t_imp_count = 5;
-                double t_imp0 = 0.00025, t_imp1 = 0.00055, t_imp_shag = (t_imp1 - t_imp0) / t_imp_count;
-                int imp_count = 5;
+                int t_imp_count = 4;
+                double t_imp0 = 0.00025, t_imp1 = 0.00045, t_imp_shag = (t_imp1 - t_imp0) / t_imp_count;
+                int imp_count = 4;
                 double imp0 = 1.8, imp1 = 3.8, imp_shag = (imp1 - imp0) / imp_count;
                 var lst = new List<Experiments_WallShoot_params>();
                 int id = 3000;
@@ -766,6 +766,23 @@ double omega = 2 * 3.14159 / T;
                     f.WriteLine(JsonConvert.SerializeObject(lst));
                     f.Close();
                 }
+            }
+        }
+
+        private void Button_Click_8(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants"
+            };
+            if (sd.ShowDialog() == true) {
+                using (var f = new StreamReader(sd.FileName)) {
+                    var lst = JsonConvert.DeserializeObject<List<Experiments_WallShoot_params>>(f.ReadToEnd());
+                    dg_ex.ItemsSource = lst;
+                    resDirPath = System.IO.Path.GetDirectoryName(sd.FileName);
+                    btn_resDir.Content = resDirPath;
+                    btn_resDir.ToolTip = "ResDir : " + btn_resDir.Content;
+                }
+
             }
         }
 
