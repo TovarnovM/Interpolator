@@ -1,9 +1,11 @@
 ﻿using Interpolator;
 using Microsoft.Research.Oslo;
+using Newtonsoft.Json;
 using Sharp3D.Math.Core;
 using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -136,6 +138,37 @@ namespace RobotSim {
 
         }
 
+        public Experiments_WallShoot_params LoadResultsFromFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt", bool loadAll = true) {
+            using (var f = new StreamReader(exFilePath)) {
+                var sb = new StringBuilder();
+                string line = f.ReadLine();
+                while (line != "=============") {
+                    sb.Append(line);
+                    line = f.ReadLine();
+                }
+                PrsShoot = JsonConvert.DeserializeObject<Experiments_WallShoot_params>(sb.ToString());
+                if (!loadAll)
+                    return PrsShoot;
+                line = f.ReadLine();
+                var hds = line.Split(separator).Select(h => h.Trim()).ToList();
+                Results.Clear();
+
+
+                foreach (var h in hds) {
+                    Results.Add(h, new InterpXY());
+                }
+
+                while (!f.EndOfStream) {
+                    line = f.ReadLine();
+                    var vals = line.Split(separator).Select(s => GetDouble(s.Trim())).ToList();
+                    var t = vals[0];
+                    for (int i = 1; i < hds.Count; i++) {
+                        Results[hds[i]].Add(t, vals[i]);
+                    }
+                }
+                return PrsShoot;
+            }
+        }
 
         public override void Start(string exFilePath = defexFilePath, string solFilePath = defsolFilePath) {
             try {

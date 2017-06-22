@@ -1,6 +1,8 @@
 ﻿using Interpolator;
 using MyRandomGenerator;
+using Newtonsoft.Json;
 using RobotIM.Core;
+using RobotIM.IM;
 using RobotIM.Scene;
 using Sharp3D.Math.Core;
 using System;
@@ -26,12 +28,16 @@ namespace RobotIM {
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window {
-        ViewModel vm;
+        public ViewModel vm { get; set; }
+        public vmTrg vmT { get; set; }
+        public vmTrg_IM vmT_IM { get; set; }
         GameLoop mainLoop;
         Room r;
         public MainWindow() {
             vm = new ViewModel();
-            DataContext = vm;
+            vmT = new vmTrg();
+            vmT_IM = new vmTrg_IM();
+            DataContext = this;
             InitializeComponent();
             mainLoop = InitLoop();
             vm.DrawRoom(r,false);
@@ -118,8 +124,8 @@ namespace RobotIM {
 
             //staticnoises = new List<INoisePoint>();
             //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 2), 10));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(18, 18), 30));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 2), 10));
+            //staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 18), 30));
             //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 18), 30));
             //r.staticNoisesList = staticnoises;
             //r.InitNoiseMap();
@@ -173,6 +179,110 @@ namespace RobotIM {
 
         private async void Button_Click_2(object sender, RoutedEventArgs e) {
          
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e) {
+            vmT.DrawAim(vmT.Pm, Target.Factory("fire"));
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) {
+            var exp = new Experim1();
+            exp.Start();
+            vmT.DrawAim(vmT.Pm, exp.Targ,exp.Info.ResultIndex,exp.Info.N_rounds, exp.Info.N_rounds, exp.Info.Prob);
+        }
+
+        private async void btn_IM1_Click(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.SaveFileDialog() {
+                    Filter = "infoList Files|*.json",
+                    FileName = "Infos"
+                };
+                if (sd.ShowDialog() == true) {
+                    btn_IM1.IsEnabled = false;
+                    await StartCalcAsync();
+                    using (var f = new StreamWriter(sd.FileName)) {
+                        f.WriteLine(JsonConvert.SerializeObject(infoList));
+                        f.Close();
+                    }
+                    vmT_IM.Print(infoList);
+                }
+                
+
+            } finally {
+                btn_IM1.IsEnabled = true;
+            }
+            
+
+        }
+        Task StartCalcAsync() {
+            return Task.Factory.StartNew(StartCalc, TaskCreationOptions.LongRunning);
+        }
+        void StartCalc() {
+            double h = 0;
+            double fi0 = 0.001, fi1 = 90, fi_shag = 14.99;
+            double r0 = 3, r1 = 50, r_shag = 3;
+
+            int i_max = (int)((fi1 - fi0) / fi_shag) + 1;
+            int j_max = (int)((r1 - r0) / r_shag) + 1;
+            int ind_id = 1000;
+            infoList.Clear();
+            for (int i = 0; i < i_max; i++) {
+                for (int j = 0; j < j_max; j++) {
+                    var exp_info = new Experim1Info(3) {
+                        id = ind_id++,
+                        I_ind = i,
+                        J_ind = j,
+                        TrgTetta0 = fi0 + fi_shag * i,
+                        TrgR0 = r0 + j * r_shag,
+
+                    };
+                    exp_info.Name = $"{exp_info.id}_{exp_info.Name}";
+                    infoList.Add(exp_info);
+                }
+            }
+            P_data = new double[i_max, j_max];
+            progr_curr = 0;
+            progr_max = infoList.Count;
+            Parallel.ForEach(infoList, StartVar);
+        }
+        List<Experim1Info> infoList = new List<Experim1Info>();
+        double[,] P_data;
+        object _locker1 = new object(), _locker = new object();
+        int progr_curr = 0, progr_max = 0;
+
+        private void btn_IM1_Copy_Click(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "infoList Files|*.json",
+                    FileName = "Infos"
+                };
+                if (sd.ShowDialog() == true) {
+                    using (var f = new StreamReader(sd.FileName)) {
+                        infoList = JsonConvert.DeserializeObject<List<Experim1Info>>(f.ReadToEnd());
+                        f.Close();
+                    }
+                    vmT_IM.Print(infoList);
+                }
+
+
+            } finally {
+               
+            }
+        }
+
+        void StartVar(Experim1Info info) {
+            var exp = new Experim1();
+            exp.Info = info;
+            exp.Start();
+            lock (_locker1) {
+                P_data[info.I_ind, info.J_ind] = exp.Info.Prob;
+            }
+            Dispatcher.Invoke(new Action(() => {
+                lock (_locker) {
+                    progr_curr++;
+                    btn_IM1.Content = $"Calc {progr_curr} / {progr_max}";
+                }
+            }));
         }
     }
     [Serializable]

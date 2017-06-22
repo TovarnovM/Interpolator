@@ -44,7 +44,7 @@ namespace RobotSim {
         private Microsoft.Research.Oslo.Vector v0;
         private Experiments_Wall ex;
         TaskScheduler ts_ui;
-
+        public VM_spiral vm_spir { get; set; } = new VM_spiral();
         public ViewModel vm { get; set; }
         public int MyProperty { get; set; }
         public TestVM TstVm { get; set; }
@@ -784,6 +784,36 @@ double omega = 2 * 3.14159 / T;
                 }
 
             }
+        }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "Джейсон Files|*.json",
+                FileName = "Exper_variants"
+            };
+            if (sd.ShowDialog() == true) {
+                var lll= Directory.GetFiles(resDirPath).Where(s =>System.IO.Path.GetFileName(s).StartsWith("Ex_res_") &&s.EndsWith(".txt")).ToList();
+                var doll = new Experiments_Wall_Shoot();
+                var ids = lll
+                    .Select(fn => {
+                        var pr = doll.LoadResultsFromFile(fn, false);
+                        return pr;
+                    })
+                    .Select(pr => pr.id)
+                    .ToList();
+                
+
+                using (var f = new StreamWriter(sd.FileName)) {
+                    var lst = ExperimentParamList.Where(pr => !ids.Contains(pr.id)).ToList();
+                    f.WriteLine(JsonConvert.SerializeObject(lst));
+                    f.Close();
+                }
+
+            }
+        }
+
+        private void button_loadEx_Copy_Click(object sender, RoutedEventArgs e) {
+
         }
 
         private void Btn_smooth1_Click(object sender, RoutedEventArgs e) {

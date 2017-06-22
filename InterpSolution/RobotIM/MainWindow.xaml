@@ -17,13 +17,45 @@
                         <RowDefinition Height="41*"/>
                     </Grid.RowDefinitions>
                     <Button x:Name="button1" Content="Start" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="32" Click="button1_Click"/>
-                    <oxy:PlotView x:Name="tstPV" Model="{Binding Model1Rx.Value}" Grid.Row="0" Grid.Column="0"/>
+                    <oxy:PlotView x:Name="tstPV" Model="{Binding vm.Model1Rx.Value}" Grid.Row="0" Grid.Column="0"/>
                     <Button Content="Log" Width="75" Margin="164,0,0,0" Grid.Row="1" Click="Button_Click" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"/>
                     <Button Content="GenerateNewRoom" Margin="271,0,0,0" Grid.Row="1" Height="32" VerticalAlignment="Top" Click="Button_Click_1" HorizontalAlignment="Left" Width="109"/>
                     <CheckBox Content="CheckBox" HorizontalAlignment="Left" Margin="393,5,0,0" Grid.Row="1" VerticalAlignment="Top" Checked="CheckBox_Checked" Unchecked="CheckBox_Unchecked"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="Цель">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="251*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="418*"/>
+                        <ColumnDefinition Width="93*"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView x:Name="TrgPV" Model="{Binding vmT.Pm}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Content="Цель1" Grid.Column="1" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
+                    <Button Content="Цель2" Grid.Column="1" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Цель3" Grid.Column="1" HorizontalAlignment="Left" Margin="10,50,0,0" VerticalAlignment="Top" Width="75"/>
+                    <Button Content="Button" HorizontalAlignment="Left" Margin="25,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Button_Click_4"/>
 
+                </Grid>
+            </TabItem>
+            <TabItem Header="Цель">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="251*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="418*"/>
+                        <ColumnDefinition Width="93*"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView x:Name="TrgIM" Model="{Binding vmT_IM.Pm}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Name="btn_IM1" Content="ИМ1" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="106" Click="btn_IM1_Click"/>
+                    <Button x:Name="btn_IM1_Copy" Content="Load" HorizontalAlignment="Left" Margin="121,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="106" Click="btn_IM1_Copy_Click" />
+                </Grid>
+            </TabItem>
         </TabControl>
 
 

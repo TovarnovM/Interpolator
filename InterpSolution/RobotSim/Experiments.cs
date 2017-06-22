@@ -201,7 +201,7 @@ namespace RobotSim {
             Results[$"Суммарная нагрузка лапы {trid}, Н"].Add(rd.TimeSynch, summ);
             Results[$"Длина пятна лапы {trid}, мм"].Add(rd.TimeSynch, maxLength*1000);
         }
-        char separator = ';';
+        protected char separator = ';';
         protected void SaveResultsToFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt", string solFilePath = @"C:\Users\User\Desktop\ExperLog_sol.xml") {
             using (var f = new StreamWriter(exFilePath)) {
                 f.WriteLine(JsonConvert.SerializeObject(Prs));
@@ -258,7 +258,7 @@ namespace RobotSim {
             sr.Close();
         }
 
-        public void LoadResultsFromFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt") {
+        public virtual void LoadResultsFromFile(string exFilePath = @"C:\Users\User\Desktop\ExperLog.txt") {
             using (var f = new StreamReader(exFilePath)) {
                 var sb = new StringBuilder();
                 string line = f.ReadLine();

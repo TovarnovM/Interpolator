@@ -109,6 +109,7 @@ namespace SimpleIntegrator {
         public ForceG(IMaterialPoint who, Vector3D dir, double g =9.8) : base(who.Mass.Value*g,new RelativePoint(dir),null) {
             this.who = who;
             this.g = g;
+            SynchMeBefore += SynchAction;
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void SynchAction(double t) {
