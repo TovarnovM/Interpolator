@@ -9,10 +9,56 @@ using MoreLinq;
 using static System.Math;
 using Sharp3D.Math.Core;
 using MyRandomGenerator;
+using Newtonsoft.Json;
+using System.IO;
 
 namespace RobotIM.Scene {
     [Serializable]
     public class Room {
+        public void SaveToFile(string fileName) {
+            using (var jsw = new JsonTextWriter(new StreamWriter(fileName))) {
+                var ser = JsonSerializer.Create();
+                var rd = new RoomData();
+                rd.walls = walls;
+                rd.cellsize = cellsize;
+                rd.nh = nh;
+                rd.nw = nw;
+                rd.staticNoiseMap = staticNoiseMap;
+                ser.Serialize(jsw, rd);
+            } 
+
+        }
+        public void LoadFromFile(string fileName) {
+            var jstr = new JsonTextReader(new StreamReader(fileName));
+            var ser = JsonSerializer.Create();
+            var rd = ser.Deserialize<RoomData>(jstr);
+            walls = rd.walls;
+            cellsize = rd.cellsize;
+            nh = rd.nh;
+            nw = rd.nw;
+            staticNoiseMap = rd.staticNoiseMap;
+            CreateScene();
+
+        }
+        public Room Clone() {
+            var res = new Room();
+            res.walls = new List<LevelLine>(walls);
+            res.searchGrid = (StaticGrid)searchGrid.Clone();
+            res.jumpParam = new JumpPointParam(res.searchGrid, true, false, false);
+            res.cellsize = cellsize;
+            res.gabarit = gabarit;
+            res.nw = nw;
+            res.nh = nh;
+            res.staticNoisesList = new List<INoisePoint>(staticNoisesList);
+            res.staticNoiseMap = staticNoiseMap;
+            return res;
+        }
+        class RoomData {
+            public List<LevelLine> walls = new List<LevelLine>();
+            public double cellsize = 0.1;
+            public int nw, nh;
+            public double[,] staticNoiseMap;
+        }
         public List<LevelLine> walls = new List<LevelLine>();
         MyRandom _rnd = new MyRandom();
         public  StaticGrid searchGrid;
@@ -222,5 +268,18 @@ namespace RobotIM.Scene {
             var c = GetGridCoords(hearP);
             return staticNoiseMap[c.ix, c.iy];
         }
+
+        #region Factory
+        public static Room Factory(string fileName = "current") {
+            if(fileName != "current" && fileName != _currFileName) {             
+                _currRoom.Value.LoadFromFile(fileName);
+                _currFileName = fileName;
+            }
+            return _currRoom.Value.Clone();
+        }       
+        static string _currFileName = "current";
+        static readonly Lazy<Room> _currRoom = new Lazy<Room>(() => new Room());
+        #endregion
+
     }
 }

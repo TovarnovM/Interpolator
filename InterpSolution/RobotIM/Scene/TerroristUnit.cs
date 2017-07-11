@@ -238,8 +238,7 @@ namespace RobotIM.Scene {
 
         private Room _r;
         private Vector2D _noisePos;
-
-        public List<INoisePoint> BackgroundNoise { get; set; } = new List<INoisePoint>();
+        
         public List<INoisePoint> UnitNoises { get; set; } = new List<INoisePoint>();
 
         public TargetKnowlege targKnowlege = new TargetKnowlege();

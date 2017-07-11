@@ -39,6 +39,7 @@ namespace RobotIM {
             vmT_IM = new vmTrg_IM();
             DataContext = this;
             InitializeComponent();
+            r = GetRoom();
             mainLoop = InitLoop();
             vm.DrawRoom(r,false);
         }
@@ -46,9 +47,19 @@ namespace RobotIM {
         public Room GetRoom() {
             var rr = new Room();
 
-            rr.walls = RoomGenerator.GetWalls(30, 40, 7, 7);
-            rr.cellsize = 0.4;
+            rr.walls = RoomGenerator.GetWalls(30, 30, 4, 4);
+            rr.cellsize = 0.7;
             rr.CreateScene();
+
+            staticnoises = new List<INoisePoint>();
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 2), 10));
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 18), 30));
+            staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 18), 30));
+            rr.staticNoisesList = staticnoises;
+            rr.InitNoiseMap();
+
+
             return rr;
 
             
@@ -80,7 +91,7 @@ namespace RobotIM {
         public GameLoop InitLoop() {
             var l = new GameLoop();
             l.dT = 0.02;
-            r = GetRoom();
+            
             //for (int i = 0; i <130; i++) {
             //    var u = new TerrorTest($"unit{i}", r);
             //    l.AddUnit(u);
@@ -122,14 +133,7 @@ namespace RobotIM {
             immr.Pos = r.GetWalkableCoord();
             tstterror.UnitNoises.Add(immr);
 
-            //staticnoises = new List<INoisePoint>();
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 2), 10));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 18), 30));
-            //staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 18), 30));
-            //r.staticNoisesList = staticnoises;
-            //r.InitNoiseMap();
-            //tstterror.BackgroundNoise = staticnoises;
+            
 
 
             return l;
@@ -165,6 +169,7 @@ namespace RobotIM {
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
+            r = GetRoom();
             mainLoop = InitLoop();
             vm.DrawRoom(r, true);
         }
@@ -249,6 +254,42 @@ namespace RobotIM {
         double[,] P_data;
         object _locker1 = new object(), _locker = new object();
         int progr_curr = 0, progr_max = 0;
+
+        private void Button_Click_5(object sender, RoutedEventArgs e) {
+
+            try {
+                var sd = new Microsoft.Win32.SaveFileDialog() {
+                    Filter = "room Files|*.json",
+                    FileName = "room"
+                };
+                if (sd.ShowDialog() == true) {
+                    r.SaveToFile(sd.FileName);
+                }
+
+
+            } finally {
+
+            }
+
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "room Files|*.json",
+                    FileName = "room"
+                };
+                if (sd.ShowDialog() == true) {
+                    r.LoadFromFile(sd.FileName);
+                    mainLoop = InitLoop();
+                    vm.DrawRoom(r, false);
+                }
+
+
+            } finally {
+
+            }
+        }
 
         private void btn_IM1_Copy_Click(object sender, RoutedEventArgs e) {
             try {

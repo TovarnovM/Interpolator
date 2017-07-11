@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.7
+VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpApp", "InterpApp\InterpApp.csproj", "{5C93BCEB-59BC-4510-823E-8860581B1332}"
 EndProject
@@ -80,6 +80,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GeneticBallistic", "GeneticBallistic", "{31F83E99-4127-4947-A770-6630D25662DF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MassDrummer", "MassDrummer", "{F4DA2367-06D9-4FCD-9451-62EBB75AE0D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ClientServer", "ClientServer", "{AEB207D2-D739-4608-8DD1-2755429B1C03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
