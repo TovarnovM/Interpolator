@@ -24,6 +24,7 @@ namespace RobotIM.Scene {
                 rd.nh = nh;
                 rd.nw = nw;
                 rd.staticNoiseMap = staticNoiseMap;
+                rd.noisePoints = staticNoisesList;
                 ser.Serialize(jsw, rd);
             } 
 
@@ -37,6 +38,7 @@ namespace RobotIM.Scene {
             nh = rd.nh;
             nw = rd.nw;
             staticNoiseMap = rd.staticNoiseMap;
+            staticNoisesList = rd.noisePoints;
             CreateScene();
 
         }
@@ -49,7 +51,7 @@ namespace RobotIM.Scene {
             res.gabarit = gabarit;
             res.nw = nw;
             res.nh = nh;
-            res.staticNoisesList = new List<INoisePoint>(staticNoisesList);
+            res.staticNoisesList = new List<StaticNoisePoint>(staticNoisesList);
             res.staticNoiseMap = staticNoiseMap;
             return res;
         }
@@ -58,6 +60,7 @@ namespace RobotIM.Scene {
             public double cellsize = 0.1;
             public int nw, nh;
             public double[,] staticNoiseMap;
+            public List<StaticNoisePoint> noisePoints;
         }
         public List<LevelLine> walls = new List<LevelLine>();
         MyRandom _rnd = new MyRandom();
@@ -246,23 +249,31 @@ namespace RobotIM.Scene {
             return dist;
         }
 
-        public List<INoisePoint> staticNoisesList = new List<INoisePoint>();
+        public List<StaticNoisePoint> staticNoisesList = new List<StaticNoisePoint>();
         public double[,] staticNoiseMap;
         public void InitNoiseMap() {
             staticNoiseMap = new double[searchGrid.width, searchGrid.height];
-            for (int i = 0; i < searchGrid.width; i++) {
-                for (int j = 0; j < searchGrid.height; j++) {
-                    var p = GetCellCenter(i, j);
-                    var noise = 0d;
-                    foreach (var np in staticNoisesList) {
+            foreach (var np in staticNoisesList) {
+                for (int i = 0; i < searchGrid.width; i++) {
+                    for (int j = 0; j < searchGrid.height; j++) {
+                        var p = GetCellCenter(i, j);
+                        var noise = 0d;
+                    
                         var n = np.GetDBTo(p, this, true);
                         if (Abs(n - np.noiseDB) < 0.01 && (np.GetPos() - p).GetLength() > 1+cellsize)
                             n = 0d;
-                        noise += n;
+                        noise += Pow(10,0.1*n);
+                        
+                        staticNoiseMap[i, j] += noise;
                     }
-                    staticNoiseMap[i, j] = noise;
                 }
             }
+            for (int i = 0; i < searchGrid.width; i++) {
+                for (int j = 0; j < searchGrid.height; j++) {
+                    staticNoiseMap[i, j] = 10 * Log10(staticNoiseMap[i, j]);
+                }
+            }
+
         }
         public double GetStaticNoiseAt(Vector2D hearP) {
             var c = GetGridCoords(hearP);

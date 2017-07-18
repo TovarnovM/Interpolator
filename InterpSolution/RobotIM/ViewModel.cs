@@ -12,10 +12,10 @@ using System.Threading.Tasks;
 
 namespace RobotIM {
     public class ViewModel {
-        private ScatterSeries P,pdead;
-        LineSeries SerWalls, SerVision;
-        HeatMapSeries SerCells;
-        private LinearColorAxis linearColorAxis1;
+        protected ScatterSeries P,pdead;
+        protected LineSeries SerWalls, SerVision;
+        protected HeatMapSeries SerCells;
+        protected LinearColorAxis linearColorAxis1;
 
         public VMPropRx<PlotModel, GameLoop> Model1Rx { get; private set; }
 
@@ -82,8 +82,8 @@ namespace RobotIM {
                 Model1Rx.Value.InvalidatePlot(true);
                 return;
             }
-                
-            if (room.staticNoisesList.Count != 0) {
+            bool noNoise = !(room.staticNoiseMap != null && room.staticNoiseMap.Length != 0);   
+            if (!noNoise) {
                 linearColorAxis1.AbsoluteMaximum = room.staticNoiseMap.Max2D();
             }
             SerCells.X0 = gab.p1.X;
@@ -94,7 +94,7 @@ namespace RobotIM {
             SerCells.Data = new Double[room.searchGrid.width, room.searchGrid.height];
             for (int i = 0; i < room.searchGrid.width; i++) {
                 for (int j = 0; j < room.searchGrid.height; j++) {
-                    if(room.staticNoisesList.Count == 0)
+                    if(noNoise)
                         SerCells.Data[i, j] = room.searchGrid.IsWalkableAt(i, j) ? 1d : 0d;
                     else {
                         var noise = room.staticNoiseMap[i, j];
@@ -106,7 +106,9 @@ namespace RobotIM {
 
             Model1Rx.Value.InvalidatePlot(true);
         }
-
+        public void ReDraw() {
+            Model1Rx.Value.InvalidatePlot(true);
+        }
         public void Draw(GameLoop t, PlotModel pm) {
             P.Points.Clear();
             SerVision.Points.Clear();

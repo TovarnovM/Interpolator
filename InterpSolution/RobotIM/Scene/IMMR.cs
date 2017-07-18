@@ -16,6 +16,8 @@ namespace RobotIM.Scene {
 
     public class StaticNoisePoint : INoisePoint {
         private Vector2D _pos;
+        public string Name { get; set; } = "StaticNoise";
+        public string FullName => ToString();
         static double Zeros(double v) => v < 0 ? 0 : v;
         public StaticNoisePoint(Vector2D pos, double db) {
             _pos = pos;
@@ -46,6 +48,28 @@ namespace RobotIM.Scene {
 
         public Vector2D GetPos() {
             return _pos;
+        }
+        public void SetPos(Vector2D pos) {
+            _pos = pos;
+        }
+        public double X {
+            get {
+                return _pos.X;
+            }
+            set {
+                _pos.X = value;
+            }
+        }
+        public double Y{
+            get {
+                return _pos.Y;
+            }
+            set {
+                _pos.Y= value;
+            }
+        }
+        public override string ToString() {
+            return $"({_pos.X:0.###};{_pos.Y:0.###}), {Name} = {_db} dB";
         }
     }
 

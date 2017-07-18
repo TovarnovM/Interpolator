@@ -8,7 +8,7 @@ using static System.Math;
 
 namespace RobotIM.Scene {
     public static class RoomGenerator {
-        public static double DiffPerc = 0.15;
+
         
         static MyRandomGenerator.MyRandom _rnd = new MyRandomGenerator.MyRandom();
         static List<(int x, int y)> GetUniqueVectors(int w, int h, int n) {
@@ -30,9 +30,9 @@ namespace RobotIM.Scene {
             }
             return answ;
         }
-        static List<double> GetBlurList(int nh, double h) {
+        static List<double> GetBlurList(int nh, double h, double diff) {
             var hh = h / nh;
-            var dhmax = DiffPerc * hh;
+            var dhmax = diff * hh;
             var heights = Enumerable
                 .Range(0, nh +1)
                 .Select(j => {
@@ -64,7 +64,7 @@ namespace RobotIM.Scene {
             return ll;
         }
 
-        public static List<LevelLine> GetWalls(double h, double w, int nh, int nw) {
+        public static List<LevelLine> GetWalls(double h, double w, int nh, int nw, double diff = 0.15, int nmin = 5, int nmax = 10) {
             var cells = new Cell[nw, nh];
             for (int i = 0; i < nw; i++) {
                 for (int j = 0; j < nh; j++) {
@@ -90,8 +90,8 @@ namespace RobotIM.Scene {
                     }
                 }
             }
-            var yPoints = GetBlurList(nh, h);
-            var xPoints = GetBlurList(nw, w);
+            var yPoints = GetBlurList(nh, h, diff);
+            var xPoints = GetBlurList(nw, w, diff);
             for (int i = 0; i < nw; i++) {
                 for (int j = 0; j < nh; j++) {
                     if(i+1 < nw) { 
@@ -107,7 +107,7 @@ namespace RobotIM.Scene {
                 }
             }
 
-            int nRoomz = _rnd.GetInt(5, 10);
+            int nRoomz = _rnd.GetInt(nmin, nmax);
             var inds = GetUniqueVectors(nw, nh, nRoomz);
             var bigRooms = Enumerable
                 .Range(0, nRoomz)
@@ -125,7 +125,8 @@ namespace RobotIM.Scene {
                     //if (br.cellMax < i)
                     //    continue;
                     var possNeibs = br.c.MyCluster.Neibs
-                        .Except(bigRooms.Except(new[] { br }).SelectMany(bbr => bbr.c.MyCluster.CellList).Distinct())
+                        .Except(bigRooms.Except(new[] { br })
+                        .SelectMany(bbr => bbr.c.MyCluster.CellList).Distinct())
                         .ToList();
                     if (possNeibs.Count == 0)
                         continue;

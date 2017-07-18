@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RobotIM"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="613">
+        Title="MainWindow" Height="346.69" Width="589.832">
     <Grid>
         <TabControl x:Name="tabControl" Margin="0,0,0,0" Grid.RowSpan="2">
 
@@ -58,6 +58,61 @@
                     <Button x:Name="btn_IM1_Copy" Content="Load" HorizontalAlignment="Left" Margin="121,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="106" Click="btn_IM1_Copy_Click" />
                 </Grid>
             </TabItem>
+            <TabItem Header="Комната">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="251*"/>
+                        <RowDefinition Height="40*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="474*"/>
+                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="97*"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView x:Name="RoomPlot" Model="{Binding vm_rm.Model1Rx.Value}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                    <TabControl x:Name="tabControlGener" Grid.Column="2" Margin="0,0,0,0" RenderTransformOrigin="0.505,0.608" >
+
+                        <TabItem Header="Новая">
+                            <Grid>
+
+                                <Button Content="Сген. новую" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="89" Height="20" Click="Button_Click_7"/>
+                                <TextBox Name="tb_w"  HorizontalAlignment="Left" Height="19" Margin="38,35,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="56" ToolTip="ширина комнаты, м"/>
+                                <TextBox x:Name="tb_h" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,59,0,0" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="56" ToolTip="высота комнаты, м"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,35,0,0" TextWrapping="Wrap" Text="w = " VerticalAlignment="Top" Width="28"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,62,0,0" TextWrapping="Wrap" Text="h = " VerticalAlignment="Top" Width="28"/>
+                                <TextBox x:Name="tb_wN" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,95,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Количество комнат по ширине, шт"/>
+                                <TextBox x:Name="tb_hN" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,119,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Количество комнат по высоте, шт"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,95,0,0" TextWrapping="Wrap" Text="wN = " VerticalAlignment="Top" Width="33"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,122,0,0" TextWrapping="Wrap" Text="hN = " VerticalAlignment="Top" Width="28"/>
+                                <TextBox x:Name="tb_Diff" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,148,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="56" ToolTip="Отклонение размеров, %"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,151,0,0" TextWrapping="Wrap" Text="diff=" VerticalAlignment="Top" Width="28"/>
+                                <TextBox x:Name="tb_CellSize" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,222,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="56" ToolTip="Размер ячейки, м"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,225,0,0" TextWrapping="Wrap" Text="cell=" VerticalAlignment="Top" Width="28"/>
+                                <TextBox x:Name="tb_Nmin" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,177,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Минимальное Кол-во больших комнат шт"/>
+                                <TextBox x:Name="tb_Nmax" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,195,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Максимальное Кол-во больших комнат, шт"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,177,0,0" TextWrapping="Wrap" Text="Nmin" VerticalAlignment="Top" Width="33"/>
+                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,198,0,0" TextWrapping="Wrap" Text="Nmax" VerticalAlignment="Top" Width="33"/>
+
+                            </Grid>
+                        </TabItem>
+                        <TabItem Header="Шумы">
+                            <Grid>
+                                <DataGrid Name="dg_noises" Margin="0,0,0,81" CellEditEnding="dg_noises_CellEditEnding"/>
+                                <Button Content="Add" Margin="0,0,0,61" Click="Button_Click_8" Height="20" VerticalAlignment="Bottom"/>
+                                <Button Content="Delete" Height="20" VerticalAlignment="Bottom" Click="Button_Click_9" Margin="0,0,0,41"/>
+                                <Button Name="btn_calcField" Content="Calc Field" Height="20" VerticalAlignment="Bottom" Click="Button_Click_10"/>
+                                <CheckBox Content="шум поле" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,20" Checked="CheckBox_Checked_1" Unchecked="CheckBox_Unchecked_1"/>
+
+                            </Grid>
+                        </TabItem>
+
+                    </TabControl>
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="2"  ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"/>
+                    <Button Content="Save" Width="75" Margin="0,0,399,10" Grid.Row="1" Click="Button_Click_11"/>
+                    <Button Content="Load" Width="75" Margin="80,0,319,10" Grid.Row="1" Click="Button_Click_12"/>
+                </Grid>
+            </TabItem>
+
         </TabControl>
 
 

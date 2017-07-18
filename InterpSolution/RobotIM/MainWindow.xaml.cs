@@ -7,6 +7,7 @@ using RobotIM.Scene;
 using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -31,10 +32,12 @@ namespace RobotIM {
         public ViewModel vm { get; set; }
         public vmTrg vmT { get; set; }
         public vmTrg_IM vmT_IM { get; set; }
+        public VM_room vm_rm { get; set; }
         GameLoop mainLoop;
         Room r;
         public MainWindow() {
             vm = new ViewModel();
+            vm_rm = new VM_room();
             vmT = new vmTrg();
             vmT_IM = new vmTrg_IM();
             DataContext = this;
@@ -42,6 +45,7 @@ namespace RobotIM {
             r = GetRoom();
             mainLoop = InitLoop();
             vm.DrawRoom(r,false);
+            vm_rm.GenerateNewRoom(1, 1, 1, 1, 0, 0.1, 1, 1);
         }
 
         public Room GetRoom() {
@@ -51,7 +55,7 @@ namespace RobotIM {
             rr.cellsize = 0.7;
             rr.CreateScene();
 
-            staticnoises = new List<INoisePoint>();
+            staticnoises = new List<StaticNoisePoint>();
             staticnoises.Add(new StaticNoisePoint(new Vector2D(2, 2), 30));
             staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 2), 10));
             staticnoises.Add(new StaticNoisePoint(new Vector2D(25, 18), 30));
@@ -158,7 +162,7 @@ namespace RobotIM {
         }
 
         System.Timers.Timer timer = null;
-        private List<INoisePoint> staticnoises;
+        private List<StaticNoisePoint> staticnoises;
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             //var bf = new BinaryFormatter();
@@ -291,6 +295,18 @@ namespace RobotIM {
             }
         }
 
+        private void Button_Click_7(object sender, RoutedEventArgs e) {
+            var w = GetDouble(tb_w.Text, 30);
+            var h = GetDouble(tb_h.Text, 40);
+            var wn = (int)GetDouble(tb_wN.Text, 10);
+            var hn = (int)GetDouble(tb_wN.Text, 10);
+            var nmin = (int)GetDouble(tb_Nmin.Text, 10);
+            var nmax = (int)GetDouble(tb_Nmax.Text, 10);
+            var diff = GetDouble(tb_Diff.Text, 20)/100;
+            var cellSize = GetDouble(tb_CellSize.Text, 0.3);
+            vm_rm.GenerateNewRoom(w,h,wn,hn,diff,cellSize,nmin,nmax);
+        }
+
         private void btn_IM1_Copy_Click(object sender, RoutedEventArgs e) {
             try {
                 var sd = new Microsoft.Win32.OpenFileDialog() {
@@ -310,6 +326,78 @@ namespace RobotIM {
                
             }
         }
+        
+        private void Button_Click_8(object sender, RoutedEventArgs e) {
+            vm_rm.AddNoisePoint();
+            dg_noises.ItemsSource = null;
+            dg_noises.ItemsSource = vm_rm.NoiseList;
+
+        }
+
+        private void dg_noises_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e) {
+            vm_rm.ReDraw();
+        }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e) {
+            vm_rm.NoiseList.Remove((StaticNoisePoint)dg_noises.SelectedItem);
+            vm_rm.ReDraw();
+        }
+
+        private async void Button_Click_10(object sender, RoutedEventArgs e) {
+            try {
+                btn_calcField.IsEnabled = false;
+                await Task.Factory.StartNew(vm_rm.CalcField);
+            } finally {
+                btn_calcField.IsEnabled = true;
+            }
+        }
+
+        private void CheckBox_Checked_1(object sender, RoutedEventArgs e) {
+            vm_rm.DrawRoom(vm_rm.room, true);
+        }
+
+        private void CheckBox_Unchecked_1(object sender, RoutedEventArgs e) {
+            vm_rm.DrawRoom(vm_rm.room, false);
+        }
+
+        private void Button_Click_11(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.SaveFileDialog() {
+                    Filter = "room Files|*.json",
+                    FileName = "room"
+                };
+                if (sd.ShowDialog() == true) {
+                    vm_rm.room.SaveToFile(sd.FileName);
+                }
+
+
+            } finally {
+
+            }
+        }
+
+        private void Button_Click_12(object sender, RoutedEventArgs e) {
+            try {
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "room Files|*.json",
+                    FileName = "room"
+                };
+                if (sd.ShowDialog() == true) {
+                    vm_rm.room.LoadFromFile(sd.FileName);
+                    vm_rm.NoiseList.Clear();
+                    foreach (var item in vm_rm.room.staticNoisesList) {
+                        vm_rm.NoiseList.Add(item);
+                    }
+                    dg_noises.ItemsSource = null;
+                    dg_noises.ItemsSource = vm_rm.NoiseList;
+                    vm_rm.DrawRoom(vm_rm.room, false);
+                }
+
+
+            } finally {
+
+            }
+        }
 
         void StartVar(Experim1Info info) {
             var exp = new Experim1();
@@ -324,6 +412,19 @@ namespace RobotIM {
                     btn_IM1.Content = $"Calc {progr_curr} / {progr_max}";
                 }
             }));
+        }
+        public static double GetDouble(string value, double defaultValue = 0d) {
+
+            //Try parsing in the current culture
+            if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out double result) &&
+                //Then try in US english
+                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result) &&
+                //Then in neutral language
+                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result)) {
+                result = defaultValue;
+            }
+
+            return result;
         }
     }
     [Serializable]
