@@ -1,0 +1,163 @@
+8
+
+dir
+12438
+http://localhost:8081/tfs05.codeplex.com/RemotingLite/src
+http://localhost:8081/tfs05.codeplex.com
+
+
+
+2008-02-10T12:20:19.480000Z
+7445
+unknown
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+768f3a04-76a6-432f-b7ac-274fd7b03e9c
+
+Licence - RemotingLite.txt
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+4ae764c6a337068f188558b92f05d266
+2008-04-01T07:52:43.460000Z
+9777
+unknown
+
+RemotingLite.csproj
+file
+
+
+
+
+2008-06-04T14:53:53.593750Z
+829de1b1e53c0a1457ddfdd361323ada
+2008-03-01T17:36:09.997000Z
+8922
+unknown
+
+ServiceHost.cs
+file
+
+
+
+
+2008-06-04T14:53:53.609375Z
+44a233f2981c54c5b9fa3f97104e6592
+2008-03-01T17:36:09.997000Z
+8922
+unknown
+
+Release Notes.txt
+file
+12440
+
+
+
+2008-09-12T18:16:29.125000Z
+425d19fedacf5c93335fc39a15dd64ef
+2008-09-12T18:16:51.453125Z
+12440
+unknown
+
+ParameterTransferHelper.cs
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+e11ed468cda7ea14ee669077132a9c23
+2008-03-01T17:36:09.997000Z
+8922
+unknown
+
+MessageType.cs
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+d356dd1b583ccb0818efbf642cd7cb3c
+2008-02-15T17:43:12.733000Z
+8078
+unknown
+
+Properties
+dir
+
+Channel.cs
+file
+12439
+
+
+
+2008-09-12T18:14:02.703125Z
+a735e156fd5120f2cb3f17c42356f7de
+2008-09-12T18:15:01.906250Z
+12439
+unknown
+
+mono_build.bat
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+fc0dce9f872b3719cf90453ef7ead3a9
+2008-04-01T07:52:43.460000Z
+9777
+unknown
+
+ClientBase.cs
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+aaa39d3ca00fb294a81808c099fe55bc
+2008-02-10T12:20:19.480000Z
+7445
+unknown
+
+ProxyFactory.cs
+file
+
+
+
+
+2008-06-04T14:53:53.578125Z
+b4f2cac6a98a6ab326b38472d9bdf027
+2008-03-01T17:36:09.997000Z
+8922
+unknown
+
+RemotingLite.sln
+file
+
+
+
+
+2008-06-04T14:53:53.593750Z
+1b6f09fc1e82e06354d112ebaa0b5725
+2008-02-10T12:23:47.253000Z
+7446
+unknown
+

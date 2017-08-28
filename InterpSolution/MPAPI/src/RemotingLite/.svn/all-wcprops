@@ -1,0 +1,71 @@
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/tfs05.codeplex.com/!svn/ver/7445/RemotingLite/src
+END
+Licence - RemotingLite.txt
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/tfs05.codeplex.com/!svn/ver/9777/RemotingLite/src/Licence%20-%20RemotingLite.txt
+END
+RemotingLite.csproj
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/tfs05.codeplex.com/!svn/ver/8922/RemotingLite/src/RemotingLite.csproj
+END
+ServiceHost.cs
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/tfs05.codeplex.com/!svn/ver/8922/RemotingLite/src/ServiceHost.cs
+END
+Release Notes.txt
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/tfs05.codeplex.com/!svn/ver/12440/RemotingLite/src/Release%20Notes.txt
+END
+ParameterTransferHelper.cs
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/tfs05.codeplex.com/!svn/ver/8922/RemotingLite/src/ParameterTransferHelper.cs
+END
+MessageType.cs
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/tfs05.codeplex.com/!svn/ver/8078/RemotingLite/src/MessageType.cs
+END
+Channel.cs
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/tfs05.codeplex.com/!svn/ver/12439/RemotingLite/src/Channel.cs
+END
+mono_build.bat
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/tfs05.codeplex.com/!svn/ver/9777/RemotingLite/src/mono_build.bat
+END
+ClientBase.cs
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/tfs05.codeplex.com/!svn/ver/7445/RemotingLite/src/ClientBase.cs
+END
+ProxyFactory.cs
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/tfs05.codeplex.com/!svn/ver/8922/RemotingLite/src/ProxyFactory.cs
+END
+RemotingLite.sln
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/tfs05.codeplex.com/!svn/ver/7446/RemotingLite/src/RemotingLite.sln
+END

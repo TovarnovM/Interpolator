@@ -1,0 +1,40 @@
+8
+
+dir
+12438
+http://localhost:8081/tfs05.codeplex.com/RemotingLite/src/Properties
+http://localhost:8081/tfs05.codeplex.com
+
+
+
+2008-02-10T12:53:24.563000Z
+7452
+unknown
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+768f3a04-76a6-432f-b7ac-274fd7b03e9c
+
+AssemblyInfo.cs
+file
+12441
+
+
+
+2008-09-12T18:17:56.265625Z
+5f8372e2707a78b890a091c41d97ffbc
+2008-09-12T18:18:21.921875Z
+12441
+unknown
+
