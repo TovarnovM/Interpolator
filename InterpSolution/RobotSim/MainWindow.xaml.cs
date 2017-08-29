@@ -82,7 +82,7 @@ namespace RobotSim {
                 .SelectMany(tr => tr.ConnP.Select(cp => tr.WorldTransform * cp))
                 .MinBy(p => p.X);
 
-            //sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(mostLeftPoint.X,0,0), new Vector3D(1,0,0)),0.9);
+            sol.AddSurf_magnetic_standart(new FlatSurf(10000,100,new Vector3D(mostLeftPoint.X,0,0), new Vector3D(1,0,0)),0.9);
 
             sol.AddSurf(new FlatSurf(10000,100,new Vector3D(1,0,1)));
             ////sol.AddSurf_magnetic_standart(new RbSurfFloor(10000,100,new Vector3D(1,0,1)),100);
