@@ -78,7 +78,7 @@ namespace MPAPI
 
         public override int GetHashCode()
         {
-            return base.GetHashCode();
+            return _nodeId.GetHashCode() ^ _workerId.GetHashCode();
         }
 
         public override string ToString()

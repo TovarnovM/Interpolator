@@ -30,7 +30,7 @@ namespace MPAPI.RegistrationServer
             Log.LogLevel = LogLevel.InfoWarningError;
             Log.LogType = LogType.Console;
             _registrationServer = new RegistrationServer();
-            
+
             _host = new ServiceHost(_registrationServer, port);
             _host.Open();
             Console.Title = "Registration server";
@@ -38,9 +38,32 @@ namespace MPAPI.RegistrationServer
             Log.Info($"IsIPv6LinkLocal = {_host.EndPoint.Address.IsIPv6LinkLocal}, IsIPv6Multicast = {_host.EndPoint.Address.IsIPv6Multicast}  IsIPv6SiteLocal = {_host.EndPoint.Address.IsIPv6SiteLocal}");
             Log.Info($"Address = {_host.EndPoint.Address.AddressFamily.ToString()}");
 
-            //var s = Dns.GetHostEntry(_host.EndPoint.Address).AddressList;
-
-            Console.ReadLine();
+            var ips = Dns.GetHostEntry(_host.EndPoint.Address).AddressList;
+            int i = 0;
+            foreach (var ip in ips)
+            {
+                Log.Info($"ip[{i++}] : {ip.ToString()}");
+            }
+            Log.Info($"potr : {port}");
+            string input = "";
+            do {
+                input = Console.ReadLine();
+                switch (input) {
+                    case "scount":
+                        Console.WriteLine($"Slaves count : {_registrationServer.GetAllNodeEndPoints().Count}");
+                        break;
+                    case "slaves":
+                        i = 0;
+                        foreach (var s in _registrationServer.GetAllNodeEndPoints()) {
+                            Console.WriteLine($"[{i++}] : {s.ToString()}");
+                        }       
+                        break;
+                    default:
+                        Console.WriteLine("Такой команды нет (exit для выхода если что)");
+                        break;
+                }
+            } while (input!="exit");
+            //Console.ReadLine();
             Log.Info("Registration server terminated.");
         }
 

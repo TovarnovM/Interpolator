@@ -71,10 +71,6 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="RemotingLite, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\deps\RemotingLite.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -103,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="MPAPI.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RemotingLite\RemotingLite.csproj">
+      <Project>{0affa4eb-edea-43cc-8045-c7d1fe557803}</Project>
+      <Name>RemotingLite</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
