@@ -283,6 +283,11 @@ namespace Interpolator {
             }
             return result;
         }
+        public void SynchArrays() {
+            foreach (var ixy in _data.Values) {
+                ixy.SynchArrays();
+            }
+        }
         /// <summary>
         /// На вход подается прямоугольная матрица. первый индекс - "строка", второй - "столбец";
         /// элемент [0,0] не учитывается; 
