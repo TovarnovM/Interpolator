@@ -51,7 +51,8 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="DataFactoryTests.cs" />
+    <Compile Include="GraphsTests.cs" />
+    <Compile Include="MisTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -62,6 +63,14 @@
     <ProjectReference Include="..\MeetingPro\MeetingPro.csproj">
       <Project>{24A42719-BAB0-4300-8EA4-5F0FF86AA926}</Project>
       <Name>MeetingPro</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Oslo\Oslo.csproj">
+      <Project>{92589C2D-3833-496F-87E8-788FD511B162}</Project>
+      <Name>Oslo</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SimpleIntegrator\SimpleIntegrator.csproj">
+      <Project>{FCCF7D41-C6A6-4991-BFE3-769D77D9B314}</Project>
+      <Name>SimpleIntegrator</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

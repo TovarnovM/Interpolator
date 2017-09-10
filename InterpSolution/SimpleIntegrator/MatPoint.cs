@@ -98,8 +98,8 @@ namespace SimpleIntegrator {
             var f = new ForceG(this,dir,g);
             AddForce(f);
         }
-        public void AddGForce() {
-            AddGForce(new Vector3D(0,-1,0));
+        public void AddGForce(double g = 9.8) {
+            AddGForce(new Vector3D(0,-1,0),g);
         }
     }
 
