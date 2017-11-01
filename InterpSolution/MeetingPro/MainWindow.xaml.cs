@@ -33,28 +33,28 @@ namespace MeetingPro {
             var sss = mis.GetAllParams().Select(dp => dp.FullName).ToList();
             var dct = mis.SaveToDict();
 
-            //var dlst = new List<Data4Draw>((int)((t1 - t0) / dt) + 5);
+            var dlst = new List<Data4Draw>((int)((t1 - t0) / dt) + 5);
 
-            //foreach (var sp in res) {
-            //    dlst.Add(mis.GetData4Draw());
-            //}
-
-            //Vm.DrawDL(dlst);
-
-            var lst = res.ToList();
-            Vm.Pm.Series.Clear();
-
-            var serXY = new LineSeries() { Title = "XY" };
-            var serXZ = new LineSeries() { Title = "XZ" };
-            Vm.Pm.Series.Add(serXY);
-            Vm.Pm.Series.Add(serXZ);
-            int xInd = s.IndexOf("Mis.X");
-            int yInd = s.IndexOf("Mis.Y");
-            int zInd = s.IndexOf("Mis.Z");
-            foreach (var sp in lst) {
-                serXY.Points.Add(new DataPoint(sp.X[xInd], sp.X[yInd]));
-                serXZ.Points.Add(new DataPoint(sp.X[xInd], sp.X[zInd]));
+            foreach (var sp in res) {
+                dlst.Add(mis.GetData4Draw());
             }
+
+            Vm.DrawDL(dlst);
+
+            //var lst = res.ToList();
+            //Vm.Pm.Series.Clear();
+
+            //var serXY = new LineSeries() { Title = "XY" };
+            //var serXZ = new LineSeries() { Title = "XZ" };
+            //Vm.Pm.Series.Add(serXY);
+            //Vm.Pm.Series.Add(serXZ);
+            //int xInd = s.IndexOf("Mis.X");
+            //int yInd = s.IndexOf("Mis.Y");
+            //int zInd = s.IndexOf("Mis.Z");
+            //foreach (var sp in lst) {
+            //    serXY.Points.Add(new DataPoint(sp.X[xInd], sp.X[yInd]));
+            //    serXZ.Points.Add(new DataPoint(sp.X[xInd], sp.X[zInd]));
+            //}
 
             //var sers = s.Select(ss => new LineSeries() { Title = ss }).ToArray();
             //foreach (var sp in lst) {

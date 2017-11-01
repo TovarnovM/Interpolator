@@ -291,7 +291,6 @@ namespace MeetingPro {
             SynchMeBefore += SyncAct;
         }
         public void CreateBodyAndForces() {
-
             F_engine = Force.GetForceCentered(0, new Vector3D(1, 0, 0), this);
             F_engine.Name = "F_engine";
             AddForce(F_engine);
@@ -350,6 +349,7 @@ namespace MeetingPro {
             m_air_dempf = Vector3D.Zero;
             delta_C = Vector3D.Zero;
         }
+
         public void SyncAct(double t) {
             Synch_0(t);
             Synch_1();
