@@ -1,20 +1,13 @@
 ﻿using Microsoft.Research.Oslo;
 using OxyPlot;
 using OxyPlot.Series;
+using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MeetingPro {
     /// <summary>
@@ -31,7 +24,7 @@ namespace MeetingPro {
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             var mis = new Mis();
-            mis.delta_eler = -0.5 * Mis.RAD;
+            //mis.delta_eler = -0.5 * Mis.RAD;
             mis.Vel.X = 0;
             var v0 = mis.Rebuild();
             double t0 = 0, t1 = 60, dt = 0.1;
@@ -74,6 +67,31 @@ namespace MeetingPro {
             //    Vm.Pm.Series.Add(ser);
             //}
             //Vm.Pm.InvalidatePlot(true);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e) {
+            var mis = new Mis();
+            var tetta0 = 40 * Mis.RAD;
+            var VecOX = new Vector3D(Math.Cos(tetta0), Math.Sin(tetta0), 0);
+            mis.RotateOxThenNearOy(VecOX, Vector3D.YAxis);
+            mis.Vel.Vec3D = VecOX;
+            var v0 = mis.Rebuild();
+            var res = Ode.RK45(0, v0, mis.f, 0.005);
+
+
+            var dlst = new List<Data4Draw>();
+
+            foreach (var sp in res) {
+                if(sp.T > 1 && mis.Y <= 0) {
+                    break;
+                }
+                dlst.Add(mis.GetData4Draw());
+
+            }
+            var hmax = dlst.Select(d => d.Y).Max();
+            btn.Content = hmax.ToString();
+            Vm.DrawDL(dlst);
+
         }
     }
 }

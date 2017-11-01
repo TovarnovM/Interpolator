@@ -14,6 +14,7 @@ namespace MeetingPro {
         public ViewMod() {
             Pm = GetNewModel("графики", "время, с", "stuff");
         }
+
         public void DrawDL(List<Data4Draw> dl){
             var names = typeof(Data4Draw)
                 .GetProperties(BindingFlags.Instance | BindingFlags.GetProperty | BindingFlags.Public)
@@ -21,23 +22,23 @@ namespace MeetingPro {
                 .ToList();
 
             var filter = new List<string>() {
-                "T",
-           //     "V",
-           //     "V_x",
-           //     "V_y",
-           //     "V_z",
-           //     "dV_x",
-           //     "dV_y",
-           //     "dV_z",
-           //    "X",
-           //     "Y",
-           //     "Z",
-           ////     "Alpha",
-           //     "P",
-           //  //   "Om_x",
-           //     "Om_y",
-           //     "Om_z",
-           //  //   "Kren"
+            //    "T",
+            //   "V",
+            //    "V_x",
+            //    "V_y",
+            //    "V_z",
+            //    "dV_x",
+            //    "dV_y",
+            //    "dV_z",
+            //   "X",
+            //    "Y",
+            //    "Z",
+            ////    "Alpha",
+            //    "P",
+            //    "Om_x",
+            //    "Om_y",
+            //    "Om_z",
+            ////    "Kren"
             };
 
 

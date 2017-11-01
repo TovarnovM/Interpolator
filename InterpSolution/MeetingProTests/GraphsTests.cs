@@ -11,8 +11,6 @@ namespace MeetingPro.Tests {
     public class GraphsTests {
         [TestMethod(), TestInitialize()]
         public void CopyTest() {
-            Graphs.FilePath = @"C:\Users\User\Documents\data.xml";
-
             var gs = Graphs.GetNew();
             var names = gs.Names;
             var allNames = names.Aggregate("", (s1, s2) => s1 + s2 + "\n");

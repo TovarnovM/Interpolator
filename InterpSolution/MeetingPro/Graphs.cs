@@ -118,7 +118,7 @@ namespace MeetingPro {
             return new Graphs(this);
         }
 
-        private static string filePath = "data\\data.xml";
+        private static string filePath = @"C:\Users\User\Documents\data.xml";
         public static string FilePath {
             get { return filePath; }
             set { filePath = value; }

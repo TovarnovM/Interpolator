@@ -9,13 +9,11 @@ using System.Threading.Tasks;
 namespace MeetingPro.Tests {
     [TestClass()]
     public class MisTests {
-        string fp = @"C:\Users\User\Documents\data.xml";
         Mis mis;
 
         [TestMethod(), TestInitialize()]
         public void SqrTest() {
             var d = 9;
-            Graphs.FilePath = fp;
             mis = new Mis();
             Assert.AreEqual(81d, Mis.Sqr(d));
         }

@@ -65,7 +65,7 @@ namespace MeetingPro {
         /// </summary>
         public Vector3D V_air;
         public void Set_V_air() {
-            V_air = WorldTransformRot_1 * Vel.Vec3D;
+            V_air = -(WorldTransformRot_1 * Vel.Vec3D);
         }
 
         public double Mach;
@@ -146,9 +146,9 @@ namespace MeetingPro {
         public double K_aa;
         public double K_fi;
         public void Set_alpha_i() {
-            var delta_alpha = (matr_lambda * delta_i_rad).Sum;
+            var delta_alpha = matr_lambda * delta_i_rad;
             for (int i = 0; i < 4; i++) {
-                alpha_i[i] = Atan(Tan(alpha_c) * (K_aa * Cos(fi_i[i]) + K_fi * Sin(2 * fi_i[i]) * Sin(alpha_c))) + delta_alpha;
+                alpha_i[i] = Atan(Tan(alpha_c) * (K_aa * Cos(fi_i[i]) + K_fi * Sin(2 * fi_i[i]) * Sin(alpha_c))) + delta_alpha[i];
             }
         }
 
@@ -253,7 +253,7 @@ namespace MeetingPro {
                 var d_m_i = -2d * K_st_aa * K_aa_k_st_aa * c_kr_y_i.GetV(1d, Mach) * alpha_sk.GetV(alpha_c * GRAD, Mach) * (X_m - x_r_d_i) + (X_m - x_r_d_i);
 
                 delta_m_air.Y += (c_r * Sign(delta_i_rad[i]) * K_aa_k_aa * Sin(fi_0[i]) * d_m_i + c_kr * Sign(alpha_st[i]) * K_aa_k_st_aa * (X_m - x_kr_d_i) * Sin(fi_0[i])) / L;
-                delta_m_air.Y += (c_r * Sign(delta_i_rad[i]) * K_aa_k_aa * Cos(fi_0[i]) * d_m_i + c_kr * Sign(alpha_st[i]) * K_aa_k_st_aa * (X_m - x_kr_d_i) * Cos(fi_0[i])) / L;
+                delta_m_air.Z += (c_r * Sign(delta_i_rad[i]) * K_aa_k_aa * Cos(fi_0[i]) * d_m_i + c_kr * Sign(alpha_st[i]) * K_aa_k_st_aa * (X_m - x_kr_d_i) * Cos(fi_0[i])) / L;
             }
         }
 
@@ -265,7 +265,7 @@ namespace MeetingPro {
 
             m_air.X = (-m_x0 * Sign(delta_eler) - delta_m_air.X) * qS * l_m_x;
             m_air.Y = (c_k_y * (X_m - x_k_d) * Sin(fi_n) / L - delta_m_air.Y) * qS * L;
-            m_air.Y = (c_k_y * (X_m - x_k_d) * Cos(fi_n) / L - delta_m_air.Y) * qS * L;
+            m_air.Z = (c_k_y * (X_m - x_k_d) * Cos(fi_n) / L - delta_m_air.Y) * qS * L;
         }
 
         public void Set_M_air() {
@@ -345,7 +345,7 @@ namespace MeetingPro {
 
             m_air = Vector3D.Zero;
 
-            temperature = 30;
+            temperature = 15;
             delta_m_air = Vector3D.Zero;
             m_air_dempf = Vector3D.Zero;
             delta_C = Vector3D.Zero;
@@ -411,10 +411,8 @@ namespace MeetingPro {
             };
         }
 
-        private double GetKren() {
-            var oy = WorldTransformRot * Vector3D.YAxis;
-
-            return Acos(oy * Vector3D.YAxis) * GRAD;
+        private double GetKren() {          
+            return Asin(ZAxis * Vector3D.YAxis) * GRAD;
         }
         #endregion
     }  
