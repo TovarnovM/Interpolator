@@ -93,5 +93,26 @@ namespace MeetingPro {
             Vm.DrawDL(dlst);
 
         }
+
+        private void btn_Copy_Click(object sender, RoutedEventArgs e) {
+            var fr = new Vector3D(0, 0, 0);
+            var to = new Vector3D(10, 20, 30);
+            var fr1 = new Vector3D(10, 10, 10);
+            var to1 = new Vector3D(20, 30, 30);
+            Vm.Pm.Series.Clear();
+            for (int n = 2; n < 5; n+=1) {
+                var lst = Vm.GetBezie(fr, to, fr1, to1, n);
+                
+                Vm.Pm.Series.Add(new LineSeries() {
+                    ItemsSource = lst,
+                    DataFieldX = "X",
+                    DataFieldY = "Y",
+                    Smooth = true,
+                    Title = n.ToString()
+                });
+            }
+
+            Vm.Pm.InvalidatePlot(true);
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
+using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,5 +89,26 @@ namespace MeetingPro {
 
             return m;
         }
+        public List<Vector3D> GetBezie(Vector3D fr, Vector3D to, Vector3D fr_1, Vector3D to_1, int n) {
+            //Vector3D interpF(Vector3D fr_p, Vector3D to_p, double interp) {
+            //    return to_p * interp + (1 - interp) * fr_p;
+            //}
+            var res = new List<Vector3D>(n+1);
+            res.Add(fr);
+            double dn = 1d / (n);
+            for (int i = 1; i < n; i++) {
+                var t = dn * i;
+                var p1 = fr_1 * t + (1 - t) * fr;// interpF(fr, fr_1, t);
+                var p2 = to_1 * t + (1 - t) * fr_1;// interpF(fr_1, to_1, t);
+                var p3 =  to* t +(1 - t) * to_1;//interpF(to_1, to, t);
+                var p12 =  p2* t +(1 - t) * p1;//interpF(p1, p2, t);
+                var p23 =  p3* t +(1 - t) * p2;//interpF(p2, p3, t);
+                var p =  p23* t +(1 - t) * p12;//interpF(p12, p23, t);
+                res.Add(p);
+            }
+            res.Add(to);
+            return res;
+        }
+
     }
 }
