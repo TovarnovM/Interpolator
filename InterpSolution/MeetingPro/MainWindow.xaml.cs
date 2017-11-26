@@ -24,8 +24,10 @@ namespace MeetingPro {
 
         private void Button_Click(object sender, RoutedEventArgs e) {
             var mis = new Mis();
+            
             //mis.delta_eler = -0.5 * Mis.RAD;
             mis.Vel.X = 0;
+            mis.Temperature = -30;
             var v0 = mis.Rebuild();
             double t0 = 0, t1 = 60, dt = 0.1;
             var res = Ode.RK45(t0, v0, mis.f, 0.001).SolveFromToStep(0, t1, dt);

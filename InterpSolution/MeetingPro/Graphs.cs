@@ -56,6 +56,16 @@ namespace MeetingPro {
             dct.Remove("А.25");
             dct.Remove("А.26");
 
+            dct.Remove("r_md");
+            dct.Remove("r_rd");
+            var r_rd = new P_interp();
+            r_rd.Init_sd();
+            r_rd.Temperature = 15;
+
+            var r_md = new P_interp();
+            r_md.Init_md();
+            r_md.Temperature = 15;
+
             foreach (var tp in altNames) {
                 dct[tp.aName].Title = tp.aName;
             }
@@ -74,7 +84,9 @@ namespace MeetingPro {
                     (m_x0.Title,m_x0),
                     (ro.Title,ro),
                     (a.Title,a),
-                    (m_omegax_x_dempf.Title,m_omegax_x_dempf)
+                    (m_omegax_x_dempf.Title,m_omegax_x_dempf),
+                    ("r_rd",r_rd),
+                    ("r_md",r_md)
                 })
                 .Select(tp => {
                     if (replDict.ContainsKey(tp.Item1))
@@ -178,6 +190,135 @@ namespace MeetingPro {
 
             res.SynchArrays();
             return res;
+        }
+
+        public class P_interp: IInterpElem {
+            public InterpXY r15, r50, r_50;
+            public InterpXY actT;
+
+            public void Init_sd() {
+                r_50 = new InterpXY();
+                r_50.Title = "-50";
+                r_50.Add(0, 0);
+                r_50.Add(0.05, 1000);
+                r_50.Add(0.09, 840);
+                r_50.Add(0.7, 940);
+                r_50.Add(1.6, 810);
+                r_50.Add(2.05, 650);
+                r_50.Add(2.15, 0);
+
+                r15 = new InterpXY() {
+                    Title = "+15"
+                };
+                r15.Add(0.0, 0.0);
+                r15.Add(0.03, 1460);
+                r15.Add(0.06, 1250);
+                r15.Add(0.5, 1395);
+                r15.Add(1.15, 1190);
+                r15.Add(1.44, 970);
+                r15.Add(1.5, 0);
+
+                r50 = new InterpXY() {
+                    Title = "+50"
+                };
+                r50.Add(0.0, 0.0);
+                r50.Add(0.04, 1850);
+                r50.Add(0.05, 1580);
+                r50.Add(0.4, 1750);
+                r50.Add(0.92, 1520);
+                r50.Add(1.18, 1200);
+                r50.Add(1.22, 0);
+            }
+
+            public void Init_md() {
+                r_50 = new InterpXY {
+                    Title = "-50"
+                };
+                r_50.Add(0, 0);
+                r_50.Add(1, 30);
+                r_50.Add(4, 37);
+                r_50.Add(40, 39);
+                r_50.Add(72, 35);
+                r_50.Add(85, 0);
+
+                r15 = new InterpXY() {
+                    Title = "+15"
+                };
+                r15.Add(0.0, 0.0);
+                r15.Add(1, 40);
+                r15.Add(3, 55);
+                r15.Add(30, 59);
+                r15.Add(52, 53);
+                r15.Add(62, 0);
+
+                r50 = new InterpXY() {
+                    Title = "+50"
+                };
+                r50.Add(0.0, 0.0);
+                r50.Add(1, 55);
+                r50.Add(2.5, 73);
+                r50.Add(25, 77);
+                r50.Add(43, 70);
+                r50.Add(52, 0);
+            }
+
+            private double temperature;
+
+            public double Temperature {
+                get { return temperature; }
+                set {
+                    temperature = value;
+                    actT = new InterpXY();
+                    if(temperature >= 50d) {
+                        actT = r50.CopyMe();
+                    } else if(temperature <= -50d) {
+                        actT = r_50.CopyMe();
+                    } else if (temperature > -50d && temperature <= 15d) {
+                        actT = getSimilar(r_50, r15, -50d, 15d, temperature);
+                    } else if (temperature > 15d && temperature < 50d) {
+                        actT = getSimilar(r15, r50, 15d, 50d, temperature);
+                    } else {
+                        actT = r15.CopyMe();
+                    }
+                }
+            }
+
+            private InterpXY getSimilar(InterpXY r1, InterpXY r2, double v1, double v2, double temper) {
+                var res = new InterpXY();
+                foreach (var tup4 in r1.Data
+                    .Zip(r2.Data, 
+                        (kv1,kv2) => 
+                            (t1: kv1.Key,
+                            val1: kv1.Value.Value, 
+                            t2: kv2.Key, 
+                            val2: kv2.Value.Value) )) {
+
+                    var t = tup4.t1 + (temper - v1) / (v2 - v1) * (tup4.t2 - tup4.t1);
+                    var val = tup4.val1 + (temper - v1) / (v2 - v1) * (tup4.val2 - tup4.val1);
+                    res.Add(t, val);
+                }
+                return res;
+            }
+
+            public object Clone() {
+                var cl = new P_interp();
+                cl.r15 = r15.CopyMe();
+                cl.r50 = r50.CopyMe();
+                cl.r_50 = r_50.CopyMe();
+                cl.Temperature = temperature;
+                return cl;
+            }
+
+            public void Dispose() {
+                r15?.Dispose();
+                r50?.Dispose();
+                r_50?.Dispose();
+                actT?.Dispose();
+            }
+
+            public double GetV(params double[] t) {
+                return actT.GetV(t);
+            }
         }
     }
 }

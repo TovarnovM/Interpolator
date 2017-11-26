@@ -279,7 +279,17 @@ namespace MeetingPro {
         #region Creation
         //public MaterialObjectNewton body;
         public Force F_engine, F_air, M_air;
-        public double temperature;
+        private double temperature;
+
+        public double Temperature {
+            get { return temperature; }
+            set {
+                temperature = value;
+                gr.r_md.Temperature = temperature;
+                gr.r_rd.Temperature = temperature;
+            }
+        }
+
         public Mis():this(Graphs.GetNew()) {
 
         }
@@ -344,7 +354,7 @@ namespace MeetingPro {
 
             m_air = Vector3D.Zero;
 
-            temperature = 15;
+            Temperature = 15;
             delta_m_air = Vector3D.Zero;
             m_air_dempf = Vector3D.Zero;
             delta_C = Vector3D.Zero;
@@ -360,7 +370,8 @@ namespace MeetingPro {
 
         public class Gr {
             public Interp3D m_x0, c_r_y_i, c_r_x;
-            public Interp2D x_k_d, c_k_y, c_kr_y_i, x_kr_d, alpha_sk, m_omegaz_z_dempf, c_x, r_rd, r_md, deltam_rd, deltam_md, x_m, m, i_x, i_yz;
+            public Interp2D x_k_d, c_k_y, c_kr_y_i, x_kr_d, alpha_sk, m_omegaz_z_dempf, c_x, deltam_rd, deltam_md, x_m, m, i_x, i_yz;
+            public Graphs.P_interp r_rd, r_md;
             public InterpXY m_omegax_x_dempf, ro, a;
             public Gr(Graphs graphs) {
                 i_yz = graphs["i_yz"] as Interp2D;
@@ -369,8 +380,8 @@ namespace MeetingPro {
                 x_m = graphs["x_m"] as Interp2D;
                 deltam_rd = graphs["deltam_rd"] as Interp2D;
                 deltam_md = graphs["deltam_md"] as Interp2D;
-                r_md = graphs["r_md"] as Interp2D;
-                r_rd = graphs["r_rd"] as Interp2D;
+                r_md = graphs["r_md"] as Graphs.P_interp;
+                r_rd = graphs["r_rd"] as Graphs.P_interp;
                 m_x0 = graphs["m_x0"] as Interp3D;
                 c_k_y = graphs["c_k_y"] as Interp2D;
                 x_k_d = graphs["x_k_d"] as Interp2D;
@@ -411,8 +422,57 @@ namespace MeetingPro {
             };
         }
 
-        private double GetKren() {          
-            return Asin(ZAxis * Vector3D.YAxis) * GRAD;
+        private double GetKren() {
+            var z0 = (XAxis & Vector3D.YAxis).Norm;
+            var y0 = (z0 & XAxis).Norm;
+            var x = y0 * YAxis;
+            var y = z0 * YAxis;
+            return Atan2(y,x) * GRAD;
+        }
+        #endregion
+
+        #region NDem
+        public NDemVec GetNDemVec() {
+            var res = new NDemVec();
+            var v = Vel.Vec3D;
+            res.V = v.GetLength();
+            res.T = TimeSynch;
+            res.Temperature = temperature;
+            res.Thetta = 90d - Math.Acos(v.Norm * Vector3D.YAxis) * GRAD;
+
+            var vyn = (v & Vector3D.YAxis).Norm;
+            var ox_c = XAxis;
+            var xvy = ox_c - (ox_c * vyn) * vyn;
+
+            double signA = v.Norm * Vector3D.YAxis < xvy.Norm * Vector3D.YAxis
+                ? 1d
+                : -1d;
+
+            res.Alpha = signA * Math.Acos(xvy.Norm * v.Norm) * GRAD;
+
+            double signB = ox_c * vyn * signA < 0
+                ? 1d
+                : -1d;
+
+            res.Betta = signB * Math.Acos(xvy.Norm * ox_c) * GRAD;
+            res.Kren = GetKren();
+            return res;
+
+        }
+
+        public MT_pos GetMTPos() {
+            var delta = new MT_pos() {
+                X = this.X,
+                Y = this.Y,
+                Z = this.Z
+            };
+
+            var v = Vel.Vec3D;
+            delta.V_x = v.X;
+            delta.V_y = v.Y;
+            delta.V_z = v.Z;
+
+            return delta;
         }
         #endregion
     }  
@@ -436,4 +496,47 @@ namespace MeetingPro {
         public double Om_z { get; set; }
         public double Kren { get; set; }
 }
+
+    public class NDemVec {
+        public double V { get; set; }
+        public double T { get; set; }
+        public double Temperature { get; set; }
+        public double Thetta { get; set; }
+        public double Alpha { get; set; }
+        public double Betta { get; set; }
+        public double Kren { get; set; }
+        //public double Om_y { get; set; }
+        //public double Om_z { get; set; }
+        public Vector ToVec() {
+            return new Vector(V, T, Temperature, Thetta, Alpha, Betta, Kren);//, Om_y, Om_z);
+        }
+        public void FromVec(Vector vec) {
+            V = vec[0];
+            T = vec[1];
+            Temperature = vec[2];
+            Thetta = vec[3];
+            Alpha = vec[4];
+            Betta = vec[5];
+            Kren = vec[6];
+            //Om_y = vec[6];
+            //Om_z = vec[7];
+        }
+        public NDemVec() {
+
+        }
+        public NDemVec(Vector vec) {
+            FromVec(vec);
+        }
+        public NDemVec(NDemVec copy) {
+            FromVec(copy.ToVec());
+        }
+    }
+    public class MT_pos {
+        public double X { get; set; }
+        public double Y { get; set; }
+        public double Z { get; set; }
+        public double V_x { get; set; }
+        public double V_y { get; set; }
+        public double V_z { get; set; }
+    }
 }

@@ -23,23 +23,23 @@ namespace MeetingPro {
                 .ToList();
 
             var filter = new List<string>() {
-            //    "T",
-            //   "V",
-            //    "V_x",
-            //    "V_y",
-            //    "V_z",
-            //    "dV_x",
-            //    "dV_y",
-            //    "dV_z",
-            //   "X",
-            //    "Y",
-            //    "Z",
-            ////    "Alpha",
+                "T",
+               "V",
+                "V_x",
+                "V_y",
+                "V_z",
+                "dV_x",
+                "dV_y",
+                "dV_z",
+               "X",
+                "Y",
+                "Z",
+            //    "Alpha",
             //    "P",
-            //    "Om_x",
-            //    "Om_y",
-            //    "Om_z",
-            ////    "Kren"
+                "Om_x",
+                "Om_y",
+                "Om_z",
+            //    "Kren"
             };
 
 
