@@ -456,10 +456,43 @@ namespace MeetingPro {
 
             res.Betta = signB * Math.Acos(xvy.Norm * ox_c) * GRAD;
             res.Kren = GetKren();
+            res.Om_x = Omega.X;
+            res.Om_y = Omega.Y;
+            res.Om_z = Omega.Z;
             return res;
 
         }
 
+        public void SetNDemVec(NDemVec res) {
+            TimeSynch = res.T;
+            Temperature = res.Temperature;
+            var v0 = Vel.Vec3D;
+            var v_xz = new Vector3D(v0.X, 0, v0.Z).Norm * res.V * Cos(res.Thetta * RAD);
+            var v_y = Sqrt(res.V * res.V - v_xz.GetLengthSquared())*Sign(res.Thetta);
+            var vel = new Vector3D(v_xz.X, v_y, v_xz.Z);
+            Vel.Vec3D = vel;
+
+            var axis_alpha = (vel & Vector3D.YAxis).Norm;
+            var q_alpha = QuaternionD.FromAxisAngle(axis_alpha, res.Alpha * RAD);       
+            var ox_alpha = q_alpha * vel.Norm;
+
+            var axis_betta = (axis_alpha & ox_alpha).Norm;
+            var q_betta = QuaternionD.FromAxisAngle(axis_betta, -res.Betta * RAD);
+            var ox_betta = q_betta * ox_alpha.Norm;
+
+            SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis, Vec3D + ox_betta, new Vector3D(0, 0, 0));
+
+            var kr_n = (ox_betta & Vector3D.YAxis).Norm;
+            var kr_0 = (kr_n & ox_betta).Norm;
+            var q_kr = QuaternionD.FromAxisAngle(ox_betta.Norm, res.Kren * RAD);
+            var oy_kr = q_kr * kr_0;
+
+            SetPosition_LocalPoint_LocalFixed(Vector3D.YAxis, Vec3D + oy_kr, new Vector3D(-1, 0, 0), new Vector3D(1, 0, 0));
+
+            Omega.X = res.Om_x;
+            Omega.Y = res.Om_y;
+            Omega.Z = res.Om_z;
+        }
         public MT_pos GetMTPos() {
             var delta = new MT_pos() {
                 X = this.X,
@@ -473,6 +506,20 @@ namespace MeetingPro {
             delta.V_z = v.Z;
 
             return delta;
+        }
+        public void SetMTpos(MT_pos pos) {
+            X = pos.X;
+            Y = pos.Y;
+            Z = pos.Z;
+            
+            Vel.X = pos.V_x;
+            Vel.Y = pos.V_y;
+            Vel.Z = pos.V_z;
+
+            SynchQandM();
+        }
+        public void SetTimeSynch(double time) {
+            TimeSynch = time;
         }
         #endregion
     }  
@@ -505,10 +552,11 @@ namespace MeetingPro {
         public double Alpha { get; set; }
         public double Betta { get; set; }
         public double Kren { get; set; }
-        //public double Om_y { get; set; }
-        //public double Om_z { get; set; }
+        public double Om_x { get; set; }
+        public double Om_y { get; set; }
+        public double Om_z { get; set; }
         public Vector ToVec() {
-            return new Vector(V, T, Temperature, Thetta, Alpha, Betta, Kren);//, Om_y, Om_z);
+            return new Vector(V, T, Temperature, Thetta, Alpha, Betta, Kren, Om_x, Om_y, Om_z);
         }
         public void FromVec(Vector vec) {
             V = vec[0];
@@ -518,8 +566,23 @@ namespace MeetingPro {
             Alpha = vec[4];
             Betta = vec[5];
             Kren = vec[6];
-            //Om_y = vec[6];
-            //Om_z = vec[7];
+            Om_x = vec[7];
+            Om_y = vec[8];
+            Om_z = vec[9];
+        }
+        public string[] GetHeader(string prefix = "") {
+            return new string[] {
+                prefix+"V",
+                prefix+"T",
+                prefix+"Temperature",
+                prefix+"Thetta",
+                prefix+"Alpha",
+                prefix+"Betta",
+                prefix+"Kren",
+                prefix+"Om_x",
+                prefix+"Om_y",
+                prefix+"Om_z"
+            };
         }
         public NDemVec() {
 
@@ -538,5 +601,41 @@ namespace MeetingPro {
         public double V_x { get; set; }
         public double V_y { get; set; }
         public double V_z { get; set; }
+        public MT_pos() {
+
+        }
+        public MT_pos(Vector vec) {
+            FromVec(vec);
+        }
+        public MT_pos(MT_pos copy) {
+            FromVec(copy.ToVec());
+        }
+        public Vector ToVec() {
+            return new Vector(X, Y, Z, V_x, V_y, V_z);
+        }
+        public void FromVec(Vector vec) {
+            X = vec[0];
+            Y = vec[1];
+            Z = vec[2];
+            V_x = vec[3];
+            V_y = vec[4];
+            V_z = vec[5];
+        }
+        public Vector3D GetPos0() {
+            return new Vector3D(X, Y, Z);
+        }
+        public Vector3D GetVel0() {
+            return new Vector3D(V_x, V_y, V_z);
+        }
+        public string[] GetHeader(string prefix = "") {
+            return new string[] {
+                prefix+"X",
+                prefix+"Y",
+                prefix+"Z",
+                prefix+"V_x",
+                prefix+"V_y",
+                prefix+"V_z"
+            };
+        }
     }
 }

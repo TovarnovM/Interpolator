@@ -562,6 +562,20 @@ namespace Microsoft.Research.Oslo
                 return false;
         }
 
+        public bool Equals(object obj, double tol) {
+            if (obj is Vector) {
+                var v2 = (Vector)obj;
+                if (v2.Length != Length)
+                    return false;
+                var av2 = v2.v;
+                for (var i = 0; i < v.Length; i++)
+                    if (System.Math.Abs(v[i] - av2[i]) > tol)
+                        return false;
+                return true;
+            } else
+                return false;
+        }
+
         public override int GetHashCode()
         {
             return v == null ? base.GetHashCode() : v.GetHashCode();

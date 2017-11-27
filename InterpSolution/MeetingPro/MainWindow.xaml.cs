@@ -96,25 +96,68 @@ namespace MeetingPro {
 
         }
 
-        private void btn_Copy_Click(object sender, RoutedEventArgs e) {
-            var fr = new Vector3D(0, 0, 0);
-            var to = new Vector3D(10, 20, 30);
-            var fr1 = new Vector3D(10, 10, 10);
-            var to1 = new Vector3D(20, 30, 30);
-            Vm.Pm.Series.Clear();
-            for (int n = 2; n < 5; n+=1) {
-                var lst = Vm.GetBezie(fr, to, fr1, to1, n);
-                
-                Vm.Pm.Series.Add(new LineSeries() {
-                    ItemsSource = lst,
-                    DataFieldX = "X",
-                    DataFieldY = "Y",
-                    Smooth = true,
-                    Title = n.ToString()
-                });
-            }
+        List<OneWay> tstRun() {
+            var m = new Mis();
+            m.Vec3D = new Vector3D(0, 0, 0);
+            m.Vel.Vec3D = new Vector3D(1, 0, 0);
+            m.Omega.Y = 0;
+            m.Omega.Z = 0;
+            m.SetTimeSynch(0);
+            m.SynchQandM();
 
+            var v0 = m.Rebuild();
+            var sp0 = Ode.RK45(0, v0, m.f, 0.001).SolveTo(m.gr.r_rd.actT.Data.Last().Key + 0.5).Last();
+
+            var ndv = m.GetNDemVec();
+            var pos = m.GetMTPos();
+
+            //ndv.Kren = 0;
+
+            var gr = new GramofonLarva(ndv, pos);
+            var sols = gr.GetSols();
+            return sols;
+        }
+        Task<List<OneWay>> tstRunAsync() {
+            return Task.Factory.StartNew<List<OneWay>>(tstRun);
+        }
+        private async void btn_Copy_Click(object sender, RoutedEventArgs e) {
+            btn_Copy.IsEnabled = false;
+            var sol = await tstRunAsync();
+            sol.SaveToFile(@"C:\Users\User\Desktop\www.csv");
+            int i = 90;
+            btn_Copy.IsEnabled = true;
+            //var fr = new Vector3D(0, 0, 0);
+            //var to = new Vector3D(10, 20, 30);
+            //var fr1 = new Vector3D(10, 10, 10);
+            //var to1 = new Vector3D(20, 30, 30);
+            //Vm.Pm.Series.Clear();
+            //for (int n = 2; n < 5; n+=1) {
+            //    var lst = Vm.GetBezie(fr, to, fr1, to1, n);
+
+            //    Vm.Pm.Series.Add(new LineSeries() {
+            //        ItemsSource = lst,
+            //        DataFieldX = "X",
+            //        DataFieldY = "Y",
+            //        Smooth = true,
+            //        Title = n.ToString()
+            //    });
+            //}
+
+            //Vm.Pm.InvalidatePlot(true);
+        }
+
+        private void btn_Copy1_Click(object sender, RoutedEventArgs e) {
+            var lst = GramSLoader.LoadFromFile(@"C:\Users\User\Desktop\www.csv");
+            var pts = lst.Uniquest();
+            Vm.Pm.Series.Clear();
+            Vm.Pm.Series.Add(new ScatterSeries() {
+                DataFieldX = "X",
+                DataFieldY = "Y",
+                ItemsSource = pts
+
+            });
             Vm.Pm.InvalidatePlot(true);
+            int f = 44;
         }
     }
 }

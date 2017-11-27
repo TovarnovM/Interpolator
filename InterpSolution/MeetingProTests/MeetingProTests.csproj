@@ -64,6 +64,10 @@
       <Project>{24A42719-BAB0-4300-8EA4-5F0FF86AA926}</Project>
       <Name>MeetingPro</Name>
     </ProjectReference>
+    <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
+      <Project>{441FF4C9-0F85-4470-A274-41408B420F86}</Project>
+      <Name>Sharp3D.Math</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Oslo\Oslo.csproj">
       <Project>{92589C2D-3833-496F-87E8-788FD511B162}</Project>
       <Name>Oslo</Name>

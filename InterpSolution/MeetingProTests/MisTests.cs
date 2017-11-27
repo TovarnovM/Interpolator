@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Sharp3D.Math.Core;
+using Microsoft.Research.Oslo;
 
 namespace MeetingPro.Tests {
     [TestClass()]
@@ -20,7 +22,7 @@ namespace MeetingPro.Tests {
 
         [TestMethod()]
         public void Synch_0Test() {
-            mis.Synch_0(1);           
+            mis.Synch_0(1);
         }
 
         [TestMethod()]
@@ -53,9 +55,34 @@ namespace MeetingPro.Tests {
             var v0 = mis.Rebuild(10);
             var a0 = mis.f(10, v0);
             var s = mis.GetDiffPrms().Select(dp => dp.FullName).ToArray();
-            foreach (var d in v0.ToArray().Concat(a0.ToArray()) ) {
+            foreach (var d in v0.ToArray().Concat(a0.ToArray())) {
                 Assert.IsFalse(Double.IsNaN(d));
             }
+        }
+
+        [TestMethod()]
+        public void SetNDemVecTest() {
+            var m = new Mis();
+            m.Vec3D = new Vector3D(100, 200, 300);
+            m.Vel.Vec3D = new Vector3D(10, 30, 20);
+            m.Omega.Y = 33;
+            m.Omega.Z = -77;
+            m.SetTimeSynch(11);
+            m.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(new Vector3D(1, 0, 0), new Vector3D(1, 1, 1), new Vector3D(0, 0, 0));
+            m.SynchQandM();
+
+            var ndv = m.GetNDemVec();
+            var pos = m.GetMTPos();
+
+            var m2 = new Mis();
+            //m2.SetMTpos(pos);
+            m2.Vel.Vec3D = new Vector3D(10, 0, 0);
+            m2.SetNDemVec(ndv);
+
+            var ndv2 = m2.GetNDemVec();
+            var v1 = ndv.ToVec();
+            var v2 = ndv2.ToVec();
+            Assert.IsTrue( v1.Equals(v2, 1E-4));
         }
     }
 }

@@ -68,6 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Gramofon.cs" />
+    <Compile Include="GramSLoader.cs" />
+    <Compile Include="OneWay.cs" />
     <Compile Include="ViewMod.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +124,10 @@
     <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
       <Project>{441ff4c9-0f85-4470-a274-41408b420f86}</Project>
       <Name>Sharp3D.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyRandom\MyRandom.csproj">
+      <Project>{DB584195-10A3-4633-9388-919F7B8FE87A}</Project>
+      <Name>MyRandom</Name>
     </ProjectReference>
     <ProjectReference Include="..\Oslo\Oslo.csproj">
       <Project>{92589c2d-3833-496f-87e8-788fd511b162}</Project>
