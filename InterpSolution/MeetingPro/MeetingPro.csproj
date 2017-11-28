@@ -71,6 +71,7 @@
     <Compile Include="Gramofon.cs" />
     <Compile Include="GramSLoader.cs" />
     <Compile Include="OneWay.cs" />
+    <Compile Include="TrInterpolator.cs" />
     <Compile Include="ViewMod.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

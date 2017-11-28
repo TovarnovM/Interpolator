@@ -26,7 +26,7 @@ namespace MeetingPro {
             var mis = new Mis();
             
             //mis.delta_eler = -0.5 * Mis.RAD;
-            mis.Vel.X = 0;
+            mis.Vel.X = 10;
             mis.Temperature = -30;
             var v0 = mis.Rebuild();
             double t0 = 0, t1 = 60, dt = 0.1;
@@ -111,7 +111,14 @@ namespace MeetingPro {
             var ndv = m.GetNDemVec();
             var pos = m.GetMTPos();
 
-            //ndv.Kren = 0;
+
+            ndv.Kren = 0;
+            ndv.Om_x = 0;
+            ndv.Om_y = 0;
+            ndv.Om_z = 0;
+            ndv.Alpha = 10;
+            ndv.Betta = 0;
+
 
             var gr = new GramofonLarva(ndv, pos);
             var sols = gr.GetSols();
@@ -148,12 +155,26 @@ namespace MeetingPro {
 
         private void btn_Copy1_Click(object sender, RoutedEventArgs e) {
             var lst = GramSLoader.LoadFromFile(@"C:\Users\User\Desktop\www.csv");
-            var pts = lst.Uniquest();
+            var pts = lst.AddCoord().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+
             Vm.Pm.Series.Clear();
             Vm.Pm.Series.Add(new ScatterSeries() {
                 DataFieldX = "X",
                 DataFieldY = "Y",
-                ItemsSource = pts
+                DataFieldValue = "Val",
+                ItemsSource = pts,
+                LabelFormatString = "{Val:0.0}"
+
+            });
+
+            var pts2 = lst.AddCoord().Uniquest().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+            Vm.Pm.Series.Add(new ScatterSeries() {
+                DataFieldX = "X",
+                DataFieldY = "Y",
+                DataFieldValue = "Val",
+                ItemsSource = pts2,
+                LabelFormatString = "{Val:0.0}",
+                LabelMargin = 16
 
             });
             Vm.Pm.InvalidatePlot(true);

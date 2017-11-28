@@ -82,7 +82,36 @@ namespace MeetingPro.Tests {
             var ndv2 = m2.GetNDemVec();
             var v1 = ndv.ToVec();
             var v2 = ndv2.ToVec();
-            Assert.IsTrue( v1.Equals(v2, 1E-4));
+            Assert.IsTrue(v1.Equals(v2, 1E-4));
+        }
+
+        [TestMethod()]
+        public void GetNDemVecTest() {
+            var m = new Mis();
+            m.Vec3D = new Vector3D(0, 0, 0);
+            m.Vel.Vec3D = new Vector3D(10, 10 ,0);
+            m.Omega.Y = 33;
+            m.Omega.Z = -77;
+            m.SetTimeSynch(11);
+            
+            m.SynchQandM();
+
+            var ndv = m.GetNDemVec();
+            Assert.IsTrue(ndv.Alpha < 0);
+        }
+
+        [TestMethod()]
+        public void GetNDemVecTest2() {
+            var m = new Mis();
+            m.Vec3D = new Vector3D(0, 0, 0);
+            m.Vel.Vec3D = new Vector3D(10, 10, 0);
+            m.Omega.Y = 33;
+            m.Omega.Z = -77;
+            m.SetTimeSynch(11);
+            m.SynchQandM();
+
+            var ndv = m.GetNDemVec();
+            Assert.IsTrue(ndv.Thetta > 0);
         }
     }
 }

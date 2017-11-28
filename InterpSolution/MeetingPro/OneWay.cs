@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using Microsoft.Research.Oslo;
+using System.Linq;
 
 namespace MeetingPro {
     public class OneWay {
@@ -54,6 +55,15 @@ namespace MeetingPro {
             res[i] = YPos;
             return res;
         }
+
+        public Vector ToVector() {
+            return new Vector(ToArray());
+        }
+
+        public void FromVector(Vector vec) {
+            FromArray(vec.ToArray());
+        }
+
         public void FromArray(double[] arr) {
             Vec0 = new NDemVec();
             Pos0 = new MT_pos();

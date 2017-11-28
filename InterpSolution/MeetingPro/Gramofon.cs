@@ -18,7 +18,7 @@ namespace MeetingPro {
         public int n_rnd = 100, n_rnd_tst = 100;
         public GramofonLarva(NDemVec nDemVec0, MT_pos mT_Pos0) {
             mis = new Mis();
-            dt = 0.0001;// delta_t / 100;
+            dt = 0.001;// delta_t / 100;
             this.nDemVec0 = new NDemVec(nDemVec0);
             this.mT_Pos0 = new MT_pos(mT_Pos0);
         }

@@ -54,6 +54,7 @@
     <Compile Include="GraphsTests.cs" />
     <Compile Include="MisTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrInterpolatorTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\InterpApp\InterpApp.csproj">

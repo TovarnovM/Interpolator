@@ -418,8 +418,9 @@ namespace MeetingPro {
                 Om_x = Omega.X *GRAD,
                 Om_y = Omega.Y * GRAD,
                 Om_z = Omega.Z * GRAD,
-                Kren = GetKren()
-            };
+                Kren = GetKren(),
+                Thetta = 90d - Math.Acos(Vel.Vec3D.Norm * Vector3D.YAxis) * GRAD
+        };
         }
 
         private double GetKren() {
@@ -450,7 +451,7 @@ namespace MeetingPro {
 
             res.Alpha = signA * Math.Acos(xvy.Norm * v.Norm) * GRAD;
 
-            double signB = ox_c * vyn * signA < 0
+            double signB = ox_c * vyn * signA > 0
                 ? 1d
                 : -1d;
 
@@ -477,7 +478,7 @@ namespace MeetingPro {
             var ox_alpha = q_alpha * vel.Norm;
 
             var axis_betta = (axis_alpha & ox_alpha).Norm;
-            var q_betta = QuaternionD.FromAxisAngle(axis_betta, -res.Betta * RAD);
+            var q_betta = QuaternionD.FromAxisAngle(axis_betta, res.Betta * RAD);
             var ox_betta = q_betta * ox_alpha.Norm;
 
             SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis, Vec3D + ox_betta, new Vector3D(0, 0, 0));
@@ -537,6 +538,7 @@ namespace MeetingPro {
         public double Y { get; set; }
         public double Z { get; set; }
         public double Alpha { get; set; }
+        public double Thetta { get; set; }
         public double P { get; set; }
         public double Om_x { get; set; }
         public double Om_y { get; set; }

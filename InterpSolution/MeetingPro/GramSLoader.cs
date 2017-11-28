@@ -1,4 +1,6 @@
-﻿using Sharp3D.Math.Core;
+﻿using Microsoft.Research.Oslo;
+using MoreLinq;
+using Sharp3D.Math.Core;
 using SimpleIntegrator;
 using System;
 using System.Collections.Generic;
@@ -52,9 +54,9 @@ namespace MeetingPro {
             return res;
         }
 
-        public static List<Vector2D> Uniquest(this List<OneWay> list) {
+        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list) {
             var goodList = list
-                .Where(ow => true)//ow.Vec1.Kren > -50 && ow.Vec1.Kren < 50)
+                .Where(ow => ow.Vec1.Kren > -50 && ow.Vec1.Kren < 50)
                 .ToList();
           
             Vector3D pos0 = goodList[0].Pos0.GetPos0();
@@ -71,13 +73,51 @@ namespace MeetingPro {
 
             var tups = goodList
                 .Select(ow => {
-                    return (oneW: ow, coord: PlaneMe(sk, ow.Pos1.GetPos0()));
+                    return (pos: PlaneMe(sk, ow.Pos1.GetPos0()), ow: ow);
                 })
                 .ToList();
 
+            return tups ;
+        }
 
+        public static List<(Vector2D pos, OneWay ow)> Uniquest(this List<(Vector2D pos, OneWay ow)> list) {
+            var up = list.MaxBy(tp => tp.pos.Y).pos;
+            var down = list.MinBy(tp => tp.pos.Y).pos;
+            var right = list.MaxBy(tp => tp.pos.X).pos;
+            var left = list.MinBy(tp => tp.pos.X).pos;
+            var center = 0.25 * (up + down + right + left);
 
-            return tups.Select(tp => tp.coord).ToList() ;
+            var dists = new Vector2D[] { up, down, right, left, center };
+            var paramPoss = new(double x, double y)[] { (0,1), (0,-1), (1,0), (-1,0), (0,0) };
+            var sko = dists
+                .Select(pos => (pos - center).GetLength() / 5)
+                .Max();
+
+            var res = dists
+                .Zip(paramPoss, (p, pp) => new { pos = p, ppos = pp })
+                .Select(tp => {
+                    var (pos, ow) = list.GetSmoothP(tp.pos, sko);
+                    ow.XPos = tp.ppos.x;
+                    ow.YPos = tp.ppos.y;
+                    return (pos, ow);
+                })
+                .ToList();
+            return res;
+                
+        }
+
+        public static (Vector2D pos, OneWay ow) GetSmoothP(this List<(Vector2D pos, OneWay ow)> list, Vector2D mo, double sko) {
+            var vec = Vector.Zeros(list[0].ow.ToVector().Length);
+            double sum = 0d;
+            foreach (var tp in list) {
+                var normmn = NormMnozj(mo, sko, tp.pos);
+                vec += tp.ow.ToVector() * normmn;
+                sum += normmn;
+            }
+            vec /= sum;
+            var ow = new OneWay();
+            ow.FromVector(vec);
+            return (pos: mo, ow: ow);
         }
 
         static Vector2D PlaneMe(Orient3D sk, Vector3D pos1) {         
