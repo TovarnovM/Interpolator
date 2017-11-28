@@ -174,7 +174,7 @@ namespace MeetingPro {
                 DataFieldValue = "Val",
                 ItemsSource = pts2,
                 LabelFormatString = "{Val:0.0}",
-                LabelMargin = 16
+                LabelMargin = -16
 
             });
             Vm.Pm.InvalidatePlot(true);
