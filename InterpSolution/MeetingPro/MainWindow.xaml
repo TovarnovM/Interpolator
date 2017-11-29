@@ -6,16 +6,34 @@
         xmlns:local="clr-namespace:MeetingPro"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="377.436" Width="550.212">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="282*"/>
-            <RowDefinition Height="37*"/>
-        </Grid.RowDefinitions>
-        <oxy:PlotView x:Name="PV" Model="{Binding Vm.Pm}" Grid.Row="0" Grid.Column="0"/>
-        <Button Content="Run" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37" Click="Button_Click"/>
-        <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="95,0,0,0" Click="Button_Click_1"/>
-        <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="196,0,0,0" Click="btn_Copy_Click" />
-        <Button x:Name="btn_Copy1" Content="Tst Gramm Load&#xD;&#xA;" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="37"  Margin="290,0,0,0" Click="btn_Copy1_Click"/>
+        <TabControl>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="282*"/>
+                        <RowDefinition Height="37*"/>
+                    </Grid.RowDefinitions>
+                    <oxy:PlotView x:Name="PV" Model="{Binding Vm.Pm}" Grid.Row="0" Grid.Column="0"/>
+                    <Button Content="Run" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37" Click="Button_Click"/>
+                    <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="95,0,0,0" Click="Button_Click_1"/>
+                    <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="196,0,0,0" Click="btn_Copy_Click" />
+                    <Button x:Name="btn_Copy1" Content="Tst Gramm Load&#xD;&#xA;" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="37"  Margin="290,0,0,0" Click="btn_Copy1_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="TabItem">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="281*"/>
+                        <ColumnDefinition Width="255*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Name="tb_temperature" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="-50" VerticalAlignment="Top"/>
+                    <Button Name="btn_run" Content="Button" Margin="10,75,10,0" VerticalAlignment="Top" Click="Button_Click_2" Height="20"/>
+                    <Button x:Name="btn_run_Copy" Content="Button" Margin="10,100,10,0" VerticalAlignment="Top"  Height="20" Click="btn_run_Copy_Click"/>
+                    <TextBox x:Name="tb_id" Height="23" Margin="10,38,10,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

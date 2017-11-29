@@ -16,7 +16,7 @@ namespace MeetingPro {
     public partial class MainWindow : Window {
         public ViewMod Vm { get; set; }
         public MainWindow() {
-            Graphs.FilePath = @"C:\Users\User\Documents\data.xml";
+            //Graphs.FilePath = @"C:\Users\User\Documents\data.xml";
             Vm = new ViewMod();
             DataContext = this;
             InitializeComponent();
@@ -97,30 +97,9 @@ namespace MeetingPro {
         }
 
         List<OneWay> tstRun() {
-            var m = new Mis();
-            m.Vec3D = new Vector3D(0, 0, 0);
-            m.Vel.Vec3D = new Vector3D(1, 0, 0);
-            m.Omega.Y = 0;
-            m.Omega.Z = 0;
-            m.SetTimeSynch(0);
-            m.SynchQandM();
-
-            var v0 = m.Rebuild();
-            var sp0 = Ode.RK45(0, v0, m.f, 0.001).SolveTo(m.gr.r_rd.actT.Data.Last().Key + 0.5).Last();
-
-            var ndv = m.GetNDemVec();
-            var pos = m.GetMTPos();
 
 
-            ndv.Kren = 0;
-            ndv.Om_x = 0;
-            ndv.Om_y = 0;
-            ndv.Om_z = 0;
-            ndv.Alpha = 10;
-            ndv.Betta = 0;
-
-
-            var gr = new GramofonLarva(ndv, pos);
+            var gr = GramofonLarva.Default();
             var sols = gr.GetSols();
             return sols;
         }
@@ -179,6 +158,27 @@ namespace MeetingPro {
             });
             Vm.Pm.InvalidatePlot(true);
             int f = 44;
+        }
+
+        GrammyExecutor ge;
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            btn_run.IsEnabled = false;
+            
+            var gl = GramofonLarva.Default(GramSLoader.GetDouble(tb_temperature.Text));
+            int id = (int)GramSLoader.GetDouble(tb_id.Text);
+            ge = new GrammyExecutor(gl, id);
+            Graphs.FilePath = ge.datapath;
+            //ge.saveFPath = @"C:\Users\User\Desktop\wwww1";
+            //ge.callback = Exc_ExecutDoneNew;
+            ge.Run();
+        }
+
+        private void Exc_ExecutDoneNew() {
+            btn_run.Content = $"{ge.done} / {ge.inqueue}";
+        }
+
+        private void btn_run_Copy_Click(object sender, RoutedEventArgs e) {
+            btn_run_Copy.Content = $"{ge.done} / {ge.inqueue}";
         }
     }
 }

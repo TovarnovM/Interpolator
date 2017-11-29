@@ -54,9 +54,10 @@ namespace MeetingPro {
             return res;
         }
 
-        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list) {
+        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list, double krenMax = 50d, double thettaMax = 80d) {
             var goodList = list
-                .Where(ow => ow.Vec1.Kren > -50 && ow.Vec1.Kren < 50)
+                .Where(ow => ow.Vec1.Kren > -krenMax && ow.Vec1.Kren < krenMax)
+                .Where(ow => ow.Vec1.Thetta > -thettaMax && ow.Vec1.Thetta < thettaMax)
                 .ToList();
           
             Vector3D pos0 = goodList[0].Pos0.GetPos0();
@@ -81,10 +82,52 @@ namespace MeetingPro {
         }
 
         public static List<(Vector2D pos, OneWay ow)> Uniquest(this List<(Vector2D pos, OneWay ow)> list) {
-            var up = list.MaxBy(tp => tp.pos.Y).pos;
-            var down = list.MinBy(tp => tp.pos.Y).pos;
-            var right = list.MaxBy(tp => tp.pos.X).pos;
-            var left = list.MinBy(tp => tp.pos.X).pos;
+            //var up = list.MaxBy(tp => tp.pos.Y).pos;
+            int eliteCount = 7;// list.Count / 10;
+            var up = list
+                .OrderBy(tp => tp.pos.Y)
+                .TakeLast(eliteCount)
+                .Aggregate(new Vector2D(0, 0), (sum, tp) => {
+                    sum += tp.pos;
+                    return sum;
+                },
+                sum => {
+                    sum /= eliteCount;
+                    return sum;
+                });
+            var down = list
+                .OrderBy(tp => tp.pos.Y)
+                .Take(eliteCount)
+                .Aggregate(new Vector2D(0, 0), (sum, tp) => {
+                    sum += tp.pos;
+                    return sum;
+                },
+                sum => {
+                    sum /= eliteCount;
+                    return sum;
+                });
+            var right = list
+                .OrderBy(tp => tp.pos.X)
+                .TakeLast(eliteCount)
+                .Aggregate(new Vector2D(0, 0), (sum, tp) => {
+                    sum += tp.pos;
+                    return sum;
+                },
+                sum => {
+                    sum /= eliteCount;
+                    return sum;
+                });
+            var left = list
+                .OrderBy(tp => tp.pos.X)
+                .Take(eliteCount)
+                .Aggregate(new Vector2D(0, 0), (sum, tp) => {
+                    sum += tp.pos;
+                    return sum;
+                },
+                sum => {
+                    sum /= eliteCount;
+                    return sum;
+                });
             var center = 0.25 * (up + down + right + left);
 
             var dists = new Vector2D[] { up, down, right, left, center };
@@ -99,6 +142,8 @@ namespace MeetingPro {
                     var (pos, ow) = list.GetSmoothP(tp.pos, sko);
                     ow.XPos = tp.ppos.x;
                     ow.YPos = tp.ppos.y;
+                    ow.Vec1.XPos = tp.ppos.x;
+                    ow.Vec1.YPos = tp.ppos.y;
                     return (pos, ow);
                 })
                 .ToList();

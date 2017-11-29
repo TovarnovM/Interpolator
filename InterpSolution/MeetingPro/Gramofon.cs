@@ -1,7 +1,9 @@
 ﻿using Microsoft.Research.Oslo;
 using MyRandomGenerator;
+using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace MeetingPro {
@@ -14,8 +16,13 @@ namespace MeetingPro {
         public int n_helm = 9;
         public double delta0 = -15, delta1 = 15;
         public int n_eler = 7;
-        public double delta_el0 = -20, delta_el1 = 20;
+        public double delta_el0 = -15, delta_el1 = 15;
         public int n_rnd = 100, n_rnd_tst = 100;
+        public int generation = 0;
+        public string saveName = "";
+        public GramofonLarva(OneWay ow):this(ow.Vec1, ow.Pos1) {
+
+        }
         public GramofonLarva(NDemVec nDemVec0, MT_pos mT_Pos0) {
             mis = new Mis();
             dt = 0.001;// delta_t / 100;
@@ -95,6 +102,32 @@ namespace MeetingPro {
             }
             return res;
         }
+        public static GramofonLarva Default(double temperature = 15) {
+            var m = new Mis();
+            m.Temperature = temperature;
+            m.Vec3D = new Vector3D(0, 0, 0);
+            m.Vel.Vec3D = new Vector3D(1, 0, 0);
+            m.Omega.Y = 0;
+            m.Omega.Z = 0;
+            m.SetTimeSynch(0);
+            m.SynchQandM();
 
+            var v0 = m.Rebuild();
+            var sp0 = Ode.RK45(0, v0, m.f, 0.001).SolveTo(m.gr.r_rd.actT.Data.Last().Key + 0.5).Last();
+
+            var ndv = m.GetNDemVec();
+            var pos = m.GetMTPos();
+
+
+            ndv.Kren = 0;
+            ndv.Om_x = 0;
+            ndv.Om_y = 0;
+            ndv.Om_z = 0;
+            ndv.Alpha = 11;
+            ndv.Betta = 0;
+
+
+            return new GramofonLarva(ndv, pos);
+        }
     }
 }

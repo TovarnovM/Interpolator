@@ -557,8 +557,10 @@ namespace MeetingPro {
         public double Om_x { get; set; }
         public double Om_y { get; set; }
         public double Om_z { get; set; }
+        public double XPos { get; set; } = 0; //-1.. +1
+        public double YPos { get; set; } = 0;//-1.. +1
         public Vector ToVec() {
-            return new Vector(V, T, Temperature, Thetta, Alpha, Betta, Kren, Om_x, Om_y, Om_z);
+            return new Vector(V, T, Temperature, Thetta, Alpha, Betta, Kren, Om_x, Om_y, Om_z, XPos, YPos);
         }
         public void FromVec(Vector vec) {
             V = vec[0];
@@ -571,6 +573,8 @@ namespace MeetingPro {
             Om_x = vec[7];
             Om_y = vec[8];
             Om_z = vec[9];
+            XPos = vec[10];
+            YPos = vec[11];
         }
         public string[] GetHeader(string prefix = "") {
             return new string[] {
@@ -583,7 +587,9 @@ namespace MeetingPro {
                 prefix+"Kren",
                 prefix+"Om_x",
                 prefix+"Om_y",
-                prefix+"Om_z"
+                prefix+"Om_z",
+                prefix+"XPos",
+                prefix+"YPos"
             };
         }
         public NDemVec() {

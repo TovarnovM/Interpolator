@@ -68,6 +68,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GrammyExecutor.cs" />
     <Compile Include="Gramofon.cs" />
     <Compile Include="GramSLoader.cs" />
     <Compile Include="OneWay.cs" />
@@ -118,6 +119,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Executor\Executor.csproj">
+      <Project>{E0E0B661-B569-4030-B149-E2A76E131DD6}</Project>
+      <Name>Executor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\InterpApp\InterpApp.csproj">
       <Project>{5c93bceb-59bc-4510-823e-8860581b1332}</Project>
       <Name>InterpApp</Name>
