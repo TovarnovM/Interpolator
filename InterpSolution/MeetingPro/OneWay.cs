@@ -18,12 +18,14 @@ namespace MeetingPro {
         public double XPos { get; set; } = 0; //-1.. +1
         public double YPos { get; set; } = 0;//-1.. +1
 
+        public double Id { get; set; } = 0;
+
         public double[] ToArray() {
             var v0 = Vec0.ToVec();
             var vp0 = Pos0.ToVec();
             var vd0 = Vec1.ToVec();
             var vdp0 = Pos1.ToVec();
-            int n = v0.Length * 2 + vp0.Length * 2 + 6;
+            int n = v0.Length * 2 + vp0.Length * 2 + 7;
             var res = new double[n];
             int i = 0;
             foreach (var d in v0.ToArray()) {
@@ -53,6 +55,8 @@ namespace MeetingPro {
             res[i] = XPos;
             i++;
             res[i] = YPos;
+            i++;
+            res[i] = Id;
             return res;
         }
 
@@ -105,13 +109,16 @@ namespace MeetingPro {
             XPos = arr[i];
             i++;
             YPos = arr[i];
+            i++;
+            if (arr.Length>i)
+                Id = arr[i];
         }
         public string[] GetHeaders() {
             return Vec0.GetHeader(nameof(Vec0)+"-")
                 .Concat(Pos0.GetHeader(nameof(Pos0) +"-"))
                 .Concat(Vec1.GetHeader(nameof(Vec1) + "-"))
                 .Concat(Pos1.GetHeader(nameof(Pos1) + "-"))
-                .Concat(new string[] { "Del1", "Del2", "Del_el", "Flaggy", "XPos", "YPos" })
+                .Concat(new string[] { "Del1", "Del2", "Del_el", "Flaggy", "XPos", "YPos","Id" })
                 .ToArray();
         }
     }

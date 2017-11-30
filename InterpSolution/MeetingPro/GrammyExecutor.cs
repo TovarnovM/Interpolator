@@ -13,7 +13,7 @@ namespace MeetingPro {
         object locker = new object();
         object locker2 = new object();
         public int id_loc_gener = 0;
-        public int maxGeneration = 6;
+        public int maxGeneration = 5;
         public int done = 0;
         public int inqueue = 1;
         public string GetFilePath4Save(GramofonLarva gram) {
@@ -38,6 +38,17 @@ namespace MeetingPro {
             exc.AddToQueue(init_gl);
             Init_Gl = init_gl;
             this.id = id;
+        }
+
+        public GrammyExecutor(List<OneWay> plan) {
+            var worker = new GranneWorker(this);
+            exc = new ThreadExecutor<GramofonLarva, List<GramofonLarva>>(worker) {
+                WorkerCountMax = 9
+            };
+            exc.saveToDoneQueue = false;
+            var gls = plan.Select(ow => new GramofonLarva(ow));
+            exc.AddToQueue(gls);
+
         }
 
         private void Exc_ExecutDoneNew(object sender, Res<GramofonLarva, List<GramofonLarva>> e) {
@@ -73,9 +84,10 @@ namespace MeetingPro {
         public List<GramofonLarva> MapAction(GramofonLarva taskData) {
             var sols = taskData
                 .GetSols();
-            var res = sols
+            var uniquest = sols
                 .AddCoord()
-                .Uniquest()
+                .Uniquest();
+            var res = uniquest
                 .Select(tp => {
                     var gl = new GramofonLarva(tp.ow) {
                         generation = taskData.generation + 1,                     
@@ -86,8 +98,11 @@ namespace MeetingPro {
                 .ToList();
             if (taskData.saveName == "")
                 taskData.saveName = owner.GetFilePath4Save(taskData);
+            sols.AddRange(uniquest.Select(tp => tp.ow));
             sols.SaveToFile(taskData.saveName);
             return res;
         }
     }
+
+
 }

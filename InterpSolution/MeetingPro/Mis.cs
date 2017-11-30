@@ -612,6 +612,10 @@ namespace MeetingPro {
         public MT_pos() {
 
         }
+        public MT_pos(double v, double thetta) {
+            V_x = v * Cos(thetta * Mis.RAD);
+            V_y = v * Sin(thetta * Mis.RAD);
+        }
         public MT_pos(Vector vec) {
             FromVec(vec);
         }

@@ -11,6 +11,40 @@ using System.Text;
 
 namespace MeetingPro {
     public static class GramSLoader {
+        public static void SaveToFile(this List<Grammy> lst, string filePath, string separator = ";") {
+            var csv = new StringBuilder();
+            foreach (var ow in lst) {
+                foreach (var h in ow.ToOneVector().ToArray()) {
+                    csv.Append(h);
+                    csv.Append(separator);
+                }
+                csv.Length--;
+                csv.Append("\n");
+            }
+            File.WriteAllText(filePath, csv.ToString());
+        }
+
+        public static List<Grammy> LoadGrammyFromFile(string filePath, char separator = ';') {
+            var res = new List<Grammy>();
+            using (var reader = new StreamReader(filePath)) {
+                while (!reader.EndOfStream) {
+                    var line = reader.ReadLine();
+                    var lns = line.Split(separator);
+                    var arr = new double[lns.Length];
+                    int i = 0;
+                    foreach (var s in lns) {
+                        arr[i] = GetDouble(s.Trim());
+                        i++;
+                    }
+                    var gr = new Grammy();
+                    gr.FromOneVector(new Vector(arr));
+                    res.Add(gr);
+                }
+
+            }
+            return res;
+        }
+
         public static void SaveToFile(this List<OneWay> lst, string filePath, string separator = ";") {
             var csv = new StringBuilder();
             foreach (var h in lst[0].GetHeaders()) {

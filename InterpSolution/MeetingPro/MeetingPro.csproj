@@ -68,7 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Grammy.cs" />
     <Compile Include="GrammyExecutor.cs" />
+    <Compile Include="GrammyExecutor2.cs" />
     <Compile Include="Gramofon.cs" />
     <Compile Include="GramSLoader.cs" />
     <Compile Include="OneWay.cs" />

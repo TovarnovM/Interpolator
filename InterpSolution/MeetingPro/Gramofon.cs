@@ -13,11 +13,11 @@ namespace MeetingPro {
         public double delta_t = 1d / 23d;
         public double dt;
         public Mis mis;
-        public int n_helm = 9;
+        public int n_helm = 7;
         public double delta0 = -15, delta1 = 15;
-        public int n_eler = 7;
+        public int n_eler = 5;
         public double delta_el0 = -15, delta_el1 = 15;
-        public int n_rnd = 100, n_rnd_tst = 100;
+        public int n_rnd = 50, n_rnd_tst = 0;
         public int generation = 0;
         public string saveName = "";
         public GramofonLarva(OneWay ow):this(ow.Vec1, ow.Pos1) {
@@ -26,8 +26,9 @@ namespace MeetingPro {
         public GramofonLarva(NDemVec nDemVec0, MT_pos mT_Pos0) {
             mis = new Mis();
             dt = 0.001;// delta_t / 100;
-            this.nDemVec0 = new NDemVec(nDemVec0);
             this.mT_Pos0 = new MT_pos(mT_Pos0);
+            this.nDemVec0 = new NDemVec(nDemVec0);
+           
         }
         public void SetMis0(double del1, double del2, double del_el) {
             mis.SetMTpos(mT_Pos0);

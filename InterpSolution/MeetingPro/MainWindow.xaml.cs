@@ -133,30 +133,43 @@ namespace MeetingPro {
         }
 
         private void btn_Copy1_Click(object sender, RoutedEventArgs e) {
-            var lst = GramSLoader.LoadFromFile(@"C:\Users\User\Desktop\www.csv");
-            var pts = lst.AddCoord().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+            try {
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "room Files|*.csv",
+                    FileName = "room"
+                };
+                if (sd.ShowDialog() == true) {
+                    var lst = GramSLoader.LoadFromFile(sd.FileName);
+                    var pts = lst.AddCoord().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
 
-            Vm.Pm.Series.Clear();
-            Vm.Pm.Series.Add(new ScatterSeries() {
-                DataFieldX = "X",
-                DataFieldY = "Y",
-                DataFieldValue = "Val",
-                ItemsSource = pts,
-                LabelFormatString = "{Val:0.0}"
+                    Vm.Pm.Series.Clear();
+                    Vm.Pm.Series.Add(new ScatterSeries() {
+                        DataFieldX = "X",
+                        DataFieldY = "Y",
+                        DataFieldValue = "Val",
+                        ItemsSource = pts,
+                        LabelFormatString = "{Val:0.0}"
 
-            });
+                    });
 
-            var pts2 = lst.AddCoord().Uniquest().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
-            Vm.Pm.Series.Add(new ScatterSeries() {
-                DataFieldX = "X",
-                DataFieldY = "Y",
-                DataFieldValue = "Val",
-                ItemsSource = pts2,
-                LabelFormatString = "{Val:0.0}",
-                LabelMargin = -16
+                    var pts2 = lst.AddCoord().Uniquest().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+                    Vm.Pm.Series.Add(new ScatterSeries() {
+                        DataFieldX = "X",
+                        DataFieldY = "Y",
+                        DataFieldValue = "Val",
+                        ItemsSource = pts2,
+                        LabelFormatString = "{Val:0.0}",
+                        LabelMargin = -16
 
-            });
-            Vm.Pm.InvalidatePlot(true);
+                    });
+                    Vm.Pm.InvalidatePlot(true);
+                }
+
+
+            } finally {
+
+            }
+
             int f = 44;
         }
 
@@ -179,6 +192,93 @@ namespace MeetingPro {
 
         private void btn_run_Copy_Click(object sender, RoutedEventArgs e) {
             btn_run_Copy.Content = $"{ge.done} / {ge.inqueue}";
+        }
+
+        private void btn_plan_Click(object sender, RoutedEventArgs e) {
+            int thn = 7;
+            double th0 = -75, th1 = -th0, dth = (th1 - th0) / (thn - 1);
+
+            int alphn = 7;
+            double alph0 = -15, alph1 = -alph0, dalph = (alph1 - alph0) / (alphn - 1);
+
+            int betn = 7;
+            double bet0 = -15, bet1 = -bet0, dbet = (bet1 - bet0) / (betn - 1);
+
+            int vn = 7;
+            double v0 = 150, v1 = 300, dv = (v1 - v0) / (vn - 1);
+
+            int tempn = 5;
+            double temp0 = -50, temp1 = 50, dtemp = (temp1 - temp0) / (tempn - 1);
+
+            int tn = 5;
+            double t0 = 5, t1 = 45, dt = (t1 - t0) / (tn - 1);
+
+            var lst = new List<OneWay>(thn * alphn * betn * vn * tempn * tn);
+            double id = 0d;
+
+            for (int i = 0; i < thn; i++) {
+                double th = th0 + dth * i;
+
+                for (int j = 0; j < alphn; j++) {
+                    double alph = alph0 + dalph * j;
+
+                    for (int k = 0; k < betn; k++) {
+                        double bet = bet0 + dbet * k;
+
+                        for (int i1 = 0; i1 < vn; i1++) {
+                            double v = v0 + dv * i1;
+
+                            for (int j1 = 0; j1 < tempn; j1++) {
+                                double temp = temp0 + dtemp * j1;
+
+                                for (int k1 = 0; k1 < tn; k1++) {
+                                    double t = t0 + dt * k1;
+
+                                    var ow = new OneWay();
+                                    ow.Pos0 = new MT_pos(v, th);
+                                    ow.Vec0 = new NDemVec() {
+                                        V = v,
+                                        T = t,
+                                        Temperature = temp,
+                                        Thetta = th,
+                                        Alpha = alph,
+                                        Betta = bet,
+                                        Kren = 0,
+                                        Om_x = 0,
+                                        Om_y = 0,
+                                        Om_z = 0
+
+                                    };
+                                    ow.Pos1 = new MT_pos();
+                                    ow.Vec1 = new NDemVec();
+                                    ow.Id = id;
+                                    id += 1d;
+
+                                    lst.Add(ow);
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            lst.SaveToFile(@"C:\Users\User\Desktop\wwww1\plan.csv");
+        }
+
+        GrammyExecutor2 ge2;
+        private void btn_plan_run_Click(object sender, RoutedEventArgs e) {
+            btn_plan_run.IsEnabled = false;
+            var plan = GramSLoader.LoadFromFile("plan.csv");
+            ge2 = new GrammyExecutor2(plan);
+            Graphs.FilePath = ge2.datapath;
+            //ge.saveFPath = @"C:\Users\User\Desktop\wwww1";
+            //ge.callback = Exc_ExecutDoneNew;
+            ge2.Run();
+        }
+
+        private void btn_plan_status_Click(object sender, RoutedEventArgs e) {
+            btn_plan_status.Content = $"{ge2.done} / {ge2.inqueue}";
         }
     }
 }

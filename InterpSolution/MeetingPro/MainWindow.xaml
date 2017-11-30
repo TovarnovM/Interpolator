@@ -25,13 +25,16 @@
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="281*"/>
-                        <ColumnDefinition Width="255*"/>
+                        <ColumnDefinition Width="93*"/>
+                        <ColumnDefinition Width="175*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Name="tb_temperature" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="-50" VerticalAlignment="Top"/>
                     <Button Name="btn_run" Content="Button" Margin="10,75,10,0" VerticalAlignment="Top" Click="Button_Click_2" Height="20"/>
                     <Button x:Name="btn_run_Copy" Content="Button" Margin="10,100,10,0" VerticalAlignment="Top"  Height="20" Click="btn_run_Copy_Click"/>
                     <TextBox x:Name="tb_id" Height="23" Margin="10,38,10,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
+                    <Button x:Name="btn_plan" Content="plan" Margin="10,10,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_Click"/>
+                    <Button x:Name="btn_plan_run" Content="run plan" Margin="10,38,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_run_Click"/>
+                    <Button x:Name="btn_plan_status" Content="plan" Margin="10,63,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_status_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
