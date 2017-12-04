@@ -16,10 +16,12 @@
                         <RowDefinition Height="37*"/>
                     </Grid.RowDefinitions>
                     <oxy:PlotView x:Name="PV" Model="{Binding Vm.Pm}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Content="Run" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37" Click="Button_Click"/>
-                    <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="95,0,0,0" Click="Button_Click_1"/>
-                    <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="79" Height="37"  Margin="196,0,0,0" Click="btn_Copy_Click" />
-                    <Button x:Name="btn_Copy1" Content="Tst Gramm Load&#xD;&#xA;" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="37"  Margin="290,0,0,0" Click="btn_Copy1_Click"/>
+                    <Button Content="Run" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="43" Height="37" Click="Button_Click"/>
+                    <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="56" Height="37"  Margin="48,0,0,0" Click="Button_Click_1"/>
+                    <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="51" Height="37"  Margin="109,0,0,0" Click="btn_Copy_Click" />
+                    <Button x:Name="btn_Copy1" Content="Tst Gramm Load&#xD;&#xA;" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="37"  Margin="175,0,0,0" Click="btn_Copy1_Click"/>
+                    <Button x:Name="btn_grammyLoadFolder" Content="Load List gr folder" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="115" Height="37"  Margin="303,0,0,0" Click="btn_grammyLoadFolder_Click" />
+                    <Button x:Name="btn_grammyLoadFile" Content="Load List gr file" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="115" Height="37"  Margin="423,0,-2,0" Click="btn_grammyLoadFile_Click" />
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">

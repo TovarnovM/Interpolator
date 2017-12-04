@@ -639,6 +639,18 @@ namespace MeetingPro {
         public Vector3D GetVel0() {
             return new Vector3D(V_x, V_y, V_z);
         }
+
+        public void SetPos0(Vector3D pos0) {
+            X = pos0.X;
+            Y = pos0.Y;
+            Z = pos0.Z;
+        }
+
+        public void SetVel0(Vector3D vel0) {
+            V_x = vel0.X;
+            V_y = vel0.Y;
+            V_z = vel0.Z;
+        }
         public string[] GetHeader(string prefix = "") {
             return new string[] {
                 prefix+"X",

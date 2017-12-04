@@ -113,5 +113,14 @@ namespace MeetingPro.Tests {
             var ndv = m.GetNDemVec();
             Assert.IsTrue(ndv.Thetta > 0);
         }
+
+        [TestMethod()]
+        public void GetNDemVecTest33() {
+            var m = new List<int> {
+                1,2,3,4,1,2,5,6
+            };
+            var gb = m.GroupBy(i => i).ToList();
+            var gb0 = gb[0];
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Research.Oslo;
+using Sharp3D.Math.Core;
 using System.Linq;
 
 namespace MeetingPro {
@@ -17,6 +18,10 @@ namespace MeetingPro {
 
         public double XPos { get; set; } = 0; //-1.. +1
         public double YPos { get; set; } = 0;//-1.. +1
+
+        public Vector2D GetPos() {
+            return new Vector2D(XPos, YPos);
+        }
 
         public double Id { get; set; } = 0;
 

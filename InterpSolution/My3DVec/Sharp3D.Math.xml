@@ -14008,6 +14008,14 @@
             <param name="obj">An object to compare to this instance.</param>
             <returns><see langword="true"/> if <paramref name="obj"/> is a <see cref="T:Sharp3D.Math.Core.Vector2D"/> and has the same values as this instance; otherwise, <see langword="false"/>.</returns>
         </member>
+        <member name="M:Sharp3D.Math.Core.Vector2D.EqualsApprox(System.Object,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="obj"></param>
+            <param name="eps"></param>
+            <returns></returns>
+        </member>
         <member name="M:Sharp3D.Math.Core.Vector2D.ToString">
             <summary>
             Returns a string representation of this object.

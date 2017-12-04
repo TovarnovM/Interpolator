@@ -8,9 +8,30 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MeetingPro {
     public static class GramSLoader {
+        public static List<Grammy> LoadGrammyFromFolder(string folderPath, char separator = ';') {
+            var lst = Directory.EnumerateFiles(folderPath).ToList();
+            var res = new List<Grammy>(lst.Count);
+            var locker = new object();
+            Parallel.ForEach(lst,new ParallelOptions() { MaxDegreeOfParallelism = 9 }, fp => {
+                var owList = LoadFromFile(fp, separator);
+                var gr = new Grammy();
+                gr.FromOneWayList(owList);
+                lock (locker) {
+                    res.Add(gr);
+                }
+                
+            });
+            return res;
+        }
+
+        public static Task<List<Grammy>> LoadGrammyFromFolderAsync(string folderPath, char separator = ';') {
+            return Task.Factory.StartNew(() => LoadGrammyFromFolder(folderPath, separator));
+        }
+
         public static void SaveToFile(this List<Grammy> lst, string filePath, string separator = ";") {
             var csv = new StringBuilder();
             foreach (var ow in lst) {
@@ -88,7 +109,7 @@ namespace MeetingPro {
             return res;
         }
 
-        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list, double krenMax = 50d, double thettaMax = 80d) {
+        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list, double krenMax = 50d, double thettaMax = 85d) {
             var goodList = list
                 .Where(ow => ow.Vec1.Kren > -krenMax && ow.Vec1.Kren < krenMax)
                 .Where(ow => ow.Vec1.Thetta > -thettaMax && ow.Vec1.Thetta < thettaMax)

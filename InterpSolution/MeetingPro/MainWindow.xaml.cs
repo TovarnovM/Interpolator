@@ -280,5 +280,40 @@ namespace MeetingPro {
         private void btn_plan_status_Click(object sender, RoutedEventArgs e) {
             btn_plan_status.Content = $"{ge2.done} / {ge2.inqueue}";
         }
+
+        private async void btn_grammyLoadFolder_Click(object sender, RoutedEventArgs e) {
+            try {
+                btn_grammyLoadFolder.IsEnabled = false;
+                using (var dialog = new System.Windows.Forms.FolderBrowserDialog()) {
+                    System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                    if (result == System.Windows.Forms.DialogResult.OK) {
+                        var sp = dialog.SelectedPath;
+                        btn_grammyLoadFolder.Content = "Loading from Folder";
+                        var lst = await GramSLoader.LoadGrammyFromFolderAsync(sp);
+                        lst.SaveToFile("grammy.csv");
+                        btn_grammyLoadFolder.Content = "Creating cluster";
+                        var grClust = await GrammyCluster.CreateAsync(lst);
+
+                    }
+                }
+            } catch (Exception ex) {
+                btn_grammyLoadFolder.Content = "Error";
+                MessageBox.Show(ex.Message);
+            }
+            btn_grammyLoadFolder.IsEnabled = true;
+            btn_grammyLoadFolder.Content = "Load From Folder";
+        }
+
+        private void btn_grammyLoadFile_Click(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "room Files|*.csv",
+                FileName = "room"
+            };
+            if (sd.ShowDialog() == true) {
+                var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
+                var grClust = new GrammyCluster(lst);
+                var interp = grClust.GrammyInterp(new Microsoft.Research.Oslo.Vector(-30, 40, 310, 0, 7, -50));
+            }
+        }
     }
 }

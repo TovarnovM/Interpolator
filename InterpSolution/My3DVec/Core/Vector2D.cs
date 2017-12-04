@@ -605,11 +605,24 @@ namespace Sharp3D.Math.Core
 			return false;
 		}
 
-		/// <summary>
-		/// Returns a string representation of this object.
-		/// </summary>
-		/// <returns>A string representation of this object.</returns>
-		public override string ToString()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <param name="eps"></param>
+        /// <returns></returns>
+        public bool EqualsApprox(object obj, double eps = 1E-6) {
+            if (obj is Vector2D) {
+                Vector2D v = (Vector2D)obj;
+                return (System.Math.Abs(_x - v.X)<eps) && (System.Math.Abs(_y - v.Y) < eps);
+            }
+            return false;
+        }
+        /// <summary>
+        /// Returns a string representation of this object.
+        /// </summary>
+        /// <returns>A string representation of this object.</returns>
+        public override string ToString()
 		{
 			return string.Format("({0}, {1})", _x, _y);
 		}
