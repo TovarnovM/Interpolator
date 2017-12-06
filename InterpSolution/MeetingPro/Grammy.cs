@@ -41,6 +41,7 @@ namespace MeetingPro {
             res[11] = vel1.Z;
             return res;
         }
+        public GrammyPolygon[] polygons;
         public Vector vBegin;
         public int vecBeginLength = 6;
         public int vecLength = 12;
@@ -51,6 +52,7 @@ namespace MeetingPro {
             vLeft = Vector.Zeros(vecLength);
             vRight = Vector.Zeros(vecLength);
             vCenter = Vector.Zeros(vecLength);
+            IntiPolygons();
         }
         public Vector ToOneVector() {
             var res = new double[vecBeginLength + vecLength * 5];
@@ -99,6 +101,7 @@ namespace MeetingPro {
                 vRight[j] = vec[i];
                 i++;
             }
+            IntiPolygons();
         }
         public void FromOneWayList(List<OneWay> list) {
             var uniq = list
@@ -126,6 +129,14 @@ namespace MeetingPro {
             vRight = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(1, 0))).ow, sk0);
             vDown = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, -1))).ow, sk0);
             vCenter = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, 0))).ow, sk0);
+            IntiPolygons();
+        }
+        public void IntiPolygons() {
+            polygons = new GrammyPolygon[4];
+            polygons[0] = new GrammyPolygon(vCenter, vUp, vLeft);
+            polygons[1] = new GrammyPolygon(vCenter, vLeft, vDown);
+            polygons[2] = new GrammyPolygon(vCenter, vDown, vRight);
+            polygons[3] = new GrammyPolygon(vCenter, vRight, vUp);
         }
 
         public double Temperature => vBegin[0];
@@ -135,7 +146,32 @@ namespace MeetingPro {
         public double Betta => vBegin[4];
         public double Thetta => vBegin[5];
 
+        //public Vector PolygonsIntercept(Vector3D ray) {
 
+        //}
+
+        //public bool PolyIntercept(Vector3D ray, Vector[] polygon, ref Vector3D intercP) {
+
+        //}
+    }
+
+    public class GrammyPolygon {
+        public Vector v1, v2, v3;
+        public Vector3D p1, p2, p3;
+        public GrammyPolygon(Vector v1, Vector v2, Vector v3) {
+            this.v1 = v1;
+            this.v2 = v2;
+            this.v3 = v3;
+            p1 = new Vector3D(v1[6], v1[7], v1[8]);
+            p2 = new Vector3D(v2[6], v2[7], v2[8]);
+            p3 = new Vector3D(v3[6], v3[7], v3[8]);
+        }
+        public bool IsCross(Vector3D p_ray, Vector3D ray_dir, ref Vector3D cross_p) {
+
+        }
+        public Vector InterpV(Vector3D p) {
+
+        }
     }
 
     public class GrammyCluster {
