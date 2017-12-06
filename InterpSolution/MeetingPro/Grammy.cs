@@ -158,6 +158,8 @@ namespace MeetingPro {
     public class GrammyPolygon {
         public Vector v1, v2, v3;
         public Vector3D p1, p2, p3;
+        public Vector3D x1, y1;
+        public TrInterpolator interps;
         public GrammyPolygon(Vector v1, Vector v2, Vector v3) {
             this.v1 = v1;
             this.v2 = v2;
@@ -165,12 +167,25 @@ namespace MeetingPro {
             p1 = new Vector3D(v1[6], v1[7], v1[8]);
             p2 = new Vector3D(v2[6], v2[7], v2[8]);
             p3 = new Vector3D(v3[6], v3[7], v3[8]);
+
+            x1 = (p2 - p1).Norm;
+            var z1 = (x1 & (p3 - p1)).Norm;
+            y1 = x1 & z1;
+
+            interps = new TrInterpolator(
+                new Vector2D(0, 0),
+                new Vector2D((p2 - p1) * x1, (p2 - p1) * y1),
+                new Vector2D((p3 - p1) * x1, (p3 - p1) * y1),
+                v1,
+                v2,
+                v3);
         }
         public bool IsCross(Vector3D p_ray, Vector3D ray_dir, ref Vector3D cross_p) {
 
         }
         public Vector InterpV(Vector3D p) {
-
+            var p_loc = new Vector2D(x1 * (p - p1), y1 * (p - p1));
+            return interps.Interp(p_loc);
         }
     }
 
