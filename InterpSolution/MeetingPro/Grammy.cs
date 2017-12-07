@@ -273,7 +273,7 @@ namespace MeetingPro {
                 var n_inds = new int[vBegin.Length];
                 for (int j = 0; j < n_inds.Length; j++) {
                     //Вот тут надо исправить
-                    n_inds[j] = (i / n_devs[j])% n_devs[j] == 0
+                    n_inds[j] = (i %(2* n_devs[j]))/ n_devs[j] == 0
                         ? lst[j].ind0
                         : lst[j].ind1;
                     
@@ -290,11 +290,12 @@ namespace MeetingPro {
             for (int i = 0; i < n_devs.Length; i++) {
                 var vecs_reduce = new List<Vector>(n_devs[i]);
                 for (int j = 0; j < n_devs[i]; j++) {
-                    var vec_red = vecs[j] * lst[i].t + vecs[j + n_devs[i]] * (1 - lst[i].t);
+                    var vec_red = vecs[j] * (1-lst[i].t) + vecs[j + n_devs[i]] * lst[i].t;
                     vecs_reduce.Add(vec_red);
                 }
                 vecs = vecs_reduce;
             }
+
             var res = new Grammy();
             res.FromOneVector(vecs[0]);
             return res;
