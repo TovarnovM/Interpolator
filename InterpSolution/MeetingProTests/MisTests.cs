@@ -122,5 +122,15 @@ namespace MeetingPro.Tests {
             var gb = m.GroupBy(i => i).ToList();
             var gb0 = gb[0];
         }
+        [TestMethod()]
+        public void GetNDemVecTest34() {
+            var m = new List<int>();
+            int n = 16;
+            for (int i = 0; i < 32; i++) {
+                int answ = (i % (2 * n))/n;
+                m.Add(answ);
+            }
+            int y = 99;
+        }
     }
 }
