@@ -4,8 +4,10 @@ using OxyPlot.Series;
 using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
@@ -312,7 +314,18 @@ namespace MeetingPro {
             if (sd.ShowDialog() == true) {
                 var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
                 var grClust = new GrammyCluster(lst);
+                GC.Collect();
                 var interp = grClust.GrammyInterp(new Microsoft.Research.Oslo.Vector(-30, 40, 310, 0, 7, -50));
+                
+                int iterat = 100;
+                var lst2 = new List<Grammy>(iterat);
+                Stopwatch sw = Stopwatch.StartNew();
+                for (int i = 0; i < iterat; i++) {
+                    lst2.Add( grClust.GrammyInterp(new Microsoft.Research.Oslo.Vector(-30, 40, 310, 0, 7, -50)));
+                }
+                sw.Stop();
+                MessageBox.Show((sw.ElapsedMilliseconds / iterat).ToString());
+                
             }
         }
     }
