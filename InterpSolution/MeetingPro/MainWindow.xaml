@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MeetingPro"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="377.436" Width="550.212">
+        Title="MainWindow" Height="453.936" Width="584.712">
     <Grid>
         <TabControl>
             <TabItem Header="TabItem">
@@ -17,11 +17,13 @@
                     </Grid.RowDefinitions>
                     <oxy:PlotView x:Name="PV" Model="{Binding Vm.Pm}" Grid.Row="0" Grid.Column="0"/>
                     <Button Content="Run" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="43" Height="37" Click="Button_Click"/>
-                    <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="56" Height="37"  Margin="48,0,0,0" Click="Button_Click_1"/>
-                    <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="51" Height="37"  Margin="109,0,0,0" Click="btn_Copy_Click" />
-                    <Button x:Name="btn_Copy1" Content="Tst Gramm Load&#xD;&#xA;" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="116" Height="37"  Margin="175,0,0,0" Click="btn_Copy1_Click"/>
-                    <Button x:Name="btn_grammyLoadFolder" Content="Load List gr folder" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="115" Height="37"  Margin="303,0,0,0" Click="btn_grammyLoadFolder_Click" />
-                    <Button x:Name="btn_grammyLoadFile" Content="Load List gr file" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="115" Height="37"  Margin="423,0,-2,0" Click="btn_grammyLoadFile_Click" />
+                    <Button Name="btn" Content="Run tst" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="56" Height="37"  Margin="43,0,0,0" Click="Button_Click_1"/>
+                    <Button x:Name="btn_Copy" Content="Tst Gramm" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="51" Height="37"  Margin="99,0,0,0" Click="btn_Copy_Click" />
+                    <Button x:Name="btn_Copy1" Content="Tst Gramm Load" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="95" Height="37"  Margin="155,0,0,0" Click="btn_Copy1_Click"/>
+                    <Button x:Name="btn_grammyLoadFolder" Content="Load List gr folder" HorizontalAlignment="Left" VerticalAlignment="Top" Width="105" Height="37"  Margin="250,0,0,0" Click="btn_grammyLoadFolder_Click" Grid.Row="1" />
+                    <Button x:Name="btn_grammyLoadFile" Content="Load List gr file" HorizontalAlignment="Left" Grid.Row="1" VerticalAlignment="Top" Width="89" Height="37"  Margin="355,0,0,0" Click="btn_grammyLoadFile_Click" />
+                    <Button Content="InitCond
+" HorizontalAlignment="Left" Margin="486,0,0,0" Grid.Row="1" VerticalAlignment="Top" Width="85" Height="37" Click="Button_Click_5"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
@@ -39,6 +41,29 @@
                     <Button x:Name="btn_plan_status" Content="plan" Margin="10,63,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_status_Click"/>
                 </Grid>
             </TabItem>
+            <TabItem Header="TabItem">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="521*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="310*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="205*"/>
+                        <RowDefinition Height="5"/>
+                        <RowDefinition Height="194*"/>
+                        <RowDefinition Height="65*"/>
+                    </Grid.RowDefinitions>
+                    <oxy:PlotView Name="plot1" Model="{Binding Vm_traect.ModelXY}" Grid.Row="0" Grid.Column="0"/>
+                    <oxy:PlotView Model="{Binding Vm_traect.ModelZY}" Grid.Row="0" Grid.Column="2"/>
+                    <oxy:PlotView Model="{Binding Vm_traect.ModelXZ}" Grid.Row="2" Grid.Column="0"/>
+                    <GridSplitter Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" Height="5" Grid.Row="1" VerticalAlignment="Top" ResizeDirection="Rows"  ResizeBehavior="PreviousAndNext"/>
+                    <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"  ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"/>
+                    <Button Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
+                    <Button Content="tst1" HorizontalAlignment="Left" Margin="90,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="Button_Click_4"/>
+                </Grid>
+            </TabItem>
         </TabControl>
+
     </Grid>
 </Window>

@@ -17,9 +17,11 @@ namespace MeetingPro {
     /// </summary>
     public partial class MainWindow : Window {
         public ViewMod Vm { get; set; }
+        public VM_traect Vm_traect { get; set; }
         public MainWindow() {
             //Graphs.FilePath = @"C:\Users\User\Documents\data.xml";
             Vm = new ViewMod();
+            Vm_traect = new VM_traect();
             DataContext = this;
             InitializeComponent();
         }
@@ -314,19 +316,72 @@ namespace MeetingPro {
             if (sd.ShowDialog() == true) {
                 var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
                 var grClust = new GrammyCluster(lst);
-                GC.Collect();
-                var interp = grClust.GrammyInterp(new Microsoft.Research.Oslo.Vector(-30, 40, 310, 0, 7, -50));
-                
-                int iterat = 100;
-                var lst2 = new List<Grammy>(iterat);
-                Stopwatch sw = Stopwatch.StartNew();
-                for (int i = 0; i < iterat; i++) {
-                    lst2.Add( grClust.GrammyInterp(new Microsoft.Research.Oslo.Vector(-30, 40, 310, 0, 7, -50)));
-                }
-                sw.Stop();
-                MessageBox.Show((sw.ElapsedMilliseconds / iterat).ToString());
                 
             }
+        }
+
+
+        GrammyCluster grammyCluster_1_23;
+        private void Button_Click_3(object sender, RoutedEventArgs e) {
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "GrammyCluster Files|*.csv",
+                FileName = "GrammyCluster"
+            };
+            if (sd.ShowDialog() == true) {
+                var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
+                grammyCluster_1_23 = new GrammyCluster(lst);
+            }
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) {
+            var lst = grammyCluster_1_23.GetTstList(new Vector3D(0, 300, 0), new Vector3D(10000, 0, 0), 30);
+            Vm_traect.DrawOneTraectory(lst, "tst");
+        }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e) {
+            var temps = new double[] { -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 };
+            //var lst = temps
+            //    .Select(temperat => {
+            //        var tpl = InitConditions.GetOneSol(temperat);
+            //        return new {
+            //            Vel = tpl.vel,
+            //            T = temperat,
+            //            X = tpl.x,
+            //            time = tpl.t
+
+            //        };
+            //    })
+            //    .ToList();
+
+            //Vm.Pm.Series.Clear();
+            //Vm.Pm.Series.Add(new ScatterSeries() {
+            //    ItemsSource = lst,
+            //    DataFieldX = "T",
+            //    DataFieldY = "Vel"
+            //});
+
+
+            var sers = temps
+                .Select(temp => {
+                    var mis = new Mis();
+                    mis.Temperature = temp;
+                    var interp = mis.gr.r_md.actT.Data;
+                    //var interp = mis.gr.m.Data.Values[2].Data;
+                    var ser = new LineSeries() {
+                        Title = $"{temp}"
+                    };
+
+                    foreach (var kv in interp) {
+                        ser.Points.Add(new DataPoint(kv.Key, kv.Value.Value));
+                    }
+
+                    return ser;
+
+                }).ToList();
+
+            Vm.Pm.Series.Clear();
+            sers.ForEach(s => Vm.Pm.Series.Add(s));
+            Vm.Pm.InvalidatePlot(true);
         }
     }
 }

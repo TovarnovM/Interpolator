@@ -70,13 +70,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Grammy.cs" />
+    <Compile Include="GrammyCluster.cs" />
     <Compile Include="GrammyExecutor.cs" />
     <Compile Include="GrammyExecutor2.cs" />
+    <Compile Include="GrammyPolygon.cs" />
     <Compile Include="Gramofon.cs" />
     <Compile Include="GramSLoader.cs" />
+    <Compile Include="InitConditions.cs" />
     <Compile Include="OneWay.cs" />
     <Compile Include="TrInterpolator.cs" />
     <Compile Include="ViewMod.cs" />
+    <Compile Include="VM_traect.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

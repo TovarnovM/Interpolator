@@ -175,7 +175,6 @@ namespace MeetingPro {
             res.Add(-40,1.515 );
             res.Add(-35,1.484 );
             res.Add(-30,1.453 );
-            res.Add(-25, 1.484);
             res.Add(-20,1.395 );
             res.Add(-15,1.369 );
             res.Add(-10,1.342 );
@@ -235,8 +234,8 @@ namespace MeetingPro {
                     Title = "-50"
                 };
                 r_50.Add(0, 0);
-                r_50.Add(1, 30);
-                r_50.Add(4, 37);
+                r_50.Add(0.5, 30);
+                r_50.Add(1, 37);
                 r_50.Add(40, 39);
                 r_50.Add(72, 35);
                 r_50.Add(85, 0);
@@ -245,8 +244,8 @@ namespace MeetingPro {
                     Title = "+15"
                 };
                 r15.Add(0.0, 0.0);
-                r15.Add(1, 40);
-                r15.Add(3, 55);
+                r15.Add(0.5, 40);
+                r15.Add(1, 55);
                 r15.Add(30, 59);
                 r15.Add(52, 53);
                 r15.Add(62, 0);
@@ -255,8 +254,8 @@ namespace MeetingPro {
                     Title = "+50"
                 };
                 r50.Add(0.0, 0.0);
-                r50.Add(1, 55);
-                r50.Add(2.5, 73);
+                r50.Add(0.5, 55);
+                r50.Add(1, 73);
                 r50.Add(25, 77);
                 r50.Add(43, 70);
                 r50.Add(52, 0);

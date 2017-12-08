@@ -33,8 +33,8 @@ namespace MeetingPro {
 
         public double X_m;
         public void Set_Mass_Xs(double t) {
-            var deltam_rd = gr.deltam_rd.GetV(GetTemperature(), t);
-            var deltam_md = gr.deltam_md.GetV(GetTemperature(), t);
+            var deltam_rd = gr.deltam_rd.GetV(Temperature, t);
+            var deltam_md = gr.deltam_md.GetV(Temperature, t);
             X_m = gr.x_m.GetV(deltam_rd, deltam_md)/1000;
             Mass.Value = gr.m.GetV(deltam_rd, deltam_md);
             Mass3D.Ix = gr.i_x.GetV(deltam_rd, deltam_md);
@@ -42,8 +42,8 @@ namespace MeetingPro {
             Mass3D.Iz = Mass3D.Iy;
         }
         public void Set_F_engine(double t) {
-            var r_rd = 9.80665 * gr.r_rd.GetV(t, GetTemperature());
-            var r_md = 9.80665 * gr.r_md.GetV(t, GetTemperature());
+            var r_rd = 9.80665 * gr.r_rd.GetV(t);
+            var r_md = 9.80665 * gr.r_md.GetV(t);
             F_engine.Value = r_rd + r_md;
         }
         #endregion
@@ -71,7 +71,7 @@ namespace MeetingPro {
         public double Mach;
         public void SetMach() {
             var a = gr.a;
-            Mach = Vel.Vec3D.GetLength() / a.GetV(GetTemperature());
+            Mach = Vel.Vec3D.GetLength() / a.GetV(Temperature);
         }
 
         public double qS;
@@ -79,7 +79,7 @@ namespace MeetingPro {
         public void Set_qS() {
             var ro_gr = gr.ro;
             var v = Vel.Vec3D.GetLength();
-            qS = ro_gr.GetV(GetTemperature()) * 0.5 * Sqr(v) * Sm;
+            qS = ro_gr.GetV(Temperature) * 0.5 * Sqr(v) * Sm;
         }
 
         /// <summary>
@@ -288,6 +288,10 @@ namespace MeetingPro {
                 gr.r_md.Temperature = temperature;
                 gr.r_rd.Temperature = temperature;
             }
+        }
+
+        public double GetTrd1() {
+            return gr.r_rd.actT.Data.Last().Key;         
         }
 
         public Mis():this(Graphs.GetNew()) {
