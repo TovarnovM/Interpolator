@@ -453,13 +453,28 @@ namespace MeetingPro {
                 ? 1d
                 : -1d;
 
-            res.Alpha = signA * Math.Acos(xvy.Norm * v.Norm) * GRAD;
+
+            var dot = xvy.Norm * v.Norm;
+            if (dot > 1d) {
+                dot = 1d;
+            } else if (dot < -1d) {
+                dot = -1d;
+            }
+            res.Alpha = signA * Math.Acos(dot) * GRAD;
 
             double signB = ox_c * vyn * signA > 0
                 ? 1d
                 : -1d;
-
-            res.Betta = signB * Math.Acos(xvy.Norm * ox_c) * GRAD;
+            dot = xvy.Norm * ox_c;
+            if(dot > 1d) {
+                dot = 1d;
+            } else if(dot < -1d) {
+                dot = -1d;
+            }
+            res.Betta = signB * Math.Acos(dot) * GRAD;
+            if (double.IsNaN(res.Betta)) {
+                int gg = 77;
+            }
             res.Kren = GetKren();
             res.Om_x = Omega.X;
             res.Om_y = Omega.Y;

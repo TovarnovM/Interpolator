@@ -50,12 +50,17 @@ namespace MeetingPro {
             using (var reader = new StreamReader(filePath)) {
                 while (!reader.EndOfStream) {
                     var line = reader.ReadLine();
-                    var lns = line.Split(separator);
+                    var lns = line.Trim().Split(separator);
                     var arr = new double[lns.Length];
                     int i = 0;
                     foreach (var s in lns) {
                         arr[i] = GetDouble(s.Trim());
                         i++;
+                    }
+                    foreach (var d in arr) {
+                        if (Double.IsNaN(d)) {
+                            int y = 77;
+                        }
                     }
                     var gr = new Grammy();
                     gr.FromOneVector(new Vector(arr));
@@ -98,6 +103,9 @@ namespace MeetingPro {
                     int i = 0;
                     foreach (var s in lns) {
                         arr[i] = GetDouble(s.Trim());
+                        if (double.IsNaN(arr[i])) {
+                            int gg = 77;
+                        }
                         i++;
                     }
                     var ow = new OneWay();
@@ -109,7 +117,7 @@ namespace MeetingPro {
             return res;
         }
 
-        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list, double krenMax = 50d, double thettaMax = 85d) {
+        public static List<(Vector2D pos, OneWay ow)> AddCoord(this List<OneWay> list, double krenMax = 180d, double thettaMax = 185d) {
             var goodList = list
                 .Where(ow => ow.Vec1.Kren > -krenMax && ow.Vec1.Kren < krenMax)
                 .Where(ow => ow.Vec1.Thetta > -thettaMax && ow.Vec1.Thetta < thettaMax)
@@ -188,7 +196,7 @@ namespace MeetingPro {
             var dists = new Vector2D[] { up, down, right, left, center };
             var paramPoss = new(double x, double y)[] { (0,1), (0,-1), (1,0), (-1,0), (0,0) };
             var sko = dists
-                .Select(pos => (pos - center).GetLength() / 5)
+                .Select(pos => (pos - center).GetLength() / 12)
                 .Max();
 
             var res = dists
@@ -211,11 +219,22 @@ namespace MeetingPro {
             double sum = 0d;
             foreach (var tp in list) {
                 var normmn = NormMnozj(mo, sko, tp.pos);
-                vec += tp.ow.ToVector() * normmn;
+                var db = tp.ow.ToVector() * normmn;
+                for (int i = 0; i < db.Length; i++) {
+                    if (double.IsNaN(db[i])) {
+                        int gg = 77;
+                    }
+                }
+                vec += db;
                 sum += normmn;
             }
             vec /= sum;
             var ow = new OneWay();
+            for (int i = 0; i < vec.Length; i++) {
+                if (double.IsNaN(vec[i])) {
+                    int gg = 77;
+                }
+            }
             ow.FromVector(vec);
             return (pos: mo, ow: ow);
         }
@@ -230,17 +249,23 @@ namespace MeetingPro {
         }
 
         public static double GetDouble(string value, double defaultValue = 0d) {
-
-            //Try parsing in the current culture
-            if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out double result) &&
-                //Then try in US english
-                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result) &&
-                //Then in neutral language
-                !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result)) {
-                result = defaultValue;
+            try {
+                //Try parsing in the current culture
+                if (!double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.CurrentCulture, out double result) &&
+                    //Then try in US english
+                    !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.GetCultureInfo("en-US"), out result) &&
+                    //Then in neutral language
+                    !double.TryParse(value, System.Globalization.NumberStyles.Any, CultureInfo.InvariantCulture, out result)) {
+                    result = defaultValue;
+                }
+                if (double.IsNaN(result)) {
+                    result = defaultValue;
+                }
+                return result;
+            } catch {
+                return defaultValue;
             }
 
-            return result;
         }
     }
 }

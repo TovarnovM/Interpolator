@@ -32,5 +32,20 @@ namespace MeetingPro.Tests {
             var (d,cp) = GrammyPolygon.DistanceToSegment(p, pl2, pl1);
 
         }
+
+        [TestMethod()]
+        public void DistanceToSegmentTest2() {
+            var gr = new Grammy();
+            gr.FromOneVector(new Vector(
+                1,  2,  3,  4,  5,  6,
+                11, 21, 31, 41, 51, 61, 10, 10, 0,  10, 10, 0,
+                12, 22, 32, 42, 52, 62, 10, -10,0,  10, -10,0,
+                13, 23, 33, 43, 53, 63, 10, 0,  -10,10, 0,  -10,
+                14, 24, 34, 44, 54, 64, 10, 0,  10, 10, 0,  10,
+                10, 20, 30, 40, 50, 60, 10, 0,  0,  10, 0,  0
+                )
+            );
+            var res = gr.PolygonsIntercept(new Vector3D(0, 0, 0), new Vector3D(1, 0.5, 0));
+        }
     }
 }

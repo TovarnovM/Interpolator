@@ -200,7 +200,7 @@ namespace MeetingPro {
             var nextPos = GoToNextPos(currPos, posFromGrammy);
 
             currPos = nextPos;
-            currVec = nextVec;
+            currVec = Grammy.BeginVecFromVec(nextVec);
         }
 
         public double GrammyStep_toPoint(Vector3D to_point, ref MT_pos currPos, ref Vector currVec) {
@@ -219,6 +219,18 @@ namespace MeetingPro {
                 if (dist < 100) {
                     break;
                 }
+                res.Add(pos0.GetPos0());
+            }
+            return res;
+        }
+        public List<Vector3D> GetTstList2(Vector3D p0, Vector3D p_dir, double temperat, int n = 23 * 30) {
+            var (pos0, vec0, _) = InitConditions.GetInitCondition(p0, p0 + p_dir*10, temperat);
+
+            var res = new List<Vector3D>(n + 2);
+            res.Add(pos0.GetPos0());
+            for (int i = 0; i < n; i++) {
+                GrammyStep_ray(p_dir, ref pos0, ref vec0);
+
                 res.Add(pos0.GetPos0());
             }
             return res;

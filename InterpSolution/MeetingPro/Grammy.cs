@@ -36,13 +36,18 @@ namespace MeetingPro {
             res[9] = vel1.X;
             res[10] = vel1.Y;
             res[11] = vel1.Z;
+            for (int i = 0; i < res.Length; i++) {
+                if (double.IsNaN(res[i])) {
+                    int gg = 77;
+                }
+            }
             return res;
         }
         public GrammyPolygon[] polygons;
         public int polyCount;
         public Vector vBegin;
-        public int vecBeginLength = 6;
-        public int vecLength = 12;
+        public static int vecBeginLength = 6;
+        public static int vecLength = 12;
         public Grammy() {
             vBegin = Vector.Zeros(vecBeginLength);
             vUp = Vector.Zeros(vecLength);
@@ -81,6 +86,7 @@ namespace MeetingPro {
             }
             return new Vector(res);
         }
+
         public void FromOneVector(Vector vec) {
             int i = 0;
             for (int j = 0; j < vBegin.Length; j++) {
@@ -119,7 +125,7 @@ namespace MeetingPro {
             var ow0 = uniq[0].ow;
             var pos0 = ow0.Pos0;
 
-            sk0.SetPosition_LocalPoint_LocalFixed(Vector3D.XAxis, new Vector3D(pos0.V_x, 0, pos0.V_z), -Vector3D.YAxis, Vector3D.YAxis);
+            sk0.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis, new Vector3D(pos0.V_x, 0, pos0.V_z), -Vector3D.YAxis, Vector3D.YAxis);
             sk0.Vec3D = pos0.GetPos0();
             sk0.SynchQandM();
 
@@ -183,6 +189,10 @@ namespace MeetingPro {
                 V_z = vec[11]
             };
         } 
+
+        public static Vector BeginVecFromVec(Vector interpVec) {
+            return interpVec[0, vecBeginLength - 1];
+        }
 
     }
 }
