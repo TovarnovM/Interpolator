@@ -334,7 +334,7 @@ namespace MeetingPro {
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e) {
-            var lst = grammyCluster_1_23.GetTstList2(new Vector3D(0, 30, 0), new Vector3D(1, 1, 1), 30);
+            var lst = grammyCluster_1_23.GetTstList(new Vector3D(0, 30, 0), new Vector3D(10000, 1, 1), 30);
             Vm_traect.DrawOneTraectory(lst, "tst");
         }
 

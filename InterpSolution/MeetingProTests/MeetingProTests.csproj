@@ -54,6 +54,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="GrammyClusterTests.cs" />
     <Compile Include="GrammyPolygonTests.cs" />
     <Compile Include="GraphsTests.cs" />
     <Compile Include="MisTests.cs" />

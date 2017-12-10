@@ -97,33 +97,55 @@ namespace MeetingPro {
             }
         }
 
-        public MT_pos GoToNextPos(MT_pos fromPos, MT_pos posFromGranny) {
-            var vx0 = fromPos.V_x;
-            var vz0 = fromPos.V_z;
-            var vxz0 = Math.Sqrt(vx0 * vx0 + vz0 * vz0);
+        public static MT_pos GoToNextPos(MT_pos fromPos, MT_pos posFromGranny) {
+            var xl = new Vector3D(fromPos.V_x, 0, fromPos.V_z).Norm;
+            var yl = new Vector3D(0, 1, 0);
+            var zl = xl & yl;
 
-            var x_vx0n = vx0 / vxz0;
-            var x_vz0n = vz0 / vxz0;
+            var xg = new Vector3D(Vector3D.XAxis * xl, 0, Vector3D.XAxis * zl);
+            var yg = new Vector3D(0, 1, 0);
+            var zg = new Vector3D(Vector3D.ZAxis * xl, 0, Vector3D.ZAxis * zl);
 
-            var z_vx0n = -x_vz0n;
-            var z_vz0n = x_vx0n;
+            var posl = posFromGranny.GetPos0();
+            var pos1 = fromPos.GetPos0() + new Vector3D(posl * xg, posl * yg, posl * zg);
 
-            var x1 = fromPos.X + x_vx0n * posFromGranny.X + z_vx0n * posFromGranny.Z;
-            var y1 = fromPos.Y + posFromGranny.Y;
-            var z1 = fromPos.Z + x_vz0n * posFromGranny.X + z_vz0n * posFromGranny.Z;
-
-            var vx1 = x_vx0n * posFromGranny.V_x + z_vx0n * posFromGranny.V_z;
-            var vy1 = posFromGranny.V_y;
-            var vz1 = x_vz0n * posFromGranny.V_x + z_vz0n * posFromGranny.V_z;
+            var vell = posFromGranny.GetVel0();
+            var vel1 = new Vector3D(vell * xg, vell * yg, vell * zg);
 
             return new MT_pos() {
-                X = x1,
-                Y = y1,
-                Z = z1,
-                V_x = vx1,
-                V_y = vy1,
-                V_z = vz1
+                X = pos1.X,
+                Y = pos1.Y,
+                Z = pos1.Z,
+                V_x = vel1.X,
+                V_y = vel1.Y,
+                V_z = vel1.Z
             };
+            //var vx0 = fromPos.V_x;
+            //var vz0 = fromPos.V_z;
+            //var vxz0 = Math.Sqrt(vx0 * vx0 + vz0 * vz0);
+
+            //var x_vx0n = vx0 / vxz0;
+            //var x_vz0n = vz0 / vxz0;
+
+            //var z_vx0n = -x_vz0n;
+            //var z_vz0n = x_vx0n;
+
+            //var x1 = fromPos.X + x_vx0n * posFromGranny.X + z_vx0n * posFromGranny.Z;
+            //var y1 = fromPos.Y + posFromGranny.Y;
+            //var z1 = fromPos.Z + x_vz0n * posFromGranny.X + z_vz0n * posFromGranny.Z;
+
+            //var vx1 = x_vx0n * posFromGranny.V_x + z_vx0n * posFromGranny.V_z;
+            //var vy1 = posFromGranny.V_y;
+            //var vz1 = x_vz0n * posFromGranny.V_x + z_vz0n * posFromGranny.V_z;
+
+            //return new MT_pos() {
+            //    X = x1,
+            //    Y = y1,
+            //    Z = z1,
+            //    V_x = vx1,
+            //    V_y = vy1,
+            //    V_z = vz1
+            //};
         }
 
         public Grammy GrammyInterp(Vector vBegin) {
