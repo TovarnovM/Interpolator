@@ -56,7 +56,7 @@ namespace MeetingPro {
         public int MapAction(OneWay OneWayP) {
             var glrv = new GramofonLarva(OneWayP.Vec0, OneWayP.Pos0);
             var sols = glrv
-                .GetSols();
+                .GetSols_short();
 
             var fp = owner.GetFilePath4Save(OneWayP);
             sols.SaveToFile(fp);

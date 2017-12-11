@@ -82,6 +82,27 @@ namespace MeetingPro {
             return res;
         }
 
+        public List<(double del1, double del2, double del_el, double flaggy)> GetPlan_short() {
+            int n_r = 3;
+            var res = new List<(double del1, double del2, double del_el, double flaggy)>(5 + n_r * n_r * n_eler + n_rnd);
+            double ddelt = (delta1 - delta0) / (n_r - 1);
+            double d_el1 = 5;
+            double d_el0 = -5;
+            double ddelt_el = (d_el1 - d_el0) / (n_eler - 1);
+
+            for (int i = 0; i < n_r; i++) {
+                double del1 = delta0 + ddelt * i;
+                for (int j = 0; j < n_r; j++) {
+                    double del2 = delta0 + ddelt * j;
+                    for (int k = 0; k < n_eler; k++) {
+                        double del_el = d_el0 + ddelt_el * k;
+                        res.Add((del1, del2, del_el, 0));
+                    }
+                }
+            }
+            return res;
+        }
+
         public List<OneWay> GetSols() {
             var plan = GetPlan();
             var res = new List<OneWay>(plan.Count); 
@@ -103,6 +124,29 @@ namespace MeetingPro {
             }
             return res;
         }
+
+        public List<OneWay> GetSols_short() {
+            var plan = GetPlan_short();
+            var res = new List<OneWay>(plan.Count);
+            foreach (var (del1, del2, del_el, flaggy) in plan) {
+                var (pos1, vec1) = CalcOneVar(del1, del2, del_el);
+                var ow = new OneWay {
+                    Vec0 = new NDemVec(nDemVec0),
+                    Pos0 = new MT_pos(mT_Pos0),
+
+                    Del1 = del1,
+                    Del2 = del2,
+                    Del_el = del_el,
+                    Flaggy = flaggy,
+
+                    Vec1 = vec1,
+                    Pos1 = pos1
+                };
+                res.Add(ow);
+            }
+            return res;
+        }
+
         public static GramofonLarva Default(double temperature = 15) {
             var m = new Mis();
             m.Temperature = temperature;

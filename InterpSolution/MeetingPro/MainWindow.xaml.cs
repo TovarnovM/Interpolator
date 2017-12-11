@@ -17,11 +17,15 @@ namespace MeetingPro {
     /// </summary>
     public partial class MainWindow : Window {
         public ViewMod Vm { get; set; }
+        public ViewMod Vm3 { get; set; }
+        public VM_grammy Vm_gr { get; set; }
         public VM_traect Vm_traect { get; set; }
         public MainWindow() {
             //Graphs.FilePath = @"C:\Users\User\Documents\data.xml";
             Vm = new ViewMod();
+            Vm3 = new ViewMod();
             Vm_traect = new VM_traect();
+            Vm_gr = new VM_grammy();
             DataContext = this;
             InitializeComponent();
         }
@@ -77,10 +81,20 @@ namespace MeetingPro {
 
         private void Button_Click_1(object sender, RoutedEventArgs e) {
             var mis = new Mis();
-            var tetta0 = 40 * Mis.RAD;
+            
+            var tetta0 = 0 * Mis.RAD;
             var VecOX = new Vector3D(Math.Cos(tetta0), Math.Sin(tetta0), 0);
             mis.RotateOxThenNearOy(VecOX, Vector3D.YAxis);
             mis.Vel.Vec3D = VecOX;
+
+            mis.delta_i_rad[0] = 15d * 3.14/180d;
+            mis.delta_i_rad[1] = 5d * 3.14 / 180d;
+            mis.delta_i_rad[2] = -mis.delta_i_rad[0];
+            mis.delta_i_rad[3] = -mis.delta_i_rad[1];
+            mis.delta_eler = 1 * 3.14 / 180;
+           mis.Y = 1000;
+            mis.SynchQandM();
+
             var v0 = mis.Rebuild();
             var res = Ode.RK45(0, v0, mis.f, 0.005);
 
@@ -144,7 +158,7 @@ namespace MeetingPro {
                 };
                 if (sd.ShowDialog() == true) {
                     var lst = GramSLoader.LoadFromFile(sd.FileName);
-                    var pts = lst.AddCoord().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+                    var pts = lst.AddCoord().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, B = tp.ow.Vec1.Betta, A = tp.ow.Vec1.Alpha, B0 = tp.ow.Vec0.Betta, A0 = tp.ow.Vec0.Alpha  }).ToList();
 
                     Vm.Pm.Series.Clear();
                     Vm.Pm.Series.Add(new ScatterSeries() {
@@ -152,17 +166,17 @@ namespace MeetingPro {
                         DataFieldY = "Y",
                         DataFieldValue = "Val",
                         ItemsSource = pts,
-                        LabelFormatString = "{Val:0.0}"
+                        LabelFormatString = "A:{A:0.0} B:{B:0.0}"//"{Val:0.0}"//"{Del1:0.0} : {Del2:0.0}"
 
                     });
 
-                    var pts2 = lst.AddCoord().Uniquest().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, Val = tp.ow.Vec1.Kren }).ToList();
+                    var pts2 = lst.AddCoord().Uniquest().Select(tp => new { X = tp.pos.X, Y = tp.pos.Y, B = tp.ow.Vec1.Betta, A = tp.ow.Vec1.Alpha, B0 = tp.ow.Vec0.Betta, A0 = tp.ow.Vec0.Alpha }).ToList();
                     Vm.Pm.Series.Add(new ScatterSeries() {
                         DataFieldX = "X",
                         DataFieldY = "Y",
                         DataFieldValue = "Val",
                         ItemsSource = pts2,
-                        LabelFormatString = "{Val:0.0}",
+                        LabelFormatString = "A:{A:0.0} B:{B:0.0} A0:{A0:0.0} B0:{B0:0.0}",
                         LabelMargin = -16
 
                     });
@@ -273,12 +287,32 @@ namespace MeetingPro {
         GrammyExecutor2 ge2;
         private void btn_plan_run_Click(object sender, RoutedEventArgs e) {
             btn_plan_run.IsEnabled = false;
-            var plan = GramSLoader.LoadFromFile("plan.csv");
-            ge2 = new GrammyExecutor2(plan);
-            Graphs.FilePath = ge2.datapath;
-            //ge.saveFPath = @"C:\Users\User\Desktop\wwww1";
-            //ge.callback = Exc_ExecutDoneNew;
+            var sd = new Microsoft.Win32.OpenFileDialog() {
+                Filter = "plan Files|*.csv",
+                FileName = "plan"
+            };
+            if (sd.ShowDialog() == true) {
+                var plan = GramSLoader.LoadFromFile(sd.FileName);
+                ge2 = new GrammyExecutor2(plan);
+                using (var dialog = new System.Windows.Forms.FolderBrowserDialog()) {
+                    System.Windows.Forms.DialogResult result = dialog.ShowDialog();
+                    if (result == System.Windows.Forms.DialogResult.OK) {
+                        var sp = dialog.SelectedPath;
+                        ge2.saveFPath = sp+ "\\";
+
+                    } else {
+                        btn_plan_run.IsEnabled = true;
+                        return;
+                    }
+                } 
+                
+               
+            } else {
+                btn_plan_run.IsEnabled = true;
+                return;
+            }
             ge2.Run();
+
         }
 
         private void btn_plan_status_Click(object sender, RoutedEventArgs e) {
@@ -333,11 +367,6 @@ namespace MeetingPro {
             }
         }
 
-        private void Button_Click_4(object sender, RoutedEventArgs e) {
-            var lst = grammyCluster_1_23.GetTstList(new Vector3D(0, 30, 0), new Vector3D(10000, 1, 1), 30);
-            Vm_traect.DrawOneTraectory(lst, "tst");
-        }
-
         private void Button_Click_5(object sender, RoutedEventArgs e) {
             var temps = new double[] { -50, -40, -30, -20, -10, 0, 10, 20, 30, 40, 50 };
             //var lst = temps
@@ -382,6 +411,49 @@ namespace MeetingPro {
             Vm.Pm.Series.Clear();
             sers.ForEach(s => Vm.Pm.Series.Add(s));
             Vm.Pm.InvalidatePlot(true);
+        }
+
+
+        List<(MT_pos pos, Grammy gr)> tst_lst;
+
+        private void Button_Click_6(object sender, RoutedEventArgs e) {
+            tst_lst = grammyCluster_1_23.GetTstList_dir(new Vector3D(0, 30, 0), new Vector3D(1, 1, 0), 30);
+            Vm_traect.DrawOneTraectory(tst_lst.Select(tr => tr.pos.GetPos0()).ToList(), "tst");
+            Vm3.Pm.Series.Clear();
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = tst_lst
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Alpha })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Alpha"
+            });
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = tst_lst
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Betta })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Betta"
+            });
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = tst_lst
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Thetta"
+            });
+            Vm3.Pm.InvalidatePlot(true);
+
+            sl.Minimum = 0;
+            sl.Maximum = tst_lst.Count-1;
+        }
+
+        private void sl_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            int ind = (int)e.NewValue;
+            var gr = tst_lst[ind].gr;
+            Vm_gr.DrawGrammy(gr,"Alpha",-5,+5);
         }
     }
 }

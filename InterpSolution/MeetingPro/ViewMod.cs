@@ -12,8 +12,11 @@ using System.Threading.Tasks;
 namespace MeetingPro {
     public class ViewMod {
         public PlotModel Pm { get; set; }
-        public ViewMod() {
-            Pm = GetNewModel("графики", "время, с", "stuff");
+        public ViewMod():this("графики", "время, с", "stuff") {
+            
+        }
+        public ViewMod(string s1, string s2, string s3) {
+            Pm = GetNewModel(s1,s2,s3);
         }
 
         public void DrawDL(List<Data4Draw> dl){
@@ -31,14 +34,14 @@ namespace MeetingPro {
                 "dV_x",
                 "dV_y",
                 "dV_z",
-               //"X",
-               // "Y",
-               // "Z",
+            //   "X",
+            //    "Y",
+            //    "Z",
             //    "Alpha",
-            //    "P",
+                "P",
                 "Om_x",
-                "Om_y",
-                "Om_z",
+            //    "Om_y",
+            //    "Om_z",
             //    "Kren",
             //Thetta
             };

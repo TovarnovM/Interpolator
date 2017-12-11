@@ -146,7 +146,7 @@ namespace MeetingPro {
 
         public static List<(Vector2D pos, OneWay ow)> Uniquest(this List<(Vector2D pos, OneWay ow)> list) {
             //var up = list.MaxBy(tp => tp.pos.Y).pos;
-            int eliteCount = 7;// list.Count / 10;
+            int eliteCount = 3;// list.Count / 10;
             var up = list
                 .OrderBy(tp => tp.pos.Y)
                 .TakeLast(eliteCount)
@@ -219,13 +219,11 @@ namespace MeetingPro {
             double sum = 0d;
             foreach (var tp in list) {
                 var normmn = NormMnozj(mo, sko, tp.pos);
-                var db = tp.ow.ToVector() * normmn;
-                for (int i = 0; i < db.Length; i++) {
-                    if (double.IsNaN(db[i])) {
-                        int gg = 77;
-                    }
+                var db = tp.ow.ToVector() ;
+                if (tp.ow.Vec1.Alpha >= 0) {
+                    db[23] = -db[23];
                 }
-                vec += db;
+                vec += db * normmn;
                 sum += normmn;
             }
             vec /= sum;

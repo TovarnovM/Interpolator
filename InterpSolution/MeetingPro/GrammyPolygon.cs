@@ -5,7 +5,7 @@ namespace MeetingPro {
     public class GrammyPolygon {
         public Vector v1, v2, v3;
         public Vector3D p1, p2, p3;
-        public TrInterpolator interps;
+        public TrInterpolator interps = null;
         public GrammyPolygon(Vector v1, Vector v2, Vector v3) {
             this.v1 = v1;
             this.v2 = v2;
@@ -76,13 +76,14 @@ namespace MeetingPro {
             var z1 = (x1 & (p3 - p1)).Norm;
             var y1 = x1 & z1;
 
-            interps = new TrInterpolator(
-                new Vector2D(0, 0),
-                new Vector2D((p2 - p1) * x1, (p2 - p1) * y1),
-                new Vector2D((p3 - p1) * x1, (p3 - p1) * y1),
-                v1,
-                v2,
-                v3);
+            if(interps == null)
+                interps = new TrInterpolator(
+                    new Vector2D(0, 0),
+                    new Vector2D((p2 - p1) * x1, (p2 - p1) * y1),
+                    new Vector2D((p3 - p1) * x1, (p3 - p1) * y1),
+                    v1,
+                    v2,
+                    v3);
 
             var p_loc = new Vector2D(x1 * (p - p1), y1 * (p - p1));
             return interps.Interp(p_loc);

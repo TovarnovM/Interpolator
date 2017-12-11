@@ -65,7 +65,7 @@ namespace MeetingPro {
         /// </summary>
         public Vector3D V_air;
         public void Set_V_air() {
-            V_air = -(WorldTransformRot_1 * Vel.Vec3D);
+            V_air = (WorldTransformRot_1 * Vel.Vec3D);
         }
 
         public double Mach;
@@ -110,6 +110,11 @@ namespace MeetingPro {
                 : sin_fi_n > 0 && cos_fi_n < 0
                 ? PI - Asin(sin_fi_n)
                 : Asin(sin_fi_n);
+
+            if (TimeSynch > 2) {
+                int ggg = 77;
+            }
+
             for (int i = 0; i < 4; i++) {
                 fi_st[i] = fi_0[i] + fi_n;
                 fi_i[i] = fi_st[i];
@@ -121,7 +126,7 @@ namespace MeetingPro {
         /// </summary>
         public double alpha_c;
         public void Set_alpha_c() {
-            alpha_c = Atan2(Sqrt(Sqr(V_air.Y) + Sqr(V_air.Z)), V_air.X);
+            alpha_c = Atan2(Sqrt(Sqr(V_air.Y) + Sqr(V_air.Z)), Abs(V_air.X));
         }
 
         public double K_st_aa;
@@ -225,7 +230,7 @@ namespace MeetingPro {
             m_air_dempf.Z *= m_yz_mn;
             var vel = Vel.Vec3D.GetLength();
             if(vel > 1E-12) {
-                m_air_dempf /= Vel.Vec3D.GetLength();
+                m_air_dempf /= vel;
             } else {
                 m_air_dempf = Vector3D.Zero;
             }
@@ -250,7 +255,7 @@ namespace MeetingPro {
 
                 var x_kr_d_i = x_kr_d.GetV(Abs(alpha_st[i] * GRAD), Mach) * b_kr + X_kr_pk;
                 var x_r_d_i = 0.3857 * b_r + X_r_pk;
-                var d_m_i = -2d * K_st_aa * K_aa_k_st_aa * c_kr_y_i.GetV(1d, Mach) * alpha_sk.GetV(alpha_c * GRAD, Mach) * (X_m - x_r_d_i) + (X_m - x_r_d_i);
+                var d_m_i = -2d * K_st_aa * K_aa_k_st_aa * c_kr_y_i.GetV(1d, Mach) * alpha_sk.GetV(alpha_c * GRAD, Mach) * (X_m - x_kr_d_i) + (X_m - x_r_d_i);
 
                 delta_m_air.Y += (c_r * Sign(delta_i_rad[i]) * K_aa_k_aa * Sin(fi_0[i]) * d_m_i + c_kr * Sign(alpha_st[i]) * K_aa_k_st_aa * (X_m - x_kr_d_i) * Sin(fi_0[i])) / L;
                 delta_m_air.Z += (c_r * Sign(delta_i_rad[i]) * K_aa_k_aa * Cos(fi_0[i]) * d_m_i + c_kr * Sign(alpha_st[i]) * K_aa_k_st_aa * (X_m - x_kr_d_i) * Cos(fi_0[i])) / L;
@@ -262,10 +267,9 @@ namespace MeetingPro {
             var m_x0 = gr.m_x0.GetV(alpha_c * GRAD, Mach, Abs(delta_eler * GRAD));
             var c_k_y = gr.c_k_y.GetV(alpha_c * GRAD, Mach);
             var x_k_d = gr.x_k_d.GetV(alpha_c * GRAD, Mach);
-
             m_air.X = (-m_x0 * Sign(delta_eler) - delta_m_air.X) * qS * l_m_x;
             m_air.Y = (c_k_y * (X_m - x_k_d) * Sin(fi_n) / L - delta_m_air.Y) * qS * L;
-            m_air.Z = (c_k_y * (X_m - x_k_d) * Cos(fi_n) / L - delta_m_air.Y) * qS * L;
+            m_air.Z = (c_k_y * (X_m - x_k_d) * Cos(fi_n) / L + delta_m_air.Z) * qS * L;
         }
 
         public void Set_M_air() {
@@ -417,7 +421,7 @@ namespace MeetingPro {
                 X = this.X,
                 Y = this.Y,
                 Z = this.Z,
-                Alpha = alpha_c,
+                Alpha = alpha_c * GRAD,
                 P = F_engine.Value,
                 Om_x = Omega.X *GRAD,
                 Om_y = Omega.Y * GRAD,
@@ -472,9 +476,6 @@ namespace MeetingPro {
                 dot = -1d;
             }
             res.Betta = signB * Math.Acos(dot) * GRAD;
-            if (double.IsNaN(res.Betta)) {
-                int gg = 77;
-            }
             res.Kren = GetKren();
             res.Om_x = Omega.X;
             res.Om_y = Omega.Y;

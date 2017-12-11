@@ -208,16 +208,17 @@ namespace MeetingPro {
             }
         }
 
+        Grammy gr_curr_4tst;
         public void GrammyStep_ray(Vector3D dist_ray, ref MT_pos currPos, ref Vector currVec) {           
             var v0 = currPos.GetVel0();
             var x0 = new Vector3D(v0.X, 0, v0.Z).Norm;
             var y0 = new Vector3D(0, 1, 0);
-            var z0 = new Vector3D(-x0.Z, 0, x0.X);
+            var z0 = x0 & y0;
 
             var ray_local = new Vector3D(dist_ray * x0, dist_ray * y0, dist_ray * z0);
 
-            var grcurr = GrammyInterp(currVec);
-            var nextVec = grcurr.PolygonsIntercept(new Vector3D(0, 0, 0), ray_local);
+            gr_curr_4tst = GrammyInterp(currVec);
+            var nextVec = gr_curr_4tst.PolygonsIntercept(new Vector3D(0, 0, 0), ray_local);
             var posFromGrammy = Grammy.PosFromVec(nextVec);
             var nextPos = GoToNextPos(currPos, posFromGrammy);
 
@@ -238,6 +239,7 @@ namespace MeetingPro {
             res.Add(pos0.GetPos0());
             for (int i = 0; i < n; i++) {
                 var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0);
+
                 if (dist < 100) {
                     break;
                 }
@@ -245,15 +247,29 @@ namespace MeetingPro {
             }
             return res;
         }
-        public List<Vector3D> GetTstList2(Vector3D p0, Vector3D p_dir, double temperat, int n = 23 * 30) {
-            var (pos0, vec0, _) = InitConditions.GetInitCondition(p0, p0 + p_dir*10, temperat);
 
-            var res = new List<Vector3D>(n + 2);
-            res.Add(pos0.GetPos0());
+        public List<(MT_pos pos,Grammy gr)> GetTstList3(Vector3D p0, Vector3D p_trg, double temperat) {
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p_trg, temperat);
+            int n = (int)(tend * 23) + 2;
+            var res = new List<(MT_pos, Grammy)>(n);
+            res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
+            for (int i = 0; i < n; i++) {
+                var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0);
+                if (dist < 100) {
+                    break;
+                }
+                res.Add((new MT_pos(pos0), gr_curr_4tst));
+            }
+            return res;
+        }
+        public List<(MT_pos pos, Grammy gr)> GetTstList_dir(Vector3D p0, Vector3D p_dir, double temperat) {
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p0 + p_dir*1000, temperat);
+            int n = (int)(tend * 23) + 2;
+            var res = new List<(MT_pos, Grammy)>(n);
+            res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
             for (int i = 0; i < n; i++) {
                 GrammyStep_ray(p_dir, ref pos0, ref vec0);
-
-                res.Add(pos0.GetPos0());
+                res.Add((new MT_pos(pos0), gr_curr_4tst));
             }
             return res;
         }

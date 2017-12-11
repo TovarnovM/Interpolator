@@ -57,6 +57,15 @@ namespace MeetingPro {
             vCenter = Vector.Zeros(vecLength);
             IntiPolygons();
         }
+        public Grammy(Vector fromVector) {
+            vBegin = Vector.Zeros(vecBeginLength);
+            vUp = Vector.Zeros(vecLength);
+            vDown = Vector.Zeros(vecLength);
+            vLeft = Vector.Zeros(vecLength);
+            vRight = Vector.Zeros(vecLength);
+            vCenter = Vector.Zeros(vecLength);
+            FromOneVector(fromVector);
+        }
         public Vector ToOneVector() {
             var res = new double[vecBeginLength + vecLength * 5];
             int i = 0;
@@ -125,8 +134,9 @@ namespace MeetingPro {
             var ow0 = uniq[0].ow;
             var pos0 = ow0.Pos0;
 
-            sk0.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis, new Vector3D(pos0.V_x, 0, pos0.V_z), -Vector3D.YAxis, Vector3D.YAxis);
             sk0.Vec3D = pos0.GetPos0();
+            sk0.SetPosition_LocalPoint_LocalMoveToIt_LocalFixed(Vector3D.XAxis, new Vector3D(pos0.V_x, 0, pos0.V_z), -Vector3D.YAxis, Vector3D.YAxis);
+            
             sk0.SynchQandM();
 
             vBegin[0] = ow0.Vec0.Temperature;
@@ -136,11 +146,11 @@ namespace MeetingPro {
             vBegin[4] = ow0.Vec0.Betta;
             vBegin[5] = ow0.Vec0.Thetta;
 
-            vUp = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, 1))).ow, sk0);
-            vLeft = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(-1, 0))).ow, sk0);
-            vRight = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(1, 0))).ow, sk0);
-            vDown = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, -1))).ow, sk0);
-            vCenter = FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, 0))).ow, sk0);
+            vUp = FormVector(uniq[0].ow, sk0);//FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, 1))).ow, sk0);
+            vLeft = FormVector(uniq[1].ow, sk0);// FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(-1, 0))).ow, sk0);
+            vRight = FormVector(uniq[2].ow, sk0);//FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(1, 0))).ow, sk0);
+            vDown = FormVector(uniq[3].ow, sk0);//FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, -1))).ow, sk0);
+            vCenter = FormVector(uniq[4].ow, sk0);//FormVector(uniq.Find(tp => tp.ow.GetPos().EqualsApprox(new Vector2D(0, 0))).ow, sk0);
             IntiPolygons();
         }
         public void IntiPolygons() {
