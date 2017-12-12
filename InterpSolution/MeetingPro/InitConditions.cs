@@ -18,9 +18,9 @@ namespace MeetingPro {
             var p00 = (trg_pos - pos0);
 
 
-            var p0 = pos0 + new Vector3D(l0, 0, 0);//new Vector3D(p00.X, 0, p00.Z).Norm * l0;//(trg_pos - pos0).Norm * l0;
+            var p0 = pos0 + new Vector3D(l0, 0, 0); //new Vector3D(p00.X, 0, p00.Z).Norm * l0;//(trg_pos - pos0).Norm * l0;
 
-            var vel0 = new Vector3D(v0, 0, 0);//new Vector3D(p00.X, 0, p00.Z).Norm * v0;//(trg_pos - pos0).Norm * v0;
+            var vel0 = new Vector3D(v0, 0, 0);// new Vector3D(p00.X, 0, p00.Z).Norm * v0;;//(trg_pos - pos0).Norm * v0;
 
             var thetta0 = 90d - Math.Acos(vel0.Norm * Vector3D.YAxis) * 180d/ Math.PI;
 
