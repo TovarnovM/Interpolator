@@ -49,6 +49,8 @@ namespace MeetingPro {
             Pm.Series.Add(GetNewSS(gr.vUp, dispName, "vUp"));
             Pm.Series.Add(GetNewSS(gr.vDown, dispName, "vDown"));
 
+            Pm.Series.Add(GetNewSS(gr.dopVec, dispName, "INTERP"));
+
             linearColorAxis1.AbsoluteMinimum = min;
             linearColorAxis1.AbsoluteMaximum = max;
             linearColorAxis1.Minimum = min;

@@ -252,7 +252,7 @@ namespace MeetingPro {
             var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p_trg, temperat);
             int n = (int)(tend * 23) + 2;
             var res = new List<(MT_pos, Grammy)>(n);
-            res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
+            //res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
             for (int i = 0; i < n; i++) {
                 var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0);
                 if (dist < 100) {
@@ -266,7 +266,7 @@ namespace MeetingPro {
             var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p0 + p_dir*1000, temperat);
             int n = (int)(tend * 23) + 2;
             var res = new List<(MT_pos, Grammy)>(n);
-            res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
+            //res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
             for (int i = 0; i < n; i++) {
                 GrammyStep_ray(p_dir, ref pos0, ref vec0);
                 res.Add((new MT_pos(pos0), gr_curr_4tst));

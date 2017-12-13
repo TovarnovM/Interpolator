@@ -417,7 +417,7 @@ namespace MeetingPro {
         List<(MT_pos pos, Grammy gr)> tst_lst;
 
         private void Button_Click_6(object sender, RoutedEventArgs e) {
-            tst_lst = grammyCluster_1_23.GetTstList3(new Vector3D(0, 300, 0), new Vector3D(5000, 1, 1000), 30);
+            tst_lst = grammyCluster_1_23.GetTstList3(new Vector3D(0, 300, 0), new Vector3D(5555, 10,-5555), 30);
             Vm_traect.DrawOneTraectory(tst_lst.Select(tr => tr.pos.GetPos0()).ToList(), "tst");
             Vm3.Pm.Series.Clear();
             Vm3.Pm.Series.Add(new LineSeries() {
@@ -453,7 +453,7 @@ namespace MeetingPro {
         private void sl_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
             int ind = (int)e.NewValue;
             var gr = tst_lst[ind].gr;
-            Vm_gr.DrawGrammy(gr,"Alpha",-5,+5);
+            Vm_gr.DrawGrammy(gr, "x", -5,+5);
         }
     }
 }

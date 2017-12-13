@@ -20,6 +20,7 @@ namespace MeetingPro {
         //9 - Vx
         //10 - Vy
         //11 - Vz
+        public Vector dopVec;
         Vector FormVector(OneWay ow, Orient3D sk0) {
             var res = Vector.Zeros(vecLength);
             res[0] = ow.Vec1.Temperature;
@@ -55,6 +56,7 @@ namespace MeetingPro {
             vLeft = Vector.Zeros(vecLength);
             vRight = Vector.Zeros(vecLength);
             vCenter = Vector.Zeros(vecLength);
+            dopVec = Vector.Zeros(vecLength);
             IntiPolygons();
         }
         public Grammy(Vector fromVector) {
@@ -64,6 +66,7 @@ namespace MeetingPro {
             vLeft = Vector.Zeros(vecLength);
             vRight = Vector.Zeros(vecLength);
             vCenter = Vector.Zeros(vecLength);
+            Vector.Zeros(vecLength);
             FromOneVector(fromVector);
         }
         public Vector ToOneVector() {
@@ -160,6 +163,11 @@ namespace MeetingPro {
             polygons[2] = new GrammyPolygon(vCenter, vDown, vRight);
             polygons[3] = new GrammyPolygon(vCenter, vRight, vUp);
             polyCount = 4;
+            //polyCount = 2;
+            //polygons = new GrammyPolygon[polyCount];
+            //polygons[0] = new GrammyPolygon(vRight, vUp, vLeft);
+            //polygons[1] = new GrammyPolygon(vRight, vDown, vLeft);
+
         }
 
         public double Temperature => vBegin[0];
@@ -187,7 +195,8 @@ namespace MeetingPro {
                     min_dist_index = i;
                 }
             }
-            return polygons[min_dist_index].InterpV(minDist_p);
+            dopVec = polygons[min_dist_index].InterpV(minDist_p);
+            return dopVec;
         }
         public static MT_pos PosFromVec(Vector vec) {
             return new MT_pos() {
