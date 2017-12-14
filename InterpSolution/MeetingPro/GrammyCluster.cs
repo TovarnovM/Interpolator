@@ -208,8 +208,7 @@ namespace MeetingPro {
             }
         }
 
-        Grammy gr_curr_4tst;
-        public void GrammyStep_ray(Vector3D dist_ray, ref MT_pos currPos, ref Vector currVec) {           
+        public void GrammyStep_ray(Vector3D dist_ray, ref MT_pos currPos, ref Vector currVec, out double grammyL, out Grammy gr_curr) {           
             var v0 = currPos.GetVel0();
             var x0 = new Vector3D(v0.X, 0, v0.Z).Norm;
             var y0 = new Vector3D(0, 1, 0);
@@ -217,61 +216,215 @@ namespace MeetingPro {
 
             var ray_local = new Vector3D(dist_ray * x0, dist_ray * y0, dist_ray * z0);
 
-            gr_curr_4tst = GrammyInterp(currVec);
-            var nextVec = gr_curr_4tst.PolygonsIntercept(new Vector3D(0, 0, 0), ray_local);
+            gr_curr = GrammyInterp(currVec);
+            var nextVec = gr_curr.PolygonsIntercept(new Vector3D(0, 0, 0), ray_local);
             var posFromGrammy = Grammy.PosFromVec(nextVec);
             var nextPos = GoToNextPos(currPos, posFromGrammy);
 
             currPos = nextPos;
             currVec = Grammy.BeginVecFromVec(nextVec);
+            
+            grammyL = Grammy.PosFromVec(nextVec).GetPos0().GetLength();
         }
 
-        public double GrammyStep_toPoint(Vector3D to_point, ref MT_pos currPos, ref Vector currVec) {
+        public double GrammyStep_toPoint(Vector3D to_point, ref MT_pos currPos, ref Vector currVec, out double grammyL, out Grammy gr_curr) {
             var rayDist = (to_point - currPos.GetPos0()).Norm;
-            GrammyStep_ray(rayDist, ref currPos, ref currVec);
+            GrammyStep_ray(rayDist, ref currPos, ref currVec,out grammyL, out gr_curr);
             return (to_point - currPos.GetPos0()).GetLength();
         }
 
-        public List<Vector3D> GetTstList(Vector3D p0, Vector3D p_trg, double temperat, int n = 23 * 30) {
-            var (pos0, vec0, _) = InitConditions.GetInitCondition(p0, p_trg, temperat);
 
-            var res = new List<Vector3D>(n + 2);
-            res.Add(pos0.GetPos0());
-            for (int i = 0; i < n; i++) {
-                var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0);
+        public List<(MT_pos pos,Grammy gr)> TraectToPoint(Vector3D p0, Vector3D p_trg, double temperat) {
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0,new Vector3D(1,0,0), p_trg, temperat);
+            int n = (int)(tend * 23) + 2;
+            var res = new List<(MT_pos, Grammy)>(n);
+            double coneL = 0d;
+            double t = vec0[1];
+            while(t<tend) {                
+                var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0, out coneL, out Grammy gr_curr);
+                t += 1d/23d;
+                gr_curr.vBegin[1] = t;
+                res.Add((new MT_pos(pos0), gr_curr));
+                if (dist < coneL*1.1) {
+                    break;
+                }               
+            }
+            return res;
+        }
+        public List<(MT_pos pos, Grammy gr)> TraectToDir(Vector3D p0, Vector3D p_dir, double temperat) {
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, new Vector3D(1, 0, 0), p0 + p_dir*1000, temperat);
+            int n = (int)(tend * 23) + 2;
+            var res = new List<(MT_pos, Grammy)>(n);
+            double coneL = 0d;
+            double t = vec0[1];
+            while (t < tend) {
+                GrammyStep_ray(p_dir, ref pos0, ref vec0, out coneL, out Grammy gr_curr);
+                t += 1d / 23d;
+                gr_curr.vBegin[1] = t;
+                res.Add((new MT_pos(pos0), gr_curr));
+            }
+            return res;
+        }
+        public List<(MT_pos pos, Grammy gr)> TraectToPoint_inHorizSurf(Vector3D p0, Vector3D v_dir_0, Vector3D p_trg, double temperat) {
+            
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, v_dir_0, p_trg, temperat);
+            int n = (int)(tend * 23) + 2;
+            var res = new List<(MT_pos, Grammy)>(n);
+            double t = vec0[1];
 
-                if (dist < 100) {
+            bool isHit = HitFromThatPos(pos0, vec0, p_trg, tend, res);
+
+            return res;
+        }
+
+        public static Vector3D GetSurfTarget_toPoint(Vector3D n, Vector3D p_surf, Vector3D vel, Vector3D pos, Vector3D toPoint, double gamma = 30, double dt = 1d / 23d, double a = 13) {
+            var p_loc1 = pos - p_surf;
+            var pos_s = pos - (p_loc1 * n) * n;
+            var y_s = (pos - pos_s).Norm;
+            var vel_ys = (y_s * vel) * y_s;
+            var vel_xs = vel - vel_ys;
+            var x_s = vel_xs.Norm;
+            var z_s = x_s & y_s;
+
+            var l_s = vel.GetLength() * dt * a;
+
+            var toPoint_s = toPoint - pos_s;
+            var toPoint_s_1 = toPoint_s.Norm;
+
+            if (l_s > (pos - toPoint).GetLength()) {
+                return toPoint;
+            }
+
+            var gamma_toPoint = Math.Atan2(toPoint_s_1 * z_s, toPoint_s_1 * x_s)*180/Math.PI;
+            if (Math.Abs(gamma_toPoint) > gamma) {
+                gamma = Math.Abs(gamma) * Math.Sign(gamma_toPoint);
+            } else {
+                gamma = gamma_toPoint;
+            }
+
+            var r_s = x_s * Math.Cos(gamma * Math.PI / 180) + z_s * Math.Sin(gamma * Math.PI / 180);
+            
+            var p_dist_s = pos_s + r_s * l_s;
+            return p_dist_s;
+        }
+
+        public bool GoodVec(ref Vector vec) {
+            return !(dems[2][0] > vec[2] || vec[2] > dems[2][dems[2].Length - 1] //Vel
+                || dems[3][0] > vec[3] || vec[3] > dems[3][dems[3].Length - 1] //alph
+                || dems[4][0] > vec[4] || vec[4] > dems[4][dems[4].Length - 1] //bet
+                || dems[5][0] > vec[5] || vec[5] > dems[5][dems[5].Length - 1] //Thetta
+                );
+        }
+
+        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, Vector3D surf_n, Vector3D surf_p, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d/23d, double h0 = -20) {
+            bool hit = false;
+            double coneL = 0d;
+            double t = vec0[1];
+            while (t < t_max && GoodVec(ref vec0)) {
+                var curr_mt_pos = new MT_pos(pos0);
+                var currTrgP = GetSurfTarget_toPoint(surf_n, surf_p, pos0.GetVel0(), pos0.GetPos0(), p_dist);
+                GrammyStep_toPoint(currTrgP, ref pos0, ref vec0, out coneL, out Grammy gr_curr);
+                t += dt;
+                gr_curr.vBegin[1] = t;
+                lst.Add((curr_mt_pos, gr_curr));
+                double dist = (curr_mt_pos.GetPos0() - p_dist).GetLength();
+                if (dist < coneL * 3) {
+                    hit = true;
                     break;
                 }
-                res.Add(pos0.GetPos0());
+                if (curr_mt_pos.GetPos0()[1] < h0) {
+                    break;
+                }
+            }
+            return hit;
+        }
+
+        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d / 23d, double h0 = -20) {
+            var p_in_surf = pos0.GetPos0();
+            var p_in_surf2 = p_in_surf + pos0.GetVel0();
+
+            var surf_n = ((p_in_surf2 - p_in_surf).Norm & (p_dist - p_in_surf).Norm).Norm;
+            return HitFromThatPos(pos0, vec0, p_dist, surf_n, p_in_surf, t_max, lst, dt, h0);
+        }
+        
+        public List<(MT_pos pos, Grammy gr)> GetExtrimeTraect(MT_pos pos0, Vector vec0, Vector3D p_trg, Vector3D p_trg_extrime_dir, double tMax, double tFast, double h0 = -20) {
+            double tFast_base = tFast * 0.85; 
+            int nfast = (int)(tFast_base * 23) + 2;
+            int nmax = (int)(tMax * 23) + 2;
+            var base_traect = new List<(MT_pos, Grammy)>(nfast);
+            var extrime_traect = new List<(MT_pos, Grammy)>(nmax);
+
+            var p_extrime_trg = p_trg + p_trg_extrime_dir.Norm * 30000;
+
+            HitFromThatPos(pos0, vec0, p_extrime_trg, tFast_base, base_traect);
+            int i_base_max = base_traect.Count - 1;
+            int i_base_curr = i_base_max / 2;
+            int i_base_min = 0;
+            int extrime_ind = 0;
+
+            while (i_base_max- i_base_min>13) {
+                var tup = base_traect[i_base_curr];
+                var pos1 = new MT_pos(tup.Item1);
+                var vec1 = tup.Item2.vBegin.Clone();
+
+                var traect_curr = new List<(MT_pos, Grammy)>(nmax);
+
+                var hit = HitFromThatPos(pos1, vec1, p_trg, tMax, traect_curr, h0);
+                if (hit) {
+                    extrime_traect = traect_curr;
+                    extrime_ind = i_base_curr;
+                    i_base_min = i_base_curr;
+                    i_base_curr = (i_base_max + i_base_min) / 2;
+                } else {
+                    i_base_max = i_base_curr;
+                    i_base_curr = (i_base_max + i_base_min) / 2;
+                }
+            }
+
+            if (extrime_ind == 0) {
+                return extrime_traect;
+            }
+
+            var res = new List<(MT_pos, Grammy)>(nmax);
+            for (int i = 0; i <= extrime_ind; i++) {
+                res.Add(base_traect[i]);
+            }
+            for (int i = 0; i < extrime_traect.Count; i++) {
+                res.Add(extrime_traect[i]);
             }
             return res;
         }
 
-        public List<(MT_pos pos,Grammy gr)> GetTstList3(Vector3D p0, Vector3D p_trg, double temperat) {
-            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p_trg, temperat);
+        public Dictionary<string, List<(MT_pos pos, Grammy gr)>> getSuperDict(Vector3D p0, Vector3D v_dir_0, Vector3D p_trg, double temperat) {
+            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, v_dir_0, p_trg, temperat);
             int n = (int)(tend * 23) + 2;
-            var res = new List<(MT_pos, Grammy)>(n);
-            //res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
-            for (int i = 0; i < n; i++) {
-                var dist = GrammyStep_toPoint(p_trg, ref pos0, ref vec0);
-                if (dist < 100) {
-                    break;
-                }
-                res.Add((new MT_pos(pos0), gr_curr_4tst));
+            var fastest = new List<(MT_pos pos, Grammy gr)>(n);
+            double t = vec0[1];
+
+            bool isHit = HitFromThatPos(pos0, vec0, p_trg, tend, fastest);
+
+            var bunch_dict = new Dictionary<string, List<(MT_pos pos, Grammy gr)>>();
+            bunch_dict.Add("наибыстрейшая", fastest);
+            if (!isHit) {
+                return bunch_dict;
             }
-            return res;
-        }
-        public List<(MT_pos pos, Grammy gr)> GetTstList_dir(Vector3D p0, Vector3D p_dir, double temperat) {
-            var (pos0, vec0, tend) = InitConditions.GetInitCondition(p0, p0 + p_dir*1000, temperat);
-            int n = (int)(tend * 23) + 2;
-            var res = new List<(MT_pos, Grammy)>(n);
-            //res.Add((new MT_pos(pos0), GrammyInterp(vec0)));
-            for (int i = 0; i < n; i++) {
-                GrammyStep_ray(p_dir, ref pos0, ref vec0);
-                res.Add((new MT_pos(pos0), gr_curr_4tst));
+            var extrime_up = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 1, 0),tend, tend);
+            if(extrime_up.Count != 0) {
+                bunch_dict.Add("экстремальная верхняя", extrime_up);
             }
-            return res;
+            var extrime_down = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, -1, 0), tend, tend);
+            if (extrime_down.Count != 0) {
+                bunch_dict.Add("экстремальная нижняя", extrime_down);
+            }
+            var extrime_left = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 0, -1), tend, tend);
+            if (extrime_left.Count != 0) {
+                bunch_dict.Add("экстремальная левая", extrime_left);
+            }
+            var extrime_right = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 0, 1), tend, tend);
+            if (extrime_right.Count != 0) {
+                bunch_dict.Add("экстремальная правая", extrime_right);
+            }
+            return bunch_dict;
         }
     }
 }

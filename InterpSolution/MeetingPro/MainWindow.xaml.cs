@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace MeetingPro {
     /// <summary>
@@ -191,39 +192,29 @@ namespace MeetingPro {
             int f = 44;
         }
 
-        GrammyExecutor ge;
-        private void Button_Click_2(object sender, RoutedEventArgs e) {
-            btn_run.IsEnabled = false;
-            
-            var gl = GramofonLarva.Default(GramSLoader.GetDouble(tb_temperature.Text));
-            int id = (int)GramSLoader.GetDouble(tb_id.Text);
-            ge = new GrammyExecutor(gl, id);
-            Graphs.FilePath = ge.datapath;
-            //ge.saveFPath = @"C:\Users\User\Desktop\wwww1";
-            //ge.callback = Exc_ExecutDoneNew;
-            ge.Run();
-        }
 
-        private void Exc_ExecutDoneNew() {
-            btn_run.Content = $"{ge.done} / {ge.inqueue}";
-        }
-
-        private void btn_run_Copy_Click(object sender, RoutedEventArgs e) {
-            btn_run_Copy.Content = $"{ge.done} / {ge.inqueue}";
-        }
 
         private void btn_plan_Click(object sender, RoutedEventArgs e) {
-            int thn = 7;
-            double th0 = -75, th1 = -th0, dth = (th1 - th0) / (thn - 1);
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "plan Files|*.pln",
+                FileName = "plan"
+            };
+            if (sd.ShowDialog() != true) {
+                return;
+            }
+
+
+            int thn = 11;
+            double th0 = -85, th1 = -th0, dth = (th1 - th0) / (thn - 1);
 
             int alphn = 7;
-            double alph0 = -15, alph1 = -alph0, dalph = (alph1 - alph0) / (alphn - 1);
+            double alph0 = -9, alph1 = -alph0, dalph = (alph1 - alph0) / (alphn - 1);
 
             int betn = 7;
-            double bet0 = -15, bet1 = -bet0, dbet = (bet1 - bet0) / (betn - 1);
+            double bet0 = -9, bet1 = -bet0, dbet = (bet1 - bet0) / (betn - 1);
 
-            int vn = 7;
-            double v0 = 150, v1 = 300, dv = (v1 - v0) / (vn - 1);
+            int vn = 4;
+            double v0 = 50, v1 = 125, dv = (v1 - v0) / (vn - 1);
 
             int tempn = 5;
             double temp0 = -50, temp1 = 50, dtemp = (temp1 - temp0) / (tempn - 1);
@@ -231,7 +222,9 @@ namespace MeetingPro {
             int tn = 5;
             double t0 = 5, t1 = 45, dt = (t1 - t0) / (tn - 1);
 
-            var lst = new List<OneWay>(thn * alphn * betn * vn * tempn * tn);
+            int n = thn * alphn * betn * vn * tempn * tn;
+
+            var lst = new List<OneWay>(n);
             double id = 0d;
 
             for (int i = 0; i < thn; i++) {
@@ -281,14 +274,14 @@ namespace MeetingPro {
 
             }
 
-            lst.SaveToFile(@"C:\Users\User\Desktop\wwww1\plan.csv");
+            lst.SaveToFile(sd.FileName);
         }
 
         GrammyExecutor2 ge2;
         private void btn_plan_run_Click(object sender, RoutedEventArgs e) {
             btn_plan_run.IsEnabled = false;
             var sd = new Microsoft.Win32.OpenFileDialog() {
-                Filter = "plan Files|*.csv",
+                Filter = "plan Files|*.pln",
                 FileName = "plan"
             };
             if (sd.ShowDialog() == true) {
@@ -325,10 +318,18 @@ namespace MeetingPro {
                 using (var dialog = new System.Windows.Forms.FolderBrowserDialog()) {
                     System.Windows.Forms.DialogResult result = dialog.ShowDialog();
                     if (result == System.Windows.Forms.DialogResult.OK) {
+                        var sd = new Microsoft.Win32.SaveFileDialog() {
+                            Filter = "GrammyCluster Files|*.grm",
+                            FileName = "grammy"
+                        };
+                        if (sd.ShowDialog() != true) {
+                            return;
+                        }
+
                         var sp = dialog.SelectedPath;
                         btn_grammyLoadFolder.Content = "Loading from Folder";
                         var lst = await GramSLoader.LoadGrammyFromFolderAsync(sp);
-                        lst.SaveToFile("grammy.csv");
+                        lst.SaveToFile(sd.FileName);
                         btn_grammyLoadFolder.Content = "Creating cluster";
                         var grClust = await GrammyCluster.CreateAsync(lst);
 
@@ -355,16 +356,27 @@ namespace MeetingPro {
         }
 
 
-        GrammyCluster grammyCluster_1_23;
+        GrammyCluster grammyCluster_1_23 = null;
         private void Button_Click_3(object sender, RoutedEventArgs e) {
-            var sd = new Microsoft.Win32.OpenFileDialog() {
-                Filter = "GrammyCluster Files|*.csv",
-                FileName = "GrammyCluster"
-            };
-            if (sd.ShowDialog() == true) {
-                var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
-                grammyCluster_1_23 = new GrammyCluster(lst);
+            try {
+                btn_load_MVP.IsEnabled = false;
+                Mouse.OverrideCursor = Cursors.Wait;
+                var sd = new Microsoft.Win32.OpenFileDialog() {
+                    Filter = "GrammyCluster Files|*.grm",
+                    FileName = "grammy"
+                };
+                if (sd.ShowDialog() == true) {
+                    var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
+                    grammyCluster_1_23 = new GrammyCluster(lst);
+                }
+
+            } catch {
+                MessageBox.Show("Ошибка при загрузке файла");
+            } finally {
+                btn_load_MVP.IsEnabled = true;
+                Mouse.OverrideCursor = Cursors.Arrow;
             }
+
         }
 
         private void Button_Click_5(object sender, RoutedEventArgs e) {
@@ -414,46 +426,101 @@ namespace MeetingPro {
         }
 
 
-        List<(MT_pos pos, Grammy gr)> tst_lst;
+        Dictionary<string,List<(MT_pos pos, Grammy gr)>> bunch_dict;
 
         private void Button_Click_6(object sender, RoutedEventArgs e) {
-            tst_lst = grammyCluster_1_23.GetTstList3(new Vector3D(0, 300, 0), new Vector3D(5555, 10,-5555), 30);
-            Vm_traect.DrawOneTraectory(tst_lst.Select(tr => tr.pos.GetPos0()).ToList(), "tst");
-            Vm3.Pm.Series.Clear();
-            Vm3.Pm.Series.Add(new LineSeries() {
-                ItemsSource = tst_lst
-                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Alpha })
-                    .ToList(),
-                DataFieldX = "time",
-                DataFieldY = "val",
-                Title = "Alpha"
-            });
-            Vm3.Pm.Series.Add(new LineSeries() {
-                ItemsSource = tst_lst
-                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Betta })
-                    .ToList(),
-                DataFieldX = "time",
-                DataFieldY = "val",
-                Title = "Betta"
-            });
-            Vm3.Pm.Series.Add(new LineSeries() {
-                ItemsSource = tst_lst
-                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
-                    .ToList(),
-                DataFieldX = "time",
-                DataFieldY = "val",
-                Title = "Thetta"
-            });
-            Vm3.Pm.InvalidatePlot(true);
+            if(grammyCluster_1_23 == null) {
+                MessageBox.Show("Сначала загрузите файл МВП");
+                return;
+            }
 
-            sl.Minimum = 0;
-            sl.Maximum = tst_lst.Count-1;
+            var x0 = GramSLoader.GetDouble(tb_x.Text, 0);
+            tb_x.Text = x0.ToString();
+            var y0 = GramSLoader.GetDouble(tb_y.Text, 300);
+            tb_y.Text = y0.ToString();
+            var z0 = GramSLoader.GetDouble(tb_z.Text, 0);
+            tb_z.Text = z0.ToString();
+
+            var x0_trg = GramSLoader.GetDouble(tb_x_trg.Text, 0);
+            tb_x_trg.Text = x0_trg.ToString();
+            var y0_trg = GramSLoader.GetDouble(tb_y_trg.Text, 300);
+            tb_y_trg.Text = y0_trg.ToString();
+            var z0_trg = GramSLoader.GetDouble(tb_z_trg.Text, 0);
+            tb_z_trg.Text = z0_trg.ToString();
+
+            var x0_vel = GramSLoader.GetDouble(tb_x_vel.Text, 0);
+            tb_x_vel.Text = x0_vel.ToString();
+            var y0_vel = GramSLoader.GetDouble(tb_y_vel.Text, 300);
+            tb_y_vel.Text = y0_vel.ToString();
+            var z0_vel = GramSLoader.GetDouble(tb_z_vel.Text, 0);
+            tb_z_vel.Text = z0_vel.ToString();
+
+            var temperature = GramSLoader.GetDouble(tb_temper.Text, 0);
+            tb_temper.Text = temperature.ToString();
+
+            var p_trg = new Vector3D(x0_trg, y0_trg, z0_trg);
+            var pos0 = new Vector3D(x0, y0, z0);
+            var v0_dir = new Vector3D(x0_vel, y0_vel, z0_vel);
+            bunch_dict = grammyCluster_1_23.getSuperDict(pos0, v0_dir, p_trg, temperature);
+            DrawBunch(bunch_dict);
+
+            //Vm3.Pm.Series.Clear();
+            //Vm3.Pm.Series.Add(new LineSeries() {
+            //    ItemsSource = fastest
+            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Alpha })
+            //        .ToList(),
+            //    DataFieldX = "time",
+            //    DataFieldY = "val",
+            //    Title = "Alpha"
+            //});
+            //Vm3.Pm.Series.Add(new LineSeries() {
+            //    ItemsSource = fastest
+            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Betta })
+            //        .ToList(),
+            //    DataFieldX = "time",
+            //    DataFieldY = "val",
+            //    Title = "Betta"
+            //});
+            //Vm3.Pm.Series.Add(new LineSeries() {
+            //    ItemsSource = fastest
+            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
+            //        .ToList(),
+            //    DataFieldX = "time",
+            //    DataFieldY = "val",
+            //    Title = "Thetta"
+            //});
+            //Vm3.Pm.Series.Add(new LineSeries() {
+            //    ItemsSource = fastest
+            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.V })
+            //        .ToList(),
+            //    DataFieldX = "time",
+            //    DataFieldY = "val",
+            //    Title = "Vel"
+            //});
+            //Vm3.Pm.InvalidatePlot(true);
+
+            //sl.Minimum = 0;
+            //sl.Maximum = fastest.Count-1;
         }
 
+        void DrawBunch(Dictionary<string, List<(MT_pos pos, Grammy gr)>> dct) {
+            Vm_traect.ClearSerries();
+            foreach (var tv in dct) {
+                Vm_traect.DrawOneTraectory(tv.Value.Select(tr => tr.pos.GetPos0()).ToList(), tv.Key);
+            }
+            Vm_traect.ModelXY.ResetAllAxes();
+            
+        }
+        //void DrawGraphs()
+
+
         private void sl_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e) {
+            if (bunch_dict == null) {
+                return;
+            }
             int ind = (int)e.NewValue;
-            var gr = tst_lst[ind].gr;
-            Vm_gr.DrawGrammy(gr, "x", -5,+5);
+            var gr = bunch_dict.First().Value[ind].gr;
+            Vm_gr.DrawGrammy(gr, "Thetta", -5,+5);
         }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MeetingPro"
         xmlns:oxy="http://oxyplot.org/wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="453.936" Width="584.712">
+        Title="MainWindow" Height="641.436" Width="680.712">
     <Grid>
         <TabControl>
             <TabItem Header="TabItem">
@@ -28,17 +28,10 @@
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="93*"/>
-                        <ColumnDefinition Width="175*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBox Name="tb_temperature" Height="23" Margin="10,10,10,0" TextWrapping="Wrap" Text="-50" VerticalAlignment="Top"/>
-                    <Button Name="btn_run" Content="Button" Margin="10,75,10,0" VerticalAlignment="Top" Click="Button_Click_2" Height="20"/>
-                    <Button x:Name="btn_run_Copy" Content="Button" Margin="10,100,10,0" VerticalAlignment="Top"  Height="20" Click="btn_run_Copy_Click"/>
-                    <TextBox x:Name="tb_id" Height="23" Margin="10,38,10,0" TextWrapping="Wrap" Text="1" VerticalAlignment="Top"/>
-                    <Button x:Name="btn_plan" Content="plan" Margin="10,10,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_Click"/>
-                    <Button x:Name="btn_plan_run" Content="run plan" Margin="10,38,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_run_Click"/>
-                    <Button x:Name="btn_plan_status" Content="plan" Margin="10,63,174,0" VerticalAlignment="Top" Height="20" Grid.Column="1" Click="btn_plan_status_Click"/>
+
+                    <Button x:Name="btn_plan" Content="Сформировать план расчета" Margin="10,10,444,0" VerticalAlignment="Top" Height="20" Click="btn_plan_Click"/>
+                    <Button x:Name="btn_plan_run" Content="Запустить расчет плана" Margin="10,35,444,0" VerticalAlignment="Top" Height="20" Click="btn_plan_run_Click"/>
+                    <Button x:Name="btn_plan_status" Content="Проверить ход выполнения" Margin="10,60,444,0" VerticalAlignment="Top" Height="20" Click="btn_plan_status_Click"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
@@ -49,41 +42,65 @@
                         <ColumnDefinition Width="310*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="205*"/>
+                        <RowDefinition Height="255*"/>
                         <RowDefinition Height="5"/>
-                        <RowDefinition Height="194*"/>
-                        <RowDefinition Height="65*"/>
+                        <RowDefinition Height="283*"/>
+                        <RowDefinition Height="39"/>
                     </Grid.RowDefinitions>
                     <oxy:PlotView Name="plot1" Model="{Binding Vm_traect.ModelXY}" Grid.Row="0" Grid.Column="0"/>
                     <oxy:PlotView Model="{Binding Vm_traect.ModelZY}" Grid.Row="0" Grid.Column="2"/>
                     <oxy:PlotView Model="{Binding Vm_traect.ModelXZ}" Grid.Row="2" Grid.Column="0"/>
                     <GridSplitter Grid.ColumnSpan="3" Grid.Column="0" HorizontalAlignment="Stretch" Height="5" Grid.Row="1" VerticalAlignment="Top" ResizeDirection="Rows"  ResizeBehavior="PreviousAndNext"/>
                     <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Grid.RowSpan="3"  ResizeBehavior="PreviousAndNext" ResizeDirection="Columns"/>
-                    <Button Content="Load" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
-                    <Button Content="tst1" HorizontalAlignment="Left" Margin="90,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="75" Click="Button_Click_6"/>
+                    <Button Name="btn_load_MVP" Content="Загрузить файл МВП" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="3" VerticalAlignment="Top" Width="143" Click="Button_Click_3" Height="20"/>
+                    <Button Content="Построить траектории" Margin="5,9,0,0" Grid.Row="3" VerticalAlignment="Top" Click="Button_Click_6" Height="20" Grid.Column="2"/>
+                    <TextBox Name="tb_x" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,5,10,0" Grid.Row="2" ToolTip="начальная координата ракеты по оси Х" VerticalAlignment="Top"/>
+                    <Label Content="Коорд.Х, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата ракеты по оси Х"/>
+                    <TextBox x:Name="tb_y" Height="23" TextWrapping="Wrap" Text="300" Grid.Column="2" Margin="129,30,10,0" Grid.Row="2" ToolTip="начальная координата ракеты по оси Y" VerticalAlignment="Top"/>
+                    <Label Content="Коорд.Y, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,26,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата ракеты по оси Y"/>
+                    <TextBox x:Name="tb_z" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,56,10,0" Grid.Row="2" ToolTip="начальная координата ракеты по оси Z" VerticalAlignment="Top"/>
+                    <Label Content="Коорд.Z, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,52,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата ракеты по оси Z"/>
+                    <TextBox x:Name="tb_x_trg" Height="23" TextWrapping="Wrap" Text="8000" Grid.Column="2" Margin="129,86,10,0" Grid.Row="2" ToolTip="начальная координата цели по оси Х" VerticalAlignment="Top"/>
+                    <Label Content="Коорд. ц. Х , м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,81,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата цели по оси Х"/>
+                    <TextBox x:Name="tb_y_trg" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,111,10,0" Grid.Row="2" ToolTip="начальная координата цели по оси Y" VerticalAlignment="Top"/>
+                    <Label Content="Коорд. ц. Y, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,107,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата цели по оси Y"/>
+                    <TextBox x:Name="tb_z_trg" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,137,10,0" Grid.Row="2" ToolTip="начальная координата цели по оси Z" VerticalAlignment="Top"/>
+                    <Label Content="Коорд. ц.Z, м" Grid.Column="2" HorizontalAlignment="Left" Margin="10,133,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="начальная координата цели по оси Z"/>
+                    <TextBox x:Name="tb_x_vel" Height="23" TextWrapping="Wrap" Text="1" Grid.Column="2" Margin="129,169,10,0" Grid.Row="2" ToolTip="Начальное направление вектора скорости ракеты по оси Х" VerticalAlignment="Top"/>
+                    <Label Content="Напр. скор. Х" Grid.Column="2" HorizontalAlignment="Left" Margin="10,164,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="Начальное направление вектора скорости ракеты по оси Х"/>
+                    <TextBox x:Name="tb_y_vel" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,194,10,0" Grid.Row="2" ToolTip="Начальное направление вектора скорости ракеты по оси Y" VerticalAlignment="Top"/>
+                    <Label Content="Напр. скор. Y" Grid.Column="2" HorizontalAlignment="Left" Margin="10,190,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="Начальное направление вектора скорости ракеты по оси Y"/>
+                    <TextBox x:Name="tb_z_vel" Height="23" TextWrapping="Wrap" Text="1" Grid.Column="2" Margin="129,220,10,0" Grid.Row="2" ToolTip="Начальное направление вектора скорости ракеты по оси Z" VerticalAlignment="Top"/>
+                    <Label Content="Напр. скор. Z" Grid.Column="2" HorizontalAlignment="Left" Margin="10,216,0,0" Grid.Row="2" VerticalAlignment="Top" Width="89" Height="26" ToolTip="Начальное направление вектора скорости ракеты по оси Z"/>
+                    <TextBox x:Name="tb_temper" Height="23" TextWrapping="Wrap" Text="0" Grid.Column="2" Margin="129,261,10,0" Grid.Row="2" ToolTip="Начальное направление вектора скорости ракеты по оси Z" VerticalAlignment="Top" Grid.RowSpan="2"/>
+                    <Label Content="Температура, С" Grid.Column="2" HorizontalAlignment="Left" Margin="10,257,0,0" Grid.Row="2" VerticalAlignment="Top" Width="102" Height="26" ToolTip="Начальное направление вектора скорости ракеты по оси Z"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="282*"/>
-                        <RowDefinition Height="37*"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="87"/>
                     </Grid.RowDefinitions>
                     <oxy:PlotView x:Name="PV2" Model="{Binding Vm3.Pm}" Grid.Row="0" Grid.Column="0"/>
-                    <Button Content="load" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Button_Click_3"/>
-                    <Button Content="start3" HorizontalAlignment="Left" Margin="100,5,0,0" Grid.Row="1" VerticalAlignment="Top" Width="75" Click="Button_Click_6"/>
+                    <CheckBox Name="chbx_fastest" Content="Отобразить параметры быстрейшей траектории" HorizontalAlignment="Left" Margin="10,5,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="288"/>
+                    <CheckBox Name="chbx_up" Content="Отобразить параметры верхней экстримальной траектории" HorizontalAlignment="Left" Margin="10,20,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="351"/>
+                    <CheckBox Name="chbx_down" Content="Отобразить параметры нижней экстримальной траектории" HorizontalAlignment="Left" Margin="10,35,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="349"/>
+                    <CheckBox Name="chbx_left" Content="Отобразить параметры левой экстримальной траектории" HorizontalAlignment="Left" Margin="10,50,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="339"/>
+                    <CheckBox Name="chbx_fright" Content="Отобразить параметры правой экстримальной траектории" HorizontalAlignment="Left" Margin="10,65,0,0" Grid.Row="1" VerticalAlignment="Top" Height="15" Width="346"/>
                 </Grid>
             </TabItem>
             <TabItem Header="TabItem">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="282*"/>
-                        <RowDefinition Height="37*"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="28"/>
                     </Grid.RowDefinitions>
                     <oxy:PlotView Model="{Binding Vm_gr.Pm}" Grid.Row="0" Grid.Column="0"/>
                     <Slider Name="sl" Grid.Row="1" VerticalAlignment="Top" RenderTransformOrigin="1.752,-1.849" Height="18" ValueChanged="sl_ValueChanged"/>
                 </Grid>
             </TabItem>
+
         </TabControl>
 
     </Grid>

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MeetingPro {
     public class InitConditions {
-        public static (MT_pos pos, Vector vec, double time_end) GetInitCondition(Vector3D pos0, Vector3D trg_pos, double temperature) {
+        public static (MT_pos pos, Vector vec, double time_end) GetInitCondition(Vector3D pos0, Vector3D v_dir0, Vector3D trg_pos, double temperature) {
             double l0 = InterpAbstract(197, 151, temperature);
             double time0 = InterpAbstract(2.15, 1.22, temperature);
             double v0 = InterpAbstract(175, 237, temperature);
@@ -18,9 +18,9 @@ namespace MeetingPro {
             var p00 = (trg_pos - pos0);
 
 
-            var p0 = pos0 + new Vector3D(l0, 0, 0); //new Vector3D(p00.X, 0, p00.Z).Norm * l0;//(trg_pos - pos0).Norm * l0;
+            var p0 = pos0 + v_dir0.Norm * l0; //new Vector3D(p00.X, 0, p00.Z).Norm * l0;//(trg_pos - pos0).Norm * l0;
 
-            var vel0 = new Vector3D(v0, 0, 0);// new Vector3D(p00.X, 0, p00.Z).Norm * v0;;//(trg_pos - pos0).Norm * v0;
+            var vel0 = v_dir0.Norm * v0;// new Vector3D(p00.X, 0, p00.Z).Norm * v0;;//(trg_pos - pos0).Norm * v0;
 
             var thetta0 = 90d - Math.Acos(vel0.Norm * Vector3D.YAxis) * 180d/ Math.PI;
 

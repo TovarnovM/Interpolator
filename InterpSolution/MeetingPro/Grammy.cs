@@ -157,16 +157,16 @@ namespace MeetingPro {
             IntiPolygons();
         }
         public void IntiPolygons() {
-            polygons = new GrammyPolygon[4];
-            polygons[0] = new GrammyPolygon(vCenter, vUp, vLeft);
-            polygons[1] = new GrammyPolygon(vCenter, vLeft, vDown);
-            polygons[2] = new GrammyPolygon(vCenter, vDown, vRight);
-            polygons[3] = new GrammyPolygon(vCenter, vRight, vUp);
-            polyCount = 4;
-            //polyCount = 2;
-            //polygons = new GrammyPolygon[polyCount];
-            //polygons[0] = new GrammyPolygon(vRight, vUp, vLeft);
-            //polygons[1] = new GrammyPolygon(vRight, vDown, vLeft);
+            //polygons = new GrammyPolygon[4];
+            //polygons[0] = new GrammyPolygon(vCenter, vUp, vLeft);
+            //polygons[1] = new GrammyPolygon(vCenter, vLeft, vDown);
+            //polygons[2] = new GrammyPolygon(vCenter, vDown, vRight);
+            //polygons[3] = new GrammyPolygon(vCenter, vRight, vUp);
+            //polyCount = 4;
+            polyCount = 2;
+            polygons = new GrammyPolygon[polyCount];
+            polygons[0] = new GrammyPolygon(vRight, vUp, vLeft);
+            polygons[1] = new GrammyPolygon(vRight, vDown, vLeft);
 
         }
 
