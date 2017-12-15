@@ -316,18 +316,23 @@ namespace MeetingPro {
                 );
         }
 
-        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, Vector3D surf_n, Vector3D surf_p, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d/23d, double h0 = -20) {
+        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, Vector3D surf_n, Vector3D surf_p, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d/23d, double h0 = -20, double gst_dist = 1800) {
             bool hit = false;
             double coneL = 0d;
             double t = vec0[1];
             while (t < t_max && GoodVec(ref vec0)) {
                 var curr_mt_pos = new MT_pos(pos0);
-                var currTrgP = GetSurfTarget_toPoint(surf_n, surf_p, pos0.GetVel0(), pos0.GetPos0(), p_dist);
+                double dist = (curr_mt_pos.GetPos0() - p_dist).GetLength();
+                Vector3D currTrgP;
+                if (dist > gst_dist)
+                    currTrgP = GetSurfTarget_toPoint(surf_n, surf_p, pos0.GetVel0(), pos0.GetPos0(), p_dist);
+                else
+                    currTrgP = p_dist;
                 GrammyStep_toPoint(currTrgP, ref pos0, ref vec0, out coneL, out Grammy gr_curr);
                 t += dt;
                 gr_curr.vBegin[1] = t;
                 lst.Add((curr_mt_pos, gr_curr));
-                double dist = (curr_mt_pos.GetPos0() - p_dist).GetLength();
+                
                 if (dist < coneL * 3) {
                     hit = true;
                     break;
@@ -339,12 +344,12 @@ namespace MeetingPro {
             return hit;
         }
 
-        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d / 23d, double h0 = -20) {
+        public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d / 23d, double h0 = -20, double gst_dist = 1800) {
             var p_in_surf = pos0.GetPos0();
             var p_in_surf2 = p_in_surf + pos0.GetVel0();
 
             var surf_n = ((p_in_surf2 - p_in_surf).Norm & (p_dist - p_in_surf).Norm).Norm;
-            return HitFromThatPos(pos0, vec0, p_dist, surf_n, p_in_surf, t_max, lst, dt, h0);
+            return HitFromThatPos(pos0, vec0, p_dist, surf_n, p_in_surf, t_max, lst, dt, h0, gst_dist);
         }
         
         public List<(MT_pos pos, Grammy gr)> GetExtrimeTraect(MT_pos pos0, Vector vec0, Vector3D p_trg, Vector3D p_trg_extrime_dir, double tMax, double tFast, double h0 = -20) {
