@@ -464,40 +464,42 @@ namespace MeetingPro {
             bunch_dict = grammyCluster_1_23.getSuperDict(pos0, v0_dir, p_trg, temperature);
             DrawBunch(bunch_dict);
 
-            //Vm3.Pm.Series.Clear();
-            //Vm3.Pm.Series.Add(new LineSeries() {
-            //    ItemsSource = fastest
-            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Alpha })
-            //        .ToList(),
-            //    DataFieldX = "time",
-            //    DataFieldY = "val",
-            //    Title = "Alpha"
-            //});
-            //Vm3.Pm.Series.Add(new LineSeries() {
-            //    ItemsSource = fastest
-            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Betta })
-            //        .ToList(),
-            //    DataFieldX = "time",
-            //    DataFieldY = "val",
-            //    Title = "Betta"
-            //});
-            //Vm3.Pm.Series.Add(new LineSeries() {
-            //    ItemsSource = fastest
-            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
-            //        .ToList(),
-            //    DataFieldX = "time",
-            //    DataFieldY = "val",
-            //    Title = "Thetta"
-            //});
-            //Vm3.Pm.Series.Add(new LineSeries() {
-            //    ItemsSource = fastest
-            //        .Select(tp => new { time = tp.gr.T, val = tp.gr.V })
-            //        .ToList(),
-            //    DataFieldX = "time",
-            //    DataFieldY = "val",
-            //    Title = "Vel"
-            //});
-            //Vm3.Pm.InvalidatePlot(true);
+            var fastest = bunch_dict.First().Value;
+
+            Vm3.Pm.Series.Clear();
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = fastest
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Alpha })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Alpha"
+            });
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = fastest
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Betta })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Betta"
+            });
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = fastest
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Thetta"
+            });
+            Vm3.Pm.Series.Add(new LineSeries() {
+                ItemsSource = fastest
+                    .Select(tp => new { time = tp.gr.T, val = tp.gr.V })
+                    .ToList(),
+                DataFieldX = "time",
+                DataFieldY = "val",
+                Title = "Vel"
+            });
+            Vm3.Pm.InvalidatePlot(true);
 
             //sl.Minimum = 0;
             //sl.Maximum = fastest.Count-1;

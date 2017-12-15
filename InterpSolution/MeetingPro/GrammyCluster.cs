@@ -310,8 +310,8 @@ namespace MeetingPro {
 
         public bool GoodVec(ref Vector vec) {
             return !(dems[2][0] > vec[2] || vec[2] > dems[2][dems[2].Length - 1] //Vel
-                || dems[3][0] > vec[3] || vec[3] > dems[3][dems[3].Length - 1] //alph
-                || dems[4][0] > vec[4] || vec[4] > dems[4][dems[4].Length - 1] //bet
+                //|| dems[3][0] > vec[3] || vec[3] > dems[3][dems[3].Length - 1] //alph
+                //|| dems[4][0] > vec[4] || vec[4] > dems[4][dems[4].Length - 1] //bet
                 || dems[5][0] > vec[5] || vec[5] > dems[5][dems[5].Length - 1] //Thetta
                 );
         }
@@ -374,7 +374,7 @@ namespace MeetingPro {
 
                 var traect_curr = new List<(MT_pos, Grammy)>(nmax);
 
-                var hit = HitFromThatPos(pos1, vec1, p_trg, tMax, traect_curr, h0);
+                var hit = HitFromThatPos(pos1, vec1, p_trg, tMax, traect_curr, h0:h0);
                 if (hit) {
                     extrime_traect = traect_curr;
                     extrime_ind = i_base_curr;
