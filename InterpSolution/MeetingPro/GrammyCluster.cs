@@ -2,7 +2,10 @@
 using Sharp3D.Math.Core;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace MeetingPro {
@@ -431,5 +434,149 @@ namespace MeetingPro {
             }
             return bunch_dict;
         }
+
+        public void CreateCPPFuncFile(string filepath) {
+            using(var sw = new StreamWriter(filepath)) {
+                var separator = ",";
+                sw.WriteLine(@"#include ""Funcs.h""");
+                sw.WriteLine(@"TFloat * get_dems_dx()");
+                sw.WriteLine(@"{");
+                sw.WriteLine(@"     TFloat * res = new TFloat[6]{");
+                sw.Write    (@"         ");
+                var sb = new StringBuilder();
+                foreach (var d in dems_dx) {                 
+                    sb.Append(d.ToString(CultureInfo.GetCultureInfo("en-GB")));
+                    sb.Append(separator);                  
+                }
+                sb.Length--;
+                sw.WriteLine(sb.ToString());
+                sw.WriteLine(@"     };");
+                sw.WriteLine(@"     return res;");
+                sw.WriteLine(@"}");
+                sw.WriteLine(@" ");
+                sw.WriteLine(@"TFloat ** get_dems()");
+                sw.WriteLine(@"{");
+                sw.WriteLine(@"     TFloat** res = new TFloat*[6]{");
+                sb.Clear();
+                foreach (var dd in dems) {                  
+                    sb.Append($"         new TFloat[{dd.Length}]{{");
+                    foreach (var d in dd) {
+                        sb.Append(d.ToString(CultureInfo.GetCultureInfo("en-GB")));
+                        sb.Append(separator);
+                    }
+                    sb.Length--;
+                    sb.Append("},\n");                    
+                }
+                sb.Length -= 2;
+                sw.WriteLine(sb.ToString());
+                sw.WriteLine(@"     };");
+                sw.WriteLine(@"     return res;");
+                sw.WriteLine(@"}");
+                sw.WriteLine(@" ");
+                
+            }
+        }
+
+        public void SaveDataToCSV(string filepath) {
+            using (var sw = new StreamWriter(filepath)) {
+                var separator = " ";                
+                for (int i0 = 0; i0 < data.GetLength(0); i0++) { //
+                    for (int i1 = 0; i1 < data.GetLength(1); i1++) {
+                        for (int i2 = 0; i2 < data.GetLength(2); i2++) {
+                            for (int i3 = 0; i3 < data.GetLength(3); i3++) {
+                                for (int i4 = 0; i4 < data.GetLength(4); i4++) {
+                                    for (int i5 = 0; i5 < data.GetLength(5); i5++) {
+                                        var vec = data[i0, i1, i2, i3, i4, i5].ToOneVector();
+                                        for (int j = 0; j < vec.Length; j++) {
+                                            sw.Write(((float)vec[j]).ToString("E4", CultureInfo.GetCultureInfo("en-GB")));
+                                            if (j < vec.Length - 1)
+                                                sw.Write(separator);
+                                        }
+                                        sw.WriteLine();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                sw.Close();
+                
+            }
+        }
     }
 }
+/*
+sw.WriteLine(@"TFloat ******* get_data()");
+sw.WriteLine(@"{");
+sw.WriteLine($"     TFloat******* res = new TFloat******[{data.GetLength(0)}]{{"); //
+sb.Clear();
+for (int i0 = 0; i0 < data.GetLength(0); i0++) { //
+    sw.WriteLine($"     new TFloat*****[{data.GetLength(1)}] {{");//
+
+    for (int i1 = 0; i1 < data.GetLength(1); i1++) {
+        sw.Write("     ");
+        sw.WriteLine($"     new TFloat****[{data.GetLength(2)}] {{");
+
+        for (int i2 = 0; i2 < data.GetLength(2); i2++) {
+            sw.Write("          ");
+            sw.WriteLine($"     new TFloat***[{data.GetLength(3)}] {{");
+
+            for (int i3 = 0; i3 < data.GetLength(3); i3++) {
+                sw.Write("               ");
+                sw.WriteLine($"     new TFloat**[{data.GetLength(4)}] {{");
+
+                for (int i4 = 0; i4 < data.GetLength(4); i4++) {
+                    sw.Write("                    ");
+                    sw.WriteLine($"     new TFloat*[{data.GetLength(5)}] {{");
+
+                    for (int i5 = 0; i5 < data.GetLength(5); i5++) {
+                        sw.Write("                         ");
+                        var vec = data[i0, i1, i2, i3, i4, i5].ToOneVector();
+                        sw.Write($"     new TFloat[{vec.Length}] {{");
+                        for (int j = 0; j < vec.Length; j++) {
+                            sw.Write(((float)vec[j]).ToString("E4", CultureInfo.GetCultureInfo("en-GB")));
+                            if (j < vec.Length - 1)
+                                sw.Write(separator);
+                        }
+                        sw.Write("}");
+                        if (i5 < data.GetLength(5) - 1)
+                            sw.WriteLine(separator);
+                        else
+                            sw.WriteLine();
+                    }
+                    sw.Write("}");
+                    if (i4 < data.GetLength(4) - 1)
+                        sw.WriteLine(separator);
+                    else
+                        sw.WriteLine();
+                }
+                sw.Write("}");
+                if (i3 < data.GetLength(3) - 1)
+                    sw.WriteLine(separator);
+                else
+                    sw.WriteLine();
+            }
+            sw.Write("}");
+            if (i2 < data.GetLength(2) - 1)
+                sw.WriteLine(separator);
+            else
+                sw.WriteLine();
+        }
+        sw.Write("}");
+        if (i1 < data.GetLength(1) - 1)
+            sw.WriteLine(separator);
+        else
+            sw.WriteLine();
+    }
+    sw.Write("}");
+    if (i0 < data.GetLength(0) - 1)
+        sw.WriteLine(separator);
+    else
+        sw.WriteLine();
+}
+sw.WriteLine(@"     };");
+sw.WriteLine(@"     return res;");
+sw.WriteLine(@"}");
+
+sw.Close();
+*/

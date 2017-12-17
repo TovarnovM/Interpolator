@@ -524,5 +524,13 @@ namespace MeetingPro {
             var gr = bunch_dict.First().Value[ind].gr;
             Vm_gr.DrawGrammy(gr, "Thetta", -5,+5);
         }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e) {
+            grammyCluster_1_23.CreateCPPFuncFile("Funcs.cpp");
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e) {
+            grammyCluster_1_23.SaveDataToCSV("mdata.csv");
+        }
     }
 }
