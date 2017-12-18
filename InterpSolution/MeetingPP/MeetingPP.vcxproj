@@ -149,13 +149,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Funcs.h" />
+    <ClInclude Include="Grammy.h" />
     <ClInclude Include="GrammyCluster.h" />
+    <ClInclude Include="GrammyPolygon.h" />
     <ClInclude Include="LAlgebra.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Funcs.cpp" />
+    <ClCompile Include="Grammy.cpp" />
     <ClCompile Include="GrammyCluster.cpp" />
+    <ClCompile Include="GrammyPolygon.cpp" />
+    <ClCompile Include="LAlgebra.cpp" />
     <ClCompile Include="MeetingPP.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

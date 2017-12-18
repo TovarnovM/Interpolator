@@ -26,5 +26,13 @@ namespace MeetingPro {
 (vc.X - vb.X) * (va.Y - vb.Y));
             return alf * (fa - fb) + bet * (fc - fb) + fb;
         }
+        public static Vector InterpStatic(Vector3D p, Vector3D va, Vector3D vb, Vector3D vc, Vector fa, Vector fb, Vector fc) {
+
+            double alf = ((p.X - vb.X) * (vc.Y - vb.Y) - (vc.X - vb.X) * (p.Y - vb.Y)) / ((vc.Y - vb.Y) * (va.X - vb.X) -
+(vc.X - vb.X) * (va.Y - vb.Y));
+            double bet = ((p.Y - vb.Y) * (va.X - vb.X) - (p.X - vb.X) * (va.Y - vb.Y)) / ((vc.Y - vb.Y) * (va.X - vb.X) -
+(vc.X - vb.X) * (va.Y - vb.Y));
+            return alf * (fa - fb) + bet * (fc - fb) + fb;
+        }
     }
 }

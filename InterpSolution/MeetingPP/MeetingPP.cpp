@@ -7,57 +7,37 @@
 
 using namespace std;
 
+
 int main()
 {
-	//GrammyCluster * cl= new GrammyCluster[7];
-	Vec3 v1(1, 2, 3);
-	Vec3 v2 = v1*2;
-	Vec3 v3 = v1 - v2;
-	auto l = dist(v1, v1);
-	Vec3 b(1, 0, 0);
-	Vec3 c(-1, 1, 0);
-	auto a = angle_gr(b, c);
-	b = c;
-	size_t n = 140000 * 66;
-	//FILE *pFile;
-	//pFile = fopen("C:\\Users\\User\\Source\\Repos\\Interpolator\\InterpSolution\\MeetingPP\\mdata.csv", "r");
+	GrammyCluster cl;
+	cout <<endl<< cl.n_elems << endl << endl;
+	//cout << endl << cl.load_from_csv("C:\\mdata.csv") << endl << endl;
+	cout << endl << cl.load_from_bin("C:\\mdata.bin") << endl << endl;
 	
-	//auto arr = new TFloat[n];
-	//for (size_t i = 0; i < n; i++)
-	//{
-	//	fscanf(pFile, SCANF_STR, &arr[i]);
-	//	//cout << f << endl;
+	size_t *counts;
+	size_t count;
+	Vec3** traects;
 
-	//}
-	//fclose(pFile);
-	//for (size_t i = 0; i < 77; i++)
-	//{
-
-	//	cout << arr[i] << endl;
-
-	//}
-	//cout << "done "<<sizeof(arr)*n<<endl;
-	//FILE *pFile2;
-	//pFile2 = fopen("C:\\Users\\User\\Source\\Repos\\Interpolator\\InterpSolution\\MeetingPP\\mdata.bin", "wb");
-	//fwrite(arr, sizeof(arr), n, pFile2);
-	//delete[] arr;
-	//fclose(pFile2);
-	//cout << "done2" << endl;
-	FILE *pFile3;
-	pFile3 = fopen("C:\\Users\\User\\Source\\Repos\\Interpolator\\InterpSolution\\MeetingPP\\mdata.bin", "rb");
-	auto arr2 = new TFloat[n];
-	fread(arr2, sizeof(arr2), n, pFile3);
-	fclose(pFile3);
-	cout << "done3" << endl;
-	for (size_t i = 0; i < 77; i++)
-	{
-		
-		cout << arr2[i] << endl;
-
+	bool good = cl.GetExtrimeTraects(Vec3(0, 300, 0), Vec3(1, 0, 0), Vec3(6000, 0, 10), 30, &traects, count, &counts);
+	if (good) {
+		for (size_t i = 0; i < count; i++)
+		{
+			cout << "Traect "<<i<<"; count = "<<counts[i]<<endl;
+			for (size_t j = 0; j < counts[i]; j++)
+			{
+				cout << "(" << traects[i][j].x << "; " << traects[i][j].y << "; " << traects[i][j].z << ")" << endl;
+			}
+			cout << endl;
+		}
 	}
+
+	//auto traect = cl.TraectToPoint(Vec3(0, 300, 0), Vec3(1, 0, 0), Vec3(6000, 0, 10), 30, count);
+	//for (size_t i = 0; i < count; i++)
+	//{
+	//	cout << "(" << traect[i].x << "; " << traect[i].y << "; " << traect[i].z << ")" << endl;
+	//}
 	string s;
-	cin >> s;
-	cout << s;
 	cin >> s;
     return 0;
 }

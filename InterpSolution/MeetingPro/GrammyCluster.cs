@@ -123,32 +123,6 @@ namespace MeetingPro {
                 V_y = vel1.Y,
                 V_z = vel1.Z
             };
-            //var vx0 = fromPos.V_x;
-            //var vz0 = fromPos.V_z;
-            //var vxz0 = Math.Sqrt(vx0 * vx0 + vz0 * vz0);
-
-            //var x_vx0n = vx0 / vxz0;
-            //var x_vz0n = vz0 / vxz0;
-
-            //var z_vx0n = -x_vz0n;
-            //var z_vz0n = x_vx0n;
-
-            //var x1 = fromPos.X + x_vx0n * posFromGranny.X + z_vx0n * posFromGranny.Z;
-            //var y1 = fromPos.Y + posFromGranny.Y;
-            //var z1 = fromPos.Z + x_vz0n * posFromGranny.X + z_vz0n * posFromGranny.Z;
-
-            //var vx1 = x_vx0n * posFromGranny.V_x + z_vx0n * posFromGranny.V_z;
-            //var vy1 = posFromGranny.V_y;
-            //var vz1 = x_vz0n * posFromGranny.V_x + z_vz0n * posFromGranny.V_z;
-
-            //return new MT_pos() {
-            //    X = x1,
-            //    Y = y1,
-            //    Z = z1,
-            //    V_x = vx1,
-            //    V_y = vy1,
-            //    V_z = vz1
-            //};
         }
 
         public Grammy GrammyInterp(Vector vBegin) {
@@ -488,7 +462,7 @@ namespace MeetingPro {
                                     for (int i5 = 0; i5 < data.GetLength(5); i5++) {
                                         var vec = data[i0, i1, i2, i3, i4, i5].ToOneVector();
                                         for (int j = 0; j < vec.Length; j++) {
-                                            sw.Write(((float)vec[j]).ToString("E4", CultureInfo.GetCultureInfo("en-GB")));
+                                            sw.Write(((float)vec[j]).ToString(CultureInfo.GetCultureInfo("en-GB")));
                                             if (j < vec.Length - 1)
                                                 sw.Write(separator);
                                         }

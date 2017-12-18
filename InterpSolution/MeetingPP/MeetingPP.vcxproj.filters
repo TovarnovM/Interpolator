@@ -30,6 +30,12 @@
     <ClInclude Include="LAlgebra.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+    <ClInclude Include="Grammy.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="GrammyPolygon.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -42,6 +48,15 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Funcs.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="LAlgebra.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="Grammy.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="GrammyPolygon.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

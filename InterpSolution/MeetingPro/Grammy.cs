@@ -179,7 +179,7 @@ namespace MeetingPro {
 
         public Vector PolygonsIntercept(Vector3D ray_p, Vector3D ray_dir) {
             double minDist = 1E10;
-            Vector3D minDist_p = new Vector3D(0, 0, 0); ;
+            Vector3D minDist_p = new Vector3D(0, 0, 0);
             int min_dist_index = 0;
             for (int i = 0; i < polyCount; i++) {
                 Vector3D minDist_i = new Vector3D(0,0,0);
