@@ -105,9 +105,9 @@ namespace MeetingPro {
             var yl = new Vector3D(0, 1, 0);
             var zl = xl & yl;
 
-            var xg = new Vector3D(Vector3D.XAxis * xl, 0, Vector3D.XAxis * zl);
+            var xg = new Vector3D(Vector3D.XAxis * xl, 0, Vector3D.XAxis * zl).Norm;
             var yg = new Vector3D(0, 1, 0);
-            var zg = new Vector3D(Vector3D.ZAxis * xl, 0, Vector3D.ZAxis * zl);
+            var zg = new Vector3D(Vector3D.ZAxis * xl, 0, Vector3D.ZAxis * zl).Norm;
 
             var posl = posFromGranny.GetPos0();
             var pos1 = fromPos.GetPos0() + new Vector3D(posl * xg, posl * yg, posl * zg);
@@ -254,7 +254,7 @@ namespace MeetingPro {
             return res;
         }
 
-        public static Vector3D GetSurfTarget_toPoint(Vector3D n, Vector3D p_surf, Vector3D vel, Vector3D pos, Vector3D toPoint, double gamma = 30, double dt = 1d / 23d, double a = 13) {
+        public static Vector3D GetSurfTarget_toPoint(Vector3D n, Vector3D p_surf, Vector3D vel, Vector3D pos, Vector3D toPoint, double gamma = 25, double dt = 1d / 23d, double a = 13) {
             var p_loc1 = pos - p_surf;
             var pos_s = pos - (p_loc1 * n) * n;
             var y_s = (pos - pos_s).Norm;
@@ -289,7 +289,7 @@ namespace MeetingPro {
             return !(dems[2][0] > vec[2] || vec[2] > dems[2][dems[2].Length - 1] //Vel
                 //|| dems[3][0] > vec[3] || vec[3] > dems[3][dems[3].Length - 1] //alph
                 //|| dems[4][0] > vec[4] || vec[4] > dems[4][dems[4].Length - 1] //bet
-                || dems[5][0] > vec[5] || vec[5] > dems[5][dems[5].Length - 1] //Thetta
+                //|| dems[5][0] > vec[5] || vec[5] > dems[5][dems[5].Length - 1] //Thetta
                 );
         }
 
@@ -297,19 +297,28 @@ namespace MeetingPro {
             bool hit = false;
             double coneL = 0d;
             double t = vec0[1];
-            while (t < t_max && GoodVec(ref vec0)) {
-                var curr_mt_pos = new MT_pos(pos0);
+            var vecz = vec0.Clone();
+            var posz = new MT_pos(pos0);
+
+            double tet1, tet2;
+
+            while (t < t_max && GoodVec(ref vecz)) {
+                var curr_mt_pos = new MT_pos(posz);
                 double dist = (curr_mt_pos.GetPos0() - p_dist).GetLength();
                 Vector3D currTrgP;
                 if (dist > gst_dist)
-                    currTrgP = GetSurfTarget_toPoint(surf_n, surf_p, pos0.GetVel0(), pos0.GetPos0(), p_dist);
+                    currTrgP = GetSurfTarget_toPoint(surf_n, surf_p, posz.GetVel0(), posz.GetPos0(), p_dist);
                 else
                     currTrgP = p_dist;
-                GrammyStep_toPoint(currTrgP, ref pos0, ref vec0, out coneL, out Grammy gr_curr);
+
+                tet1 = vecz[5];
+                GrammyStep_toPoint(currTrgP, ref posz, ref vecz, out coneL, out Grammy gr_curr);
+                tet2 = vecz[5];
                 t += dt;
                 gr_curr.vBegin[1] = t;
                 lst.Add((curr_mt_pos, gr_curr));
                 
+
                 if (dist < coneL * 3) {
                     hit = true;
                     break;
@@ -322,10 +331,10 @@ namespace MeetingPro {
         }
 
         public bool HitFromThatPos(MT_pos pos0, Vector vec0, Vector3D p_dist, double t_max, List<(MT_pos pos, Grammy gr)> lst, double dt = 1d / 23d, double h0 = -20, double gst_dist = 1800) {
-            var p_in_surf = pos0.GetPos0();
-            var p_in_surf2 = p_in_surf + pos0.GetVel0();
-
-            var surf_n = ((p_in_surf2 - p_in_surf).Norm & (p_dist - p_in_surf).Norm).Norm;
+            var p_in_surf = pos0.GetPos0()- pos0.GetVel0();
+            var p_in_surf2 = p_in_surf + 2*pos0.GetVel0();
+            var tmpz = (p_in_surf2 - p_in_surf) & (p_dist - p_in_surf);
+            var surf_n = (tmpz).Norm;
             return HitFromThatPos(pos0, vec0, p_dist, surf_n, p_in_surf, t_max, lst, dt, h0, gst_dist);
         }
         
@@ -338,7 +347,8 @@ namespace MeetingPro {
 
             var p_extrime_trg = p_trg + p_trg_extrime_dir.Norm * 30000;
 
-            HitFromThatPos(pos0, vec0, p_extrime_trg, tFast_base, base_traect);
+            var vecz = vec0.Clone();
+            HitFromThatPos(pos0, vecz, p_extrime_trg, tFast_base, base_traect);
             int i_base_max = base_traect.Count - 1;
             int i_base_curr = i_base_max / 2;
             int i_base_min = 0;
@@ -351,9 +361,10 @@ namespace MeetingPro {
 
                 var traect_curr = new List<(MT_pos, Grammy)>(nmax);
 
-                var hit = HitFromThatPos(pos1, vec1, p_trg, tMax, traect_curr, h0:h0);
+                var hit = HitFromThatPos(pos1, vec1, p_trg, tMax, traect_curr);
                 if (hit) {
-                    extrime_traect = traect_curr;
+                    extrime_traect.Clear();
+                    extrime_traect.AddRange(traect_curr);
                     extrime_ind = i_base_curr;
                     i_base_min = i_base_curr;
                     i_base_curr = (i_base_max + i_base_min) / 2;
@@ -368,7 +379,7 @@ namespace MeetingPro {
             }
 
             var res = new List<(MT_pos, Grammy)>(nmax);
-            for (int i = 0; i <= extrime_ind; i++) {
+            for (int i = 0; i < extrime_ind; i++) {
                 res.Add(base_traect[i]);
             }
             for (int i = 0; i < extrime_traect.Count; i++) {
@@ -390,19 +401,27 @@ namespace MeetingPro {
             if (!isHit) {
                 return bunch_dict;
             }
-            var extrime_up = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 1, 0),tend, tend);
-            if(extrime_up.Count != 0) {
+            var extrime_up = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 1, 0), tend, tend);
+            if (extrime_up.Count != 0) {
                 bunch_dict.Add("экстремальная верхняя", extrime_up);
             }
             var extrime_down = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, -1, 0), tend, tend);
             if (extrime_down.Count != 0) {
                 bunch_dict.Add("экстремальная нижняя", extrime_down);
             }
-            var extrime_left = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 0, -1), tend, tend);
+
+            var x_ax = p_trg - pos0.GetPos0();
+            x_ax.Y = 0;
+            x_ax.Normalize();
+
+            var z_ax = x_ax & Vector3D.YAxis;
+
+
+            var extrime_left = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, -z_ax, tend, tend);
             if (extrime_left.Count != 0) {
                 bunch_dict.Add("экстремальная левая", extrime_left);
             }
-            var extrime_right = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, new Vector3D(0, 0, 1), tend, tend);
+            var extrime_right = GetExtrimeTraect(fastest[0].pos, fastest[0].gr.vBegin, p_trg, z_ax, tend, tend);
             if (extrime_right.Count != 0) {
                 bunch_dict.Add("экстремальная правая", extrime_right);
             }
@@ -479,78 +498,4 @@ namespace MeetingPro {
         }
     }
 }
-/*
-sw.WriteLine(@"TFloat ******* get_data()");
-sw.WriteLine(@"{");
-sw.WriteLine($"     TFloat******* res = new TFloat******[{data.GetLength(0)}]{{"); //
-sb.Clear();
-for (int i0 = 0; i0 < data.GetLength(0); i0++) { //
-    sw.WriteLine($"     new TFloat*****[{data.GetLength(1)}] {{");//
 
-    for (int i1 = 0; i1 < data.GetLength(1); i1++) {
-        sw.Write("     ");
-        sw.WriteLine($"     new TFloat****[{data.GetLength(2)}] {{");
-
-        for (int i2 = 0; i2 < data.GetLength(2); i2++) {
-            sw.Write("          ");
-            sw.WriteLine($"     new TFloat***[{data.GetLength(3)}] {{");
-
-            for (int i3 = 0; i3 < data.GetLength(3); i3++) {
-                sw.Write("               ");
-                sw.WriteLine($"     new TFloat**[{data.GetLength(4)}] {{");
-
-                for (int i4 = 0; i4 < data.GetLength(4); i4++) {
-                    sw.Write("                    ");
-                    sw.WriteLine($"     new TFloat*[{data.GetLength(5)}] {{");
-
-                    for (int i5 = 0; i5 < data.GetLength(5); i5++) {
-                        sw.Write("                         ");
-                        var vec = data[i0, i1, i2, i3, i4, i5].ToOneVector();
-                        sw.Write($"     new TFloat[{vec.Length}] {{");
-                        for (int j = 0; j < vec.Length; j++) {
-                            sw.Write(((float)vec[j]).ToString("E4", CultureInfo.GetCultureInfo("en-GB")));
-                            if (j < vec.Length - 1)
-                                sw.Write(separator);
-                        }
-                        sw.Write("}");
-                        if (i5 < data.GetLength(5) - 1)
-                            sw.WriteLine(separator);
-                        else
-                            sw.WriteLine();
-                    }
-                    sw.Write("}");
-                    if (i4 < data.GetLength(4) - 1)
-                        sw.WriteLine(separator);
-                    else
-                        sw.WriteLine();
-                }
-                sw.Write("}");
-                if (i3 < data.GetLength(3) - 1)
-                    sw.WriteLine(separator);
-                else
-                    sw.WriteLine();
-            }
-            sw.Write("}");
-            if (i2 < data.GetLength(2) - 1)
-                sw.WriteLine(separator);
-            else
-                sw.WriteLine();
-        }
-        sw.Write("}");
-        if (i1 < data.GetLength(1) - 1)
-            sw.WriteLine(separator);
-        else
-            sw.WriteLine();
-    }
-    sw.Write("}");
-    if (i0 < data.GetLength(0) - 1)
-        sw.WriteLine(separator);
-    else
-        sw.WriteLine();
-}
-sw.WriteLine(@"     };");
-sw.WriteLine(@"     return res;");
-sw.WriteLine(@"}");
-
-sw.Close();
-*/

@@ -18,7 +18,7 @@ bool GrammyPolygon::IsCross(const Vec3 & p_ray, const  Vec3 & ray_dir, Vec3 & cr
 	TFloat s1 = (dot(u, v) * dot(w, v) - dot(v, v) * dot(w, u)) / (dot(u, v) * dot(u, v) - dot(u, u) * dot(v, v));
 	TFloat t1 = (dot(u, v) * dot(w, u) - dot(u, u) * dot(v, v)) / (dot(u, v) * dot(u, v) - dot(u, u) * dot(v, v));
 
-	bool intersect = (s1 >= 0 && t1 >= 0 && t1 + s1 <= 1);
+	bool intersect = (s1 >= 0 && t1 >= 0 && t1 + s1 <= 0.95);
 	if (!intersect) {
 		TFloat d1, d2, d3;
 		Vec3 cp1, cp2, cp3;

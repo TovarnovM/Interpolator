@@ -36,7 +36,7 @@ namespace MeetingPro {
             if (r1 < 0) {
                 int gg = 77;
             }
-            bool intersect = (s1 >=0 && t1 >=0 && t1+s1<=1);
+            bool intersect = (s1 >=0 && t1 >=0 && t1+s1<=0.95);
             if (!intersect) {
                 var (d1, cp1) = AngleToSegmentFromRay(p_ray, ray_dir, p1, p2);
                 var (d2, cp2) = AngleToSegmentFromRay(p_ray, ray_dir, p2, p3);

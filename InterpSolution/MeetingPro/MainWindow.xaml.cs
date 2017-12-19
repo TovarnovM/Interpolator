@@ -367,6 +367,13 @@ namespace MeetingPro {
                 };
                 if (sd.ShowDialog() == true) {
                     var lst = GramSLoader.LoadGrammyFromFile(sd.FileName);
+                    //var baad = lst.Where(gr => gr.Thetta > 5)
+                    //    .Where(gr => {
+                    //        var vecs = new Microsoft.Research.Oslo.Vector[] { gr.vDown, gr.vLeft, gr.vRight, gr.vUp };
+                    //        var tehhas = vecs.Select(v => v[5]).Min();
+                    //        return tehhas < -3;
+                    //    })
+                    //    .ToList();
                     grammyCluster_1_23 = new GrammyCluster(lst);
                 }
 
@@ -464,7 +471,7 @@ namespace MeetingPro {
             bunch_dict = grammyCluster_1_23.getSuperDict(pos0, v0_dir, p_trg, temperature);
             DrawBunch(bunch_dict);
 
-            var fastest = bunch_dict.First().Value;
+            var fastest = bunch_dict["наибыстрейшая"];
 
             Vm3.Pm.Series.Clear();
             Vm3.Pm.Series.Add(new LineSeries() {
@@ -481,9 +488,10 @@ namespace MeetingPro {
                     .ToList(),
                 DataFieldX = "time",
                 DataFieldY = "val",
-                Title = "Betta"
+                Title = "Betta",
+                MarkerType = MarkerType.Cross
             });
-            Vm3.Pm.Series.Add(new LineSeries() {
+            Vm3.Pm.Series.Add(new ScatterSeries() {
                 ItemsSource = fastest
                     .Select(tp => new { time = tp.gr.T, val = tp.gr.Thetta })
                     .ToList(),
@@ -497,9 +505,11 @@ namespace MeetingPro {
                     .ToList(),
                 DataFieldX = "time",
                 DataFieldY = "val",
-                Title = "Vel"
+                Title = "Vel",
+                MarkerType = MarkerType.Cross
             });
             Vm3.Pm.InvalidatePlot(true);
+
 
             //sl.Minimum = 0;
             //sl.Maximum = fastest.Count-1;
@@ -526,11 +536,36 @@ namespace MeetingPro {
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e) {
-            grammyCluster_1_23.CreateCPPFuncFile("Funcs.cpp");
+            if (grammyCluster_1_23 == null) {
+                MessageBox.Show("Сначала загрузите файл МВП");
+                return;
+            }
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "cpp Files|*.cpp",
+                FileName = "Funcs"
+            };
+            if (sd.ShowDialog() == true) {
+                grammyCluster_1_23.CreateCPPFuncFile(sd.FileName);
+            }
+
+            
         }
 
         private void Button_Click_4(object sender, RoutedEventArgs e) {
-            grammyCluster_1_23.SaveDataToCSV("mdata.csv");
+            if (grammyCluster_1_23 == null) {
+                MessageBox.Show("Сначала загрузите файл МВП");
+                return;
+            }
+            var sd = new Microsoft.Win32.SaveFileDialog() {
+                Filter = "csv Files|*.csv",
+                FileName = "mdata"
+            };
+            if (sd.ShowDialog() == true) {
+                grammyCluster_1_23.SaveDataToCSV(sd.FileName);
+            }
+            
         }
+
+
     }
 }

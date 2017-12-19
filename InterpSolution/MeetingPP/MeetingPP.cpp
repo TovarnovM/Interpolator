@@ -12,6 +12,10 @@ int main()
 {
 	GrammyCluster cl;
 	//cout << endl << cl.load_from_csv("C:\\mdata.csv") << endl << endl;
+	//cout << endl << cl.save_to_bin("mdata.bin") << endl << endl;
+	//string en;
+	//cin >> en;
+	//return 0;
 	cout << endl << cl.load_from_bin("C:\\mdata.bin") << endl << endl;
 	for (size_t kk = 0; kk < 100; kk++)
 	{
@@ -24,10 +28,11 @@ int main()
 			for (size_t i = 0; i < count; i++)
 			{
 				cout << "Traect "<<i<<"; count = "<<counts[i]<<endl;
-				//for (size_t j = 0; j < counts[i]; j+=50)
+				//for (size_t j = 0; j < counts[i]; j+=10)
 				//{
 				//	cout << "(" << traects[i][j].x << "; " << traects[i][j].y << "; " << traects[i][j].z << ")" << endl;
 				//}
+				//cout << "(" << traects[i][counts[i]-1].x << "; " << traects[i][counts[i]-1].y << "; " << traects[i][counts[i]-1].z << ")" << endl;
 				cout <<"============" << kk << endl;
 				delete[] traects[i];
 			}
