@@ -168,6 +168,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AeroApp\AeroApp.csproj">
+      <Project>{08247cc2-aa89-43ba-a7b1-c1311f7a52cb}</Project>
+      <Name>AeroApp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\My3DVec\Sharp3D.Math.csproj">
       <Project>{441FF4C9-0F85-4470-A274-41408B420F86}</Project>
       <Name>Sharp3D.Math</Name>

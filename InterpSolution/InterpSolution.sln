@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27130.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InterpApp", "InterpApp\InterpApp.csproj", "{5C93BCEB-59BC-4510-823E-8860581B1332}"
 EndProject
@@ -94,6 +94,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Executor", "Executor\Executor.csproj", "{E0E0B661-B569-4030-B149-E2A76E131DD6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MeetingPP", "MeetingPP\MeetingPP.vcxproj", "{C8E857E4-A2A5-4C53-9608-C8F1B74F439D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "aero_new", "aero_new\aero_new.csproj", "{9154CEA3-5F2D-43B2-A181-FD002D7AE213}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -549,6 +551,18 @@ Global
 		{C8E857E4-A2A5-4C53-9608-C8F1B74F439D}.Release|x64.Build.0 = Release|x64
 		{C8E857E4-A2A5-4C53-9608-C8F1B74F439D}.Release|x86.ActiveCfg = Release|Win32
 		{C8E857E4-A2A5-4C53-9608-C8F1B74F439D}.Release|x86.Build.0 = Release|Win32
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|x64.Build.0 = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Debug|x86.Build.0 = Debug|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|x64.ActiveCfg = Release|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|x64.Build.0 = Release|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|x86.ActiveCfg = Release|Any CPU
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -597,6 +611,7 @@ Global
 		{41A761FD-F688-431A-8C55-0EB4AFC5255C} = {AEB207D2-D739-4608-8DD1-2755429B1C03}
 		{E0E0B661-B569-4030-B149-E2A76E131DD6} = {563CFDCD-0222-4CC2-893F-00ACABD72213}
 		{C8E857E4-A2A5-4C53-9608-C8F1B74F439D} = {563CFDCD-0222-4CC2-893F-00ACABD72213}
+		{9154CEA3-5F2D-43B2-A181-FD002D7AE213} = {EE0144CA-ABFE-4041-9650-1421E1E3DEDB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF394B76-593C-454C-A575-A9FC6177CDBF}
