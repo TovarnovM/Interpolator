@@ -29,7 +29,7 @@ namespace RobotSim {
         public string ImpulseType { get; set; } = "fire";
         public double ImpulseT { get; set; } = 0.00035;
         public double ImpulseT0 { get; set; } = 0.2;
-        public double Impulse { get; set; } = 2;
+        public double Impulse { get; set; } = 5;
         public Vector3D GetShootDir() {
             var az1 = -Vector3D.XAxis * Cos(Tetta * PI / 180) + Vector3D.ZAxis * Sin(Tetta * PI / 180);
             return az1* Cos(Alpha * PI / 180) + Vector3D.YAxis * Sin(Alpha * PI / 180);

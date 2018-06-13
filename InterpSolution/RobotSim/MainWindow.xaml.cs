@@ -99,7 +99,7 @@ namespace RobotSim {
 
         public MainWindow() {
             ts_ui = TaskScheduler.Current;
-            ex = new Experiments_Wall_Shoot();
+            ex = new Experiments_Wall();
             ex.Prs.Angle = 0;
 
             vm = new ViewModel(GetNewRD);
@@ -152,7 +152,7 @@ namespace RobotSim {
             var names = pr.GetDiffPrms().Select(dp => dp.FullName).ToList();
             var dt = 0.00001;
 
-            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.0001,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
+            var sol = Ode.MidPoint(pr.TimeSynch,v0,pr.f,dt).WithStepRx(0.01,out controller).StartWith(new SolPoint(pr.TimeSynch,v0)).Publish();
             controller.Pause();
 
             sol.ObserveOnDispatcher().Subscribe(sp => {

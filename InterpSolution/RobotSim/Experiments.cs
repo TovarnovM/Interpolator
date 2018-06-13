@@ -23,7 +23,7 @@ namespace RobotSim {
         /// в градусах
         /// </summary>
         public double Angle { get; set; } = 0;
-        public double WheelMoment { get; set; } = 0;//4;
+        public double WheelMoment { get; set; } = 4;
         public double OmegaMax { get; set; } = 4;
         public double Magnetic_h { get; set; } = 0.07;
         public double Magnetic_Fmax { get; set; } = 1.3;
