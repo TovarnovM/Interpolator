@@ -79,8 +79,8 @@ namespace RobotIM.Scene {
         }
 
         GridPos GetGridCoordsGP(Vector2D p) {
-            var t = GetGridCoords(p);
-            return new GridPos(t.ix, t.iy);
+            var (ix, iy) = GetGridCoords(p);
+            return new GridPos(ix, iy);
         }
         (int ix, int iy) GetGridCoords(Vector2D p) {
             return GetGridCoords(p.X, p.Y);
