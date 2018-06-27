@@ -45,13 +45,27 @@ namespace RobotIM {
             r = GetRoom();
             mainLoop = InitLoop();
             vm.DrawRoom(r,false);
-            vm_rm.GenerateNewRoom(1, 1, 1, 1, 0, 0.1, 1, 1);
+            vm_rm.GenerateNewRoom(
+                new RoomGeneratorSettings() {
+                    h = 30,
+                    w = 30,
+                    nh = 4,
+                    nw = 4
+                }, 
+                cellSize: 0.25);
         }
 
         public Room GetRoom() {
             var rr = new Room();
-
-            rr.walls = RoomGenerator.GetWalls(30, 30, 4, 4);
+            var tp = RoomGenerator.GetWallsAndFurs(
+                new RoomGeneratorSettings() {
+                    h = 30,
+                    w = 30,
+                    nh = 4,
+                    nw = 4
+                });
+            rr.walls = tp.walls;
+            rr.furnitures = tp.furs;
             rr.cellsize = 0.7;
             rr.CreateScene();
 
@@ -296,15 +310,17 @@ namespace RobotIM {
         }
 
         private void Button_Click_7(object sender, RoutedEventArgs e) {
-            var w = GetDouble(tb_w.Text, 30);
-            var h = GetDouble(tb_h.Text, 40);
-            var wn = (int)GetDouble(tb_wN.Text, 10);
-            var hn = (int)GetDouble(tb_wN.Text, 10);
-            var nmin = (int)GetDouble(tb_Nmin.Text, 10);
-            var nmax = (int)GetDouble(tb_Nmax.Text, 10);
-            var diff = GetDouble(tb_Diff.Text, 20)/100;
+            var set = new RoomGeneratorSettings() {
+                w = GetDouble(tb_w.Text, 30),
+                h = GetDouble(tb_h.Text, 40),
+                nw = (int)GetDouble(tb_wN.Text, 10),
+                nh = (int)GetDouble(tb_hN.Text, 10),
+                nmin = (int)GetDouble(tb_Nmin.Text, 10),
+                nmax = (int)GetDouble(tb_Nmax.Text, 10),
+                diff = GetDouble(tb_Diff.Text, 20) / 100
+            };
             var cellSize = GetDouble(tb_CellSize.Text, 0.3);
-            vm_rm.GenerateNewRoom(w,h,wn,hn,diff,cellSize,nmin,nmax);
+            vm_rm.GenerateNewRoom(set, cellSize);
         }
 
         private void btn_IM1_Copy_Click(object sender, RoutedEventArgs e) {

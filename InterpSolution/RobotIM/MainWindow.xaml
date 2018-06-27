@@ -74,24 +74,62 @@
 
                         <TabItem Header="Новая">
                             <Grid>
+                                <StackPanel>
+                                    <StackPanel.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Width" Value="55"/>
+                                        </Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Width" Value="40"/>
+                                        </Style>
+                                    </StackPanel.Resources>
+                                    <Button Content="Сген. новую"  Click="Button_Click_7"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="w = "/>
+                                        <TextBox Name="tb_w"  HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" ToolTip="ширина комнаты, м"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="h = " VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_h" Grid.Column="1" HorizontalAlignment="Left" Height="19"  TextWrapping="Wrap" Text="40" VerticalAlignment="Top"  ToolTip="высота комнаты, м"/>                                    
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="wN= " VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_wN" Grid.Column="1" HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"  ToolTip="Количество комнат по ширине, шт"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="hN= " VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_hN" Grid.Column="1" HorizontalAlignment="Left" Height="19"  TextWrapping="Wrap" Text="10" VerticalAlignment="Top"  ToolTip="Количество комнат по высоте, шт"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left"  TextWrapping="Wrap" Text="diff=" VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_Diff" Grid.Column="1" HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" ToolTip="Отклонение размеров, %"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="cell=" VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_CellSize" Grid.Column="1" HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top"  ToolTip="Размер ячейки, м"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Nmin" VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_Nmin" Grid.Column="1" HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"  ToolTip="Минимальное Кол-во больших комнат шт"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Grid.Column="1" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Nmax" VerticalAlignment="Top" />
+                                        <TextBox x:Name="tb_Nmax" Grid.Column="1" HorizontalAlignment="Left" Height="19" TextWrapping="Wrap" Text="10" VerticalAlignment="Top"  ToolTip="Максимальное Кол-во больших комнат, шт"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="FurRo"/>
+                                        <TextBox x:Name="tb_FurRo" Text="0.3" ToolTip="Заполненность комнаты мебелью"/>                                  
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="FHmin"/>
+                                        <TextBox x:Name="tb_FurHmin" Text="1" ToolTip="минимальная высота мебели, м"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="FHmax"/>
+                                        <TextBox x:Name="tb_FurHmax" Text="3" ToolTip="максимальная высота мебели, м"/>
+                                    </StackPanel>
+                                </StackPanel>
 
-                                <Button Content="Сген. новую" HorizontalAlignment="Left" Margin="5,10,0,0" VerticalAlignment="Top" Width="89" Height="20" Click="Button_Click_7"/>
-                                <TextBox Name="tb_w"  HorizontalAlignment="Left" Height="19" Margin="38,35,0,0" TextWrapping="Wrap" Text="30" VerticalAlignment="Top" Width="56" ToolTip="ширина комнаты, м"/>
-                                <TextBox x:Name="tb_h" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,59,0,0" TextWrapping="Wrap" Text="40" VerticalAlignment="Top" Width="56" ToolTip="высота комнаты, м"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,35,0,0" TextWrapping="Wrap" Text="w = " VerticalAlignment="Top" Width="28"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,62,0,0" TextWrapping="Wrap" Text="h = " VerticalAlignment="Top" Width="28"/>
-                                <TextBox x:Name="tb_wN" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,95,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Количество комнат по ширине, шт"/>
-                                <TextBox x:Name="tb_hN" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,119,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Количество комнат по высоте, шт"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,95,0,0" TextWrapping="Wrap" Text="wN = " VerticalAlignment="Top" Width="33"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,122,0,0" TextWrapping="Wrap" Text="hN = " VerticalAlignment="Top" Width="28"/>
-                                <TextBox x:Name="tb_Diff" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,148,0,0" TextWrapping="Wrap" Text="20" VerticalAlignment="Top" Width="56" ToolTip="Отклонение размеров, %"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,151,0,0" TextWrapping="Wrap" Text="diff=" VerticalAlignment="Top" Width="28"/>
-                                <TextBox x:Name="tb_CellSize" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,222,0,0" TextWrapping="Wrap" Text="0.3" VerticalAlignment="Top" Width="56" ToolTip="Размер ячейки, м"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,225,0,0" TextWrapping="Wrap" Text="cell=" VerticalAlignment="Top" Width="28"/>
-                                <TextBox x:Name="tb_Nmin" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,177,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Минимальное Кол-во больших комнат шт"/>
-                                <TextBox x:Name="tb_Nmax" Grid.Column="1" HorizontalAlignment="Left" Height="19" Margin="38,195,0,0" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="56" ToolTip="Максимальное Кол-во больших комнат, шт"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,177,0,0" TextWrapping="Wrap" Text="Nmin" VerticalAlignment="Top" Width="33"/>
-                                <TextBlock Grid.Column="1" HorizontalAlignment="Left" Margin="5,198,0,0" TextWrapping="Wrap" Text="Nmax" VerticalAlignment="Top" Width="33"/>
 
                             </Grid>
                         </TabItem>

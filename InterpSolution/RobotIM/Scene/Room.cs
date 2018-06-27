@@ -11,6 +11,7 @@ using Sharp3D.Math.Core;
 using MyRandomGenerator;
 using Newtonsoft.Json;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace RobotIM.Scene {
     [Serializable]
@@ -20,6 +21,7 @@ namespace RobotIM.Scene {
                 var ser = JsonSerializer.Create();
                 var rd = new RoomData();
                 rd.walls = walls;
+                rd.furnitures = furnitures;
                 rd.cellsize = cellsize;
                 rd.nh = nh;
                 rd.nw = nw;
@@ -35,6 +37,7 @@ namespace RobotIM.Scene {
             var rd = ser.Deserialize<RoomData>(jstr);
             walls = rd.walls;
             cellsize = rd.cellsize;
+            furnitures = rd.furnitures;
             nh = rd.nh;
             nw = rd.nw;
             staticNoiseMap = rd.staticNoiseMap;
@@ -57,12 +60,14 @@ namespace RobotIM.Scene {
         }
         class RoomData {
             public List<LevelLine> walls = new List<LevelLine>();
+            public List<Furniture> furnitures = new List<Furniture>();
             public double cellsize = 0.1;
             public int nw, nh;
             public double[,] staticNoiseMap;
             public List<StaticNoisePoint> noisePoints;
         }
         public List<LevelLine> walls = new List<LevelLine>();
+        public List<Furniture> furnitures = new List<Furniture>();
         MyRandom _rnd = new MyRandom();
         public  StaticGrid searchGrid;
         JumpPointParam jumpParam;
@@ -152,6 +157,19 @@ namespace RobotIM.Scene {
                         break;
                     }
                 }
+
+                foreach (var fur in furnitures) {
+                    bool cross = fur.IsCrossMe(p1, p2) ||
+                        fur.IsCrossMe(p2, p3) ||
+                        fur.IsCrossMe(p3, p4) ||
+                        fur.IsCrossMe(p1, p4) ||
+                        fur.IsCrossMe(p1, p3) ||
+                        fur.IsCrossMe(p2, p4);
+                    if (cross) {
+                        bgrid[cell.ix][cell.iy] = false;
+                        break;
+                    }
+                }
             }
             return bgrid;
         }
@@ -210,6 +228,10 @@ namespace RobotIM.Scene {
             System.Windows.Vector b2 = new System.Windows.Vector(a2.X, a2.Y);
             foreach (var wall in walls) {
                 if (wall.IsCrossMe(b1, b2))
+                    return true;
+            }
+            foreach (var fur in furnitures) {
+                if (fur.IsCrossMe(b1, b2))
                     return true;
             }
             return false;
@@ -292,5 +314,53 @@ namespace RobotIM.Scene {
         static readonly Lazy<Room> _currRoom = new Lazy<Room>(() => new Room());
         #endregion
 
+    }
+
+    public class Furniture: Polygon {
+        public Furniture(double height): base(height) {
+
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public bool RayIntersect3D(Vector3D p1,Vector3D p2) {
+            return RayIntersect3D(new Vector2D(p1.X, p1.Y), p1.Z, new Vector2D(p2.X, p2.Y), p2.Z);
+        }
+        public bool RayIntersect3D(Vector2D p1, double h1, Vector2D p2, double h2) {
+            if (Min(h1, h2) > Value) {
+                return false;
+            }
+            if ( !IsCrossMe(VecConv.Vec2DToWinVec(p1), VecConv.Vec2DToWinVec(p2))) {
+                return false;
+            }
+            if(Max(h1,h2) < Value) {
+                return true;
+            }
+
+            var p3_1 = new Vector3D(p1.X, p1.Y, h1);
+            var p3_2 = new Vector3D(p2.X, p2.Y, h2);
+            var p0 = new Vector3D(0, 0, Value);
+            var u = (p3_1 - p3_2).Norm;
+            var n0 = new Vector3D(0, 0, 1);
+            var dot = n0 * u;
+            if (Math.Abs(dot) > 1E-8) {
+                var w = p3_1 - p0;
+                var fac = -(n0 * w) / dot;
+                var intersect_p3 =  p3_1 + (u * fac);
+                var intersect_p2 = new Vector2D(intersect_p3.X, intersect_p3.Y);
+                return !IsInside(VecConv.Vec2DToWinVec(intersect_p2));
+            }
+            return true;
+
+        }
+    }
+
+    public static class VecConv {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Vector2D WinVecToVec2D(System.Windows.Vector winVec) {
+            return new Vector2D(winVec.X, winVec.Y);
+        }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static System.Windows.Vector Vec2DToWinVec(Vector2D vec) {
+            return new System.Windows.Vector(vec.X, vec.Y);
+        }
     }
 }

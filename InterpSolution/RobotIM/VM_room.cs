@@ -28,9 +28,11 @@ namespace RobotIM {
             MouseEvents4SS(ss_noises, Model1Rx.Value);
 
         }
-        internal void GenerateNewRoom(double w, double h, int wn, int hn, double diff, double cellSize, int nmin, int nmax) {
+        internal void GenerateNewRoom(RoomGeneratorSettings settings, double cellSize) {
             room = new Room();
-            room.walls = RoomGenerator.GetWalls(h, w, hn, wn, diff, nmin, nmax);
+            var tp = RoomGenerator.GetWallsAndFurs(settings);
+            room.walls = tp.walls;
+            room.furnitures = tp.furs;
             room.cellsize = cellSize;
             room.CreateScene();
             DrawRoom(room);

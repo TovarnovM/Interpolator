@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace RobotIM {
     public class ViewModel {
         protected ScatterSeries P,pdead;
-        protected LineSeries SerWalls, SerVision;
+        protected LineSeries SerWalls, SerVision, SerFurs;
         protected HeatMapSeries SerCells;
         protected LinearColorAxis linearColorAxis1;
 
@@ -47,6 +47,11 @@ namespace RobotIM {
                     StrokeThickness = 3
                 };
                 Model1.Series.Add(SerWalls);
+                SerFurs = new LineSeries() {
+                    Color = OxyColors.DarkGreen,
+                    StrokeThickness = 3
+                };
+                Model1.Series.Add(SerFurs);
                 SerVision = new LineSeries() {
                     Color = OxyColors.Green,
                     StrokeThickness = 2
@@ -75,6 +80,14 @@ namespace RobotIM {
                     SerWalls.Points.Add(new DataPoint(p.X, p.Y));
                 }
             }
+            SerFurs.Points.Clear();
+            foreach (var f in room.furnitures) {
+                SerFurs.Points.Add(new DataPoint(Double.NaN, Double.NaN));
+                foreach (var p in f.pointsList) {
+                    SerFurs.Points.Add(new DataPoint(p.X, p.Y));
+                }
+            }
+
             var gab = room.gabarit;
 
             SerCells.IsVisible = drawCells;

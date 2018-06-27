@@ -30,6 +30,15 @@ namespace MyRandomGenerator
         }
         #endregion
 
+        public MyRandom(int seed) {
+            s_seed = seed;
+            s_random = new Random(seed);
+        }
+
+        public MyRandom() {
+
+        }
+
         #region Methods
         /// <summary>
         /// Gets an integer value between minimum value (inclusive) and maximum value (exclusive).

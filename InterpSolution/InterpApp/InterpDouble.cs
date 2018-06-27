@@ -465,6 +465,49 @@ namespace Interpolator {
             return false;
         }
 
+        public Vector? CrossRay(Vector p0, Vector n0, double ray_length = 1000) {
+
+            var plst = new List<Vector>();
+            for (int i = 0; i < pointsList.Count - 1; i++) {
+                var p1 = pointsList[i];
+                var p2 = pointsList[i + 1];
+                if (LinesIntersect(p1, p2, p0, p0 + n0 * ray_length)) {
+                    var v1 = p0 - p1;
+                    var v2 = p2 - p1;
+                    var v3 = new Vector(-n0.Y, n0.X);
+
+
+                    var dot = v2 * v3;
+                    if (Math.Abs(dot) < 0.000001)
+                        continue;
+
+                    var t1 = Vector.CrossProduct(v2, v1) / dot;
+                    var t2 = (v1 * v3) / dot;
+
+                    if (t1 >= 0.0 && (t2 >= 0.0 && t2 <= 1.0)) {
+                        var p_cross = p0 + n0 * t1;
+                        plst.Add(p_cross);
+                    }
+                        
+                }
+            }
+            if(plst.Count == 0) {
+                return null;
+            }
+            double dist = (plst[0] - p0).Length;
+            Vector res_p = plst[0];
+            foreach (var p in plst) {
+                var tmp_dist = (p - p0).Length;
+                if(tmp_dist < dist) {
+                    res_p = p;
+                    dist = tmp_dist;
+                }
+            }
+            return res_p;
+            
+            
+        }
+
         public static bool BoundingBoxesIntersect(Vector a0, Vector a1, Vector b0, Vector b1) {
             return Math.Min(a0.X, a1.X) <= Math.Max(b0.X, b1.X)
                     && Math.Max(a0.X, a1.X) >= Math.Min(b0.X, b1.X)
@@ -494,6 +537,10 @@ namespace Interpolator {
         public static double CrossProduct(Vector a, Vector b) {
             return a.X * b.Y - b.X * a.Y;
         }
+
+        public static double DotProduct(Vector a, Vector b) {
+            return a.X * b.X + b.Y * a.Y;
+        }
         public static double EPSILON = 0.000001;
 
         public override object Clone() {
@@ -506,6 +553,54 @@ namespace Interpolator {
             base.Dispose();
             pointsList.Clear();
             pointsList = null;
+        }
+    }
+
+    public class Polygon: LevelLine {
+        public Polygon(double Value = 0.0) : base(Value) {
+
+        }
+        /// <summary>
+        /// Замкнут ли полигон
+        /// </summary>
+        public bool IsClosed {
+            get {
+                var first_p = pointsList[0];
+                var last_p = pointsList[pointsList.Count-1];
+                return (last_p - first_p).Length < 0.00001;
+            }
+        }
+        /// <summary>
+        /// Замкнуть полигон
+        /// </summary>
+        /// <returns>True, если была добавлена точка, False, если он и так уже был замкнут</returns>
+        public bool Close() {
+            if (IsClosed) {
+                return false;
+            }
+            AddPoint(pointsList[0]);
+            return true;
+        }
+
+        public bool IsInside(Vector p, double ray_switch = -1000) {
+            int intersect_count = 0;
+            Vector p0 = new Vector(p.X - ray_switch, p.Y);
+            for (int i = 0; i < pointsList.Count - 1; i++) {
+                if (LinesIntersect(pointsList[i], pointsList[i + 1], p0, p))
+                    intersect_count++;
+            }
+            return intersect_count % 2 == 1;
+        }
+
+        public double GetSquare() {
+            double a = 0d;
+            int shift = IsClosed ? 2 : 1;
+            for (int i = 0; i < pointsList.Count - shift; i++) {
+                a += pointsList[i].X * pointsList[i + 1].Y - pointsList[i+1].X * pointsList[i].Y;
+            }
+            a += pointsList[pointsList.Count - shift].X * pointsList[0].Y - pointsList[0].X * pointsList[pointsList.Count - shift].Y;
+            a /= 2;
+            return Math.Abs(a);
         }
     }
     /// <summary>

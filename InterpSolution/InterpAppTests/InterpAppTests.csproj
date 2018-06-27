@@ -94,6 +94,7 @@
     <Compile Include="InterpXY_finderTests.cs" />
     <Compile Include="InterpXY_smootherTests.cs" />
     <Compile Include="LevelLineTests.cs" />
+    <Compile Include="PolygonTests.cs" />
     <Compile Include="PotentGraff2DTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

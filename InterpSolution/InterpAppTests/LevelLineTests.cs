@@ -7,15 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Interpolator.Tests
-{
+namespace Interpolator.Tests {
     [TestClass()]
-    public class LevelLineTests
-    {
+    public class LevelLineTests {
         private LevelLine testDummy;
         [TestMethod(), TestInitialize()]
-        public void AddPointTest()
-        {
+        public void AddPointTest() {
             testDummy = new LevelLine(0.7);
             Assert.AreEqual(0.7, testDummy.Value, 0.001);
             testDummy.AddPoints(new double[][]  {
@@ -30,8 +27,7 @@ namespace Interpolator.Tests
         }
 
         [TestMethod()]
-        public void NearestToPointTest()
-        {
+        public void NearestToPointTest() {
             Assert.AreEqual<Vector>(new Vector(-2, -3), testDummy.NearestToPoint(new Vector(-3, -4)));
             Assert.AreEqual((new Vector(-2, -3) - new Vector(-3, -4)).LengthSquared,
                             (testDummy.NearestToPoint(new Vector(-3, -4)) - new Vector(-3, -4)).LengthSquared);
@@ -58,8 +54,7 @@ namespace Interpolator.Tests
         }
 
         [TestMethod()]
-        public void BoundingBoxesIntersectTest()
-        {
+        public void BoundingBoxesIntersectTest() {
             Vector v1 = new Vector(-2, 3); Vector v2 = new Vector(0, 3); Vector v3 = new Vector(2, 3); Vector v4 = new Vector(3, 3);
             Vector v5 = new Vector(-2, 2); Vector v6 = new Vector(0, 2); Vector v7 = new Vector(2, 2); Vector v8 = new Vector(3, 2);
             Vector v9 = new Vector(-2, 1); Vector v10 = new Vector(0, 1); Vector v11 = new Vector(2, 1); Vector v12 = new Vector(3, 1);
@@ -85,20 +80,16 @@ namespace Interpolator.Tests
         }
 
         [TestMethod()]
-        public void CrossProductTest()
-        {
+        public void CrossProductTest() {
             var l = new List<Vector>(52);
             l.Add(new Vector(0, 0));
             l.Add(new Vector(1, 1));
             var rnd = new Random();
-            for (int i = 0; i < 50; i++)
-            {
+            for (int i = 0; i < 50; i++) {
                 l.Add(new Vector(rnd.NextDouble(), rnd.NextDouble()));
             }
-            foreach (var p1 in l)
-            {
-                foreach (var p2 in l)
-                {
+            foreach (var p1 in l) {
+                foreach (var p2 in l) {
                     double diff = LevelLine.CrossProduct(p1, p2) + LevelLine.CrossProduct(p2, p1);
                     Assert.AreEqual(0, diff, LevelLine.EPSILON);
 
@@ -108,8 +99,7 @@ namespace Interpolator.Tests
         }
 
         [TestMethod()]
-        public void IsPointOnLineTest()
-        {
+        public void IsPointOnLineTest() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(4, 4);
             var p = new Vector(3, 3);
@@ -121,8 +111,7 @@ namespace Interpolator.Tests
         }
 
         [TestMethod()]
-        public void IsPointRightOfLineTest()
-        {
+        public void IsPointRightOfLineTest() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(0, 7);
             var p = new Vector(5, 5);
@@ -134,8 +123,7 @@ namespace Interpolator.Tests
 
         /* Tests for doLinesIntersect https://martin-thoma.com/how-to-check-if-two-line-segments-intersect/*/
         [TestMethod()]
-        public void testLinesDontIntesectF1()
-        {
+        public void testLinesDontIntesectF1() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(7, 7);
             var b0 = new Vector(3, 4);
@@ -146,8 +134,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF2()
-        {
+        public void testLinesDontIntesectF2() {
             var a0 = new Vector(-4, 4);
             var a1 = new Vector(-2, 1);
             var b0 = new Vector(-2, 3);
@@ -158,8 +145,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF3()
-        { 
+        public void testLinesDontIntesectF3() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(0, 1);
             var b0 = new Vector(2, 2);
@@ -170,8 +156,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF4()
-        {
+        public void testLinesDontIntesectF4() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(0, 1);
             var b0 = new Vector(2, 2);
@@ -182,8 +167,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF5()
-        {
+        public void testLinesDontIntesectF5() {
             var a0 = new Vector(-1, -1);
             var a1 = new Vector(2, 2);
             var b0 = new Vector(3, 3);
@@ -194,8 +178,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF6()
-        {
+        public void testLinesDontIntesectF6() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(1, 1);
             var b0 = new Vector(2, 0);
@@ -206,8 +189,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF7()
-        {
+        public void testLinesDontIntesectF7() {
 
             var a0 = new Vector(1, 1);
             var a1 = new Vector(4, 1);
@@ -219,8 +201,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDontIntesectF8()
-        {
+        public void testLinesDontIntesectF8() {
             var a0 = new Vector(0, 5);
             var a1 = new Vector(6, 1);
             var b0 = new Vector(2, 1);
@@ -231,8 +212,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(false, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT1()
-        {
+        public void testLinesDoIntesectT1() {
             var a0 = new Vector(0, -2);
             var a1 = new Vector(0, 2);
             var b0 = new Vector(-2, 0);
@@ -243,8 +223,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT2()
-        {
+        public void testLinesDoIntesectT2() {
             var a0 = new Vector(5, 5);
             var a1 = new Vector(0, 0);
             var b0 = new Vector(1, 1);
@@ -255,8 +234,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT3()
-        {
+        public void testLinesDoIntesectT3() {
             var a0 = new Vector(-1, 0);
             var a1 = new Vector(0, 0);
             var b0 = new Vector(-1, -1);
@@ -267,8 +245,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT4()
-        {
+        public void testLinesDoIntesectT4() {
             var a0 = new Vector(0, 2);
             var a1 = new Vector(2, 2);
             var b0 = new Vector(2, 0);
@@ -279,8 +256,7 @@ namespace Interpolator.Tests
             Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT5()
-        {
+        public void testLinesDoIntesectT5() {
             var a0 = new Vector(0, 0);
             var a1 = new Vector(5, 5);
             var b0 = new Vector(1, 1);
@@ -291,10 +267,8 @@ namespace Interpolator.Tests
             Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
         }
         [TestMethod()]
-        public void testLinesDoIntesectT6()
-        {
-            for (int i = 0; i < 50; i++)
-            {
+        public void testLinesDoIntesectT6() {
+            for (int i = 0; i < 50; i++) {
                 var rnd = new Random();
                 double ax = rnd.NextDouble();
                 double ay = rnd.NextDouble();
@@ -310,6 +284,19 @@ namespace Interpolator.Tests
                 Assert.AreEqual(true, LevelLine.LinesIntersect(a0, a1, b1, b0));
                 Assert.AreEqual(true, LevelLine.LinesIntersect(a1, a0, b0, b1));
             }
+        }
+
+        [TestMethod()]
+        public void IsCrossMeTest() {
+            var testDummy = new LevelLine(0.7);
+            testDummy.AddPoints(new double[][]  {
+                new double[] { -1,-1 },
+                new double[] { 0,1 },
+                new double[] { 2, 2 },
+                new double[] {  3, -1.5 },
+                new double[] {  -1, 1 }
+            });
+            Assert.IsTrue(testDummy.IsCrossMe(new Vector(1,-3), new Vector(3,1)));
         }
     }
 }
