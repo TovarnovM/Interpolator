@@ -121,7 +121,7 @@ namespace RobotIM.Scene {
             List<Furniture> furs = new List<Furniture>();
             foreach (var c in cells) {
                 if(_rnd.GetDouble() < settings.FurRo) {
-                    int n = _rnd.GetInt(4, 4);
+                    int n = _rnd.GetInt(3, 7);
                     double fheight = _rnd.GetDouble(settings.FHmin, settings.FHmax);
                     furs.Add(c.GenerateFurInMe(n, fheight,lilbit:0.4,s_otn:0.3));
                 }
